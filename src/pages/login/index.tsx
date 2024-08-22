@@ -1,59 +1,33 @@
-/* eslint-disable prettier/prettier */
-import React from 'react';
-import {ScrollView, StyleSheet, View, Text, Image} from 'react-native';
-import {Button, Gap, PageHeader, TextInput} from '../../components';
-import Unklab from '../../assets/images/Unklab.png';
-// import { Image } from 'react-native-svg';
+import * as React from 'react';
+import {TextInput} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
+import {Border, Color} from '../../../GlobalStyles';
 
-const Login = ({navigation}) => {
+const LoginScreen = () => {
   return (
-    <ScrollView style={styles.container}>
-      <View>
-        <Text>Login</Text>
-      </View>
-    </ScrollView>
+    <TextInput
+      style={styles.loginScreen}
+      label="Please select who you are"
+      placeholder="Login to continue"
+      mode="flat"
+      placeholderTextColor="#464646"
+      theme={{
+        fonts: {regular: {fontFamily: 'Poppins', fontWeight: 'Regular'}},
+        colors: {text: '#464646'},
+      }}
+    />
   );
 };
 
-export default Login;
-
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#A109C7',
+  loginScreen: {
+    borderRadius: Border.br_xl,
+    backgroundColor: Color.schemesOnPrimary,
     flex: 1,
-  },
-  contentWrapper: {
-    backgroundColor: '#A109C7',
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-  title: {
-    fontFamily: 'Poppins',
-    color: '#FFFFFF',
-    fontWeight: '700',
-    textAlign: 'center',
-    lineHeight: 52,
-    fontSize: 35,
-    marginTop: 33,
-  },
-  head: {
-    fontFamily: 'Poppins',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    fontSize: 13,
-    fontWeight: '500',
-    marginTop: 12,
-  },
-  imageStyle: {
-    width: 60,
-    height: 50,
-    resizeMode: 'stretch',
-    alignItems: 'center',
-    marginBottom: 50,
-    marginTop: 100,
-  },
-  buttonStyle: {
-    width: 150,
-    marginLeft: 85,
+    width: '100%',
+    height: 800,
+    overflow: 'hidden',
   },
 });
+
+export default LoginScreen;
