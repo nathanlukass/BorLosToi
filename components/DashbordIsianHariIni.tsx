@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   },
   dashbordIsianHariIni: {
     top: 263,
-    left: 16,
+    left: 29,
   },
 });
 
