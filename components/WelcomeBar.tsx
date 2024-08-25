@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import FrameComponent from "./FrameComponent";
 import { FontSize, Border, Color, FontFamily } from "../GlobalStyles";
+import { Gap } from "../src/components";
 
 const WelcomeBar = () => {
   return (
@@ -9,6 +10,7 @@ const WelcomeBar = () => {
       <View style={[styles.welcomeBarChild, styles.welcomeLayout]} />
       <Text style={[styles.mujair, styles.mujairTypo]}>Mujair</Text>
       <FrameComponent veronikaBedes="Veronika Bedes" />
+      <Gap height={100}/>
       <Text style={[styles.ruangan, styles.mujairTypo]}>Ruangan :</Text>
     </View>
   );

@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { Text, StyleSheet, View, Image, Pressable } from "react-native";
 import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 
 export type SelectUserNurseType = {
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    left: 10,
   },
   usernameBg: {
     backgroundColor: Color.schemesOnPrimary,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
   },
   selectUserType: {
     marginTop: -9.5,
-    top: "50%",
+    top: "80%",
     left: 12,
     fontSize: FontSize.m3LabelLarge_size,
     fontFamily: FontFamily.poppinsRegular,
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
     height: "31.03%",
     top: "0%",
     right: "0.32%",
-    bottom: "68.97%",
+    bottom: "28.97%",
     left: "-0.32%",
     borderRadius: Border.br_8xs,
     borderStyle: "solid",

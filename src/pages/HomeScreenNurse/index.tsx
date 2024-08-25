@@ -3,7 +3,7 @@ import {Image, StyleSheet, View, Text, Pressable, Modal} from 'react-native';
 import WelcomeBar from '../../../components/WelcomeBar';
 import DashbordIsianHariIni from '../../../components/DashbordIsianHariIni';
 import Stats from '../../../components/Stats';
-import AndroidStatusBar from '../../../components/AndroidStatusBar';
+// import AndroidStatusBar from '../../../components/AndroidStatusBar';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {
@@ -61,14 +61,14 @@ const HomeScreenNurse = () => {
             </Text>
           </Pressable>
         </View>
-        <AndroidStatusBar
+        {/* <AndroidStatusBar
           battery={require('../../../assets/battery1.png')}
           androidStatusBarPosition="absolute"
           androidStatusBarWidth="unset"
           androidStatusBarTop={0}
           androidStatusBarRight={0}
           androidStatusBarLeft={0}
-        />
+        /> */}
         <View
           style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
           <View style={[styles.homeParent, styles.parentFlexBox]}>
@@ -196,12 +196,12 @@ const styles = StyleSheet.create({
   },
   lihatBorLosContainer: {
     left: 18,
-    top: 4,
+    top: 10,
     position: 'absolute',
   },
   lihatBorlostoi: {
     top: 210,
-    left: 16,
+    left: 30,
     position: 'absolute',
   },
   homeIcon: {
