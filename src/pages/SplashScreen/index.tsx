@@ -4,7 +4,7 @@ import {Logo} from '../../assets/images';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => navigation.replace('NurseInputPage'), 3000);
+    setTimeout(() => navigation.replace('InputScreenPage'), 3000);
   }, []);
 
   return (
