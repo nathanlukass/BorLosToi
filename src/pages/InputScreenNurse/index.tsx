@@ -30,7 +30,7 @@ const NurseInputPage = () => {
         <View style={[styles.rincianPasien, styles.rincianPasienShadowBox]}>
           <View style={styles.judul}>
             <Text style={[styles.totalHariPerawatan, styles.pasienFlexBox]}>
-              Total hari perawatan per pasien
+              Total hari perawatan per pasienn
             </Text>
             <View style={[styles.judulChild, styles.judulPosition]} />
           </View>
@@ -705,12 +705,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   amountPosition: {
-    marginTop: -10.9,
+    marginTop: -2,
     opacity: 0.7,
     color: Color.colorGray_100,
     fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-    letterSpacing: 1,
+    fontWeight: 'bold',
+    letterSpacing: 51,
     fontSize: FontSize.m3BodySmall_size,
     left: '46.34%',
     top: '50%',
@@ -1095,10 +1095,10 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
   },
   jumlahTempatTidur: {
-    zIndex: 0,
     fontFamily: FontFamily.poppinsRegular,
     textAlign: 'left',
     fontSize: FontSize.m3BodySmall_size,
+    marginTop: -14,
   },
 
   amount19: {
@@ -1123,6 +1123,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     color: Color.notSoBlack,
     textAlign: 'center',
+    marginBottom: -10,
   },
   namaRuangan: {
     top: 127,
