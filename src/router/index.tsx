@@ -1,7 +1,6 @@
-/* eslint-disable prettier/prettier */
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SplashScreen, Login, Home} from '../pages';
+import {SplashScreen, Login, HomeScreenNurse, LoginScreen} from '../pages';
 
 const Stack = createNativeStackNavigator();
 const index = () => {
@@ -13,8 +12,13 @@ const index = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Login"
-        component={Login}
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="HomeScreenNurse"
+        component={HomeScreenNurse}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
