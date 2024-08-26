@@ -24,7 +24,7 @@ const LoginScreen = () => {
         style={[styles.pleaseSelectWhoYouAreWrapper, styles.loginFieldPosition]}
       >
         <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
-          Please select who you are
+          nn admin ato nurse??
         </Text>
       </View>
       <View style={[styles.loginField, styles.loginFieldPosition]}>
