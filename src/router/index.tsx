@@ -1,8 +1,12 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {SplashScreen, Login, HomeScreenNurse, NurseInputPage} from '../pages';
-
+import {
+  SplashScreen,
+  LoginScreen,
+  HomeScreenNurse,
+  NurseInputPage,
+} from '../pages';
 
 const Stack = createNativeStackNavigator();
 const index = () => {
