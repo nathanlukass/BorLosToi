@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: Color.colorBlack,
     fontSize: FontSize.m3LabelLarge_size,
-    top: '19.69%',
+    top: '19.7%',
+    height: '70.63%',
     position: 'absolute',
   },
   hasil1Typo: {

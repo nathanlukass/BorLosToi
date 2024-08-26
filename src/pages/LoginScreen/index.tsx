@@ -1,11 +1,17 @@
 import * as React from 'react';
-import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/native';
+import {Text, StyleSheet, View, Image, Pressable} from 'react-native';
+import {TextInput, Button} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
 // import AndroidStatusBar from "./AndroidStatusBar";
-import { FontFamily, Color, Padding, Border, FontSize } from '../../../GlobalStyles';
+import {
+  FontFamily,
+  Color,
+  Padding,
+  Border,
+  FontSize,
+} from '../../../GlobalStyles';
 
 const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -13,16 +19,17 @@ const LoginScreen = () => {
   return (
     <Pressable
       style={styles.loginScreenAdmin}
-      onPress={() => navigation.navigate('HomeScreenNurse')}
-    >
+      onPress={() => navigation.navigate('HomeScreenNurse')}>
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
         <Text style={[styles.loginToContinue, styles.orTypo]}>
           Login to continue
         </Text>
       </View>
       <View
-        style={[styles.pleaseSelectWhoYouAreWrapper, styles.loginFieldPosition]}
-      >
+        style={[
+          styles.pleaseSelectWhoYouAreWrapper,
+          styles.loginFieldPosition,
+        ]}>
         <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
           Please select who you are
         </Text>
@@ -35,9 +42,9 @@ const LoginScreen = () => {
           placeholderTextColor="#6a6a6a"
           theme={{
             fonts: {
-              regular: { fontFamily: 'Poppins', fontWeight: 'Regular' },
+              regular: {fontFamily: 'Poppins', fontWeight: 'Regular'},
             },
-            colors: { text: '#6a6a6a' },
+            colors: {text: '#6a6a6a'},
           }}
         />
         <TextInput
@@ -47,9 +54,9 @@ const LoginScreen = () => {
           placeholderTextColor="#6a6a6a"
           theme={{
             fonts: {
-              regular: { fontFamily: 'Poppins', fontWeight: 'Regular' },
+              regular: {fontFamily: 'Poppins', fontWeight: 'Regular'},
             },
-            colors: { text: '#6a6a6a' },
+            colors: {text: '#6a6a6a'},
           }}
         />
         <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
@@ -69,8 +76,7 @@ const LoginScreen = () => {
         </View>
         <Pressable
           style={[styles.groupParent, styles.groupLayout]}
-          onPress={() => navigation.navigate('HomeScreenNurse')}
-        >
+          onPress={() => navigation.navigate('ScreenGuest')}>
           <View style={[styles.rectangleWrapper, styles.groupLayout]}>
             <View style={[styles.groupInner, styles.groupLayout]} />
           </View>
@@ -94,15 +100,17 @@ const LoginScreen = () => {
         source={require('../../../assets/samrat1.png')}
       />
       <View
-        style={[styles.welcomeToSamratIndikatorWrapper, styles.welcomePosition]}
-      >
+        style={[
+          styles.welcomeToSamratIndikatorWrapper,
+          styles.welcomePosition,
+        ]}>
         <Text style={[styles.welcomeToSamratContainer, styles.welcomePosition]}>
           <Text style={styles.welcomeTo}>Welcome to</Text>
           <Text style={styles.text}>{' \n'}</Text>
           <Text style={styles.samrat}>Samrat</Text>
-          <Text style={styles.text1}>{' '}</Text>
+          <Text style={styles.text1}> </Text>
           <Text style={styles.indikator}>Indikator</Text>
-          <Text style={styles.text}>{' '}</Text>
+          <Text style={styles.text}> </Text>
         </Text>
       </View>
       <SelectUserNurse
@@ -279,7 +287,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 3,
     position: 'absolute',
-    backgroundColor: '#47ad39' 
+    backgroundColor: '#47ad39',
   },
   login: {
     marginLeft: 22,
@@ -338,7 +346,6 @@ const styles = StyleSheet.create({
     height: 800,
     overflow: 'hidden',
     backgroundColor: Color.schemesOnPrimary,
-    
   },
 });
 
