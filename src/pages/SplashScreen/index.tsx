@@ -1,11 +1,10 @@
-/* eslint-disable prettier/prettier */
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React, {useEffect} from 'react';
 import {Logo} from '../../assets/images';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => navigation.replace('LoginScreen'), 3000);
+    setTimeout(() => navigation.replace('InputScreenPage'), 3000);
   }, []);
 
   return (

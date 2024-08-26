@@ -2,7 +2,7 @@
 import Login from './Login';
 import SplashScreen from './SplashScreen';
 import HomeScreenNurse from './HomeScreenNurse';
-import LoginScreen from './LoginScreen';
 
+import NurseInputPage from './InputScreenNurse';
 
-export {Login, SplashScreen, HomeScreenNurse, LoginScreen};
+export {Login, SplashScreen, HomeScreenNurse, NurseInputPage};
