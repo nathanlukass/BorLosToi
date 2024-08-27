@@ -29,7 +29,7 @@ const SelectUserNurse = ({
   return (
     <View style={[styles.property1default, selectUserNurseStyle]}>
       <View style={[styles.usernameField, styles.usernameFlexBox]}>
-        <Text style={styles.selectUserType}>Select user type</Text>
+        <Text style={styles.selectUserType}>Select user </Text>
         <Image
           style={styles.doubleDownIcon}
           resizeMode="cover"
