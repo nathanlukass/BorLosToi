@@ -4,7 +4,6 @@ import {TextInput, Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
-// import AndroidStatusBar from "./AndroidStatusBar";
 import {
   FontFamily,
   Color,
@@ -116,7 +115,7 @@ const LoginScreen = () => {
       <SelectUserNurse
         selectUserNursePosition="absolute"
         selectUserNurseTop={368}
-        selectUserNurseLeft={23}
+        selectUserNurseLeft={25}
       />
       {/* <AndroidStatusBar
         battery={require("../assets/battery.png")}
@@ -285,9 +284,9 @@ const styles = StyleSheet.create({
   },
   groupButton: {
     left: 0,
-    top: 3,
+    top: 2,
     position: 'absolute',
-    backgroundColor: '#47ad39',
+    backgroundColor: '#21b557',
   },
   login: {
     marginLeft: 22,
@@ -297,7 +296,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   loginButton: {
-    top: 574,
+    top: 580,
     left: 30,
     width: 322,
     height: 130,
@@ -343,9 +342,9 @@ const styles = StyleSheet.create({
   loginScreenAdmin: {
     borderRadius: Border.br_xl,
     width: 385,
+    left: 13,
     height: 800,
     overflow: 'hidden',
-    backgroundColor: Color.schemesOnPrimary,
   },
 });
 
