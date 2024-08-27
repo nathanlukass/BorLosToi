@@ -526,11 +526,13 @@ const NurseInputPage = () => {
           </Text>
         </View>
         <View style={[styles.barAtas, styles.barAtasPosition]}>
-          <Image
-            style={styles.iconArrowBack}
-            resizeMode="cover"
-            source={require('../../../assets/-icon-arrow-back.png')}
-          />
+          <Pressable onPress={() => navigation.navigate('HomeScreenNurse')}>
+            <Image
+              style={styles.iconArrowBack}
+              resizeMode="cover"
+              source={require('../../../assets/-icon-arrow-back.png')}
+            />
+          </Pressable>
           <Text style={[styles.inputHarian, styles.inputTypo]}>
             Input Harian
           </Text>

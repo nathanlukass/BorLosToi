@@ -1,27 +1,17 @@
 // import * as React from 'react';
 import React, {useState, useCallback} from 'react';
-import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/native';
-import { Color, FontSize, FontFamily, Padding, Border } from '../GlobalStyles';
-import { Gap, GapHorizontal } from '../src/components';
+import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/native';
+import {Color, FontSize, FontFamily, Padding, Border} from '../GlobalStyles';
+import {Gap, GapHorizontal} from '../src/components';
 
 export type StatsType = {
   onClose?: () => void;
 };
 
-const Stats = ({ onClose }: StatsType) => {
-  const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
+const Stats = ({onClose}: StatsType) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
-  const openLihatBORLOS = useCallback(() => {
-    setLihatBORLOSVisible(true);
-  }, []);
-
-  const closeLihatBORLOS = useCallback(() => {
-    setLihatBORLOSVisible(false);
-  }, []);
-
   return (
     <View style={styles.stats}>
       <View style={styles.statsChild} />
@@ -31,31 +21,31 @@ const Stats = ({ onClose }: StatsType) => {
 40-50 Kali
 <20%
 <45%`}</Text> */}
-<Text style={[styles.hari13Hari]}>60-85%</Text>
-        <Text style={[styles.hari13Hari2]}>6-9 Hari</Text>
-        <Text style={[styles.hari13Hari3]}>1-3 Hari</Text>
-        <Text style={[styles.hari13Hari4]}>40-50 Kali</Text>
-        <Text style={[styles.hari13Hari5]}>{'< 20%'}</Text>
-        <Text style={[styles.hari13Hari6]}>{'< 45%'}</Text>
+      <Text style={[styles.hari13Hari]}>60-85%</Text>
+      <Text style={[styles.hari13Hari2]}>6-9 Hari</Text>
+      <Text style={[styles.hari13Hari3]}>1-3 Hari</Text>
+      <Text style={[styles.hari13Hari4]}>40-50 Kali</Text>
+      <Text style={[styles.hari13Hari5]}>{'< 20%'}</Text>
+      <Text style={[styles.hari13Hari6]}>{'< 45%'}</Text>
       <Text style={[styles.text]}>0</Text>
-        <Text style={[styles.text2]}>0</Text>
-        <Text style={[styles.text3]}>0</Text>
-        <Text style={[styles.text4]}>0</Text>
-        <Text style={[styles.text5]}>0</Text>
-        <Text style={[styles.text6]}>0</Text>
-    <View style={styles.BorAvlosToiContainer}>
-      <Text style={[styles.hasil1Typo]}>BOR           :</Text>
-      <Gap height={22}/>
-        <Text style={[styles.hasil1Typo]}>AVLOS       :</Text>
-        <Gap height={23}/>
-        <Text style={[styles.hasil1Typo]}>TOI             :</Text>
-        <Gap height={19}/>
-        <Text style={[styles.hasil1Typo]}>BTO            :</Text>
-        <Gap height={21}/>
-        <Text style={[styles.hasil1Typo]}>GDR            :</Text>
-        <Gap height={23}/>
-        <Text style={[styles.hasil1Typo]}>NDR            :</Text>
-          </View>
+      <Text style={[styles.text2]}>0</Text>
+      <Text style={[styles.text3]}>0</Text>
+      <Text style={[styles.text4]}>0</Text>
+      <Text style={[styles.text5]}>0</Text>
+      <Text style={[styles.text6]}>0</Text>
+      <View style={styles.BorAvlosToiContainer}>
+        <Text style={[styles.hasil1Typo]}>BOR :</Text>
+        <Gap height={22} />
+        <Text style={[styles.hasil1Typo]}>AVLOS :</Text>
+        <Gap height={23} />
+        <Text style={[styles.hasil1Typo]}>TOI :</Text>
+        <Gap height={19} />
+        <Text style={[styles.hasil1Typo]}>BTO :</Text>
+        <Gap height={21} />
+        <Text style={[styles.hasil1Typo]}>GDR :</Text>
+        <Gap height={23} />
+        <Text style={[styles.hasil1Typo]}>NDR :</Text>
+      </View>
       <View style={[styles.ket, styles.ketPosition]}>
         <Text style={[styles.ket1, styles.ket1Typo]}>KET</Text>
       </View>
@@ -67,7 +57,7 @@ const Stats = ({ onClose }: StatsType) => {
       </View>
       <Pressable
         style={styles.backButton}
-        onPress={closeLihatBORLOS}>
+        onPress={() => navigation.navigate('HomeScreenNurse')}>
         <Image
           style={styles.vectorIcon}
           resizeMode="cover"
@@ -121,12 +111,14 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: Color.colorBlack,
     fontSize: FontSize.m3LabelLarge_size,
-    top: '19.69%',
+    top: '19.7%',
+    height: '70.63%',
     position: 'absolute',
   },
   hasil1Typo: {
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
+    color: 'black',
   },
   ketPosition: {
     padding: Padding.p_base,

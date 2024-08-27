@@ -1,8 +1,13 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import {SplashScreen, LoginScreen, HomeScreenNurse, NurseInputPage} from '../pages';
-
+import {
+  SplashScreen,
+  LoginScreen,
+  HomeScreenNurse,
+  NurseInputPage,
+  ScreenGuest,
+} from '../pages';
 
 const Stack = createNativeStackNavigator();
 const index = () => {
@@ -26,6 +31,11 @@ const index = () => {
       <Stack.Screen
         name="NurseInputPage"
         component={NurseInputPage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ScreenGuest"
+        component={ScreenGuest}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
