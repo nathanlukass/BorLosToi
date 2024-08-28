@@ -1,38 +1,55 @@
-import * as React from "react";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import React, { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { TextInput } from 'react-native-paper';
+import { Padding, Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 
 const PasswordField = () => {
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <View style={styles.property1default}>
-      <Text style={styles.password}>Password</Text>
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        label="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry={!showPassword}
+        mode="outlined"
+        theme={{
+          fonts: {
+            regular: { fontFamily: FontFamily.poppinsRegular },
+          },
+          colors: { text: '#6a6a6a' },
+        }}
+        right={
+          <TextInput.Icon
+            icon={showPassword ? "eye-off" : "eye"}
+            onPress={togglePasswordVisibility}
+            color="#6a6a6a"
+          />
+        }
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  password: {
-    position: "absolute",
-    top: 10,
-    left: 10,
-    fontSize: FontSize.m3LabelLarge_size,
-    fontFamily: FontFamily.poppinsRegular,
-    color: Color.colorDarkslategray_100,
-    textAlign: "left",
-    width: 78,
-    height: 19,
-    zIndex: 0,
+  container: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 10,
   },
-  property1default: {
-    borderRadius: Border.br_3xs,
+  input: {
+    height: 55,
+    width: '90%',
     backgroundColor: Color.schemesOnPrimary,
-    borderStyle: "solid",
-    borderColor: Color.colorDarkslategray_100,
-    borderWidth: 1,
-    width: 317,
-    height: 39,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    borderRadius: Border.br_8xs,
     padding: Padding.p_3xs,
   },
 });
