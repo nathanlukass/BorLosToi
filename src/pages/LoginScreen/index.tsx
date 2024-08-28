@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {Text, StyleSheet, View, Image, Pressable} from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/native';
+import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, ParamListBase } from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
-// import AndroidStatusBar from "./AndroidStatusBar";
+import UsernameField from '../../../components/UserNameField';
+import PasswordField from '../../../components/PasswordField';
 import {
   FontFamily,
   Color,
@@ -17,10 +18,7 @@ const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    // <Pressable
-    //   style={styles.loginScreenAdmin}
-    //   onPress={() => navigation.navigate('HomeScreenNurse')}>
-    <View>
+    <View style={styles.loginScreenAdmin}>
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
         <Text style={[styles.loginToContinue, styles.orTypo]}>
           Login to continue
@@ -30,9 +28,10 @@ const LoginScreen = () => {
         style={[
           styles.pleaseSelectWhoYouAreWrapper,
           styles.loginFieldPosition,
-        ]}>
+        ]}
+      >
         <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
-          nn admin ato nurse??
+          Please select who you are
         </Text>
       </View>
       <View style={[styles.loginField, styles.loginFieldPosition]}>
@@ -43,26 +42,15 @@ const LoginScreen = () => {
           placeholderTextColor="#6a6a6a"
           theme={{
             fonts: {
-              regular: {fontFamily: 'Poppins', fontWeight: 'Regular'},
+              regular: { fontFamily: 'Poppins', fontWeight: 'Regular' },
             },
-            colors: {text: '#6a6a6a'},
+            colors: { text: '#6a6a6a' },
           }}
         />
-        <TextInput
-          style={[styles.usernameField, styles.fieldFlexBox]}
-          placeholder="Username"
-          mode="flat"
-          placeholderTextColor="#6a6a6a"
-          theme={{
-            fonts: {
-              regular: {fontFamily: 'Poppins', fontWeight: 'Regular'},
-            },
-            colors: {text: '#6a6a6a'},
-          }}
-        />
-        <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
-          Enter your username and password
-        </Text>
+        {/* Hapus teks "Enter your username and password" */}
+        {/* Hapus field username lama */}
+        {/* Tambahkan komponen UsernameField di sini */}
+        <UsernameField />
       </View>
       <Image
         style={styles.iconEyeAlt}
@@ -77,7 +65,8 @@ const LoginScreen = () => {
         </View>
         <Pressable
           style={[styles.groupParent, styles.groupLayout]}
-          onPress={() => navigation.navigate('ScreenGuest')}>
+          onPress={() => navigation.navigate('ScreenGuest')}
+        >
           <View style={[styles.rectangleWrapper, styles.groupLayout]}>
             <View style={[styles.groupInner, styles.groupLayout]} />
           </View>
@@ -90,7 +79,8 @@ const LoginScreen = () => {
             style={styles.groupButton}
             mode="outlined"
             onPress={() => navigation.navigate('HomeScreenNurse')}
-            contentStyle={styles.groupButtonBtn}>
+            contentStyle={styles.groupButtonBtn}
+          >
             <Text style={[styles.login, styles.loginPosition]}>Login</Text>
           </Button>
         </View>
@@ -104,7 +94,8 @@ const LoginScreen = () => {
         style={[
           styles.welcomeToSamratIndikatorWrapper,
           styles.welcomePosition,
-        ]}>
+        ]}
+      >
         <Text style={[styles.welcomeToSamratContainer, styles.welcomePosition]}>
           <Text style={styles.welcomeTo}>Welcome to</Text>
           <Text style={styles.text}>{' \n'}</Text>
@@ -117,16 +108,8 @@ const LoginScreen = () => {
       <SelectUserNurse
         selectUserNursePosition="absolute"
         selectUserNurseTop={368}
-        selectUserNurseLeft={23}
+        selectUserNurseLeft={27}
       />
-      {/* <AndroidStatusBar
-        battery={require("../assets/battery.png")}
-        androidStatusBarPosition="absolute"
-        androidStatusBarWidth="unset"
-        androidStatusBarTop={0}
-        androidStatusBarRight={0}
-        androidStatusBarLeft={0}
-      /> */}
     </View>
   );
 };
@@ -217,27 +200,20 @@ const styles = StyleSheet.create({
     top: 93,
     left: 13,
   },
-  usernameField: {
-    top: 31,
-    left: 13,
-    borderColor: Color.colorMediumaquamarine,
-    borderWidth: 1,
-    backgroundColor: Color.schemesOnPrimary,
-  },
   loginField: {
     top: 420,
     width: 319,
     height: 138,
   },
   iconEyeAlt: {
-    height: '1.4%',
-    width: '5.56%',
+    height: '1%',
+    width: '5%',
     top: '66.13%',
     right: '10.56%',
     bottom: '32.47%',
     left: '83.89%',
-    maxWidth: '100%',
-    maxHeight: '100%',
+    maxWidth: '20%',
+    maxHeight: '10%',
     position: 'absolute',
     overflow: 'hidden',
   },
@@ -286,9 +262,9 @@ const styles = StyleSheet.create({
   },
   groupButton: {
     left: 0,
-    top: 3,
+    top: 2,
     position: 'absolute',
-    backgroundColor: '#47ad39',
+    backgroundColor: '#21b557',
   },
   login: {
     marginLeft: 22,
@@ -298,7 +274,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   loginButton: {
-    top: 574,
+    top: 580,
     left: 30,
     width: 322,
     height: 130,
@@ -343,10 +319,10 @@ const styles = StyleSheet.create({
   },
   loginScreenAdmin: {
     borderRadius: Border.br_xl,
+    alignSelf: 'center',
     width: 385,
     height: 800,
     overflow: 'hidden',
-    backgroundColor: Color.schemesOnPrimary,
   },
 });
 
