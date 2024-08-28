@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Text, StyleSheet, View, Image, Pressable } from "react-native";
+import React, { useMemo, useState } from "react";
+import { Text, StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Padding, Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 
 export type SelectUserNurseType = {
@@ -13,11 +13,22 @@ const getStyleValue = (key: string, value: string | number | undefined) => {
   if (value === undefined) return;
   return { [key]: value === "unset" ? undefined : value };
 };
+
 const SelectUserNurse = ({
   selectUserNursePosition,
   selectUserNurseTop,
   selectUserNurseLeft,
 }: SelectUserNurseType) => {
+  const [isDropdownOpen, setDropdownOpen] = useState(false); // State untuk mengelola dropdown terbuka atau tidak
+  const [selectedRole, setSelectedRole] = useState(''); // State untuk menyimpan role yang dipilih
+
+  const toggleDropdown = () => setDropdownOpen(!isDropdownOpen); // Fungsi untuk toggle dropdown
+
+  const selectRole = (role: string) => {
+    setSelectedRole(role);
+    setDropdownOpen(false); // Menutup dropdown setelah memilih
+  };
+
   const selectUserNurseStyle = useMemo(() => {
     return {
       ...getStyleValue("position", selectUserNursePosition),
@@ -28,22 +39,34 @@ const SelectUserNurse = ({
 
   return (
     <View style={[styles.property1default, selectUserNurseStyle]}>
-      <View style={[styles.usernameField, styles.usernameFlexBox]}>
-        <Text style={styles.selectUserType}>Select user type</Text>
+      <TouchableOpacity 
+        style={[
+          styles.usernameField, 
+          styles.usernameFlexBox, 
+          { borderColor: isDropdownOpen ? Color.colorMediumaquamarine : "black" }
+        ]} 
+        onPress={toggleDropdown}
+      >
+        <Text style={styles.selectUserType}>{selectedRole || "Select user type"}</Text>
         <Image
-          style={styles.doubleDownIcon}
+          style={[
+            styles.doubleDownIcon,
+            { transform: [{ rotate: isDropdownOpen ? "180deg" : "0deg" }] } // Rotasi icon saat dropdown dibuka
+          ]}
           resizeMode="cover"
           source={require("../assets/double-down.png")}
         />
-      </View>
-      <View style={[styles.usernameFieldParent, styles.usernameBg]}>
-        <View style={[styles.usernameField1, styles.usernameFlexBox]}>
-          <Text style={styles.selectUserType}>Nurse</Text>
+      </TouchableOpacity>
+      {isDropdownOpen && (
+        <View style={[styles.usernameFieldParent, styles.usernameBg]}>
+          <TouchableOpacity style={[styles.usernameField1, styles.usernameFlexBox]} onPress={() => selectRole('Nurse')}>
+            <Text style={styles.selectUserType}>Nurse</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.usernameField1, styles.usernameFlexBox]} onPress={() => selectRole('Admin')}>
+            <Text style={styles.selectUserType}>Admin</Text>
+          </TouchableOpacity>
         </View>
-        <View style={[styles.usernameField1, styles.usernameFlexBox]}>
-          <Text style={styles.selectUserType}>Admin</Text>
-        </View>
-      </View>
+      )}
     </View>
   );
 };
@@ -90,7 +113,7 @@ const styles = StyleSheet.create({
     left: "-0.32%",
     borderRadius: Border.br_8xs,
     borderStyle: "solid",
-    borderColor: Color.colorMediumaquamarine,
+    borderColor: "black", // Default border color hitam
     borderWidth: 1,
     backgroundColor: Color.schemesOnPrimary,
     width: "100%",
@@ -101,7 +124,7 @@ const styles = StyleSheet.create({
     height: 45,
   },
   usernameFieldParent: {
-    height: "68.97%",
+    height: "auto",
     top: "31.03%",
     right: "0%",
     bottom: "0%",
@@ -110,7 +133,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: Border.br_3xs,
     paddingHorizontal: 0,
     paddingVertical: Padding.p_8xs,
-    display: "none",
   },
   property1default: {
     width: 317,
