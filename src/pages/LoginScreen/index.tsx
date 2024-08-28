@@ -4,6 +4,7 @@ import {TextInput, Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
+// import AndroidStatusBar from "./AndroidStatusBar";
 import {
   FontFamily,
   Color,
@@ -16,9 +17,10 @@ const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <Pressable
-      style={styles.loginScreenAdmin}
-      onPress={() => navigation.navigate('HomeScreenNurse')}>
+    // <Pressable
+    //   style={styles.loginScreenAdmin}
+    //   onPress={() => navigation.navigate('HomeScreenNurse')}>
+    <View>
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
         <Text style={[styles.loginToContinue, styles.orTypo]}>
           Login to continue
@@ -30,7 +32,7 @@ const LoginScreen = () => {
           styles.loginFieldPosition,
         ]}>
         <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
-          Please select who you are
+          nn admin ato nurse??
         </Text>
       </View>
       <View style={[styles.loginField, styles.loginFieldPosition]}>
@@ -115,7 +117,7 @@ const LoginScreen = () => {
       <SelectUserNurse
         selectUserNursePosition="absolute"
         selectUserNurseTop={368}
-        selectUserNurseLeft={25}
+        selectUserNurseLeft={23}
       />
       {/* <AndroidStatusBar
         battery={require("../assets/battery.png")}
@@ -125,7 +127,7 @@ const LoginScreen = () => {
         androidStatusBarRight={0}
         androidStatusBarLeft={0}
       /> */}
-    </Pressable>
+    </View>
   );
 };
 
@@ -284,9 +286,9 @@ const styles = StyleSheet.create({
   },
   groupButton: {
     left: 0,
-    top: 2,
+    top: 3,
     position: 'absolute',
-    backgroundColor: '#21b557',
+    backgroundColor: '#47ad39',
   },
   login: {
     marginLeft: 22,
@@ -296,7 +298,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   loginButton: {
-    top: 580,
+    top: 574,
     left: 30,
     width: 322,
     height: 130,
@@ -342,9 +344,9 @@ const styles = StyleSheet.create({
   loginScreenAdmin: {
     borderRadius: Border.br_xl,
     width: 385,
-    left: 13,
     height: 800,
     overflow: 'hidden',
+    backgroundColor: Color.schemesOnPrimary,
   },
 });
 
