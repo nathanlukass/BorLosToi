@@ -17,9 +17,10 @@ const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <Pressable
-      style={styles.loginScreenAdmin}
-      onPress={() => navigation.navigate('HomeScreenNurse')}>
+    // <Pressable
+    //   style={styles.loginScreenAdmin}
+    //   onPress={() => navigation.navigate('HomeScreenNurse')}>
+    <View>
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
         <Text style={[styles.loginToContinue, styles.orTypo]}>
           Login to continue
@@ -126,7 +127,7 @@ const LoginScreen = () => {
         androidStatusBarRight={0}
         androidStatusBarLeft={0}
       /> */}
-    </Pressable>
+    </View>
   );
 };
 

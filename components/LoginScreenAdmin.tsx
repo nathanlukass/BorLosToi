@@ -4,7 +4,6 @@ import { TextInput, Button } from "react-native-paper";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useNavigation, ParamListBase } from "@react-navigation/native";
 import SelectUserNurse from "./SelectUserNurse";
-import AndroidStatusBar from "./AndroidStatusBar";
 import { FontFamily, Color, Padding, Border, FontSize } from "../GlobalStyles";
 
 const LoginScreenAdmin = () => {
