@@ -16,9 +16,7 @@ const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <Pressable
-      style={styles.loginScreenAdmin}
-      onPress={() => navigation.navigate('HomeScreenNurse')}>
+    <View style={styles.loginScreenAdmin}>
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
         <Text style={[styles.loginToContinue, styles.orTypo]}>
           Login to continue
@@ -115,7 +113,7 @@ const LoginScreen = () => {
       <SelectUserNurse
         selectUserNursePosition="absolute"
         selectUserNurseTop={368}
-        selectUserNurseLeft={25}
+        selectUserNurseLeft={27}
       />
       {/* <AndroidStatusBar
         battery={require("../assets/battery.png")}
@@ -125,7 +123,7 @@ const LoginScreen = () => {
         androidStatusBarRight={0}
         androidStatusBarLeft={0}
       /> */}
-    </Pressable>
+    </View>
   );
 };
 
@@ -342,7 +340,7 @@ const styles = StyleSheet.create({
   loginScreenAdmin: {
     borderRadius: Border.br_xl,
     width: 385,
-    left: 13,
+    alignSelf: 'center',
     height: 800,
     overflow: 'hidden',
   },
