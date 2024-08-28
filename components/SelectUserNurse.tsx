@@ -57,7 +57,7 @@ const SelectUserNurse = ({
             {transform: [{rotate: isDropdownOpen ? '180deg' : '0deg'}]}, // Rotasi icon saat dropdown dibuka
           ]}
           resizeMode="cover"
-          source={require('../../../assets/double-down.png')}
+          source={require('../assets/double-down.png')}
         />
       </TouchableOpacity>
       {isDropdownOpen && (
