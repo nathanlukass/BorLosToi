@@ -1,39 +1,61 @@
-import * as React from "react";
-import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import React, { useState } from 'react';
+import { TextInput, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { Padding, Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 
 const PasswordField = () => {
+  const [password, setpassword] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
-    <View style={styles.property1default}>
-      <Text style={styles.password}>Password</Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>Password</Text>
+      <TouchableOpacity 
+        style={[
+          styles.inputContainer, 
+          { borderColor: isFocused ? Color.colorMediumaquamarine : 'grey' }
+        ]}
+        activeOpacity={1}
+        onPress={() => setIsFocused(true)}
+      >
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setpassword}
+          placeholder="Enter your password"
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholderTextColor={Color.colorDimgray}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  password: {
-    position: "absolute",
-    top: 10,
-    left: 10,
+  container: {
+    marginVertical: 10,
+    width: '100%',
+  },
+  label: {
     fontSize: FontSize.m3LabelLarge_size,
     fontFamily: FontFamily.poppinsRegular,
-    color: Color.colorDarkslategray_100,
-    textAlign: "left",
-    width: 78,
-    height: 19,
-    zIndex: 0,
+    color: Color.colorDimgray,
+    marginBottom: 5,
+    left: 10,
   },
-  property1default: {
-    borderRadius: Border.br_3xs,
-    backgroundColor: Color.schemesOnPrimary,
-    borderStyle: "solid",
-    borderColor: Color.colorDarkslategray_100,
+  inputContainer: {
+    left: 10,
+    height: 45,
+    borderRadius: Border.br_8xs,
     borderWidth: 1,
-    width: 317,
-    height: 39,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: Padding.p_3xs,
+    backgroundColor: Color.schemesOnPrimary,
+    paddingHorizontal: Padding.p_3xs,
+    justifyContent: 'center',
+  },
+  input: {
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorBlack,
   },
 });
 

@@ -1,18 +1,11 @@
 import * as React from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  Image,
-  Pressable,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform,
-} from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/native';
+import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
+import { Button } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, ParamListBase } from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
+import UsernameField from '../../../components/UsernameField';
+import PasswordField from '../../../components/PasswordField';
 import {
   FontFamily,
   Color,
@@ -25,113 +18,82 @@ const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View>
-          <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
-            <Text style={[styles.loginToContinue, styles.orTypo]}>
-              Login to continue
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.pleaseSelectWhoYouAreWrapper,
-              styles.loginFieldPosition,
-            ]}>
-            <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
-              nn admin ato nurse??
-            </Text>
-          </View>
-          <View style={[styles.loginField, styles.loginFieldPosition]}>
-            <TextInput
-              style={[styles.passwordField, styles.fieldFlexBox]}
-              placeholder="Password"
-              mode="outlined"
-              placeholderTextColor="#6a6a6a"
-              theme={{
-                fonts: {
-                  regular: {fontFamily: 'Poppins', fontWeight: 'Regular'},
-                },
-                colors: {text: '#6a6a6a'},
-              }}
-            />
-            <TextInput
-              style={[styles.usernameField, styles.fieldFlexBox]}
-              placeholder="Username"
-              mode="flat"
-              placeholderTextColor="#6a6a6a"
-              theme={{
-                fonts: {
-                  regular: {fontFamily: 'Poppins', fontWeight: 'Regular'},
-                },
-                colors: {text: '#6a6a6a'},
-              }}
-            />
-            <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
-              Enter your username and password
-            </Text>
-          </View>
-          <Image
-            style={styles.iconEyeAlt}
-            resizeMode="cover"
-            source={require('../../../assets/-icon-eye-alt.png')}
-          />
-          <View style={styles.loginButton}>
-            <View style={[styles.lineParent, styles.lineParentLayout]}>
-              <View style={[styles.groupChild, styles.groupLayout1]} />
-              <View style={[styles.groupItem, styles.groupLayout1]} />
-              <Text style={[styles.or, styles.orTypo]}>or</Text>
-            </View>
-            <Pressable
-              style={[styles.groupParent, styles.groupLayout]}
-              onPress={() => navigation.navigate('ScreenGuest')}>
-              <View style={[styles.rectangleWrapper, styles.groupLayout]}>
-                <View style={[styles.groupInner, styles.groupLayout]} />
-              </View>
-              <Text style={[styles.asAGuest, styles.loginPosition]}>
-                As a guest
-              </Text>
-            </Pressable>
-            <View style={[styles.groupContainer, styles.groupLayout]}>
-              <Button
-                style={styles.groupButton}
-                mode="outlined"
-                onPress={() => navigation.navigate('HomeScreenNurse')}
-                contentStyle={styles.groupButtonBtn}>
-                <Text style={[styles.login, styles.loginPosition]}>Login</Text>
-              </Button>
-            </View>
-          </View>
-          <Image
-            style={styles.samratIcon}
-            resizeMode="cover"
-            source={require('../../../assets/samrat1.png')}
-          />
-          <View
-            style={[
-              styles.welcomeToSamratIndikatorWrapper,
-              styles.welcomePosition,
-            ]}>
-            <Text
-              style={[styles.welcomeToSamratContainer, styles.welcomePosition]}>
-              <Text style={styles.welcomeTo}>Welcome to</Text>
-              <Text style={styles.text}>{' \n'}</Text>
-              <Text style={styles.samrat}>Samrat</Text>
-              <Text style={styles.text1}> </Text>
-              <Text style={styles.indikator}>Indikator</Text>
-              <Text style={styles.text}> </Text>
-            </Text>
-          </View>
-          <SelectUserNurse
-            selectUserNursePosition="absolute"
-            selectUserNurseTop={368}
-            selectUserNurseLeft={23}
-          />
+    <View style={styles.loginScreenAdmin}>
+      <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
+        <Text style={[styles.loginToContinue, styles.orTypo]}>
+          Login to continue
+        </Text>
+      </View>
+      <View
+        style={[
+          styles.pleaseSelectWhoYouAreWrapper,
+          styles.loginFieldPosition,
+        ]}
+      >
+        <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
+          Please select who you are
+        </Text>
+      </View>
+      <View style={[styles.loginField, styles.loginFieldPosition]}>
+        {/* Tambahkan komponen UsernameField di sini */}
+        <UsernameField />
+        {/* Tambahkan PasswordField di sini */}
+        <PasswordField />
+      </View>
+      <View style={styles.loginButton}>
+        <View style={[styles.lineParent, styles.lineParentLayout]}>
+          <View style={[styles.groupChild, styles.groupLayout1]} />
+          <View style={[styles.groupItem, styles.groupLayout1]} />
+          <Text style={[styles.or, styles.orTypo]}>or</Text>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        <Pressable
+          style={[styles.groupParent, styles.groupLayout]}
+          onPress={() => navigation.navigate('ScreenGuest')}
+        >
+          <View style={[styles.rectangleWrapper, styles.groupLayout]}>
+            <View style={[styles.groupInner, styles.groupLayout]} />
+          </View>
+          <Text style={[styles.asAGuest, styles.loginPosition]}>
+            As a guest
+          </Text>
+        </Pressable>
+        <View style={[styles.groupContainer, styles.groupLayout]}>
+          <Button
+            style={styles.groupButton}
+            mode="outlined"
+            onPress={() => navigation.navigate('HomeScreenNurse')}
+            contentStyle={styles.groupButtonBtn}
+          >
+            <Text style={[styles.login, styles.loginPosition]}>Login</Text>
+          </Button>
+        </View>
+      </View>
+      <Image
+        style={styles.samratIcon}
+        resizeMode="cover"
+        source={require('../../../assets/samrat1.png')}
+      />
+      <View
+        style={[
+          styles.welcomeToSamratIndikatorWrapper,
+          styles.welcomePosition,
+        ]}
+      >
+        <Text style={[styles.welcomeToSamratContainer, styles.welcomePosition]}>
+          <Text style={styles.welcomeTo}>Welcome to</Text>
+          <Text style={styles.text}>{' \n'}</Text>
+          <Text style={styles.samrat}>Samrat</Text>
+          <Text style={styles.text1}> </Text>
+          <Text style={styles.indikator}>Indikator</Text>
+          <Text style={styles.text}> </Text>
+        </Text>
+      </View>
+      <SelectUserNurse
+        selectUserNursePosition="absolute"
+        selectUserNurseTop={368}
+        selectUserNurseLeft={27}
+      />
+    </View>
   );
 };
 
@@ -207,11 +169,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsRegular,
-    left: 16,
+    alignSelf: 'center',
   },
   loginToContinueWrapper: {
     top: 284,
-    left: 111,
+    alignSelf: 'center',
     width: 138,
   },
   pleaseSelectWho: {
@@ -227,29 +189,10 @@ const styles = StyleSheet.create({
     top: 93,
     left: 13,
   },
-  usernameField: {
-    top: 31,
-    left: 13,
-    borderColor: Color.colorMediumaquamarine,
-    borderWidth: 1,
-    backgroundColor: Color.schemesOnPrimary,
-  },
   loginField: {
     top: 420,
     width: 319,
     height: 138,
-  },
-  iconEyeAlt: {
-    height: '1.4%',
-    width: '5.56%',
-    top: '66.13%',
-    right: '10.56%',
-    bottom: '32.47%',
-    left: '83.89%',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    position: 'absolute',
-    overflow: 'hidden',
   },
   groupChild: {
     left: 0,
@@ -258,7 +201,7 @@ const styles = StyleSheet.create({
     left: 180,
   },
   or: {
-    left: 151,
+    alignSelf: 'center',
     lineHeight: 24,
     fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsRegular,
@@ -296,9 +239,9 @@ const styles = StyleSheet.create({
   },
   groupButton: {
     left: 0,
-    top: 3,
+    top: 2,
     position: 'absolute',
-    backgroundColor: '#47ad39',
+    backgroundColor: '#21b557',
   },
   login: {
     marginLeft: 22,
@@ -308,18 +251,17 @@ const styles = StyleSheet.create({
     top: 0,
   },
   loginButton: {
-    top: 574,
+    top: 620,
     left: 30,
     width: 322,
     height: 130,
     position: 'absolute',
   },
   samratIcon: {
-    marginLeft: -69,
+    alignSelf: 'center',
     top: 129,
     width: 133,
     height: 142,
-    left: '50%',
     position: 'absolute',
   },
   welcomeTo: {
@@ -353,10 +295,10 @@ const styles = StyleSheet.create({
   },
   loginScreenAdmin: {
     borderRadius: Border.br_xl,
+    alignSelf: 'center',
     width: 385,
     height: 800,
     overflow: 'hidden',
-    backgroundColor: Color.schemesOnPrimary,
   },
 });
 
