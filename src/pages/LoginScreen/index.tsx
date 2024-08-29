@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Text, StyleSheet, View, Image, Pressable} from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
@@ -34,28 +34,11 @@ const LoginScreen = () => {
         </Text>
       </View>
       <View style={[styles.loginField, styles.loginFieldPosition]}>
-        <TextInput
-          style={[styles.passwordField, styles.fieldFlexBox]}
-          placeholder="Password"
-          mode="outlined"
-          placeholderTextColor="#6a6a6a"
-          theme={{
-            fonts: {
-              regular: {fontFamily: 'Poppins', fontWeight: 'Regular'},
-            },
-            colors: {text: '#6a6a6a'},
-          }}
-        />
-        {/* Hapus teks "Enter your username and password" */}
-        {/* Hapus field username lama */}
         {/* Tambahkan komponen UsernameField di sini */}
         <UsernameField />
+        {/* Tambahkan PasswordField di sini */}
+        <PasswordField />
       </View>
-      <Image
-        style={styles.iconEyeAlt}
-        resizeMode="cover"
-        source={require('../../../assets/-icon-eye-alt.png')}
-      />
       <View style={styles.loginButton}>
         <View style={[styles.lineParent, styles.lineParentLayout]}>
           <View style={[styles.groupChild, styles.groupLayout1]} />
@@ -176,11 +159,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsRegular,
-    left: 16,
+    alignSelf: 'center',
   },
   loginToContinueWrapper: {
     top: 284,
-    left: 111,
+    alignSelf: 'center',
     width: 138,
   },
   pleaseSelectWho: {
@@ -201,18 +184,6 @@ const styles = StyleSheet.create({
     width: 319,
     height: 138,
   },
-  iconEyeAlt: {
-    height: '1%',
-    width: '5%',
-    top: '66.13%',
-    right: '10.56%',
-    bottom: '32.47%',
-    left: '83.89%',
-    maxWidth: '20%',
-    maxHeight: '10%',
-    position: 'absolute',
-    overflow: 'hidden',
-  },
   groupChild: {
     left: 0,
   },
@@ -220,7 +191,7 @@ const styles = StyleSheet.create({
     left: 180,
   },
   or: {
-    left: 151,
+    alignSelf: 'center',
     lineHeight: 24,
     fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsRegular,
@@ -270,18 +241,17 @@ const styles = StyleSheet.create({
     top: 0,
   },
   loginButton: {
-    top: 580,
+    top: 620,
     left: 30,
     width: 322,
     height: 130,
     position: 'absolute',
   },
   samratIcon: {
-    marginLeft: -69,
+    alignSelf: 'center',
     top: 129,
     width: 133,
     height: 142,
-    left: '50%',
     position: 'absolute',
   },
   welcomeTo: {

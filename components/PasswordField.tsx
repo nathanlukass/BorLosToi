@@ -1,56 +1,61 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Padding, Color, FontSize, FontFamily, Border } from '../GlobalStyles';
 
 const PasswordField = () => {
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  const [password, setpassword] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={!showPassword}
-        mode="outlined"
-        theme={{
-          fonts: {
-            regular: { fontFamily: FontFamily.poppinsRegular },
-          },
-          colors: { text: '#6a6a6a' },
-        }}
-        right={
-          <TextInput.Icon
-            icon={showPassword ? "eye-off" : "eye"}
-            onPress={togglePasswordVisibility}
-            color="#6a6a6a"
-          />
-        }
-      />
+      <Text style={styles.label}>Password</Text>
+      <TouchableOpacity 
+        style={[
+          styles.inputContainer, 
+          { borderColor: isFocused ? Color.colorMediumaquamarine : 'grey' }
+        ]}
+        activeOpacity={1}
+        onPress={() => setIsFocused(true)}
+      >
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setpassword}
+          placeholder="Enter your password"
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholderTextColor={Color.colorDimgray}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
     marginVertical: 10,
+    width: '100%',
+  },
+  label: {
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorDimgray,
+    marginBottom: 5,
+    left: 10,
+  },
+  inputContainer: {
+    left: 10,
+    height: 45,
+    borderRadius: Border.br_8xs,
+    borderWidth: 1,
+    backgroundColor: Color.schemesOnPrimary,
+    paddingHorizontal: Padding.p_3xs,
+    justifyContent: 'center',
   },
   input: {
-    height: 55,
-    width: '90%',
-    backgroundColor: Color.schemesOnPrimary,
-    borderRadius: Border.br_8xs,
-    padding: Padding.p_3xs,
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorBlack,
   },
 });
 
