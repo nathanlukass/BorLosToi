@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/native';
+import {Text, StyleSheet, View, Image, Pressable} from 'react-native';
+import {TextInput, Button} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
-import UsernameField from '../../../components/UserNameField';
+import UsernameField from '../../../components/UsernameField';
 import PasswordField from '../../../components/PasswordField';
 import {
   FontFamily,
@@ -28,8 +28,7 @@ const LoginScreen = () => {
         style={[
           styles.pleaseSelectWhoYouAreWrapper,
           styles.loginFieldPosition,
-        ]}
-      >
+        ]}>
         <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
           Please select who you are
         </Text>
@@ -42,9 +41,9 @@ const LoginScreen = () => {
           placeholderTextColor="#6a6a6a"
           theme={{
             fonts: {
-              regular: { fontFamily: 'Poppins', fontWeight: 'Regular' },
+              regular: {fontFamily: 'Poppins', fontWeight: 'Regular'},
             },
-            colors: { text: '#6a6a6a' },
+            colors: {text: '#6a6a6a'},
           }}
         />
         {/* Hapus teks "Enter your username and password" */}
@@ -65,8 +64,7 @@ const LoginScreen = () => {
         </View>
         <Pressable
           style={[styles.groupParent, styles.groupLayout]}
-          onPress={() => navigation.navigate('ScreenGuest')}
-        >
+          onPress={() => navigation.navigate('ScreenGuest')}>
           <View style={[styles.rectangleWrapper, styles.groupLayout]}>
             <View style={[styles.groupInner, styles.groupLayout]} />
           </View>
@@ -79,8 +77,7 @@ const LoginScreen = () => {
             style={styles.groupButton}
             mode="outlined"
             onPress={() => navigation.navigate('HomeScreenNurse')}
-            contentStyle={styles.groupButtonBtn}
-          >
+            contentStyle={styles.groupButtonBtn}>
             <Text style={[styles.login, styles.loginPosition]}>Login</Text>
           </Button>
         </View>
@@ -94,8 +91,7 @@ const LoginScreen = () => {
         style={[
           styles.welcomeToSamratIndikatorWrapper,
           styles.welcomePosition,
-        ]}
-      >
+        ]}>
         <Text style={[styles.welcomeToSamratContainer, styles.welcomePosition]}>
           <Text style={styles.welcomeTo}>Welcome to</Text>
           <Text style={styles.text}>{' \n'}</Text>

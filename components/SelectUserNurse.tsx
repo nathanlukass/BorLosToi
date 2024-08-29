@@ -1,12 +1,5 @@
 import React, {useMemo, useState, useRef} from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  Animated,
-} from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Animated} from 'react-native';
 import {Padding, Color, FontSize, FontFamily, Border} from '../GlobalStyles';
 
 export type SelectUserNurseType = {
@@ -17,7 +10,9 @@ export type SelectUserNurseType = {
 };
 
 const getStyleValue = (key: string, value: string | number | undefined) => {
-  if (value === undefined) return;
+  if (value === undefined) {
+    return;
+  }
   return {[key]: value === 'unset' ? undefined : value};
 };
 

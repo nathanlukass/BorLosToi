@@ -11,7 +11,6 @@ import LamaDirawat from '../../../components/LamaDirawat';
 import TextField from '../../../components/TextField';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
-import AndroidStatusBar from '../../../components/AndroidStatusBar';
 import {
   Padding,
   Border,
@@ -537,14 +536,6 @@ const NurseInputPage = () => {
             Input Harian
           </Text>
         </View>
-        <AndroidStatusBar
-          battery={require('../../../assets/battery1.png')}
-          androidStatusBarPosition="absolute"
-          androidStatusBarWidth="unset"
-          androidStatusBarTop={0}
-          androidStatusBarRight={-1}
-          androidStatusBarLeft={1}
-        />
       </View>
     </ScrollView>
   );

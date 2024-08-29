@@ -91,7 +91,7 @@ const HomeScreenNurse = () => {
           </Pressable>
           <Pressable
             style={styles.parentFlexBox}
-            onPress={() => navigation.navigate('ProfileScreenNurse')}>
+            onPress={() => navigation.navigate('ProfilScreenNurse')}>
             <Image
               style={styles.homeIcon}
               resizeMode="cover"
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Padding.p_52xl,
     paddingVertical: Padding.p_9xs,
-    alignItems: 'center',
+    alignSelf: 'center',
   },
   homeScreenNurse: {
     borderRadius: Border.br_xl,
