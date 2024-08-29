@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 import LamaDirawat from '../../../components/LamaDirawat';
 import TextField from '../../../components/TextField';
-import { DatePickerr } from '../../components';
+import {DatePickerr} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/native';
-import AndroidStatusBar from '../../../components/AndroidStatusBar';
+import {useNavigation, ParamListBase} from '@react-navigation/core';
+// import {useNavigation, ParamListBase} from '@react-navigation/natiSve';
 import TrailingIcon from '../../../components/TrailingIcon';
 import {
   Padding,
@@ -502,7 +502,7 @@ const NurseInputPage = () => {
             <Text style={[styles.amount19, styles.amountPosition]}>22</Text>
           </View>
         </View>
-        <DatePickerr/>
+        <DatePickerr />
         <View style={[styles.namaRuangan, styles.jumlahBedShadowBox]}>
           <Text style={[styles.mujair, styles.inputTypo]}>Mujair</Text>
         </View>
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
     justifyContent: 'center',
     left: '50%',
-    transform: [{ translateX: -163 }] // Half of the width to center it
+    transform: [{translateX: -163}], // Half of the width to center it
   },
   pasienFlexBox: {
     alignSelf: 'center',
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
     borderColor: Color.notSoBlack,
     borderStyle: 'solid',
     left: '50%',
-    transform: [{ translateX: -133.5 }], // Half of the width to center it
+    transform: [{translateX: -133.5}], // Half of the width to center it
     width: 267,
     position: 'absolute',
   },
@@ -1221,7 +1221,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: Color.schemesOnPrimary,
     borderRadius: Border.br_xl,
-    
   },
 });
 

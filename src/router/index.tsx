@@ -7,6 +7,7 @@ import {
   HomeScreenNurse,
   NurseInputPage,
   ScreenGuest,
+  ProfileScreenNurse,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +32,11 @@ const index = () => {
       <Stack.Screen
         name="NurseInputPage"
         component={NurseInputPage}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ProfilScreenNurse"
+        component={ProfileScreenNurse}
         options={{headerShown: false}}
       />
       <Stack.Screen
