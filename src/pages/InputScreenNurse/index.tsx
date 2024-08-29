@@ -11,7 +11,8 @@ import LamaDirawat from '../../../components/LamaDirawat';
 import TextField from '../../../components/TextField';
 import {DatePickerr} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/native';
+import {useNavigation, ParamListBase} from '@react-navigation/core';
+// import {useNavigation, ParamListBase} from '@react-navigation/natiSve';
 import TrailingIcon from '../../../components/TrailingIcon';
 import {
   Padding,

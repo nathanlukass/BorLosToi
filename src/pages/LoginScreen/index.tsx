@@ -61,7 +61,7 @@ const LoginScreen = () => {
             mode="outlined"
             onPress={() => navigation.navigate('HomeScreenNurse')}
             contentStyle={styles.groupButtonBtn}>
-            <Text style={[styles.login, styles.loginPosition]}>Loginn</Text>
+            <Text style={[styles.login, styles.loginPosition]}>Login</Text>
           </Button>
         </View>
       </View>
