@@ -9,8 +9,10 @@ import {
 } from 'react-native';
 import LamaDirawat from '../../../components/LamaDirawat';
 import TextField from '../../../components/TextField';
+import {DatePickerr} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
+import TrailingIcon from '../../../components/TrailingIcon';
 import {
   Padding,
   Border,
@@ -499,17 +501,7 @@ const NurseInputPage = () => {
             <Text style={[styles.amount19, styles.amountPosition]}>22</Text>
           </View>
         </View>
-        <TextField
-          inputText="08/17/2023"
-          labelText="Date"
-          supportingText="MM/DD/YYYY"
-          showSupportingText
-          propTop={189}
-          propMarginLeft={-163}
-          propLeft="50%"
-          propWidth={327}
-          propBackgroundColor="rgba(73, 69, 79, 0.12)"
-        />
+        <DatePickerr />
         <View style={[styles.namaRuangan, styles.jumlahBedShadowBox]}>
           <Text style={[styles.mujair, styles.inputTypo]}>Mujair</Text>
         </View>
@@ -542,12 +534,16 @@ const NurseInputPage = () => {
 };
 
 const styles = StyleSheet.create({
+  datePickerContainer: {
+    top: '9%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   rincianPasienShadowBox: {
     paddingHorizontal: Padding.p_9xl,
     alignItems: 'center',
     width: 326,
     borderRadius: Border.br_3xs,
-    left: 18,
     shadowOpacity: 1,
     elevation: 8,
     shadowRadius: 8,
@@ -558,8 +554,12 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
+    justifyContent: 'center',
+    left: '50%',
+    transform: [{translateX: -163}], // Half of the width to center it
   },
   pasienFlexBox: {
+    alignSelf: 'center',
     justifyContent: 'center',
     position: 'absolute',
   },
@@ -569,8 +569,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.3,
     borderColor: Color.notSoBlack,
     borderStyle: 'solid',
-    marginLeft: -133.7,
     left: '50%',
+    transform: [{translateX: -133.5}], // Half of the width to center it
     width: 267,
     position: 'absolute',
   },
@@ -692,8 +692,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    alignSelf: 'center',
   },
   subJudul18Position: {
+    alignSelf: 'center',
     zIndex: 1,
     position: 'absolute',
   },
@@ -749,7 +751,7 @@ const styles = StyleSheet.create({
   },
   barAtasPosition: {
     borderRadius: Border.br_8xs,
-    left: 0,
+    alignSelf: 'center',
     position: 'absolute',
   },
   totalHariPerawatan: {
@@ -764,8 +766,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: FontSize.m3LabelLarge_size,
     justifyContent: 'center',
-    left: '50%',
-    top: '0%',
+    alignSelf: 'center',
   },
   judulChild: {
     top: 37,
@@ -1185,7 +1186,7 @@ const styles = StyleSheet.create({
   },
   inputHarian: {
     marginTop: -11.5,
-    marginLeft: -51,
+    marginLeft: -35,
     fontSize: FontSize.m3BodyLarge_size,
     zIndex: 1,
     position: 'absolute',
@@ -1212,6 +1213,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
   },
   nurseInputPage: {
+    alignSelf: 'center',
     flex: 1,
     height: 2080,
     overflow: 'hidden',
