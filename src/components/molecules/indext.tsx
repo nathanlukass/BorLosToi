@@ -1,3 +1,2 @@
-import DatePickerr from './DatePickerr'
-
+import DatePicker from './DatePickerr'
 export {DatePickerr}
