@@ -4,7 +4,7 @@ import { Button } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
-import UsernameField from '../../../components/UserNameField';
+import UsernameField from '../../../components/UsernameField';
 import PasswordField from '../../../components/PasswordField';
 import {
   FontFamily,
