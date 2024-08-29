@@ -21,7 +21,7 @@ const LoginScreen = () => {
     <View style={styles.loginScreenAdmin}>
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
         <Text style={[styles.loginToContinue, styles.orTypo]}>
-          Login to continue
+          S Login to continue
         </Text>
       </View>
       <View
@@ -61,7 +61,7 @@ const LoginScreen = () => {
             mode="outlined"
             onPress={() => navigation.navigate('HomeScreenNurse')}
             contentStyle={styles.groupButtonBtn}>
-            <Text style={[styles.login, styles.loginPosition]}>Login</Text>
+            <Text style={[styles.login, styles.loginPosition]}>Loginn</Text>
           </Button>
         </View>
       </View>
