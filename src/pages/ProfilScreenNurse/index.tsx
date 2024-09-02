@@ -86,7 +86,7 @@ const ProfileScreenNurse = () => {
       <Text style={[styles.joshuaTengker, styles.adminLayout]}>
         Joshua Tengker
       </Text>
-      <Text style={[styles.admin, styles.adminLayout]}>Admin</Text>
+      <Text style={[styles.admin, styles.adminLayout]}>Nurse</Text>
       <Text style={[styles.profile, styles.profilePosition]}>Profile</Text>
     </View>
   );
