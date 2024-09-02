@@ -1,11 +1,9 @@
 import * as React from 'react';
 import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
-import DockedInputDatePickerDesk from '../../../components/DockedInputDatePickerDesk';
-import Stats2 from '../../../components/Stats2';
+import {DatePickerr, FilterCheckBox} from '../../components';
 import Stats1 from '../../../components/Stats1';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
-import AndroidStatusBar from '../../../components/AndroidStatusBar';
 import {
   FontSize,
   FontFamily,
@@ -14,35 +12,30 @@ import {
   Border,
 } from '../../../GlobalStyles';
 
+
 const ScreenGuest = () => {
+  const datePickerStyle1 = {
+    top: '25%',
+  };
+  const datePickerStyle2 = {
+    top: '-40%',
+  };
+
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
     <View style={styles.screenGuest}>
-      <DockedInputDatePickerDesk
-        showClearButton
-        propTop={95}
-        propBackgroundColor="unset"
-        propBackgroundColor="unset"
-        propBackgroundColor="unset"
-        propBackgroundColor="unset"
-      />
-      <DockedInputDatePickerDesk
-        showClearButton
-        propBackgroundColor="unset"
-        propBackgroundColor="unset"
-        propBackgroundColor="unset"
-        propBackgroundColor="unset"
-      />
+        <DatePickerr style={datePickerStyle1}/>
       <View style={styles.groupParent}>
-        <Image
+        <FilterCheckBox/>
+        {/* <Image
           style={styles.groupIcon}
           resizeMode="cover"
           source={require('../../../assets/group.png')}
         />
         <Text style={[styles.filterByPeriod, styles.filterTypo]}>
           Filter by Period
-        </Text>
+        </Text> */}
       </View>
       <Stats1 />
       <View style={[styles.filter, styles.filterShadowBox]}>
@@ -53,6 +46,7 @@ const ScreenGuest = () => {
           source={require('../../../assets/vector.png')}
         />
       </View>
+        <DatePickerr style={datePickerStyle2}/>
       <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
           style={styles.backButton}
@@ -67,19 +61,15 @@ const ScreenGuest = () => {
           Back to login page
         </Text>
       </View>
-      <AndroidStatusBar
-        battery={require('../../../assets/battery1.png')}
-        androidStatusBarPosition="absolute"
-        androidStatusBarWidth="unset"
-        androidStatusBarTop={0}
-        androidStatusBarRight={0}
-        androidStatusBarLeft={0}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  datePickerStyle: {
+    top: 10,
+
+  },
   filterTypo: {
     textAlign: 'left',
     fontSize: FontSize.m3BodyLarge_size,
@@ -110,7 +100,7 @@ const styles = StyleSheet.create({
     marginLeft: 7,
   },
   groupParent: {
-    top: 206,
+    top: 190,
     left: 31,
     alignItems: 'center',
     flexDirection: 'row',
@@ -170,8 +160,8 @@ const styles = StyleSheet.create({
     left: '50%',
   },
   barAtas: {
-    top: 24,
-    left: 0,
+    top: 20,
+    left: 10,
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     shadowRadius: 4,
     elevation: 4,
@@ -184,7 +174,7 @@ const styles = StyleSheet.create({
   screenGuest: {
     borderRadius: Border.br_xl,
     flex: 1,
-    height: 800,
+    height: 900,
     overflow: 'hidden',
     width: '100%',
     backgroundColor: Color.schemesOnPrimary,

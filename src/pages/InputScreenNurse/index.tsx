@@ -8,12 +8,10 @@ import {
   ScrollView,
 } from 'react-native';
 import LamaDirawat from '../../../components/LamaDirawat';
-import TextField from '../../../components/TextField';
 import {DatePickerr} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/core';
 // import {useNavigation, ParamListBase} from '@react-navigation/natiSve';
-import TrailingIcon from '../../../components/TrailingIcon';
 import {
   Padding,
   Border,
@@ -499,7 +497,7 @@ const NurseInputPage = () => {
             Jumlah tempat tidur :
           </Text>
           <View style={[styles.amountSetting19, styles.subJudul18Position]}>
-            <Text style={[styles.amount19, styles.amountPosition]}>22</Text>
+            <Text style={[styles.amount19, styles.amountPosition]}>3</Text>
           </View>
         </View>
         <DatePickerr />
@@ -628,7 +626,7 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowColor: 'rgba(0, 0, 0, 0.25)',
-    left: 18,
+    left: 28,
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
@@ -663,7 +661,7 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowColor: 'rgba(0, 0, 0, 0.25)',
-    left: 18,
+    left: 28,
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
@@ -726,7 +724,7 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowColor: 'rgba(0, 0, 0, 0.25)',
-    left: 18,
+    left: 28,
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
@@ -749,6 +747,7 @@ const styles = StyleSheet.create({
   waktuLayout: {
     height: 31,
     width: 321,
+    left: '7.5%',
   },
   barAtasPosition: {
     borderRadius: Border.br_8xs,
@@ -870,7 +869,7 @@ const styles = StyleSheet.create({
     paddingVertical: Padding.p_base,
   },
   pasienMasukkeluarPada: {
-    height: '52.63%',
+    height: '100%',
     justifyContent: 'center',
     position: 'absolute',
     display: 'flex',
@@ -881,7 +880,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: FontSize.m3LabelLarge_size,
     left: '50%',
-    top: '0%',
+    top: '-30%',
   },
   judulInner: {
     top: 38,
@@ -1012,7 +1011,7 @@ const styles = StyleSheet.create({
     height: 182,
   },
   pasienAwal1: {
-    height: '70.21%',
+    height: '100.21%',
     marginLeft: -43.5,
     width: 86,
     display: 'flex',
@@ -1028,7 +1027,7 @@ const styles = StyleSheet.create({
   },
   judul6: {
     height: '27.92%',
-    marginLeft: -133,
+    marginLeft: -120,
     top: '19.6%',
     bottom: '52.48%',
     zIndex: 0,
@@ -1052,9 +1051,9 @@ const styles = StyleSheet.create({
     marginTop: -10.9,
   },
   pasienAwal2: {
-    height: '81.65%',
-    width: '29.32%',
-    top: '18.35%',
+    height: '220.65%',
+    width: '89.32%',
+    top: '120%',
     left: '0%',
     display: 'flex',
     alignItems: 'center',
@@ -1085,7 +1084,7 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowColor: 'rgba(0, 0, 0, 0.25)',
-    left: 18,
+    left: 28,
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
@@ -1093,7 +1092,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsRegular,
     textAlign: 'left',
     fontSize: FontSize.m3BodySmall_size,
-    marginTop: -14,
+    marginTop: -3,
   },
 
   amount19: {
@@ -1101,13 +1100,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   amountSetting19: {
-    marginTop: -9,
+    marginTop: -12,
     marginLeft: -40,
     width: 82,
     top: '50%',
     zIndex: 1,
     left: '50%',
-    height: 22,
+    height: 42,
     overflow: 'hidden',
   },
   jumlahBed: {
@@ -1115,10 +1114,11 @@ const styles = StyleSheet.create({
   },
   mujair: {
     fontSize: FontSize.m3BodyLarge_size,
-    alignSelf: 'stretch',
+    alignSelf: 'center',
     color: Color.notSoBlack,
     textAlign: 'center',
     marginBottom: -10,
+    top: -5,
   },
   namaRuangan: {
     top: 127,

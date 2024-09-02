@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   lamaDiRawat: {
     top: "18.18%",
     fontFamily: FontFamily.poppinsRegular,
-    left: "0%",
+    left: "10%",
     color: Color.notSoBlack,
   },
   subJudul: {
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   lamaDirawat: {
     top: 1216,
-    left: 18,
+    left: 28,
     shadowColor: "rgba(0, 0, 0, 0.25)",
     shadowOffset: {
       width: 0,
