@@ -21,7 +21,7 @@ const LoginScreen = () => {
     <View style={styles.loginScreenAdmin}>
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
         <Text style={[styles.loginToContinue, styles.orTypo]}>
-          S Login to continue
+          Login to continue
         </Text>
       </View>
       <View
@@ -92,6 +92,7 @@ const LoginScreen = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   groupButtonBtn: {

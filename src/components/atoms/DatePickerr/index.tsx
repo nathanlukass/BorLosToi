@@ -8,6 +8,7 @@ import TrailingIcon from '../../../../components/TrailingIcon';
 export interface IProps {
   date?: string;
   placeholder?: string;
+  style?: React.CSSProperties;
 }
 
 export interface IState {
@@ -18,35 +19,35 @@ export interface IState {
 
 class DatePickerr extends React.Component<IProps, IState> {
   state: IState = {
-    dateString: moment(new Date()).format('YYYY-MM-DD'),
+    dateString: moment(new Date()).format('dddd, YYYY-MM-DD'),
     date: this.props.date ? new Date(this.props.date) : new Date(),
-    show: false
+    show: false,
   };
 
   onChange = (event: any, selectedDate: any) => {
     if (selectedDate) {
       this.setState({
-        dateString: moment(selectedDate).format('YYYY-MM-DD'),
+        dateString: moment(selectedDate).format('dddd, YYYY-MM-DD'),
         date: selectedDate,
         show: Platform.OS === 'ios' // Keep the overlay open for iOS
       });
     } else {
       this.setState({ show: false }); // Close the overlay for Android
     }
-  }
+  };
 
   showOverlay = () => {
     this.setState({ show: true });
-  }
+  };
 
   hideOverlay = () => {
     this.setState({ show: false });
-  }
+  };
 
   render() {
     return (
       <View style={{ flex: 1, borderRadius: 100 }}> 
-        <TouchableOpacity onPress={this.showOverlay} style={styles.inputContainerStyle}>
+        <TouchableOpacity onPress={this.showOverlay} style={[styles.inputContainerStyle, this.props.style]}>
           {this.state.dateString ? (
             <Text style={styles.textStyle}>{this.state.dateString}</Text>
           ) : (
