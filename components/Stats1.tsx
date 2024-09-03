@@ -35,8 +35,8 @@ GDR`}</Text> */}
       <Text style={[styles.hari13Hari2]}>6-9 Hari</Text>
       <Text style={[styles.hari13Hari3]}>1-3 Hari</Text>
       <Text style={[styles.hari13Hari4]}>40-50 Kali</Text>
-      <Text style={[styles.hari13Hari5]}>{'< 20%'}</Text>
-      <Text style={[styles.hari13Hari6]}>{'< 45%'}</Text>
+      <Text style={[styles.hari13Hari5]}>{'< 20 mil'}</Text>
+      <Text style={[styles.hari13Hari6]}>{'< 45 mil'}</Text>
       <Text style={[styles.text]}>0</Text>
       <Text style={[styles.text2]}>0</Text>
       <Text style={[styles.text3]}>0</Text>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   hasil1Typo: {
     fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
+    fontWeight: '900',
     color: Color.colorBlack,
   },
   ketPosition: {
@@ -160,7 +160,8 @@ const styles = StyleSheet.create({
   ket1Typo: {
     color: Color.schemesOnPrimary,
     fontSize: FontSize.m3BodySmall_size,
-    textAlign: 'left',
+    textAlign: 'center',
+    top: 10,
   },
   arrow1IconLayout: {
     height: 20,
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
   hari13Hari: {
     color: Color.colorBlack,
     top: '20%',
-    width: '27.5%',
+    width: '30%',
     left: '55.5%',
   },
   text: {
@@ -207,7 +208,9 @@ const styles = StyleSheet.create({
   },
   ket1: {
     fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
+    fontWeight: '100',
+    color: 'black',
+    top: 10,
   },
   ket: {
     right: '7.25%',
@@ -256,6 +259,7 @@ const styles = StyleSheet.create({
   hasil1: {
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
+    textAlign: 100,
   },
   hasil: {
     right: '53.03%',
