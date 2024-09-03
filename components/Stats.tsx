@@ -1,10 +1,10 @@
 // import * as React from 'react';
-import React, {useState, useCallback} from 'react';
+import React from 'react';
 import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {Color, FontSize, FontFamily, Padding, Border} from '../GlobalStyles';
-import {Gap, GapHorizontal} from '../src/components';
+import {Gap} from '../src/components';
 
 export type StatsType = {
   onClose?: () => void;

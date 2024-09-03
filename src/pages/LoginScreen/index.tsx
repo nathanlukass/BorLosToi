@@ -1,8 +1,18 @@
-import * as React from 'react';
-import { Text, StyleSheet, View, Image, Pressable } from 'react-native';
-import { Button } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/native';
+// import * as React from 'react';
+import React, {useMemo, useState, useRef} from 'react';
+import {
+  Text,
+  StyleSheet,
+  View,
+  Image,
+  Pressable,
+  Animated,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import {Button} from 'react-native-paper';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
 import UsernameField from '../../../components/UsernameField';
 import PasswordField from '../../../components/PasswordField';
@@ -15,7 +25,68 @@ import {
 } from '../../../GlobalStyles';
 
 const LoginScreen = () => {
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('');
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Ref untuk animasi fade
+  const rotateAnim = useRef(new Animated.Value(0)).current; // Ref untuk animasi rotasi
+  const [username, setUsername] = useState('');
+  const [usernameIsFocused, usernameSetIsFocused] = useState(false);
+  const [password, setpassword] = useState('');
+  const [passwordIsFocused, passwordSetIsFocused] = useState(false);
+
+  const toggleDropdown = () => {
+    if (isDropdownOpen) {
+      // Animasi fade out dan rotasi ketika menutup dropdown
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rotateAnim, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start(() => setDropdownOpen(false));
+    } else {
+      setDropdownOpen(true);
+      // Animasi fade in dan rotasi ketika membuka dropdown
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(rotateAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  };
+
+  const selectRole = (role: string) => {
+    setSelectedRole(role);
+    toggleDropdown(); // Menggunakan toggleDropdown untuk mengatur animasi penutupan
+  };
+
+  const rotateIcon = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'], // Rotasi dari 0 derajat ke 180 derajat
+  });
+
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
+  const handleLogin = () => {
+    if (selectedRole == 'Nurse'){
+      navigation.navigate('HomeScreenNurse')
+    }
+    if (selectedRole == 'Admin'){
+      navigation.navigate('HomeScreenAdmin')
+    }
+  }
 
   return (
     <View style={styles.loginScreenAdmin}>
@@ -28,17 +99,16 @@ const LoginScreen = () => {
         style={[
           styles.pleaseSelectWhoYouAreWrapper,
           styles.loginFieldPosition,
-        ]}
-      >
+        ]}>
         <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
           Please select who you are
         </Text>
       </View>
       <View style={[styles.loginField, styles.loginFieldPosition]}>
         {/* Tambahkan komponen UsernameField di sini */}
-        <UsernameField />
+        {/* <UsernameField /> */}
         {/* Tambahkan PasswordField di sini */}
-        <PasswordField />
+        {/* <PasswordField /> */}
       </View>
       <View style={styles.loginButton}>
         <View style={[styles.lineParent, styles.lineParentLayout]}>
@@ -48,8 +118,7 @@ const LoginScreen = () => {
         </View>
         <Pressable
           style={[styles.groupParent, styles.groupLayout]}
-          onPress={() => navigation.navigate('ScreenGuest')}
-        >
+          onPress={() => navigation.navigate('ScreenGuest')}>
           <View style={[styles.rectangleWrapper, styles.groupLayout]}>
             <View style={[styles.groupInner, styles.groupLayout]} />
           </View>
@@ -61,9 +130,8 @@ const LoginScreen = () => {
           <Button
             style={styles.groupButton}
             mode="outlined"
-            onPress={() => navigation.navigate('HomeScreenNurse')}
-            contentStyle={styles.groupButtonBtn}
-          >
+            onPress={handleLogin}
+            contentStyle={styles.groupButtonBtn}>
             <Text style={[styles.login, styles.loginPosition]}>Login</Text>
           </Button>
         </View>
@@ -77,8 +145,7 @@ const LoginScreen = () => {
         style={[
           styles.welcomeToSamratIndikatorWrapper,
           styles.welcomePosition,
-        ]}
-      >
+        ]}>
         <Text style={[styles.welcomeToSamratContainer, styles.welcomePosition]}>
           <Text style={styles.welcomeTo}>Welcome to</Text>
           <Text style={styles.text}>{' \n'}</Text>
@@ -88,16 +155,165 @@ const LoginScreen = () => {
           <Text style={styles.text}> </Text>
         </Text>
       </View>
-      <SelectUserNurse
+      {/* <SelectUserNurse
         selectUserNursePosition="absolute"
         selectUserNurseTop={368}
         selectUserNurseLeft={27}
-      />
+      /> */}
+      <View style={styles.containerUsername}>
+        <Text style={styles.labelUsername}>Username</Text>
+        <TouchableOpacity
+          style={[
+            styles.inputContainerUsername,
+            {
+              borderColor: usernameIsFocused
+                ? Color.colorMediumaquamarine
+                : 'grey',
+            },
+          ]}
+          activeOpacity={1}
+          onPress={() => usernameSetIsFocused(true)}>
+          <TextInput
+            style={styles.inputUsername}
+            value={username}
+            onChangeText={setUsername}
+            placeholder="Enter your username"
+            onFocus={() => usernameSetIsFocused(true)}
+            onBlur={() => usernameSetIsFocused(false)}
+            placeholderTextColor={Color.colorDimgray}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.containerPassword}>
+        <Text style={styles.labelPassword}>Password</Text>
+        <TouchableOpacity
+          style={[
+            styles.inputContainerPassword,
+            {
+              borderColor: passwordIsFocused
+                ? Color.colorMediumaquamarine
+                : 'grey',
+            },
+          ]}
+          activeOpacity={1}
+          onPress={() => passwordSetIsFocused(true)}>
+          <TextInput
+            style={styles.inputPassword}
+            value={password}
+            onChangeText={setpassword}
+            placeholder="Enter your password"
+            onFocus={() => passwordSetIsFocused(true)}
+            onBlur={() => passwordSetIsFocused(false)}
+            placeholderTextColor={Color.colorDimgray}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={[styles.property1default]}>
+        <TouchableOpacity
+          style={[
+            styles.usernameField,
+            styles.usernameFlexBox,
+            {
+              borderColor: isDropdownOpen
+                ? Color.colorMediumaquamarine
+                : 'grey',
+            },
+          ]}
+          onPress={toggleDropdown}>
+          <Text style={styles.selectUserType}>
+            {selectedRole || 'Select user type'}
+          </Text>
+          <Animated.Image
+            style={[
+              styles.doubleDownIcon,
+              {transform: [{rotate: rotateIcon}]}, // Menggunakan animasi rotasi untuk ikon
+            ]}
+            resizeMode="cover"
+            source={require('../../../assets/double-down.png')}
+          />
+        </TouchableOpacity>
+        {isDropdownOpen && (
+          <Animated.View
+            style={[
+              styles.usernameFieldParent,
+              styles.usernameBg,
+              {opacity: fadeAnim},
+            ]}>
+            <TouchableOpacity
+              style={[styles.usernameField1, styles.usernameFlexBox]}
+              onPress={() => selectRole('Nurse')}>
+              <Text style={styles.selectUserType}>Nurse</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.usernameField1, styles.usernameFlexBox]}
+              onPress={() => selectRole('Admin')}>
+              <Text style={styles.selectUserType}>Admin</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  containerPassword: {
+    marginVertical: 10,
+    width: '83%',
+    top: 410,
+    left: -5,
+    alignSelf: 'center',
+  },
+  labelPassword: {
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorDimgray,
+    marginBottom: 5,
+    left: 10,
+  },
+  inputContainerPassword: {
+    left: 7.5,
+    height: 45,
+    borderRadius: Border.br_8xs,
+    borderWidth: 1,
+    backgroundColor: Color.schemesOnPrimary,
+    paddingHorizontal: Padding.p_3xs,
+    justifyContent: 'center',
+  },
+  inputPassword: {
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorBlack,
+  },
+  containerUsername: {
+    marginVertical: 10,
+    width: '83%',
+    top: 420,
+    left: -5,
+    alignSelf: 'center',
+  },
+  labelUsername: {
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorDimgray,
+    marginBottom: 5,
+    left: 10,
+  },
+  inputContainerUsername: {
+    // alignSelf: 'center',
+    left: 7.5,
+    height: 45,
+    borderRadius: Border.br_8xs,
+    borderWidth: 1,
+    backgroundColor: Color.schemesOnPrimary,
+    paddingHorizontal: Padding.p_3xs,
+    justifyContent: 'center',
+  },
+  inputUsername: {
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorBlack,
+  },
   groupButtonBtn: {
     height: 45,
     width: 320,
@@ -172,7 +388,7 @@ const styles = StyleSheet.create({
   },
   pleaseSelectWho: {
     fontSize: FontSize.m3LabelLarge_size,
-    left: 10,
+    left: 20,
   },
   pleaseSelectWhoYouAreWrapper: {
     top: 341,
@@ -293,6 +509,75 @@ const styles = StyleSheet.create({
     width: 385,
     height: 800,
     overflow: 'hidden',
+  },
+  usernameFlexBox: {
+    padding: Padding.p_3xs,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    left: 7,
+  },
+  usernameBg: {
+    backgroundColor: Color.schemesOnPrimary,
+    width: '100%',
+    position: 'absolute',
+    left: 7,
+  },
+  selectUserType: {
+    marginTop: -7,
+    top: '80%',
+    left: 12,
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorDimgray,
+    textAlign: 'left',
+    width: 119,
+    height: 19,
+    zIndex: 0,
+    position: 'absolute',
+  },
+  doubleDownIcon: {
+    top: 12,
+    left: 280,
+    width: 20,
+    height: 20,
+    zIndex: 1,
+    position: 'absolute',
+  },
+  usernameField: {
+    height: '31%',
+    top: '-40%',
+    right: '0.32%',
+    bottom: '28.97%',
+    left: '-0.32%',
+    borderRadius: Border.br_8xs,
+    borderStyle: 'solid',
+    borderColor: 'blue',
+    borderWidth: 1,
+    backgroundColor: Color.schemesOnPrimary,
+    width: '100%',
+    position: 'absolute',
+  },
+  usernameField1: {
+    height: 50,
+  },
+  usernameFieldParent: {
+    alignSelf: 'center',
+    height: '70%',
+    top: -10,
+    bottom: '0%',
+    left: '0%',
+    borderBottomRightRadius: Border.br_3xs,
+    borderBottomLeftRadius: Border.br_3xs,
+    paddingHorizontal: 0,
+    paddingVertical: Padding.p_8xs,
+  },
+  property1default: {
+    left: -5,
+    width: 317,
+    height: 145,
+    top: 250,
+    alignSelf: 'center',
   },
 });
 
