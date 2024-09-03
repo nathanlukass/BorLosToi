@@ -20,6 +20,16 @@ export const FontSize = {
   size_mini: 15,
   size_5xl: 24,
 };
+export const Gap = {
+  gap_3xs: 6,
+  gap_2xs: 8,
+  gap_xs: 10,
+  gap_sm: 15,
+  gap_md: 16,
+  gap_lg: 21,
+  gap_xl: 22,
+  gap_2xl: 26,
+};
 /* Colors */
 export const Color = {
   schemesOnPrimary: '#fff',

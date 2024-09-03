@@ -79,6 +79,15 @@ const LoginScreen = () => {
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
+  const handleLogin = () => {
+    if (selectedRole == 'Nurse'){
+      navigation.navigate('HomeScreenNurse')
+    }
+    if (selectedRole == 'Admin'){
+      navigation.navigate('HomeScreenAdmin')
+    }
+  }
+
   return (
     <View style={styles.loginScreenAdmin}>
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
@@ -121,7 +130,7 @@ const LoginScreen = () => {
           <Button
             style={styles.groupButton}
             mode="outlined"
-            onPress={() => navigation.navigate('HomeScreenNurse')}
+            onPress={handleLogin}
             contentStyle={styles.groupButtonBtn}>
             <Text style={[styles.login, styles.loginPosition]}>Login</Text>
           </Button>
