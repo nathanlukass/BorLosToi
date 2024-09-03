@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
-import { TextInput, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { Padding, Color, FontSize, FontFamily, Border } from '../GlobalStyles';
+import React, {useState} from 'react';
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import {Padding, Color, FontSize, FontFamily, Border} from '../GlobalStyles';
 
 const PasswordField = () => {
   const [password, setpassword] = useState('');
@@ -9,14 +15,13 @@ const PasswordField = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Password</Text>
-      <TouchableOpacity 
+      <TouchableOpacity
         style={[
-          styles.inputContainer, 
-          { borderColor: isFocused ? Color.colorMediumaquamarine : 'grey' }
+          styles.inputContainer,
+          {borderColor: isFocused ? Color.colorMediumaquamarine : 'grey'},
         ]}
         activeOpacity={1}
-        onPress={() => setIsFocused(true)}
-      >
+        onPress={() => setIsFocused(true)}>
         <TextInput
           style={styles.input}
           value={password}
@@ -32,18 +37,18 @@ const PasswordField = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  containerPassword: {
     marginVertical: 10,
     width: '100%',
   },
-  label: {
+  labelPassword: {
     fontSize: FontSize.m3LabelLarge_size,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.colorDimgray,
     marginBottom: 5,
     left: 10,
   },
-  inputContainer: {
+  inputContainerPassword: {
     left: 10,
     height: 45,
     borderRadius: Border.br_8xs,
@@ -52,7 +57,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_3xs,
     justifyContent: 'center',
   },
-  input: {
+  inputPassword: {
     fontSize: FontSize.m3LabelLarge_size,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.colorBlack,
