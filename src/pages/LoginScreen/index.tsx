@@ -6,13 +6,7 @@ import { useNavigation, ParamListBase } from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
 import UsernameField from '../../../components/UserNameField';
 import PasswordField from '../../../components/PasswordField';
-import {
-  FontFamily,
-  Color,
-  Padding,
-  Border,
-  FontSize,
-} from '../../../GlobalStyles';
+import { FontFamily, Color, Padding, Border, FontSize } from '../../../GlobalStyles';
 
 const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -24,12 +18,7 @@ const LoginScreen = () => {
           Login to continue
         </Text>
       </View>
-      <View
-        style={[
-          styles.pleaseSelectWhoYouAreWrapper,
-          styles.loginFieldPosition,
-        ]}
-      >
+      <View style={[styles.pleaseSelectWhoYouAreWrapper, styles.loginFieldPosition]}>
         <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
           Please select who you are
         </Text>
@@ -73,12 +62,7 @@ const LoginScreen = () => {
         resizeMode="cover"
         source={require('../../../assets/samrat1.png')}
       />
-      <View
-        style={[
-          styles.welcomeToSamratIndikatorWrapper,
-          styles.welcomePosition,
-        ]}
-      >
+      <View style={[styles.welcomeToSamratIndikatorWrapper, styles.welcomePosition]}>
         <Text style={[styles.welcomeToSamratContainer, styles.welcomePosition]}>
           <Text style={styles.welcomeTo}>Welcome to</Text>
           <Text style={styles.text}>{' \n'}</Text>
@@ -115,17 +99,6 @@ const styles = StyleSheet.create({
   },
   loginFieldPosition: {
     left: 21,
-    position: 'absolute',
-  },
-  fieldFlexBox: {
-    padding: Padding.p_3xs,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    height: 30,
-    width: 317,
-    borderStyle: 'solid',
-    borderRadius: Border.br_8xs,
     position: 'absolute',
   },
   groupLayout1: {
