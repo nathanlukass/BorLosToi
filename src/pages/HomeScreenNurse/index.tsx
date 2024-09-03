@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   lihatLayout: {
     height: 46,
     width: 328,
+    alignSelf: 'center',
   },
   bottomNavigationShadowBox: {
     shadowOpacity: 1,
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: '100%',
     backgroundColor: Color.schemesOnPrimary,
+    alignSelf: 'center',
   },
 });
 
