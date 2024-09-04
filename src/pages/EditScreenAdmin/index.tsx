@@ -1,188 +1,170 @@
-import * as React from "react";
-import { StyleSheet, View, Text, Pressable, Image, ScrollView } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation, ParamListBase } from "@react-navigation/native";
-import AndroidStatusBar from "../../../components/AndroidStatusBar";
-import { Padding, Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import * as React from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Image,
+  ScrollView,
+} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/native';
+import {
+  Padding,
+  Border,
+  Color,
+  FontFamily,
+  FontSize,
+} from '../../../GlobalStyles';
 
 const EditScreenAdmin = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <ScrollView>
-    <View style={styles.editScreenAdmin}>
-      <View style={styles.pilihButton}>
-        <View style={styles.pilihButtonChild} />
-        <Pressable
-          style={[styles.mujairA, styles.mujairShadowBox]}
-          onPress={() => navigation.navigate("EditMujairA")}
-        >
-          <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR A</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.mujairB, styles.mujairShadowBox]}
-          onPress={() => navigation.navigate("EditMujairB")}
-        >
-          <Text style={[styles.mujairB1, styles.mujairTypo]}>MUJAIR B</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.nike, styles.nikeShadowBox]}
-          onPress={() => navigation.navigate("EditNike")}
-        >
-          <Image
-            style={styles.vectorIcon}
-            resizeMode="cover"
-            source={require("../../../assets/vector1.png")}
-          />
-          <Text style={[styles.nike1, styles.icu1Typo]}>NIKE</Text>
-        </Pressable>
-        <View style={[styles.neonati, styles.mujairShadowBox]}>
-          <Text style={[styles.neonati1, styles.mujairTypo]}>NEONATI</Text>
-        </View>
-        <View style={[styles.obgynginekologi, styles.obgynShadowBox]}>
-          <Text style={[styles.bomboya, styles.mujairTypo]}>BOMBOYA</Text>
-        </View>
-        <View style={[styles.bomboya1, styles.mujairShadowBox]}>
-          <Text style={[styles.payangka, styles.mujairTypo]}>PAYANGKA</Text>
-        </View>
-        <Image
-          style={styles.groupIcon}
-          resizeMode="cover"
-          source={require("../../../assets/group1.png")}
-        />
-        <View style={[styles.obgyn, styles.obgynShadowBox]}>
-          <Text style={[styles.karper, styles.mujairTypo]}>KARPER</Text>
-        </View>
-        <View style={[styles.pilihButtonInner, styles.icuWrapperLayout]}>
-          <View style={[styles.frameWrapper, styles.framePosition]}>
-            <View style={[styles.icuWrapper, styles.icuWrapperLayout]}>
-              <View style={[styles.icu, styles.framePosition]}>
-                <View style={[styles.groupParent, styles.groupLayout2]}>
-                  <View style={styles.frameParent}>
-                    <View
-                      style={[styles.groupChild, styles.groupChildLayout2]}
-                    />
-                    <View style={[styles.groupItem, styles.groupLayout]} />
-                    <View style={[styles.groupInner, styles.groupLayout]} />
-                    <View style={[styles.frameView, styles.groupLayout]} />
-                    <View
-                      style={[styles.groupChild1, styles.groupChildLayout2]}
-                    />
-                    <View style={[styles.groupChild2, styles.groupLayout]} />
-                  </View>
-                  <View style={[styles.frameGroup, styles.groupLayout2]}>
-                    <View
-                      style={[styles.groupChild3, styles.groupChildLayout1]}
-                    />
-                    <View
-                      style={[styles.groupChild4, styles.groupChildLayout1]}
-                    />
-                    <View
-                      style={[styles.groupChild5, styles.groupChildLayout]}
-                    />
-                    <View
-                      style={[styles.groupChild6, styles.groupChildLayout]}
-                    />
-                    <View
-                      style={[styles.groupChild7, styles.groupChildLayout1]}
-                    />
-                    <View style={styles.groupChild8} />
+    <View>
+      <ScrollView>
+        <View style={styles.editScreenAdmin}>
+          <View style={styles.pilihButton}>
+            <View style={styles.pilihButtonChild} />
+            <Pressable
+              style={[styles.mujairA, styles.mujairShadowBox]}
+              onPress={() => navigation.navigate('EditMujairA')}>
+              <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR A</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.mujairB, styles.mujairShadowBox]}
+              onPress={() => navigation.navigate('EditMujairB')}>
+              <Text style={[styles.mujairB1, styles.mujairTypo]}>MUJAIR B</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.nike, styles.nikeShadowBox]}
+              onPress={() => navigation.navigate('EditNike')}>
+              <Image
+                style={styles.vectorIcon}
+                resizeMode="cover"
+                source={require('../../../assets/vector1.png')}
+              />
+              <Text style={[styles.nike1, styles.icu1Typo]}>NIKE</Text>
+            </Pressable>
+            <View style={[styles.neonati, styles.mujairShadowBox]}>
+              <Text style={[styles.neonati1, styles.mujairTypo]}>NEONATI</Text>
+            </View>
+            <View style={[styles.obgynginekologi, styles.obgynShadowBox]}>
+              <Text style={[styles.bomboya, styles.mujairTypo]}>BOMBOYA</Text>
+            </View>
+            <View style={[styles.bomboya1, styles.mujairShadowBox]}>
+              <Text style={[styles.payangka, styles.mujairTypo]}>PAYANGKA</Text>
+            </View>
+            <Image
+              style={styles.groupIcon}
+              resizeMode="cover"
+              source={require('../../../assets/group1.png')}
+            />
+            <View style={[styles.obgyn, styles.obgynShadowBox]}>
+              <Text style={[styles.karper, styles.mujairTypo]}>KARPER</Text>
+            </View>
+            <View style={[styles.pilihButtonInner, styles.icuWrapperLayout]}>
+              <View style={[styles.frameWrapper, styles.framePosition]}>
+                <View style={[styles.icuWrapper, styles.icuWrapperLayout]}>
+                  <View style={[styles.icu, styles.framePosition]}>
+                    <View style={[styles.groupParent, styles.groupLayout2]}>
+                      <View style={styles.frameParent} />
+                      <Image
+                        style={styles.groupIconIcu}
+                        resizeMode="cover"
+                        source={require('../../../assets/group1.png')}
+                      />
+                    </View>
+                    <Text style={[styles.icu1, styles.icu1Typo]}>ICU</Text>
                   </View>
                 </View>
-                <Text style={[styles.icu1, styles.icu1Typo]}>ICU</Text>
               </View>
             </View>
+            <Pressable
+              style={[styles.icu2, styles.nikeShadowBox]}
+              onPress={() => navigation.navigate('EditMujairC')}>
+              <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR C</Text>
+            </Pressable>
+            <Text style={styles.pilihRuangan}>Pilih Ruangan</Text>
+            <Image
+              style={[styles.mujairIcon, styles.mujairIconLayout]}
+              resizeMode="cover"
+              source={require('../../../assets/mujair.png')}
+            />
+            <Image
+              style={[styles.mujairIcon1, styles.mujairIconLayout]}
+              resizeMode="cover"
+              source={require('../../../assets/mujair.png')}
+            />
+            <Image
+              style={styles.mujairIcon2}
+              resizeMode="cover"
+              source={require('../../../assets/mujair1.png')}
+            />
+            <Image
+              style={[styles.fishIcon, styles.iconPosition]}
+              resizeMode="cover"
+              source={require('../../../assets/fish.png')}
+            />
+            <Image
+              style={[styles.neonatiIcon, styles.iconPosition]}
+              resizeMode="cover"
+              source={require('../../../assets/neonati.png')}
+            />
+            <Image
+              style={styles.karperIcon}
+              resizeMode="cover"
+              source={require('../../../assets/karper.png')}
+            />
           </View>
+          <Text style={[styles.arilSangari, styles.halloAdminTypo]}>
+            Aril Sangari
+          </Text>
+          <Text style={[styles.halloAdmin, styles.halloAdminTypo]}>
+            Hallo Admin
+          </Text>
+          <Image
+            style={styles.memojiIcon}
+            resizeMode="cover"
+            source={require('../../../assets/memoji2.png')}
+          />
         </View>
-        <Pressable
-          style={[styles.icu2, styles.nikeShadowBox]}
-          onPress={() => navigation.navigate("EditMujairC")}
-        >
-          <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR C</Text>
-        </Pressable>
-        <Text style={styles.pilihRuangan}>Pilih Ruangan</Text>
-        <Image
-          style={[styles.mujairIcon, styles.mujairIconLayout]}
-          resizeMode="cover"
-          source={require("../../../assets/mujair.png")}
-        />
-        <Image
-          style={[styles.mujairIcon1, styles.mujairIconLayout]}
-          resizeMode="cover"
-          source={require("../../../assets/mujair.png")}
-        />
-        <Image
-          style={styles.mujairIcon2}
-          resizeMode="cover"
-          source={require("../../../assets/mujair1.png")}
-        />
-        <Image
-          style={[styles.fishIcon, styles.iconPosition]}
-          resizeMode="cover"
-          source={require("../../../assets/fish.png")}
-        />
-        <Image
-          style={[styles.neonatiIcon, styles.iconPosition]}
-          resizeMode="cover"
-          source={require("../../../assets/neonati.png")}
-        />
-        <Image
-          style={styles.karperIcon}
-          resizeMode="cover"
-          source={require("../../../assets/karper.png")}
-        />
-      </View>
-      <Text style={[styles.arilSangari, styles.halloAdminTypo]}>
-        Aril Sangari
-      </Text>
-      <Text style={[styles.halloAdmin, styles.halloAdminTypo]}>
-        Hallo Admin
-      </Text>
-      <Image
-        style={styles.memojiIcon}
-        resizeMode="cover"
-        source={require("../../../assets/memoji2.png")}
-      />
+      </ScrollView>
       <Pressable
         style={styles.bottomNavigation}
-        onPress={() => navigation.navigate("EditScreenAdmin")}
-      >
+        onPress={() => navigation.navigate('EditScreenAdmin')}>
         <Pressable
           style={[styles.homeParent, styles.parentFlexBox]}
-          onPress={() => navigation.navigate("HomeScreenAdmin")}
-        >
+          onPress={() => navigation.navigate('HomeScreenAdmin')}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
-            source={require("../../../assets/home.png")}
+            source={require('../../../assets/home.png')}
           />
           <Text style={[styles.home, styles.homeTypo]}>Home</Text>
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate("EditScreenAdmin")}
-        >
+          onPress={() => navigation.navigate('EditScreenAdmin')}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
-            source={require("../../../assets/assignment1.png")}
+            source={require('../../../assets/assignment1.png')}
           />
           <Text style={[styles.riwayat, styles.homeTypo]}>Edit</Text>
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate("ProfileScreenNurse1")}
-        >
+          onPress={() => navigation.navigate('ProfileScreenNurse1')}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
-            source={require("../../../assets/account-circle2.png")}
+            source={require('../../../assets/account-circle2.png')}
           />
           <Text style={[styles.home, styles.homeTypo]}>Profil</Text>
         </Pressable>
       </Pressable>
     </View>
-    </ScrollView>
   );
 };
 
@@ -190,11 +172,11 @@ const styles = StyleSheet.create({
   mujairShadowBox: {
     paddingVertical: Padding.p_3xs,
     paddingHorizontal: Padding.p_31xl,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: Border.br_3xs,
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    alignItems: "center",
-    flexDirection: "row",
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    alignItems: 'center',
+    flexDirection: 'row',
     elevation: 8,
     shadowRadius: 8,
     shadowOpacity: 1,
@@ -205,75 +187,75 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
   },
   mujairTypo: {
-    textAlign: "center",
+    textAlign: 'center',
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsMedium,
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: FontSize.m3BodySmall_size,
     zIndex: 0,
     top: 80,
-    position: "absolute",
+    position: 'absolute',
   },
   nikeShadowBox: {
-    bottom: "58.17%",
-    top: "26.29%",
+    bottom: '58.17%',
+    top: '26.29%',
     paddingVertical: Padding.p_3xs,
     paddingHorizontal: Padding.p_31xl,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
     width: 138,
     borderRadius: Border.br_3xs,
     elevation: 8,
     shadowRadius: 8,
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    height: "15.53%",
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    height: '15.53%',
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    position: "absolute",
+    position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
   icu1Typo: {
     zIndex: 1,
-    textAlign: "center",
+    textAlign: 'center',
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsMedium,
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: FontSize.m3BodySmall_size,
-    position: "absolute",
+    position: 'absolute',
   },
   obgynShadowBox: {
     top: 476,
     height: 114,
     paddingVertical: Padding.p_3xs,
     paddingHorizontal: Padding.p_31xl,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
     width: 138,
     borderRadius: Border.br_3xs,
     elevation: 8,
     shadowRadius: 8,
-    shadowColor: "rgba(0, 0, 0, 0.5)",
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    position: "absolute",
+    position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
   icuWrapperLayout: {
     width: 116,
-    height: 114,
-    position: "absolute",
+    height: 14,
+    position: 'absolute',
   },
   framePosition: {
     top: 0,
-    position: "absolute",
+    position: 'absolute',
   },
   groupLayout2: {
     height: 58,
@@ -284,63 +266,63 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_8xs,
     top: 11,
     backgroundColor: Color.colorMediumaquamarine,
-    position: "absolute",
-    overflow: "hidden",
+    position: 'absolute',
+    overflow: 'hidden',
   },
   groupLayout: {
     height: 5,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
     backgroundColor: Color.colorMediumaquamarine,
     borderRadius: Border.br_8xs,
-    position: "absolute",
-    overflow: "hidden",
+    position: 'absolute',
+    overflow: 'hidden',
   },
   groupChildLayout1: {
     width: 5,
     backgroundColor: Color.colorMediumaquamarine,
     borderRadius: Border.br_8xs,
-    position: "absolute",
-    overflow: "hidden",
+    position: 'absolute',
+    overflow: 'hidden',
   },
   groupChildLayout: {
     left: 61,
     width: 5,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
     backgroundColor: Color.colorMediumaquamarine,
     borderRadius: Border.br_8xs,
     height: 58,
-    position: "absolute",
-    overflow: "hidden",
+    position: 'absolute',
+    overflow: 'hidden',
   },
   mujairIconLayout: {
-    left: "9.35%",
-    right: "64.84%",
-    width: "25.81%",
-    height: "12.26%",
-    maxHeight: "100%",
-    maxWidth: "100%",
-    position: "absolute",
-    overflow: "hidden",
+    left: '9.35%',
+    right: '64.84%',
+    width: '25.81%',
+    height: '12.26%',
+    maxHeight: '100%',
+    maxWidth: '100%',
+    position: 'absolute',
+    overflow: 'hidden',
   },
   iconPosition: {
     height: 60,
-    left: "50%",
-    position: "absolute",
-    overflow: "hidden",
+    left: '50%',
+    position: 'absolute',
+    overflow: 'hidden',
   },
   halloAdminTypo: {
     textShadowRadius: 4,
-    textShadowColor: "rgba(0, 0, 0, 0.25)",
+    textShadowColor: 'rgba(0, 0, 0, 0.25)',
     height: 31,
-    textAlign: "left",
+    textAlign: 'left',
     fontSize: FontSize.m3LabelLarge_size,
     left: 88,
     textShadowOffset: {
@@ -348,38 +330,38 @@ const styles = StyleSheet.create({
       height: 1,
     },
     color: Color.notSoBlack,
-    position: "absolute",
+    position: 'absolute',
   },
   parentFlexBox: {
     width: 44,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   homeTypo: {
     fontFamily: FontFamily.iconText,
     lineHeight: 20,
     fontSize: FontSize.iconText_size,
-    textAlign: "center",
-    fontWeight: "500",
+    textAlign: 'center',
+    fontWeight: '500',
   },
   pilihButtonChild: {
-    height: "86.65%",
+    height: '86.65%',
     marginLeft: -166,
-    top: "2.86%",
-    bottom: "10.49%",
+    top: '2.86%',
+    bottom: '10.49%',
     shadowRadius: 9,
     elevation: 9,
     borderRadius: Border.br_xs,
     width: 328,
-    display: "none",
+    display: 'none',
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    left: "50%",
-    position: "absolute",
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    left: '50%',
+    position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
   mujair: {
@@ -390,14 +372,14 @@ const styles = StyleSheet.create({
     marginLeft: -155,
     width: 138,
     paddingHorizontal: Padding.p_31xl,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: Border.br_3xs,
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    position: "absolute",
-    bottom: "77.52%",
-    height: "15.53%",
-    top: "6.95%",
-    left: "50%",
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    position: 'absolute',
+    bottom: '77.52%',
+    height: '15.53%',
+    top: '6.95%',
+    left: '50%',
   },
   mujairB1: {
     left: 41,
@@ -407,13 +389,13 @@ const styles = StyleSheet.create({
     right: 4,
     width: 138,
     paddingHorizontal: Padding.p_31xl,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: Border.br_3xs,
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    position: "absolute",
-    bottom: "77.52%",
-    height: "15.53%",
-    top: "6.95%",
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    position: 'absolute',
+    bottom: '77.52%',
+    height: '15.53%',
+    top: '6.95%',
   },
   vectorIcon: {
     width: 50,
@@ -438,10 +420,10 @@ const styles = StyleSheet.create({
     right: 4,
     width: 138,
     paddingHorizontal: Padding.p_31xl,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: Border.br_3xs,
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    position: "absolute",
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    position: 'absolute',
   },
   bomboya: {
     left: 39,
@@ -460,22 +442,34 @@ const styles = StyleSheet.create({
     width: 147,
     height: 114,
     paddingHorizontal: Padding.p_31xl,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: Border.br_3xs,
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    position: "absolute",
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    position: 'absolute',
   },
   groupIcon: {
-    height: "8.72%",
-    width: "18.39%",
-    top: "47.28%",
-    right: "66.77%",
-    bottom: "44.01%",
-    left: "14.84%",
-    maxHeight: "100%",
-    maxWidth: "100%",
-    position: "absolute",
-    overflow: "hidden",
+    height: '8.72%',
+    width: '18.39%',
+    top: '47.28%',
+    right: '66.77%',
+    bottom: '44.01%',
+    left: '14.84%',
+    maxHeight: '100%',
+    maxWidth: '100%',
+    position: 'absolute',
+    overflow: 'hidden',
+  },
+  groupIconIcu: {
+    height: '180.72%',
+    width: '98.39%',
+    top: '-10%',
+    right: '66.77%',
+    bottom: '44.01%',
+    left: '0%',
+    maxHeight: '100%',
+    maxWidth: '100%',
+    position: 'absolute',
+    overflow: 'hidden',
   },
   karper: {
     left: 47,
@@ -492,7 +486,7 @@ const styles = StyleSheet.create({
     left: 8,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
     width: 15,
@@ -505,7 +499,7 @@ const styles = StyleSheet.create({
     width: 23,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
   },
@@ -515,7 +509,7 @@ const styles = StyleSheet.create({
     width: 20,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
   },
@@ -524,7 +518,7 @@ const styles = StyleSheet.create({
     width: 12,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
   },
@@ -533,7 +527,7 @@ const styles = StyleSheet.create({
     left: 38,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
     width: 15,
@@ -542,9 +536,9 @@ const styles = StyleSheet.create({
   frameParent: {
     left: 6,
     width: 49,
-    height: 21,
+    height: 11,
     top: 14,
-    position: "absolute",
+    position: 'absolute',
   },
   groupChild3: {
     left: 3,
@@ -568,7 +562,7 @@ const styles = StyleSheet.create({
     height: 54,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
   },
@@ -579,18 +573,18 @@ const styles = StyleSheet.create({
     height: 2,
     transform: [
       {
-        rotate: "-65.4deg",
+        rotate: '-65.4deg',
       },
     ],
     backgroundColor: Color.colorMediumaquamarine,
     top: 0,
-    position: "absolute",
-    overflow: "hidden",
+    position: 'absolute',
+    overflow: 'hidden',
   },
   frameGroup: {
     left: 0,
     top: 0,
-    position: "absolute",
+    position: 'absolute',
   },
   groupParent: {
     zIndex: 0,
@@ -605,11 +599,11 @@ const styles = StyleSheet.create({
     height: 114,
     paddingVertical: Padding.p_3xs,
     paddingHorizontal: Padding.p_31xl,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderRadius: Border.br_3xs,
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    alignItems: "center",
-    flexDirection: "row",
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    alignItems: 'center',
+    flexDirection: 'row',
     elevation: 8,
     shadowRadius: 8,
     shadowOpacity: 1,
@@ -626,7 +620,7 @@ const styles = StyleSheet.create({
   frameWrapper: {
     width: 134,
     left: 0,
-    height: 114,
+    height: 14,
   },
   pilihButtonInner: {
     top: 620,
@@ -637,44 +631,44 @@ const styles = StyleSheet.create({
   },
   pilihRuangan: {
     marginLeft: -58,
-    top: "0%",
+    top: '0%',
     fontSize: FontSize.m3BodyLarge_size,
-    fontWeight: "600",
+    fontWeight: '600',
     fontFamily: FontFamily.poppinsSemiBold,
-    textShadowColor: "rgba(0, 0, 0, 0.1)",
+    textShadowColor: 'rgba(0, 0, 0, 0.1)',
     textShadowRadius: 8,
     textShadowOffset: {
       width: 0,
       height: 1,
     },
-    textAlign: "center",
+    textAlign: 'center',
     color: Color.notSoBlack,
-    left: "50%",
-    position: "absolute",
+    left: '50%',
+    position: 'absolute',
   },
   mujairIcon: {
-    bottom: "61.44%",
-    top: "26.29%",
-    left: "9.35%",
-    right: "64.84%",
-    width: "25.81%",
-    height: "12.26%",
+    bottom: '61.44%',
+    top: '26.29%',
+    left: '9.35%',
+    right: '64.84%',
+    width: '25.81%',
+    height: '12.26%',
   },
   mujairIcon1: {
-    bottom: "80.79%",
-    left: "9.35%",
-    right: "64.84%",
-    width: "25.81%",
-    height: "12.26%",
-    top: "6.95%",
+    bottom: '80.79%',
+    left: '9.35%',
+    right: '64.84%',
+    width: '25.81%',
+    height: '12.26%',
+    top: '6.95%',
   },
   mujairIcon2: {
     top: 51,
     left: 197,
     width: 80,
     height: 92,
-    position: "absolute",
-    overflow: "hidden",
+    position: 'absolute',
+    overflow: 'hidden',
   },
   fishIcon: {
     marginLeft: -118,
@@ -685,7 +679,7 @@ const styles = StyleSheet.create({
   neonatiIcon: {
     marginTop: -18,
     marginLeft: 52,
-    top: "50%",
+    top: '50%',
     width: 60,
   },
   karperIcon: {
@@ -693,15 +687,15 @@ const styles = StyleSheet.create({
     top: 466,
     width: 100,
     height: 100,
-    left: "50%",
-    position: "absolute",
-    overflow: "hidden",
+    left: '50%',
+    position: 'absolute',
+    overflow: 'hidden',
   },
   pilihButton: {
-    height: "73.11%",
+    height: '73.11%',
     marginLeft: -150,
-    top: "14.24%",
-    bottom: "12.65%",
+    top: '14.24%',
+    bottom: '12.65%',
     shadowRadius: 4,
     elevation: 4,
     width: 310,
@@ -710,13 +704,13 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    left: "50%",
-    position: "absolute",
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    left: '50%',
+    position: 'absolute',
   },
   arilSangari: {
     top: 90,
-    fontWeight: "700",
+    fontWeight: '700',
     fontFamily: FontFamily.interBold,
     width: 181,
   },
@@ -731,13 +725,13 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_980xl,
     width: 55,
     height: 55,
-    position: "absolute",
-    overflow: "hidden",
+    position: 'absolute',
+    overflow: 'hidden',
   },
   homeIcon: {
     width: 24,
     height: 24,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   home: {
     color: Color.colorSilver_200,
@@ -749,34 +743,27 @@ const styles = StyleSheet.create({
     color: Color.colorMediumaquamarine,
   },
   bottomNavigation: {
-    marginLeft: -180,
-    top: 744,
-    shadowColor: "rgba(67, 67, 67, 0.3)",
-    width: 360,
-    height: 56,
-    justifyContent: "space-between",
-    paddingHorizontal: Padding.p_41xl,
-    paddingVertical: Padding.p_9xs,
-    alignItems: "center",
-    flexDirection: "row",
-    elevation: 8,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    shadowColor: 'rgba(67, 67, 67, 0.3)',
     shadowRadius: 8,
-    display: "none",
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    left: "50%",
-    position: "absolute",
-    backgroundColor: Color.schemesOnPrimary,
+    elevation: 8,
+    height: 56,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 70, // Adjusted padding
+    paddingVertical: 8, // Adjusted padding
+    backgroundColor: '#ffffff',
+    zIndex: 1000,
   },
   editScreenAdmin: {
     borderRadius: Border.br_xl,
     flex: 1,
-    width: "100%",
+    width: '100%',
     height: 1004,
-    overflow: "hidden",
+    overflow: 'hidden',
     backgroundColor: Color.schemesOnPrimary,
   },
 });
