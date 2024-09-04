@@ -9,6 +9,13 @@ import HomeScreenAdmin from './HomeScreenAdmin';
 import ProfileScreenAdmin from './ProfileScreenAdmin';
 import EditScreenAdmin from './EditScreenAdmin';
 import PrintOutScreen from './PrintOutScreen';
+import EditMujairA from './EditMujairA';
+import EditMujairB from './EditMujairB';
+import EditMujairC from './EditMujairC';
+import EditNike from './EditNike';
+import EditNeonati from './EditNeonati';
+import EditPayangka from './EditPayangka';
+import EditKarper from './EditKarper';
 
 export {
   LoginScreen,
@@ -21,4 +28,11 @@ export {
   ProfileScreenAdmin,
   EditScreenAdmin,
   PrintOutScreen,
+  EditMujairA,
+  EditMujairB,
+  EditMujairC,
+  EditNike,
+  EditNeonati,
+  EditPayangka,
+  EditKarper,
 };

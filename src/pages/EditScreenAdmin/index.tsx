@@ -21,7 +21,7 @@ const EditScreenAdmin = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <View>
+    <View style={styles.container}>
       <ScrollView>
         <View style={styles.editScreenAdmin}>
           <View style={styles.pilihButton}>
@@ -29,11 +29,21 @@ const EditScreenAdmin = () => {
             <Pressable
               style={[styles.mujairA, styles.mujairShadowBox]}
               onPress={() => navigation.navigate('EditMujairA')}>
+              <Image
+                style={[styles.mujairIcon, styles.mujairIconLayout]}
+                resizeMode="cover"
+                source={require('../../../assets/mujair.png')}
+              />
               <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR A</Text>
             </Pressable>
             <Pressable
               style={[styles.mujairB, styles.mujairShadowBox]}
               onPress={() => navigation.navigate('EditMujairB')}>
+              <Image
+                style={[styles.mujairIcon, styles.mujairIconLayout]}
+                resizeMode="cover"
+                source={require('../../../assets/mujair.png')}
+              />
               <Text style={[styles.mujairB1, styles.mujairTypo]}>MUJAIR B</Text>
             </Pressable>
             <Pressable
@@ -46,23 +56,42 @@ const EditScreenAdmin = () => {
               />
               <Text style={[styles.nike1, styles.icu1Typo]}>NIKE</Text>
             </Pressable>
-            <View style={[styles.neonati, styles.mujairShadowBox]}>
+            <Pressable
+              style={[styles.neonati, styles.mujairShadowBox]}
+              onPress={() => navigation.navigate('EditNeonati')}>
+              <Image
+                style={[styles.neonatiIcon, styles.iconPosition]}
+                resizeMode="cover"
+                source={require('../../../assets/neonati.png')}
+              />
               <Text style={[styles.neonati1, styles.mujairTypo]}>NEONATI</Text>
-            </View>
-            <View style={[styles.obgynginekologi, styles.obgynShadowBox]}>
+            </Pressable>
+            <Pressable
+              style={[styles.obgynginekologi, styles.obgynShadowBox]}
+              onPress={() => navigation.navigate('EditNeonati')}>
               <Text style={[styles.bomboya, styles.mujairTypo]}>BOMBOYA</Text>
-            </View>
-            <View style={[styles.bomboya1, styles.mujairShadowBox]}>
+            </Pressable>
+            <Pressable
+              style={[styles.bomboya1, styles.mujairShadowBox]}
+              onPress={() => navigation.navigate('EditPayangka')}>
+              <Image
+                style={styles.groupIcon}
+                resizeMode="cover"
+                source={require('../../../assets/group1.png')}
+              />
               <Text style={[styles.payangka, styles.mujairTypo]}>PAYANGKA</Text>
-            </View>
-            <Image
-              style={styles.groupIcon}
-              resizeMode="cover"
-              source={require('../../../assets/group1.png')}
-            />
-            <View style={[styles.obgyn, styles.obgynShadowBox]}>
+            </Pressable>
+
+            <Pressable
+              style={[styles.obgyn, styles.obgynShadowBox]}
+              onPress={() => navigation.navigate('EditKarper')}>
+              <Image
+                style={styles.karperIcon}
+                resizeMode="cover"
+                source={require('../../../assets/karper.png')}
+              />
               <Text style={[styles.karper, styles.mujairTypo]}>KARPER</Text>
-            </View>
+            </Pressable>
             <View style={[styles.pilihButtonInner, styles.icuWrapperLayout]}>
               <View style={[styles.frameWrapper, styles.framePosition]}>
                 <View style={[styles.icuWrapper, styles.icuWrapperLayout]}>
@@ -83,10 +112,15 @@ const EditScreenAdmin = () => {
             <Pressable
               style={[styles.icu2, styles.nikeShadowBox]}
               onPress={() => navigation.navigate('EditMujairC')}>
+              <Image
+                style={[styles.mujairIcon, styles.mujairIconLayout]}
+                resizeMode="cover"
+                source={require('../../../assets/mujair.png')}
+              />
               <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR C</Text>
             </Pressable>
             <Text style={styles.pilihRuangan}>Pilih Ruangan</Text>
-            <Image
+            {/* <Image
               style={[styles.mujairIcon, styles.mujairIconLayout]}
               resizeMode="cover"
               source={require('../../../assets/mujair.png')}
@@ -100,22 +134,22 @@ const EditScreenAdmin = () => {
               style={styles.mujairIcon2}
               resizeMode="cover"
               source={require('../../../assets/mujair1.png')}
-            />
+            /> */}
             <Image
               style={[styles.fishIcon, styles.iconPosition]}
               resizeMode="cover"
               source={require('../../../assets/fish.png')}
             />
-            <Image
+            {/* <Image
               style={[styles.neonatiIcon, styles.iconPosition]}
               resizeMode="cover"
               source={require('../../../assets/neonati.png')}
-            />
-            <Image
+            /> */}
+            {/* <Image
               style={styles.karperIcon}
               resizeMode="cover"
               source={require('../../../assets/karper.png')}
-            />
+            /> */}
           </View>
           <Text style={[styles.arilSangari, styles.halloAdminTypo]}>
             Aril Sangari
@@ -169,6 +203,9 @@ const EditScreenAdmin = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   mujairShadowBox: {
     paddingVertical: Padding.p_3xs,
     paddingHorizontal: Padding.p_31xl,
@@ -305,8 +342,8 @@ const styles = StyleSheet.create({
   mujairIconLayout: {
     left: '9.35%',
     right: '64.84%',
-    width: '25.81%',
-    height: '12.26%',
+    width: '300.81%',
+    height: '150.26%',
     maxHeight: '100%',
     maxWidth: '100%',
     position: 'absolute',
@@ -398,14 +435,15 @@ const styles = StyleSheet.create({
     top: '6.95%',
   },
   vectorIcon: {
-    width: 50,
-    height: 25,
-    zIndex: 0,
+    width: 53,
+    height: 27,
+    zIndex: 1000,
+    bottom: 10,
   },
   nike1: {
     left: 56,
     top: 80,
-    zIndex: 1,
+    zIndex: 1000,
   },
   nike: {
     right: 4,
@@ -448,16 +486,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   groupIcon: {
-    height: '8.72%',
-    width: '18.39%',
-    top: '47.28%',
-    right: '66.77%',
+    height: '63.72%',
+    width: '115%',
+    top: '5%',
+    right: '100.77%',
     bottom: '44.01%',
-    left: '14.84%',
-    maxHeight: '100%',
-    maxWidth: '100%',
     position: 'absolute',
-    overflow: 'hidden',
+    marginLeft: 45,
+    paddingLeft: 45,
   },
   groupIconIcu: {
     height: '180.72%',
@@ -647,20 +683,23 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   mujairIcon: {
-    bottom: '61.44%',
-    top: '26.29%',
-    left: '9.35%',
-    right: '64.84%',
-    width: '25.81%',
-    height: '12.26%',
+    top: '-5%',
+    // left: 100,
+    // right: '-100%',
+    marginLeft: 15,
+    paddingLeft: 100,
+    width: 150,
+    height: 100,
+    // zIndex: 1000,
   },
   mujairIcon1: {
-    bottom: '80.79%',
-    left: '9.35%',
-    right: '64.84%',
-    width: '25.81%',
-    height: '12.26%',
-    top: '6.95%',
+    // bottom: '80.79%',
+    // right: '64.84%',
+    marginLeft: 15,
+    paddingLeft: 100,
+    width: 150,
+    height: 100,
+    top: '-5%',
   },
   mujairIcon2: {
     top: 51,
@@ -677,19 +716,20 @@ const styles = StyleSheet.create({
     width: 70,
   },
   neonatiIcon: {
-    marginTop: -18,
-    marginLeft: 52,
+    marginTop: -32,
+    marginLeft: 17,
     top: '50%',
     width: 60,
   },
   karperIcon: {
-    marginLeft: 35,
-    top: 466,
-    width: 100,
-    height: 100,
-    left: '50%',
+    height: '143.72%',
+    width: '285%',
+    top: -20,
+    right: '35.77%',
+    bottom: '44.01%',
     position: 'absolute',
-    overflow: 'hidden',
+    marginLeft: 45,
+    paddingLeft: 45,
   },
   pilihButton: {
     height: '73.11%',
@@ -759,12 +799,12 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   editScreenAdmin: {
-    borderRadius: Border.br_xl,
+    // borderRadius: Border.br_xl,
     flex: 1,
-    width: '100%',
+    // width: '100%',
     height: 1004,
-    overflow: 'hidden',
-    backgroundColor: Color.schemesOnPrimary,
+    // overflow: 'hidden',
+    // backgroundColor: Color.schemesOnPrimary,
   },
 });
 
