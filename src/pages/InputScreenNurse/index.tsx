@@ -530,7 +530,7 @@ const NurseInputPage = () => {
         </View>
       </View>
     </ScrollView>
-      <View
+      {/* <View
           style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
           <View style={[styles.homeParent, styles.parentFlexBox]}>
             <Image
@@ -560,7 +560,7 @@ const NurseInputPage = () => {
             />
             <Text style={[styles.riwayat, styles.homeTypo]}>Profil</Text>
           </Pressable>
-        </View>
+        </View> */}
     </View>
   );
 };

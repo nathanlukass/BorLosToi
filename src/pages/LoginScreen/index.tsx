@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import React, {useMemo, useState, useRef} from 'react';
+import React, {useMemo, useState, useRef, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/native';
+import {useNavigation, ParamListBase, useFocusEffect} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
 import { showMessage} from 'react-native-flash-message';
 import FlashMessage from 'react-native-flash-message';
@@ -27,7 +27,7 @@ import {
   FontSize,
 } from '../../../GlobalStyles';
 
-const LoginScreen = () => {
+const LoginScreen = ({route}) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState('');
   const fadeAnim = useRef(new Animated.Value(0)).current; // Ref untuk animasi fade
@@ -96,6 +96,13 @@ const LoginScreen = () => {
       })
     }
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (route.params?.loggedOut) {
+        Alert.alert("Logged Out", "You have been logged out successfully.");
+      }
+    }, [route.params?.loggedOut]))
 
   return (
     <View style={styles.loginScreenAdmin}>
