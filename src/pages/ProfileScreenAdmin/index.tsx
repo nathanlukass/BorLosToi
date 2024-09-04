@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
+import {Image, StyleSheet, Text, View, Pressable, Alert} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {
@@ -11,10 +11,13 @@ import {
 } from '../../../GlobalStyles';
 
 const ProfileScreenAdmin = () => {
+  const handleLogoutPress = () => {
+    navigation.navigate('LoginScreen', { loggedOut: true });
+  };
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <View style={styles.profileScreenNurse}>
+    <View style={styles.profileScreenAdmin}>
       <Pressable
         style={styles.bottomNavigation}
         onPress={() => navigation.navigate('InputScreenNurse')}>
@@ -50,7 +53,7 @@ const ProfileScreenAdmin = () => {
       <View style={[styles.logoutButton, styles.aboutAppLayout]}>
         <Pressable
           style={[styles.logoutButtonChild, styles.childShadowBox]}
-          onPress={() => navigation.navigate('HomeScreenNurse')}
+          onPress={handleLogoutPress}
         />
         <Text style={styles.logOut}>Log Out</Text>
       </View>
@@ -58,7 +61,7 @@ const ProfileScreenAdmin = () => {
         <View style={[styles.aboutAppChild, styles.standbydonorChildLayout]} />
         <Text style={[styles.aboutApp1, styles.aboutApp1Typo]}>About App</Text>
         <Image
-          style={styles.iconInfoEmpty}
+          style={styles.iconInfoEmpty}git
           resizeMode="cover"
           source={require('../../../assets/-icon-info-empty.png')}
         />
@@ -170,25 +173,20 @@ const styles = StyleSheet.create({
     color: Color.colorMediumaquamarine,
   },
   bottomNavigation: {
-    top: 744,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     shadowColor: 'rgba(67, 67, 67, 0.3)',
     shadowRadius: 8,
     elevation: 8,
-    width: 360,
     height: 56,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: Padding.p_41xl,
-    paddingVertical: Padding.p_9xs,
-    alignSelf: 'center',
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    left: 22,
-    position: 'absolute',
-    backgroundColor: Color.schemesOnPrimary,
+    paddingHorizontal: 70, // Adjusted padding
+    paddingVertical: 8, // Adjusted padding
+    backgroundColor: '#ffffff',
+    zIndex: 1000,
   },
   logoutButtonChild: {
     width: 325,
@@ -325,14 +323,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'left',
   },
-  profileScreenNurse: {
-    borderRadius: Border.br_xl,
+  profileScreenAdmin: {
+    // borderRadius: Border.br_xl,
     flex: 1,
-    width: '100%',
+    // width: '100%',
     height: 800,
-    overflow: 'hidden',
-    backgroundColor: Color.schemesOnPrimary,
-    alignSelf: 'center',
+    // overflow: 'hidden',
+    // backgroundColor: Color.schemesOnPrimary,
+    // alignSelf: 'center',
   },
 });
 

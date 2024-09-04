@@ -288,7 +288,7 @@ const styles = StyleSheet.create({
   },
   upArrow1Parent: {
     top: 73,
-    left: 343,
+    left: 325,
     width: 20,
     justifyContent: 'center',
     alignItems: 'center',

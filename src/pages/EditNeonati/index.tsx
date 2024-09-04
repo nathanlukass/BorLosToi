@@ -27,7 +27,7 @@ import {
 import {DatePickerr} from '../../components';
 // import {ScrollView} from 'react-native-gesture-handler';
 
-const EditMujairA = () => {
+const EditNeonati = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const datePickerStyle1 = {
@@ -77,9 +77,9 @@ const EditMujairA = () => {
         />
         <PasienMasukRuangan propTop={350} />
         <PasienAwal propTop={237} />
-        {/* <View style={[styles.saveButton, styles.barAtasShadowBox]}>
+        <View style={[styles.saveButton, styles.barAtasShadowBox]}>
           <Text style={[styles.save, styles.saveTypo]}>Save</Text>
-        </View> */}
+        </View>
         <View style={[styles.jumlahBed, styles.jumlahBedFlexBox]}>
           <Text style={[styles.jumlahTempatTidur, styles.pasienYangMasih1Typo]}>
             Jumlah tempat tidur :
@@ -116,7 +116,7 @@ const EditMujairA = () => {
               source={require('../../../assets/-icon-arrow-back.png')}
             />
           </Pressable>
-          <Text style={[styles.mujairA, styles.mujairAPosition]}>Mujair A</Text>
+          <Text style={[styles.mujairA, styles.mujairAPosition]}>Neonati</Text>
         </Pressable>
         <DatePickerr style={datePickerStyle1} />
       </View>
@@ -400,4 +400,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditMujairA;
+export default EditNeonati;
