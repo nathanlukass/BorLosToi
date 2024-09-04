@@ -59,35 +59,12 @@ const EditScreenAdmin = () => {
               <View style={[styles.icu, styles.framePosition]}>
                 <View style={[styles.groupParent, styles.groupLayout2]}>
                   <View style={styles.frameParent}>
-                    <View
-                      style={[styles.groupChild, styles.groupChildLayout2]}
-                    />
-                    <View style={[styles.groupItem, styles.groupLayout]} />
-                    <View style={[styles.groupInner, styles.groupLayout]} />
-                    <View style={[styles.frameView, styles.groupLayout]} />
-                    <View
-                      style={[styles.groupChild1, styles.groupChildLayout2]}
-                    />
-                    <View style={[styles.groupChild2, styles.groupLayout]} />
                   </View>
-                  <View style={[styles.frameGroup, styles.groupLayout2]}>
-                    <View
-                      style={[styles.groupChild3, styles.groupChildLayout1]}
-                    />
-                    <View
-                      style={[styles.groupChild4, styles.groupChildLayout1]}
-                    />
-                    <View
-                      style={[styles.groupChild5, styles.groupChildLayout]}
-                    />
-                    <View
-                      style={[styles.groupChild6, styles.groupChildLayout]}
-                    />
-                    <View
-                      style={[styles.groupChild7, styles.groupChildLayout1]}
-                    />
-                    <View style={styles.groupChild8} />
-                  </View>
+                  <Image
+          style={styles.groupIconIcu}
+          resizeMode="cover"
+          source={require("../../../assets/group1.png")}
+        />
                 </View>
                 <Text style={[styles.icu1, styles.icu1Typo]}>ICU</Text>
               </View>
@@ -268,7 +245,7 @@ const styles = StyleSheet.create({
   },
   icuWrapperLayout: {
     width: 116,
-    height: 114,
+    height: 14,
     position: "absolute",
   },
   framePosition: {
@@ -477,6 +454,18 @@ const styles = StyleSheet.create({
     position: "absolute",
     overflow: "hidden",
   },
+  groupIconIcu: {
+    height: "180.72%",
+    width: "98.39%",
+    top: "-10%",
+    right: "66.77%",
+    bottom: "44.01%",
+    left: "0%",
+    maxHeight: "100%",
+    maxWidth: "100%",
+    position: "absolute",
+    overflow: "hidden",
+  },
   karper: {
     left: 47,
     zIndex: 0,
@@ -542,7 +531,7 @@ const styles = StyleSheet.create({
   frameParent: {
     left: 6,
     width: 49,
-    height: 21,
+    height: 11,
     top: 14,
     position: "absolute",
   },
@@ -626,7 +615,7 @@ const styles = StyleSheet.create({
   frameWrapper: {
     width: 134,
     left: 0,
-    height: 114,
+    height: 14,
   },
   pilihButtonInner: {
     top: 620,
