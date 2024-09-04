@@ -221,18 +221,19 @@ const styles = StyleSheet.create({
   },
   bottomNavigation: {
     position: 'absolute',
-    shadowColor: 'rgba(67, 67, 67, 0.3)',
-    shadowRadius: 8,
     bottom: 0,
     left: 0,
     right: 0,
+    shadowColor: 'rgba(67, 67, 67, 0.3)',
+    shadowRadius: 8,
     elevation: 8,
-    width: 360,
     height: 56,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: Padding.p_52xl,
-    paddingVertical: Padding.p_9xs,
+    paddingHorizontal: 70, // Adjusted padding
+    paddingVertical: 8, // Adjusted padding
+    backgroundColor: '#ffffff',
+    zIndex: 1000,
   },
   homeScreenNurse: {
     // borderRadius: Border.br_xl,
