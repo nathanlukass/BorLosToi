@@ -1,0 +1,91 @@
+/* fonts */
+export const FontFamily = {
+  iconText: 'Inter-Medium',
+  m3LabelLarge: 'Roboto-Medium',
+  poppinsBold: 'Poppins-Bold',
+  m3BodySmall: 'Roboto-Regular',
+  poppinsSemiBold: 'Poppins-SemiBold',
+  poppinsRegular: 'Poppins-Regular',
+  poppinsMedium: 'Poppins-Medium',
+  interBold: 'Inter-Bold',
+  robotoItalic: 'Roboto-Italic',
+};
+/* font sizes */
+export const FontSize = {
+  iconText_size: 10,
+  m3LabelLarge_size: 14,
+  m3BodyLarge_size: 16,
+  m3BodySmall_size: 12,
+  size_xl: 20,
+  size_mini: 15,
+  size_5xl: 24,
+};
+export const Gap = {
+  gap_3xs: 6,
+  gap_2xs: 8,
+  gap_xs: 10,
+  gap_sm: 15,
+  gap_md: 16,
+  gap_lg: 21,
+  gap_xl: 22,
+  gap_2xl: 26,
+};
+/* Colors */
+export const Color = {
+  schemesOnPrimary: '#fff',
+  colorMediumaquamarine: '#4ec69e',
+  colorSilver_100: '#bbb',
+  colorSilver_200: '#b9b9b9',
+  schemesOnSurface: '#1d1b20',
+  colorGray_100: '#181818',
+  wireframesColorsTextLegibilityHighEmphasis: '#170e2b',
+  colorsBackgroundsLight: '#f5f5f5',
+  colorDarkslategray_100: '#454b60',
+  schemesOnSurfaceVariant: '#49454f',
+  notSoBlack: '#464646',
+  stateLayersOnSurfaceVariantOpacity12: 'rgba(73, 69, 79, 0.12)',
+  schemesPrimary: '#65558f',
+  schemesSurface: '#fef7ff',
+  colorCornflowerblue_100: '#65a0f3',
+  colorCornflowerblue_200: '#1e9dec',
+  colorBlueviolet: '#6b50f6',
+  colorIndianred_100: '#e95b5b',
+  colorIndianred_200: '#df585a',
+  colorBlack: '#000',
+  colorLimegreen: '#49df30',
+  schemesSurfaceContainerHigh: '#ece6f0',
+  m3SysLightSecondaryContainer: '#e8def8',
+  colorDimgray: '#6a6a6a',
+  colorCrimson: '#ed1f33',
+  colorLightgray: '#ccc',
+};
+/* Paddings */
+export const Padding = {
+  p_3xs: 10,
+  p_52xl: 71,
+  p_9xs: 4,
+  p_base: 16,
+  p_5xs: 8,
+  p_21xl: 40,
+  p_10xl: 29,
+  p_xl: 20,
+  p_2xl: 21,
+  p_9xl: 28,
+  p_3xl: 22,
+  p_xs: 12,
+  p_41xl: 60,
+  p_31xl: 50,
+  p_8xs: 5,
+};
+/* border radiuses */
+export const Border = {
+  br_8xs: 5,
+  br_xl: 20,
+  br_9xs: 4,
+  br_81xl: 100,
+  br_xs: 12,
+  br_5xs: 8,
+  br_3xs: 10,
+  br_980xl: 999,
+  br_base: 16,
+};
