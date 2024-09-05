@@ -116,7 +116,7 @@ const EditMujairB = () => {
               source={require('../../../assets/-icon-arrow-back.png')}
             />
           </Pressable>
-          <Text style={[styles.mujairA, styles.mujairAPosition]}>Mujair B</Text>
+          <Text style={[styles.mujairA, styles.mujairAPosition]}>Mujair A</Text>
         </Pressable>
         <DatePickerr style={datePickerStyle1} />
       </View>
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   jumlahBedFlexBox: {
     justifyContent: 'center',
-    left: '50%',
+    left: '43.9%',
   },
   amountSettingPosition: {
     top: '0%',
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     color: Color.colorGray_100,
     fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
+    fontWeight: 'bold',
     letterSpacing: 1,
     fontSize: FontSize.m3BodySmall_size,
     left: '46.34%',
@@ -281,11 +281,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 8,
     shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
@@ -310,20 +305,15 @@ const styles = StyleSheet.create({
   },
   jumlahTempatTidur: {
     alignSelf: 'stretch',
-    zIndex: 0,
+    zIndex: 1000,
+    top: -19,
+    height: 100,
+    marginTop: 87,
+    fontWeight: 'bold',
   },
   amount1: {
     marginTop: -10.9,
-    width: '19.51%',
-    opacity: 0.7,
-    color: Color.colorGray_100,
-    fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-    letterSpacing: 1,
-    fontSize: FontSize.m3BodySmall_size,
-    left: '46.34%',
-    top: '50%',
-    textAlign: 'center',
+    fontWeight: 'bold',
   },
   amountSetting1: {
     marginTop: -9,
@@ -333,7 +323,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   editSquareIcon: {
-    top: 13,
+    top: 23,
     left: 292,
     width: 18,
     height: 18,
@@ -348,12 +338,6 @@ const styles = StyleSheet.create({
     gap: Gap.gap_lg,
     width: 326,
     borderRadius: Border.br_3xs,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
     justifyContent: 'center',
     elevation: 8,
     shadowRadius: 8,
@@ -393,10 +377,8 @@ const styles = StyleSheet.create({
   editMujairA: {
     flex: 1,
     height: 1980,
-    overflow: 'hidden',
-    width: '100%',
-    backgroundColor: Color.schemesOnPrimary,
-    borderRadius: Border.br_xl,
+    alignSelf: 'center',
+    alignItems: 'center',
   },
 });
 

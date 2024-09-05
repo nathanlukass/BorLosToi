@@ -19,6 +19,8 @@ import {
   EditNeonati,
   EditPayangka,
   EditKarper,
+  EditBomboya,
+  EditIcu,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -108,6 +110,16 @@ const index = () => {
       <Stack.Screen
         name="EditKarper"
         component={EditKarper}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditBomboya"
+        component={EditBomboya}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditIcu"
+        component={EditIcu}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

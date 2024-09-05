@@ -27,7 +27,7 @@ import {
 import {DatePickerr} from '../../components';
 // import {ScrollView} from 'react-native-gesture-handler';
 
-const Payangka = () => {
+const EditIcu = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const datePickerStyle1 = {
@@ -116,7 +116,7 @@ const Payangka = () => {
               source={require('../../../assets/-icon-arrow-back.png')}
             />
           </Pressable>
-          <Text style={[styles.mujairA, styles.mujairAPosition]}>Payangka</Text>
+          <Text style={[styles.mujairA, styles.mujairAPosition]}>ICU</Text>
         </Pressable>
         <DatePickerr style={datePickerStyle1} />
       </View>
@@ -369,4 +369,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Payangka;
+export default EditIcu;
