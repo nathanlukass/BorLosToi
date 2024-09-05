@@ -11,6 +11,9 @@ import {
 } from '../../../GlobalStyles';
 
 const ProfileScreenNurse = () => {
+  const handleLogoutPress = () => {
+    navigation.navigate('LoginScreen', { loggedOut: true });
+  };
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
@@ -50,9 +53,9 @@ const ProfileScreenNurse = () => {
       <View style={[styles.logoutButton, styles.aboutAppLayout]}>
         <Pressable
           style={[styles.logoutButtonChild, styles.childShadowBox]}
-          onPress={() => navigation.navigate('HomeScreenNurse')}
-        />
+          onPress={handleLogoutPress}>
         <Text style={styles.logOut}>Log Out</Text>
+          </Pressable>
       </View>
 
       <View style={[styles.aboutApp, styles.aboutAppLayout]}>
@@ -197,11 +200,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   logOut: {
-    top: 5,
+    top: 13,
     color: Color.colorIndianred_100,
-    width: 332,
+    width: 302,
     opacity: 0.7,
-    height: 31,
+    height: 301,
     display: 'flex',
     fontFamily: FontFamily.poppinsRegular,
     fontSize: FontSize.m3LabelLarge_size,
@@ -213,8 +216,10 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     top: 649,
-    left: 3,
+    left: 17,
+    alignSelf: 'center',
     width: 329,
+    height: 300,
   },
   aboutAppChild: {
     borderRadius: Border.br_xs,
@@ -234,6 +239,7 @@ const styles = StyleSheet.create({
   aboutApp1: {
     left: 46,
     width: 278,
+    marginTop: 7,
     textAlign: 'left',
   },
   iconInfoEmpty: {
@@ -242,7 +248,7 @@ const styles = StyleSheet.create({
     top: '28.57%',
     right: '90.99%',
     bottom: '28.57%',
-    left: '3.79%',
+    left: '4.79%',
     maxWidth: '100%',
     maxHeight: '100%',
     position: 'absolute',
@@ -251,8 +257,9 @@ const styles = StyleSheet.create({
   aboutApp: {
     top: 577,
     width: 322,
-    left: 22,
-  },
+    left: 32,
+    alignSelf: 'center'
+,  },
   standbydonorChild: {
     borderRadius: Border.br_xs,
     elevation: 9,
@@ -270,6 +277,7 @@ const styles = StyleSheet.create({
   },
   changePassword: {
     left: 47,
+    marginTop: 6,
     width: 306,
     textAlign: 'left',
   },
@@ -280,7 +288,7 @@ const styles = StyleSheet.create({
   },
   standbydonor: {
     top: 524,
-    left: 22,
+    left: 32,
   },
   profileScreenNurseChild: {
     top: -2,

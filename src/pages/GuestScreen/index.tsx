@@ -177,11 +177,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   screenGuest: {
-    borderRadius: Border.br_xl,
+    // borderRadius: Border.br_xl,
     flex: 1,
     height: 900,
-    overflow: 'hidden',
-    width: '100%',
+    // overflow: 'hidden',
+    // width: '100%',
     backgroundColor: Color.schemesOnPrimary,
   },
 });

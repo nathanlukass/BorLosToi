@@ -2,7 +2,6 @@ import * as React from 'react';
 import {StyleSheet, View, Text, Image, Pressable, Modal} from 'react-native';
 import FrameComponent from '../../../components/FrameComponent';
 import { useState,useEffect,useCallback } from 'react';
-import AndroidStatusBar from '../../../components/AndroidStatusBar';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import Stats from '../../../components/Stats';
@@ -238,7 +237,7 @@ const styles = StyleSheet.create({
   printOutBox: {
     top: 262,
     left: 32,
-    shadowOpacity: 1,
+    shadowOpacity: -10,
     shadowOffset: {
       width: 0,
       height: 4,
@@ -342,7 +341,7 @@ const styles = StyleSheet.create({
     height: 800,
     // overflow: 'hidden',
     // width: '100%',
-    // backgroundColor: Color.schemesOnPrimary,
+    backgroundColor: Color.schemesOnPrimary,
   },
 });
 
