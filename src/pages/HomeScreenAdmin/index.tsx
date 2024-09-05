@@ -1,9 +1,11 @@
 import * as React from 'react';
-import {StyleSheet, View, Text, Image, Pressable} from 'react-native';
+import {StyleSheet, View, Text, Image, Pressable, Modal} from 'react-native';
 import FrameComponent from '../../../components/FrameComponent';
+import { useState,useEffect,useCallback } from 'react';
 import AndroidStatusBar from '../../../components/AndroidStatusBar';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
+import Stats from '../../../components/Stats';
 import {
   Border,
   Color,
@@ -15,6 +17,16 @@ import {
 const HomeScreenAdmin = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
+  const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
+  const openLihatBORLOS = useCallback(() => {
+    setLihatBORLOSVisible(true);
+  }, []);
+
+  const closeLihatBORLOS = useCallback(() => {
+    setLihatBORLOSVisible(false);
+  }, []);
+
+
   return (
     <View style={styles.homeScreenAdmin}>
       <View style={[styles.welcomeBar, styles.welcomeLayout]}>
@@ -22,32 +34,35 @@ const HomeScreenAdmin = () => {
         <FrameComponent veronikaBedes="Joshua " />
         <Text style={styles.admin}>{'Admin '}</Text>
       </View>
+      <View style={[styles.lihatBorlostoi1FlexBox, styles.lihatBorlostoi1]}>
+        <View style={[styles.lihatBorlostoiItem, styles.lihatLayout]} />
+      <Pressable
+            style={styles.lihatBorLosContainer}
+            onPress={openLihatBORLOS}>
+            <Text style={styles.text}>
+              <Text style={styles.lihatBorLosContainer1}>
+                <Text style={styles.lihat}>
+                  <Text style={styles.lihat1}>Lihat</Text>
+                </Text>
+                <Text style={styles.borLosToiBtoGdrNdr}>
+                  <Text style={styles.lihat}>{'  '}</Text>
+                  <Text style={styles.borLosToi}>
+                    {'BOR LOS TOI BTO GDR & NDR'}
+                  </Text>
+                </Text>
+              </Text>
+            </Text>
+          </Pressable>
+          </View>
       <Pressable onPress={() => navigation.navigate('PrintOutScreen')}>
-        <View style={[styles.lihatBorlostoi, styles.lihatLayout]}>
+        <View style={[styles.printOutBox, styles.lihatLayout]}>
           <View style={[styles.lihatBorlostoiChild, styles.lihatLayout]} />
           <Text style={[styles.printOutHasil, styles.printOutHasilFlexBox]}>
             {'Print out hasil '}
           </Text>
         </View>
       </Pressable>
-      <View style={[styles.lihatBorlostoi1, styles.lihatBorlostoi1FlexBox]}>
-        <View style={[styles.lihatBorlostoiItem, styles.lihatLayout]} />
-        <Text
-          style={[styles.lihatBorLosContainer, styles.printOutHasilFlexBox]}>
-          <Text style={styles.lihatBorLosContainer1}>
-            <Text style={styles.lihat}>
-              <Text style={styles.lihat1}>Lihat</Text>
-            </Text>
-            <Text style={styles.borLosToiBtoGdrNdr}>
-              <Text style={styles.lihat}>{'  '}</Text>
-              <Text style={styles.borLosToi}>
-                {'BOR LOS TOI BTO GDR & NDR'}
-              </Text>
-            </Text>
-          </Text>
-        </Text>
-      </View>
-      <View style={[styles.bottomNavigation, styles.lihatBorlostoi1FlexBox]}>
+      <View style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
         <View style={[styles.homeParent, styles.parentFlexBox]}>
           <Image
             style={styles.homeIcon}
@@ -77,14 +92,43 @@ const HomeScreenAdmin = () => {
           <Text style={[styles.riwayat, styles.homeTypo]}>Profil</Text>
         </Pressable>
       </View>
+      <Modal animationType="fade" transparent visible={lihatBORLOSVisible}>
+        <View style={styles.lihatBORLOSOverlay}>
+          <Pressable style={styles.lihatBORLOSBg} onPress={closeLihatBORLOS} />
+          <Stats onClose={closeLihatBORLOS} />
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  bottomNavigationShadowBox: {
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    left: 0,
+    position: 'absolute',
+    backgroundColor: Color.schemesOnPrimary,
+  },
   welcomeLayout: {
     width: 328,
     shadowColor: 'rgba(0, 0, 0, 0.25)',
+  },
+  lihatBORLOSOverlay: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(113, 113, 113, 0.3)',
+  },
+  lihatBORLOSBg: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    left: 0,
+    top: 0,
   },
   childShadowBox: {
     borderRadius: Border.br_xs,
@@ -113,6 +157,7 @@ const styles = StyleSheet.create({
     top: '50%',
     textAlign: 'left',
     position: 'absolute',
+    
   },
   lihatBorlostoi1FlexBox: {
     justifyContent: 'space-between',
@@ -124,6 +169,7 @@ const styles = StyleSheet.create({
       height: 4,
     },
     position: 'absolute',
+    left: 250,
   },
   parentFlexBox: {
     justifyContent: 'center',
@@ -183,15 +229,15 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
   },
   printOutHasil: {
-    marginTop: -15,
+    marginTop: -8.5,
     left: 18,
     width: 310,
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsRegular,
   },
-  lihatBorlostoi: {
+  printOutBox: {
     top: 262,
-    left: 16,
+    left: 32,
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
@@ -217,8 +263,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
-  lihat1: {
-    color: Color.colorMediumaquamarine,
+ borLosToiBtoGdrNdr: {
+    color: Color.notSoBlack,
   },
   lihat: {
     fontFamily: FontFamily.poppinsRegular,
@@ -227,18 +273,13 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
   },
-  borLosToiBtoGdrNdr: {
-    color: Color.notSoBlack,
-  },
   lihatBorLosContainer1: {
     width: '100%',
   },
   lihatBorLosContainer: {
-    marginTop: -16,
-    marginLeft: -144,
-    width: 308,
-    zIndex: 1,
-    left: '50%',
+    left: 7,
+    top: 10,
+    position: 'absolute',
   },
   lihatBorlostoi1: {
     top: 210,
@@ -254,6 +295,9 @@ const styles = StyleSheet.create({
     left: '50%',
     marginLeft: -164,
   },
+  lihat1: {
+    color: Color.colorMediumaquamarine,
+  },
   homeIcon: {
     width: 24,
     height: 24,
@@ -268,27 +312,37 @@ const styles = StyleSheet.create({
   riwayat: {
     color: Color.colorSilver_100,
   },
+  text: {
+    fontSize: FontSize.m3LabelLarge_size,
+    textAlign: 'left',
+    display: 'flex',
+    width: 310,
+    height: 40,
+    alignItems: 'center',
+  },
   bottomNavigation: {
-    top: 744,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     shadowColor: 'rgba(67, 67, 67, 0.3)',
     shadowRadius: 8,
     elevation: 8,
-    width: 360,
     height: 56,
-    paddingHorizontal: Padding.p_41xl,
-    paddingVertical: Padding.p_9xs,
-    left: 0,
-    justifyContent: 'space-between',
     flexDirection: 'row',
-    backgroundColor: Color.schemesOnPrimary,
+    justifyContent: 'space-between',
+    paddingHorizontal: 70, // Adjusted padding
+    paddingVertical: 8, // Adjusted padding
+    backgroundColor: '#ffffff',
+    zIndex: 1000,
   },
   homeScreenAdmin: {
-    borderRadius: Border.br_xl,
+    // borderRadius: Border.br_xl,
     flex: 1,
     height: 800,
-    overflow: 'hidden',
-    width: '100%',
-    backgroundColor: Color.schemesOnPrimary,
+    // overflow: 'hidden',
+    // width: '100%',
+    // backgroundColor: Color.schemesOnPrimary,
   },
 });
 

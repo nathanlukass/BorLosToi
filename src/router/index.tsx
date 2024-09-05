@@ -11,7 +11,14 @@ import {
   HomeScreenAdmin,
   ProfileScreenAdmin,
   EditScreenAdmin,
-  PrintOutScreen
+  PrintOutScreen,
+  EditMujairA,
+  EditMujairB,
+  EditMujairC,
+  EditNike,
+  EditNeonati,
+  EditPayangka,
+  EditKarper,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -66,6 +73,41 @@ const index = () => {
       <Stack.Screen
         name="PrintOutScreen"
         component={PrintOutScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditMujairA"
+        component={EditMujairA}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditMujairB"
+        component={EditMujairB}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditMujairC"
+        component={EditMujairC}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditNike"
+        component={EditNike}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditNeonati"
+        component={EditNeonati}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditPayangka"
+        component={EditPayangka}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="EditKarper"
+        component={EditKarper}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
