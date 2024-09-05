@@ -68,7 +68,12 @@ const EditScreenAdmin = () => {
             </Pressable>
             <Pressable
               style={[styles.obgynginekologi, styles.obgynShadowBox]}
-              onPress={() => navigation.navigate('EditNeonati')}>
+              onPress={() => navigation.navigate('EditBomboya')}>
+              <Image
+                style={[styles.fishIcon, styles.iconPosition]}
+                resizeMode="cover"
+                source={require('../../../assets/fish.png')}
+              />
               <Text style={[styles.bomboya, styles.mujairTypo]}>BOMBOYA</Text>
             </Pressable>
             <Pressable
@@ -97,18 +102,22 @@ const EditScreenAdmin = () => {
                 <View style={[styles.icuWrapper, styles.icuWrapperLayout]}>
                   <View style={[styles.icu, styles.framePosition]}>
                     <View style={[styles.groupParent, styles.groupLayout2]}>
-                      <View style={styles.frameParent} />
-                      <Image
-                        style={styles.groupIconIcu}
-                        resizeMode="cover"
-                        source={require('../../../assets/group1.png')}
-                      />
+                      <Pressable
+                        style={styles.frameParent}
+                        onPress={() => navigation.navigate('EditIcu')}>
+                        <Image
+                          style={styles.groupIconIcu}
+                          resizeMode="cover"
+                          source={require('../../../assets/group1.png')}
+                        />
+                      </Pressable>
+                      <Text style={[styles.icu1, styles.icu1Typo]}>ICU</Text>
                     </View>
-                    <Text style={[styles.icu1, styles.icu1Typo]}>ICU</Text>
                   </View>
                 </View>
               </View>
             </View>
+
             <Pressable
               style={[styles.icu2, styles.nikeShadowBox]}
               onPress={() => navigation.navigate('EditMujairC')}>
@@ -135,11 +144,11 @@ const EditScreenAdmin = () => {
               resizeMode="cover"
               source={require('../../../assets/mujair1.png')}
             /> */}
-            <Image
+            {/* <Image
               style={[styles.fishIcon, styles.iconPosition]}
               resizeMode="cover"
               source={require('../../../assets/fish.png')}
-            />
+            /> */}
             {/* <Image
               style={[styles.neonatiIcon, styles.iconPosition]}
               resizeMode="cover"
@@ -189,7 +198,7 @@ const EditScreenAdmin = () => {
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate('ProfileScreenNurse1')}>
+          onPress={() => navigation.navigate('ProfileScreenAdmin')}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
@@ -496,16 +505,7 @@ const styles = StyleSheet.create({
     paddingLeft: 45,
   },
   groupIconIcu: {
-    height: '180.72%',
-    width: '98.39%',
-    top: '-10%',
-    right: '66.77%',
-    bottom: '44.01%',
-    left: '0%',
-    maxHeight: '100%',
-    maxWidth: '100%',
-    position: 'absolute',
-    overflow: 'hidden',
+    top: -25,
   },
   karper: {
     left: 47,
@@ -626,8 +626,9 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   icu1: {
-    top: 91,
-    left: 54,
+    top: 61,
+    left: 25,
+    fontWeight: '300',
   },
   icu: {
     right: -31,
@@ -710,10 +711,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   fishIcon: {
-    marginLeft: -118,
-    top: 489,
-    borderRadius: 1,
-    width: 70,
+    marginLeft: 10,
+    top: 18,
+    height: 100,
+    width: 80,
   },
   neonatiIcon: {
     marginTop: -32,

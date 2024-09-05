@@ -16,6 +16,8 @@ import EditNike from './EditNike';
 import EditNeonati from './EditNeonati';
 import EditPayangka from './EditPayangka';
 import EditKarper from './EditKarper';
+import EditBomboya from './EditBomboya';
+import EditIcu from './EditIcu';
 
 export {
   LoginScreen,
@@ -35,4 +37,6 @@ export {
   EditNeonati,
   EditPayangka,
   EditKarper,
+  EditBomboya,
+  EditIcu,
 };

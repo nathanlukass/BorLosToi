@@ -61,7 +61,7 @@ const Bomboya = () => {
           </View>
           <View style={styles.subJudul}>
             <View style={[styles.amountSetting, styles.amountSettingPosition]}>
-              <Text style={[styles.amount, styles.amountTypo]}>1</Text>
+              <Text style={[styles.amountTypo]}>1</Text>
             </View>
             <Text
               style={[styles.pasienYangMasih1, styles.pasienYangMasih1Typo]}>
@@ -85,7 +85,7 @@ const Bomboya = () => {
             Jumlah tempat tidur :
           </Text>
           <View style={[styles.amountSetting1, styles.mujairAPosition]}>
-            <Text style={[styles.amount1, styles.amountTypo]}>22</Text>
+            <Text style={[styles.amountTypo]}>22</Text>
           </View>
           <Image
             style={styles.editSquareIcon}
@@ -155,30 +155,21 @@ const styles = StyleSheet.create({
     left: '50%',
     shadowOpacity: 1,
     elevation: 8,
-    shadowRadius: 80,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   jumlahBedFlexBox: {
     justifyContent: 'center',
-    left: '50%',
+    left: '43.9%',
+    marginTop: -10,
   },
   amountSettingPosition: {
     top: '0%',
     position: 'absolute',
   },
   amountTypo: {
-    opacity: 0.7,
-    color: Color.colorGray_100,
     fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-    letterSpacing: 1,
-    fontSize: FontSize.m3BodySmall_size,
-    left: '46.34%',
-    top: '50%',
-    position: 'absolute',
+    fontWeight: 'bold',
+    left: '37.34%',
+    top: '35%',
   },
   pasienYangMasih1Typo: {
     fontFamily: FontFamily.poppinsRegular,
@@ -281,11 +272,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 8,
     shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
@@ -310,20 +296,11 @@ const styles = StyleSheet.create({
   },
   jumlahTempatTidur: {
     alignSelf: 'stretch',
-    zIndex: 0,
-  },
-  amount1: {
-    marginTop: -10.9,
-    width: '19.51%',
-    opacity: 0.7,
-    color: Color.colorGray_100,
-    fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-    letterSpacing: 1,
-    fontSize: FontSize.m3BodySmall_size,
-    left: '46.34%',
-    top: '50%',
-    textAlign: 'center',
+    zIndex: 1000,
+    top: -19,
+    height: 100,
+    marginTop: 117,
+    fontWeight: 'bold',
   },
   amountSetting1: {
     marginTop: -9,
@@ -333,11 +310,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   editSquareIcon: {
-    top: 13,
+    top: 14,
     left: 292,
     width: 18,
     height: 18,
-    zIndex: 2,
+    zIndex: 1000,
     position: 'absolute',
   },
   jumlahBed: {
@@ -348,12 +325,6 @@ const styles = StyleSheet.create({
     gap: Gap.gap_lg,
     width: 326,
     borderRadius: Border.br_3xs,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
     justifyContent: 'center',
     elevation: 8,
     shadowRadius: 8,
@@ -393,10 +364,8 @@ const styles = StyleSheet.create({
   editMujairA: {
     flex: 1,
     height: 1980,
-    overflow: 'hidden',
-    width: '100%',
-    backgroundColor: Color.schemesOnPrimary,
-    borderRadius: Border.br_xl,
+    alignSelf: 'center',
+    alignItems: 'center',
   },
 });
 
