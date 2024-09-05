@@ -24,7 +24,7 @@ const TrailingIcon = ({ icon, propBackgroundColor }: TrailingIconType) => {
     <View style={styles.trailingIcon}>
       <View style={[styles.container, styles.containerFlexBox]}>
         <View
-          style={[styles.stateLayer, styles.containerFlexBox, stateLayerStyle]}
+          style={[styles.containerFlexBox, stateLayerStyle]}
         >
           <Image style={styles.icon} resizeMode="cover" source={icon} />
         </View>
@@ -56,6 +56,8 @@ const styles = StyleSheet.create({
     height: 48,
     justifyContent: "center",
     alignItems: "center",
+    marginLeft: '85%',
+    top: '-15%'
   },
 });
 
