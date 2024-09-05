@@ -100,7 +100,8 @@ const LoginScreen = ({route}) => {
   useFocusEffect(
     React.useCallback(() => {
       if (route.params?.loggedOut) {
-        Alert.alert("Logged Out", "You have been logged out successfully.");
+        Alert.alert("Logged Out!", "you've been logged out.");
+        navigation.setParams({ loggedOut: false }); // Clear the loggedOut parameter after showing the alert
       }
     }, [route.params?.loggedOut]))
 
@@ -469,6 +470,7 @@ const styles = StyleSheet.create({
     top: 2,
     position: 'absolute',
     backgroundColor: '#21b557',
+    
   },
   login: {
     marginLeft: 22,
