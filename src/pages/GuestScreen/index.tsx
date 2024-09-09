@@ -88,10 +88,12 @@ const styles = StyleSheet.create({
     zIndex: 1,
     left: '50%',
     position: 'absolute',
+    alignSelf: 'center',
   },
   groupIcon: {
     width: 20,
     height: 20,
+    
   },
   filterByPeriod: {
     fontStyle: 'italic',
@@ -141,6 +143,7 @@ const styles = StyleSheet.create({
   icon: {
     height: '100%',
     width: '100%',
+  
   },
   backButton: {
     width: 42,
@@ -149,7 +152,7 @@ const styles = StyleSheet.create({
   },
   backToLogin: {
     marginTop: -11.5,
-    marginLeft: -76,
+    marginLeft: -45,
     top: '50%',
     fontWeight: '700',
     fontFamily: FontFamily.poppinsBold,
@@ -158,10 +161,11 @@ const styles = StyleSheet.create({
     fontSize: FontSize.m3BodyLarge_size,
     zIndex: 1,
     left: '50%',
+    alignSelf: 'center',
   },
   barAtas: {
     top: 20,
-    left: 10,
+    left: 17,
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     shadowRadius: 4,
     elevation: 4,
@@ -170,13 +174,14 @@ const styles = StyleSheet.create({
     height: 45,
     justifyContent: 'space-between',
     backgroundColor: Color.schemesOnPrimary,
+    alignSelf: 'center',
   },
   screenGuest: {
-    borderRadius: Border.br_xl,
+    // borderRadius: Border.br_xl,
     flex: 1,
     height: 900,
-    overflow: 'hidden',
-    width: '100%',
+    // overflow: 'hidden',
+    // width: '100%',
     backgroundColor: Color.schemesOnPrimary,
   },
 });

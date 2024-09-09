@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   lihatLayout: {
     height: 46,
     width: 328,
+    alignSelf: 'center',
   },
   bottomNavigationShadowBox: {
     shadowOpacity: 1,
@@ -219,25 +220,29 @@ const styles = StyleSheet.create({
     color: Color.colorSilver_100,
   },
   bottomNavigation: {
-    top: 744,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     shadowColor: 'rgba(67, 67, 67, 0.3)',
     shadowRadius: 8,
     elevation: 8,
-    width: 360,
     height: 56,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: Padding.p_52xl,
-    paddingVertical: Padding.p_9xs,
-    alignSelf: 'center',
+    paddingHorizontal: 70, // Adjusted padding
+    paddingVertical: 8, // Adjusted padding
+    backgroundColor: '#ffffff',
+    zIndex: 1000,
   },
   homeScreenNurse: {
-    borderRadius: Border.br_xl,
+    // borderRadius: Border.br_xl,
     flex: 1,
-    height: 800,
-    overflow: 'hidden',
-    width: '100%',
-    backgroundColor: Color.schemesOnPrimary,
+    // height: 800,
+    // overflow: 'hidden',
+    // width: '100%',
+    // backgroundColor: Color.schemesOnPrimary,
+    // alignSelf: 'center',
   },
 });
 

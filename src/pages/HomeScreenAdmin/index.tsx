@@ -1,88 +1,133 @@
-import * as React from "react";
-import { StyleSheet, View, Text, Image, Pressable } from "react-native";
-import FrameComponent from "../../../components/FrameComponent";
-import AndroidStatusBar from "../../../components/AndroidStatusBar";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useNavigation, ParamListBase } from "@react-navigation/native";
-import { Border, Color, FontSize, FontFamily, Padding } from "../../../GlobalStyles";
+import * as React from 'react';
+import {StyleSheet, View, Text, Image, Pressable, Modal} from 'react-native';
+import FrameComponent from '../../../components/FrameComponent';
+import { useState,useEffect,useCallback } from 'react';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/native';
+import Stats from '../../../components/Stats';
+import {
+  Border,
+  Color,
+  FontSize,
+  FontFamily,
+  Padding,
+} from '../../../GlobalStyles';
 
 const HomeScreenAdmin = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
+  const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
+  const openLihatBORLOS = useCallback(() => {
+    setLihatBORLOSVisible(true);
+  }, []);
+
+  const closeLihatBORLOS = useCallback(() => {
+    setLihatBORLOSVisible(false);
+  }, []);
+
 
   return (
     <View style={styles.homeScreenAdmin}>
       <View style={[styles.welcomeBar, styles.welcomeLayout]}>
         <View style={[styles.welcomeBarChild, styles.childShadowBox]} />
-        <FrameComponent veronikaBedes="Joshua Tengker" />
-        <Text style={styles.admin}>{`Admin `}</Text>
+        <FrameComponent veronikaBedes="Joshua " />
+        <Text style={styles.admin}>{'Admin '}</Text>
       </View>
-      <Pressable
-      onPress={() => navigation.navigate('PrintOutScreen')}>
-      <View style={[styles.lihatBorlostoi, styles.lihatLayout]}>
-        <View style={[styles.lihatBorlostoiChild, styles.lihatLayout]} />
-        <Text
-          style={[styles.printOutHasil, styles.printOutHasilFlexBox]}
-        >{`Print out hasil `}</Text>
-      </View>
-      </Pressable>
-      <View style={[styles.lihatBorlostoi1, styles.lihatBorlostoi1FlexBox]}>
+      <View style={[styles.lihatBorlostoi1FlexBox, styles.lihatBorlostoi1]}>
         <View style={[styles.lihatBorlostoiItem, styles.lihatLayout]} />
-        <Text
-          style={[styles.lihatBorLosContainer, styles.printOutHasilFlexBox]}
-        >
-          <Text style={styles.lihatBorLosContainer1}>
-            <Text style={styles.lihat}>
-              <Text style={styles.lihat1}>Lihat</Text>
+      <Pressable
+            style={styles.lihatBorLosContainer}
+            onPress={openLihatBORLOS}>
+            <Text style={styles.text}>
+              <Text style={styles.lihatBorLosContainer1}>
+                <Text style={styles.lihat}>
+                  <Text style={styles.lihat1}>Lihat</Text>
+                </Text>
+                <Text style={styles.borLosToiBtoGdrNdr}>
+                  <Text style={styles.lihat}>{'  '}</Text>
+                  <Text style={styles.borLosToi}>
+                    {'BOR LOS TOI BTO GDR & NDR'}
+                  </Text>
+                </Text>
+              </Text>
             </Text>
-            <Text style={styles.borLosToiBtoGdrNdr}>
-              <Text style={styles.lihat}>{`  `}</Text>
-              <Text
-                style={styles.borLosToi}
-              >{`BOR LOS TOI BTO GDR & NDR`}</Text>
-            </Text>
+          </Pressable>
+          </View>
+      <Pressable onPress={() => navigation.navigate('PrintOutScreen')}>
+        <View style={[styles.printOutBox, styles.lihatLayout]}>
+          <View style={[styles.lihatBorlostoiChild, styles.lihatLayout]} />
+          <Text style={[styles.printOutHasil, styles.printOutHasilFlexBox]}>
+            {'Print out hasil '}
           </Text>
-        </Text>
-      </View>
-      <View style={[styles.bottomNavigation, styles.lihatBorlostoi1FlexBox]}>
+        </View>
+      </Pressable>
+      <View style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
         <View style={[styles.homeParent, styles.parentFlexBox]}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
-            source={require("../../../assets/home1.png")}
+            source={require('../../../assets/home1.png')}
           />
           <Text style={[styles.home, styles.homeTypo]}>Home</Text>
         </View>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate("EditScreenAdmin")}
-        >
+          onPress={() => navigation.navigate('EditScreenAdmin')}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
-            source={require("../../../assets/assignment.png")}
+            source={require('../../../assets/assignment.png')}
           />
           <Text style={[styles.riwayat, styles.homeTypo]}>Edit</Text>
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate("ProfileScreenAdmin")}
-        >
+          onPress={() => navigation.navigate('ProfileScreenAdmin')}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
-            source={require("../../../assets/account-circle1.png")}
+            source={require('../../../assets/account-circle1.png')}
           />
           <Text style={[styles.riwayat, styles.homeTypo]}>Profil</Text>
         </Pressable>
       </View>
+      <Modal animationType="fade" transparent visible={lihatBORLOSVisible}>
+        <View style={styles.lihatBORLOSOverlay}>
+          <Pressable style={styles.lihatBORLOSBg} onPress={closeLihatBORLOS} />
+          <Stats onClose={closeLihatBORLOS} />
+        </View>
+      </Modal>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  bottomNavigationShadowBox: {
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    left: 0,
+    position: 'absolute',
+    backgroundColor: Color.schemesOnPrimary,
+  },
   welcomeLayout: {
     width: 328,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+  },
+  lihatBORLOSOverlay: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(113, 113, 113, 0.3)',
+  },
+  lihatBORLOSBg: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    left: 0,
+    top: 0,
   },
   childShadowBox: {
     borderRadius: Border.br_xs,
@@ -95,60 +140,62 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    position: "absolute",
+    position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
   lihatLayout: {
     height: 36,
     width: 328,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
   },
   printOutHasilFlexBox: {
     height: 31,
-    alignItems: "center",
-    display: "flex",
+    alignItems: 'center',
+    display: 'flex',
     fontSize: FontSize.m3LabelLarge_size,
-    top: "50%",
-    textAlign: "left",
-    position: "absolute",
+    top: '50%',
+    textAlign: 'left',
+    position: 'absolute',
+    
   },
   lihatBorlostoi1FlexBox: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    position: "absolute",
+    position: 'absolute',
+    left: 250,
   },
   parentFlexBox: {
-    justifyContent: "center",
+    justifyContent: 'center',
     width: 44,
-    alignItems: "center",
+    alignItems: 'center',
   },
   homeTypo: {
-    textAlign: "center",
+    textAlign: 'center',
     fontFamily: FontFamily.iconText,
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: 20,
     fontSize: FontSize.iconText_size,
   },
   welcomeBarChild: {
     height: 148,
     width: 328,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
   },
   admin: {
     top: 92,
     left: 13,
     fontSize: FontSize.m3BodyLarge_size,
-    textAlign: "left",
+    textAlign: 'left',
     color: Color.colorMediumaquamarine,
     fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: "600",
-    position: "absolute",
+    fontWeight: '600',
+    position: 'absolute',
   },
   welcomeBar: {
     top: 44,
@@ -158,13 +205,13 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    position: "absolute",
+    position: 'absolute',
     elevation: 4,
     shadowRadius: 4,
-    left: "50%",
+    left: '50%',
     marginLeft: -164,
     width: 328,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
   },
   lihatBorlostoiChild: {
     borderRadius: Border.br_xs,
@@ -177,25 +224,25 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    position: "absolute",
+    position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
   printOutHasil: {
-    marginTop: -15,
+    marginTop: -8.5,
     left: 18,
     width: 310,
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsRegular,
   },
-  lihatBorlostoi: {
+  printOutBox: {
     top: 262,
-    left: 16,
-    shadowOpacity: 1,
+    left: 32,
+    shadowOpacity: -10,
     shadowOffset: {
       width: 0,
       height: 4,
     },
-    position: "absolute",
+    position: 'absolute',
     elevation: 4,
     shadowRadius: 4,
     height: 36,
@@ -212,31 +259,26 @@ const styles = StyleSheet.create({
       width: 0,
       height: 4,
     },
-    position: "absolute",
+    position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
-  lihat1: {
-    color: Color.colorMediumaquamarine,
+ borLosToiBtoGdrNdr: {
+    color: Color.notSoBlack,
   },
   lihat: {
     fontFamily: FontFamily.poppinsRegular,
   },
   borLosToi: {
     fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: "600",
-  },
-  borLosToiBtoGdrNdr: {
-    color: Color.notSoBlack,
+    fontWeight: '600',
   },
   lihatBorLosContainer1: {
-    width: "100%",
+    width: '100%',
   },
   lihatBorLosContainer: {
-    marginTop: -16,
-    marginLeft: -144,
-    width: 308,
-    zIndex: 1,
-    left: "50%",
+    left: 7,
+    top: 10,
+    position: 'absolute',
   },
   lihatBorlostoi1: {
     top: 210,
@@ -244,18 +286,21 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     height: 36,
     width: 328,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    justifyContent: "space-between",
-    flexDirection: "row",
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
     elevation: 4,
     shadowRadius: 4,
-    left: "50%",
+    left: '50%',
     marginLeft: -164,
+  },
+  lihat1: {
+    color: Color.colorMediumaquamarine,
   },
   homeIcon: {
     width: 24,
     height: 24,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   home: {
     color: Color.colorMediumaquamarine,
@@ -266,26 +311,36 @@ const styles = StyleSheet.create({
   riwayat: {
     color: Color.colorSilver_100,
   },
+  text: {
+    fontSize: FontSize.m3LabelLarge_size,
+    textAlign: 'left',
+    display: 'flex',
+    width: 310,
+    height: 40,
+    alignItems: 'center',
+  },
   bottomNavigation: {
-    top: 744,
-    shadowColor: "rgba(67, 67, 67, 0.3)",
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    shadowColor: 'rgba(67, 67, 67, 0.3)',
     shadowRadius: 8,
     elevation: 8,
-    width: 360,
     height: 56,
-    paddingHorizontal: Padding.p_41xl,
-    paddingVertical: Padding.p_9xs,
-    left: 0,
-    justifyContent: "space-between",
-    flexDirection: "row",
-    backgroundColor: Color.schemesOnPrimary,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 70, // Adjusted padding
+    paddingVertical: 8, // Adjusted padding
+    backgroundColor: '#ffffff',
+    zIndex: 1000,
   },
   homeScreenAdmin: {
-    borderRadius: Border.br_xl,
+    // borderRadius: Border.br_xl,
     flex: 1,
     height: 800,
-    overflow: "hidden",
-    width: "100%",
+    // overflow: 'hidden',
+    // width: '100%',
     backgroundColor: Color.schemesOnPrimary,
   },
 });

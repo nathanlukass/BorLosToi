@@ -25,7 +25,8 @@ const NurseInputPage = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
+    <ScrollView style={styles.containerScrollView}>
       <View style={styles.nurseInputPage}>
         <View style={[styles.rincianPasien, styles.rincianPasienShadowBox]}>
           <View style={styles.judul}>
@@ -529,10 +530,98 @@ const NurseInputPage = () => {
         </View>
       </View>
     </ScrollView>
+      {/* <View
+          style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
+          <View style={[styles.homeParent, styles.parentFlexBox]}>
+            <Image
+              style={styles.homeIcon}
+              resizeMode="cover"
+              source={require('../../../assets/home1.png')}
+            />
+            <Text style={[styles.home, styles.homeTypo]}>Home</Text>
+          </View>
+          <Pressable
+            style={styles.parentFlexBox}
+            onPress={() => navigation.navigate('NurseInputPage')}>
+            <Image
+              style={styles.homeIcon}
+              resizeMode="cover"
+              source={require('../../../assets/assignment.png')}
+            />
+            <Text style={[styles.riwayat, styles.homeTypo]}>Input</Text>
+          </Pressable>
+          <Pressable
+            style={styles.parentFlexBox}
+            onPress={() => navigation.navigate('ProfilScreenNurse')}>
+            <Image
+              style={styles.homeIcon}
+              resizeMode="cover"
+              source={require('../../../assets/account-circle1.png')}
+            />
+            <Text style={[styles.riwayat, styles.homeTypo]}>Profil</Text>
+          </Pressable>
+        </View> */}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  containerScrollView: {
+    // paddingBottom: 56,
+  },
+  bottomNavigation: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    shadowColor: 'rgba(67, 67, 67, 0.3)',
+    shadowRadius: 8,
+    elevation: 8,
+    height: 56,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 70, // Adjusted padding
+    paddingVertical: 8, // Adjusted padding
+    backgroundColor: '#ffffff',
+    zIndex: 1000,
+  },
+
+  bottomNavigationShadowBox: {
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    left: 0,
+    position: 'absolute',
+    backgroundColor: Color.schemesOnPrimary,
+  },
+  homeTypo: {
+    textAlign: 'center',
+    fontFamily: FontFamily.iconText,
+    fontWeight: '500',
+    lineHeight: 20,
+    fontSize: FontSize.iconText_size,
+  },
+  home: {
+    color: Color.colorMediumaquamarine,
+  },
+  homeIcon: {
+    width: 24,
+    height: 24,
+    overflow: 'hidden',
+  },
+  parentFlexBox: {
+    justifyContent: 'center',
+    width: 44,
+    alignItems: 'center',
+  },
+  homeParent: {
+    backgroundColor: Color.schemesOnPrimary,
+  },
+  riwayat: {
+    color: Color.colorSilver_100,
+  },
   datePickerContainer: {
     top: '9%',
     justifyContent: 'center',
@@ -691,7 +780,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignSelf: 'center',
+    // alignSelf: 'center',
   },
   subJudul18Position: {
     alignSelf: 'center',
@@ -1214,13 +1303,13 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
   },
   nurseInputPage: {
-    alignSelf: 'center',
+    // alignSelf: 'center',
     flex: 1,
     height: 2080,
-    overflow: 'hidden',
-    width: '100%',
-    backgroundColor: Color.schemesOnPrimary,
-    borderRadius: Border.br_xl,
+    // overflow: 'hidden',
+    // width: '100%',
+    // backgroundColor: Color.schemesOnPrimary,
+    // borderRadius: Border.br_xl,
   },
 });
 

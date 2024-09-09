@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
-import { Text, StyleSheet, View, Image } from "react-native";
-import { Border, FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
+import React, {useMemo} from 'react';
+import {Text, StyleSheet, View, Image} from 'react-native';
+import {Border, FontSize, FontFamily, Color, Padding} from '../GlobalStyles';
 
 export type PasienMasukRuanganType = {
   /** Style props */
@@ -8,13 +8,15 @@ export type PasienMasukRuanganType = {
 };
 
 const getStyleValue = (key: string, value: string | number | undefined) => {
-  if (value === undefined) return;
-  return { [key]: value === "unset" ? undefined : value };
+  if (value === undefined) {
+    return;
+  }
+  return {[key]: value === 'unset' ? undefined : value};
 };
-const PasienMasukRuangan = ({ propTop }: PasienMasukRuanganType) => {
+const PasienMasukRuangan = ({propTop}: PasienMasukRuanganType) => {
   const pasienMasukRuanganStyle = useMemo(() => {
     return {
-      ...getStyleValue("top", propTop),
+      ...getStyleValue('top', propTop),
     };
   }, [propTop]);
 
@@ -33,7 +35,7 @@ const PasienMasukRuangan = ({ propTop }: PasienMasukRuanganType) => {
             <Image
               style={[styles.pathIcon, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path.png")}
+              source={require('../assets/path.png')}
             />
           </View>
           <View style={[styles.iconPlus, styles.iconPosition]}>
@@ -41,7 +43,7 @@ const PasienMasukRuangan = ({ propTop }: PasienMasukRuanganType) => {
             <Image
               style={[styles.pathIcon1, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path1.png")}
+              source={require('../assets/path1.png')}
             />
           </View>
           <Text style={[styles.amount, styles.amountTypo]}>1</Text>
@@ -57,7 +59,7 @@ const PasienMasukRuangan = ({ propTop }: PasienMasukRuanganType) => {
             <Image
               style={[styles.pathIcon, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path.png")}
+              source={require('../assets/path.png')}
             />
           </View>
           <View style={[styles.iconPlus, styles.iconPosition]}>
@@ -65,7 +67,7 @@ const PasienMasukRuangan = ({ propTop }: PasienMasukRuanganType) => {
             <Image
               style={[styles.pathIcon1, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path1.png")}
+              source={require('../assets/path1.png')}
             />
           </View>
           <Text style={[styles.amount, styles.amountTypo]}>1</Text>
@@ -86,59 +88,59 @@ const PasienMasukRuangan = ({ propTop }: PasienMasukRuanganType) => {
 
 const styles = StyleSheet.create({
   judulChildPosition: {
-    left: "50%",
-    position: "absolute",
+    left: '50%',
+    position: 'absolute',
   },
   iconPosition: {
-    width: "28.29%",
-    bottom: "0%",
-    height: "100%",
-    top: "0%",
-    position: "absolute",
+    width: '28.29%',
+    bottom: '0%',
+    height: '100%',
+    top: '0%',
+    position: 'absolute',
   },
   rectanglePosition: {
     borderRadius: Border.br_5xs,
-    width: "100%",
-    left: "0%",
-    bottom: "0%",
-    right: "0%",
-    height: "100%",
-    top: "0%",
-    position: "absolute",
+    width: '100%',
+    left: '0%',
+    bottom: '0%',
+    right: '0%',
+    height: '100%',
+    top: '0%',
+    position: 'absolute',
   },
   pathIconLayout: {
-    maxHeight: "100%",
-    maxWidth: "100%",
-    left: "31.03%",
-    right: "30.6%",
-    width: "38.36%",
-    overflow: "hidden",
-    position: "absolute",
+    maxHeight: '100%',
+    maxWidth: '100%',
+    left: '31.03%',
+    right: '30.6%',
+    width: '38.36%',
+    overflow: 'hidden',
+    position: 'absolute',
   },
   amountTypo: {
-    textAlign: "left",
+    textAlign: 'left',
     fontSize: FontSize.m3BodySmall_size,
-    position: "absolute",
+    position: 'absolute',
   },
   pasienMasukRuangan1: {
-    height: "71.43%",
+    height: '71.43%',
     marginLeft: -88.5,
     fontSize: FontSize.m3LabelLarge_size,
-    fontWeight: "600",
+    fontWeight: '600',
     fontFamily: FontFamily.poppinsSemiBold,
-    textAlign: "center",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 178,
     color: Color.notSoBlack,
-    top: "0%",
-    left: "50%",
+    top: '0%',
+    left: '50%',
   },
   judulChild: {
     marginLeft: -133.7,
     top: 28,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderColor: Color.notSoBlack,
     borderTopWidth: 0.3,
     height: 0,
@@ -154,52 +156,52 @@ const styles = StyleSheet.create({
     opacity: 0.1,
   },
   pathIcon: {
-    height: "5.45%",
-    top: "47.73%",
-    bottom: "46.82%",
+    height: '5.45%',
+    top: '47.73%',
+    bottom: '46.82%',
   },
   iconMinus: {
-    right: "71.71%",
-    left: "0%",
+    right: '71.71%',
+    left: '0%',
   },
   rectangleCopy: {
     backgroundColor: Color.colorCornflowerblue_100,
   },
   pathIcon1: {
-    height: "38.64%",
-    top: "30.91%",
-    bottom: "30.45%",
+    height: '38.64%',
+    top: '30.91%',
+    bottom: '30.45%',
   },
   iconPlus: {
-    left: "71.71%",
-    right: "0%",
-    width: "28.29%",
+    left: '71.71%',
+    right: '0%',
+    width: '28.29%',
   },
   amount: {
     marginTop: -11,
-    width: "6.46%",
-    top: "50%",
-    left: "46.34%",
+    width: '6.46%',
+    top: '50%',
+    left: '46.34%',
     letterSpacing: 1,
-    fontWeight: "500",
+    fontWeight: '500',
     fontFamily: FontFamily.poppinsMedium,
     color: Color.colorGray_100,
     opacity: 0.7,
   },
   amountSetting: {
-    width: "30.83%",
-    left: "69.17%",
-    overflow: "hidden",
-    bottom: "0%",
-    height: "100%",
-    right: "0%",
-    top: "0%",
-    position: "absolute",
+    width: '30.83%',
+    left: '69.17%',
+    overflow: 'hidden',
+    bottom: '0%',
+    height: '100%',
+    right: '0%',
+    top: '0%',
+    position: 'absolute',
   },
   pasienMasuk: {
-    top: "18.18%",
+    top: '18.18%',
     fontFamily: FontFamily.poppinsRegular,
-    left: "0%",
+    left: '0%',
     color: Color.notSoBlack,
   },
   subJudul: {
@@ -210,11 +212,6 @@ const styles = StyleSheet.create({
   pasienMasukRuangan: {
     top: 296,
     left: 17,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     shadowRadius: 8,
     elevation: 8,
     shadowOpacity: 1,
@@ -224,7 +221,7 @@ const styles = StyleSheet.create({
     height: 182,
     paddingHorizontal: Padding.p_10xl,
     paddingVertical: Padding.p_xl,
-    position: "absolute",
+    position: 'absolute',
   },
 });
 

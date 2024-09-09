@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image, Button, TouchableOpacity} from 'react-native';
 import {Color, FontFamily, FontSize, Padding, Border} from '../GlobalStyles';
 import {Gap} from '../src/components';
 
@@ -7,36 +7,12 @@ const Stats1 = () => {
   return (
     <View style={[styles.stats, styles.statsPosition]}>
       <View style={[styles.statsChild, styles.statsPosition]} />
-      {/* <Text style={[styles.hari13Hari, styles.textTypo]}>{`60-85%
-6-9 Hari
-1-3 Hari
-40-50 Kali
-<20 mil
-<45 mil`}</Text>
-      <Text style={[styles.text, styles.textTypo]}>{`0
-0
-0
-0
-0
-0`}</Text>
-      <Text style={[styles.text1, styles.text1Typo]}>{`:
-:
-:
-:
-:
-:`}</Text>
-      <Text style={[styles.borAvlosToi, styles.hasil1Typo]}>{`BOR
-AVLOS
-TOI
-BTO
-NDR
-GDR`}</Text> */}
       <Text style={[styles.hari13Hari]}>60-85%</Text>
       <Text style={[styles.hari13Hari2]}>6-9 Hari</Text>
       <Text style={[styles.hari13Hari3]}>1-3 Hari</Text>
       <Text style={[styles.hari13Hari4]}>40-50 Kali</Text>
-      <Text style={[styles.hari13Hari5]}>{'< 20%'}</Text>
-      <Text style={[styles.hari13Hari6]}>{'< 45%'}</Text>
+      <Text style={[styles.hari13Hari5]}>{'< 20 mil'}</Text>
+      <Text style={[styles.hari13Hari6]}>{'< 45 mil'}</Text>
       <Text style={[styles.text]}>0</Text>
       <Text style={[styles.text2]}>0</Text>
       <Text style={[styles.text3]}>0</Text>
@@ -56,15 +32,18 @@ GDR`}</Text> */}
         <Gap height={23} />
         <Text style={[styles.hasil1Typo]}>NDR :</Text>
       </View>
-      <View style={[styles.ket, styles.ketPosition]}>
-        <Text style={[styles.ket1, styles.ket1Typo]}>KET</Text>
-      </View>
-      <View style={[styles.standar, styles.ketPosition]}>
-        <Text style={[styles.ket1, styles.ket1Typo]}>STANDAR</Text>
-      </View>
-      <View style={[styles.hasil, styles.ketPosition]}>
-        <Text style={[styles.hasil1, styles.ket1Typo]}>HASIL</Text>
-      </View>
+      <TouchableOpacity
+      style={styles.buttonKet}>
+      <Text style={styles.buttonKetText}>KET</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+      style={styles.buttonStandar}>
+      <Text style={styles.buttonStandarText}>STANDAR</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+      style={styles.buttonHasil}>
+      <Text style={styles.buttonHasilText}>HASIL</Text>
+      </TouchableOpacity>
       <View style={styles.upArrow1Parent}>
         <Image
           style={styles.arrow1IconLayout}
@@ -102,6 +81,54 @@ GDR`}</Text> */}
 };
 
 const styles = StyleSheet.create({
+  buttonKet: {
+    left: 305,
+    top: 27,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 60,
+    height: 30,
+  },
+  buttonKetText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
+  buttonStandar: {
+    left: 205,
+    top: 27,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 80,
+    height: 30,
+  },
+  buttonStandarText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
+  buttonHasil: {
+    left: 125,
+    top: 27,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 60,
+    height: 30,
+  },
+  buttonHasilText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
   BorAvlosToiContainer: {
     flexDirection: 'column',
     // alignItems: 'center',
@@ -133,7 +160,7 @@ const styles = StyleSheet.create({
   },
   hasil1Typo: {
     fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
+    fontWeight: '900',
     color: Color.colorBlack,
   },
   ketPosition: {
@@ -155,12 +182,14 @@ const styles = StyleSheet.create({
     bottom: '83.12%',
     top: '8.14%',
     height: '8.74%',
-    position: 'absolute',
+    position: 'absolute', // Ensure this is set to absolute
   },
   ket1Typo: {
-    color: Color.schemesOnPrimary,
-    fontSize: FontSize.m3BodySmall_size,
-    textAlign: 'left',
+    // color: Color.schemesOnPrimary,
+    // color: 'red',
+    // fontSize: FontSize.m3BodySmall_size,
+    textAlign: 'center',
+    
   },
   arrow1IconLayout: {
     height: 20,
@@ -176,7 +205,7 @@ const styles = StyleSheet.create({
   hari13Hari: {
     color: Color.colorBlack,
     top: '20%',
-    width: '27.5%',
+    width: '30%',
     left: '55.5%',
   },
   text: {
@@ -207,7 +236,10 @@ const styles = StyleSheet.create({
   },
   ket1: {
     fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
+    fontWeight: '100',
+    color: 'red', // Ensure the text color is visible
+    fontSize: FontSize.m3BodySmall_size,
+    textAlign: 'center',
   },
   ket: {
     right: '7.25%',
@@ -230,6 +262,7 @@ const styles = StyleSheet.create({
     bottom: '83.12%',
     top: '8.14%',
     height: '8.74%',
+    position: 'absolute', // Ensure this is set to absolute
   },
   standar: {
     width: '22.14%',
@@ -256,6 +289,7 @@ const styles = StyleSheet.create({
   hasil1: {
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
+    textAlign: 100,
   },
   hasil: {
     right: '53.03%',
@@ -284,7 +318,7 @@ const styles = StyleSheet.create({
   },
   upArrow1Parent: {
     top: 73,
-    left: 343,
+    left: 325,
     width: 20,
     justifyContent: 'center',
     alignItems: 'center',

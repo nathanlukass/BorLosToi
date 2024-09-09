@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
+import {Image, StyleSheet, Text, View, Pressable, Alert} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {
@@ -11,10 +11,13 @@ import {
 } from '../../../GlobalStyles';
 
 const ProfileScreenAdmin = () => {
+  const handleLogoutPress = () => {
+    navigation.navigate('LoginScreen', { loggedOut: true });
+  };
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-    <View style={styles.profileScreenNurse}>
+    <View style={styles.profileScreenAdmin}>
       <Pressable
         style={styles.bottomNavigation}
         onPress={() => navigation.navigate('InputScreenNurse')}>
@@ -50,9 +53,9 @@ const ProfileScreenAdmin = () => {
       <View style={[styles.logoutButton, styles.aboutAppLayout]}>
         <Pressable
           style={[styles.logoutButtonChild, styles.childShadowBox]}
-          onPress={() => navigation.navigate('HomeScreenNurse')}
-        />
+          onPress={handleLogoutPress}>
         <Text style={styles.logOut}>Log Out</Text>
+        </Pressable>
       </View>
       <View style={[styles.aboutApp, styles.aboutAppLayout]}>
         <View style={[styles.aboutAppChild, styles.standbydonorChildLayout]} />
@@ -166,29 +169,24 @@ const styles = StyleSheet.create({
   riwayat: {
     color: Color.colorSilver_100,
   },
-  profil: {
+  profil: {    
     color: Color.colorMediumaquamarine,
   },
   bottomNavigation: {
-    top: 744,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     shadowColor: 'rgba(67, 67, 67, 0.3)',
     shadowRadius: 8,
     elevation: 8,
-    width: 360,
     height: 56,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: Padding.p_41xl,
-    paddingVertical: Padding.p_9xs,
-    alignSelf: 'center',
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    left: 22,
-    position: 'absolute',
-    backgroundColor: Color.schemesOnPrimary,
+    paddingHorizontal: 70, // Adjusted padding
+    paddingVertical: 8, // Adjusted padding
+    backgroundColor: '#ffffff',
+    zIndex: 1000,
   },
   logoutButtonChild: {
     width: 325,
@@ -201,11 +199,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   logOut: {
-    top: 5,
+    top: 13,
     color: Color.colorIndianred_100,
-    width: 332,
+    width: 302,
     opacity: 0.7,
-    height: 31,
+    height: 301,
     display: 'flex',
     fontFamily: FontFamily.poppinsRegular,
     fontSize: FontSize.m3LabelLarge_size,
@@ -217,8 +215,10 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     top: 649,
-    left: 3,
+    left: 17,
+    alignSelf: 'center',
     width: 329,
+    height: 300,
   },
   aboutAppChild: {
     borderRadius: Border.br_xs,
@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
   aboutApp1: {
     left: 46,
     width: 278,
+    marginTop: 7,
     textAlign: 'left',
   },
   iconInfoEmpty: {
@@ -246,7 +247,7 @@ const styles = StyleSheet.create({
     top: '28.57%',
     right: '90.99%',
     bottom: '28.57%',
-    left: '3.79%',
+    left: '4.79%',
     maxWidth: '100%',
     maxHeight: '100%',
     position: 'absolute',
@@ -255,7 +256,8 @@ const styles = StyleSheet.create({
   aboutApp: {
     top: 577,
     width: 322,
-    left: 22,
+    left: 32,
+    alignSelf: 'center'
   },
   standbydonorChild: {
     borderRadius: Border.br_xs,
@@ -274,6 +276,7 @@ const styles = StyleSheet.create({
   },
   changePassword: {
     left: 47,
+    marginTop: 6,
     width: 306,
     textAlign: 'left',
   },
@@ -284,7 +287,7 @@ const styles = StyleSheet.create({
   },
   standbydonor: {
     top: 524,
-    left: 22,
+    left: 32,
   },
   profileScreenNurseChild: {
     top: -2,
@@ -317,7 +320,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   profile: {
-    marginLeft: -33,
+    marginLeft: -20,
     top: 45,
     fontSize: FontSize.size_xl,
     fontFamily: FontFamily.poppinsBold,
@@ -325,14 +328,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'left',
   },
-  profileScreenNurse: {
-    borderRadius: Border.br_xl,
+  profileScreenAdmin: {
+    // borderRadius: Border.br_xl,
     flex: 1,
-    width: '100%',
+    // width: '100%',
     height: 800,
-    overflow: 'hidden',
-    backgroundColor: Color.schemesOnPrimary,
-    alignSelf: 'center',
+    // overflow: 'hidden',
+    // backgroundColor: Color.schemesOnPrimary,
+    // alignSelf: 'center',
   },
 });
 
