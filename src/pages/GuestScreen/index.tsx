@@ -12,7 +12,6 @@ import {
   Border,
 } from '../../../GlobalStyles';
 
-
 const ScreenGuest = () => {
   const datePickerStyle1 = {
     top: '25%',
@@ -25,9 +24,9 @@ const ScreenGuest = () => {
 
   return (
     <View style={styles.screenGuest}>
-        <DatePickerr style={datePickerStyle1}/>
+      <DatePickerr style={datePickerStyle1} />
       <View style={styles.groupParent}>
-        <FilterCheckBox/>
+        <FilterCheckBox />
         {/* <Image
           style={styles.groupIcon}
           resizeMode="cover"
@@ -38,15 +37,17 @@ const ScreenGuest = () => {
         </Text> */}
       </View>
       <Stats1 />
-      <View style={[styles.filter, styles.filterShadowBox]}>
-        <Text style={[styles.filter1, styles.filterTypo]}>Filter</Text>
-        <Image
-          style={[styles.vectorIcon, styles.vectorIconPosition]}
-          resizeMode="cover"
-          source={require('../../../assets/vector.png')}
-        />
-      </View>
-        <DatePickerr style={datePickerStyle2}/>
+      <Pressable
+        style={[styles.filter, styles.filterShadowBox]}
+        onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}
+      />
+      <Text style={[styles.filter1, styles.filterTypo]}>Filter</Text>
+      <Image
+        style={[styles.vectorIcon, styles.vectorIconPosition]}
+        resizeMode="cover"
+        source={require('../../../assets/vector.png')}
+      />
+      <DatePickerr style={datePickerStyle2} />
       <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
           style={styles.backButton}
@@ -68,7 +69,6 @@ const ScreenGuest = () => {
 const styles = StyleSheet.create({
   datePickerStyle: {
     top: 10,
-
   },
   filterTypo: {
     textAlign: 'left',
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
   groupIcon: {
     width: 20,
     height: 20,
-    
   },
   filterByPeriod: {
     fontStyle: 'italic',
@@ -143,7 +142,6 @@ const styles = StyleSheet.create({
   icon: {
     height: '100%',
     width: '100%',
-  
   },
   backButton: {
     width: 42,

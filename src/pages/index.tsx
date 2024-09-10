@@ -18,6 +18,10 @@ import EditPayangka from './EditPayangka';
 import EditKarper from './EditKarper';
 import EditBomboya from './EditBomboya';
 import EditIcu from './EditIcu';
+import BORAVLOSTOIBTONDRGDR from './BorLosToiScreen';
+import BOR from './BorScreen';
+import AVLOS from './AvlosScreen';
+import TOI from './ToiScreen';
 
 export {
   LoginScreen,
@@ -39,4 +43,8 @@ export {
   EditKarper,
   EditBomboya,
   EditIcu,
+  BORAVLOSTOIBTONDRGDR,
+  BOR,
+  AVLOS,
+  TOI,
 };
