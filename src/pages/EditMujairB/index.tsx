@@ -155,30 +155,21 @@ const styles = StyleSheet.create({
     left: '50%',
     shadowOpacity: 1,
     elevation: 8,
-    shadowRadius: 80,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   jumlahBedFlexBox: {
     justifyContent: 'center',
     left: '43.9%',
+    marginTop: -10,
   },
   amountSettingPosition: {
     top: '0%',
     position: 'absolute',
   },
   amountTypo: {
-    opacity: 0.7,
-    color: Color.colorGray_100,
     fontFamily: FontFamily.poppinsMedium,
     fontWeight: 'bold',
-    letterSpacing: 1,
-    fontSize: FontSize.m3BodySmall_size,
-    left: '46.34%',
-    top: '50%',
-    position: 'absolute',
+    left: '37.34%',
+    top: '35%',
   },
   pasienYangMasih1Typo: {
     fontFamily: FontFamily.poppinsRegular,
@@ -308,11 +299,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     top: -19,
     height: 100,
-    marginTop: 87,
-    fontWeight: 'bold',
-  },
-  amount1: {
-    marginTop: -10.9,
+    marginTop: 117,
     fontWeight: 'bold',
   },
   amountSetting1: {
@@ -323,11 +310,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   editSquareIcon: {
-    top: 23,
+    top: 14,
     left: 292,
     width: 18,
     height: 18,
-    zIndex: 2,
+    zIndex: 1000,
     position: 'absolute',
   },
   jumlahBed: {

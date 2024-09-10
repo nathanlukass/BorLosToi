@@ -21,6 +21,10 @@ import {
   EditKarper,
   EditBomboya,
   EditIcu,
+  BORAVLOSTOIBTONDRGDR,
+  BOR,
+  AVLOS,
+  TOI,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -122,6 +126,18 @@ const index = () => {
         component={EditIcu}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="BORAVLOSTOIBTONDRGDR"
+        component={BORAVLOSTOIBTONDRGDR}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="BOR" component={BOR} options={{headerShown: false}} />
+      <Stack.Screen
+        name="AVLOS"
+        component={AVLOS}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="TOI" component={TOI} options={{headerShown: false}} />
     </Stack.Navigator>
   );
 };
