@@ -26,7 +26,7 @@ const BORAVLOSTOIBTONDRGDR = () => {
   const [indicatorModalVisible, setIndicatorModalVisible] =
     React.useState(false);
 
-  const indicators = ['BOR', 'ALVOS', 'TOI', 'BTO', 'NDR', 'GDR'];
+  const indicators = ['BOR', 'AVLOS', 'TOI', 'BTO', 'NDR', 'GDR'];
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
