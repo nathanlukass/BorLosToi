@@ -16,27 +16,6 @@ const BOR = () => {
 
   return (
     <View style={styles.bor}>
-      <View style={styles.androidStatusBar}>
-        <View style={[styles.background, styles.backgroundPosition]} />
-        <View style={styles.icons}>
-          <Image
-            style={styles.cellularIcon}
-            resizeMode="cover"
-            source={require('../../../assets/cellular.png')}
-          />
-          <Image
-            style={styles.wifiIcon}
-            resizeMode="cover"
-            source={require('../../../assets/wifi.png')}
-          />
-          <Image
-            style={styles.batteryIcon}
-            resizeMode="cover"
-            source={require('../../../assets/battery1.png')}
-          />
-        </View>
-        <Text style={styles.text}>12:30</Text>
-      </View>
       <View style={styles.barAtas}>
         <Pressable
           style={styles.backButton}

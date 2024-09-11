@@ -22,6 +22,9 @@ import BORAVLOSTOIBTONDRGDR from './BorLosToiScreen';
 import BOR from './BorScreen';
 import AVLOS from './AvlosScreen';
 import TOI from './ToiScreen';
+import BTO from './BtoScreen';
+import NDR from './NdrScreen';
+import GDR from './GdrScreen';
 
 export {
   LoginScreen,
@@ -47,4 +50,7 @@ export {
   BOR,
   AVLOS,
   TOI,
+  BTO,
+  NDR,
+  GDR,
 };
