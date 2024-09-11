@@ -8,6 +8,7 @@ import {
   Modal,
   FlatList,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {DatePickerr, FilterCheckBox} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -43,8 +44,7 @@ const BORAVLOSTOIBTONDRGDR = () => {
 
   const handleViewPress = () => {
     if (selectedIndicator !== 'Pilih Indikator') {
-      // Lakukan navigasi ke halaman yang sesuai dengan indikator yang dipilih
-      navigation.navigate(selectedIndicator); // Pastikan ada screen untuk setiap indikator
+      navigation.navigate(selectedIndicator);
     } else {
       alert('Silakan pilih indikator terlebih dahulu');
     }
@@ -70,15 +70,20 @@ const BORAVLOSTOIBTONDRGDR = () => {
         transparent={true}
         visible={indicatorModalVisible}
         onRequestClose={() => setIndicatorModalVisible(false)}>
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContent}>
-            <FlatList
-              data={indicators}
-              keyExtractor={item => item}
-              renderItem={renderItem}
-            />
+        <TouchableWithoutFeedback
+          onPress={() => setIndicatorModalVisible(false)}>
+          <View style={styles.modalBackground}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                <FlatList
+                  data={indicators}
+                  keyExtractor={item => item}
+                  renderItem={renderItem}
+                />
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       {/* Tombol Lihat */}
@@ -111,13 +116,13 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
   },
   datePickerStyle1: {
-    top: '25%',
+    top: '20%',
   },
   datePickerStyle2: {
-    top: '-40%',
+    top: '-45%',
   },
   groupParent: {
-    top: 190,
+    top: 150,
     left: 31,
     alignItems: 'center',
     flexDirection: 'row',
@@ -125,15 +130,15 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 40,
-    width: 200,
+    width: 350,
     paddingHorizontal: 10,
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: Color.notSoBlack,
-    borderRadius: 8,
+    borderRadius: 10,
     backgroundColor: Color.schemesOnPrimary,
-    marginTop: 20,
     alignSelf: 'center',
+    bottom: 430,
   },
   dropdownText: {
     fontSize: FontSize.m3LabelLarge_size,
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
   item: {
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: 'grey',
   },
   viewButton: {
     marginTop: 20,
@@ -164,6 +169,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
+    bottom: 430,
+    left: 135,
   },
   viewButtonText: {
     fontSize: FontSize.m3BodyLarge_size,
@@ -171,10 +178,6 @@ const styles = StyleSheet.create({
   },
   filterShadowBox: {
     shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     alignItems: 'center',
     flexDirection: 'row',
     position: 'absolute',
@@ -208,7 +211,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
     borderRadius: Border.br_8xs,
-    width: 360,
+    width: 460,
     height: 45,
     justifyContent: 'space-between',
     backgroundColor: Color.schemesOnPrimary,

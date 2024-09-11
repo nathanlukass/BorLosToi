@@ -1,5 +1,4 @@
 import * as React from 'react';
-<<<<<<< Updated upstream
 import {
   StyleSheet,
   View,
@@ -8,9 +7,6 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-=======
-import {StyleSheet, View, Text, Pressable, Image} from 'react-native';
->>>>>>> Stashed changes
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {
@@ -19,17 +15,12 @@ import {
   Color,
   FontFamily,
   FontSize,
-<<<<<<< Updated upstream
-=======
-  Gap,
->>>>>>> Stashed changes
 } from '../../../GlobalStyles';
 
 const EditScreenAdmin = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
-<<<<<<< Updated upstream
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.editScreenAdmin}>
@@ -182,98 +173,6 @@ const EditScreenAdmin = () => {
           />
         </View>
       </ScrollView>
-=======
-    <View style={styles.editScreenAdmin}>
-      <View style={[styles.pilihButton, styles.pilihShadowBox]}>
-        <View style={[styles.pilihButtonChild, styles.pilihShadowBox]} />
-        <Pressable
-          style={[styles.mujairA, styles.mujairShadowBox]}
-          onPress={() => navigation.navigate('EditMujairA')}>
-          <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR A</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.mujairB, styles.mujairShadowBox]}
-          onPress={() => navigation.navigate('EditMujairB')}>
-          <Text style={[styles.mujairB1, styles.mujairTypo]}>MUJAIR B</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.nike, styles.icuShadowBox]}
-          onPress={() => navigation.navigate('EditNike')}>
-          <Image
-            style={styles.vectorIcon}
-            resizeMode="cover"
-            source={require('../../../assets/vector1.png')}
-          />
-          <Text style={[styles.nike1, styles.icu1Typo]}>NIKE</Text>
-        </Pressable>
-        <View style={[styles.neonati, styles.mujairShadowBox]}>
-          <Text style={[styles.neonati1, styles.mujairTypo]}>NEONATI</Text>
-        </View>
-        <View style={[styles.obgynginekologi, styles.obgynShadowBox]}>
-          <Text style={[styles.bomboya, styles.mujairTypo]}>BOMBOYA</Text>
-        </View>
-        <View style={[styles.bomboya1, styles.mujairShadowBox]}>
-          <Text style={[styles.payangka, styles.mujairTypo]}>PAYANGKA</Text>
-        </View>
-        <Image
-          style={styles.groupIcon}
-          resizeMode="cover"
-          source={require('../../../assets/group1.png')}
-        />
-        <View style={[styles.obgyn, styles.obgynShadowBox]}>
-          <Text style={[styles.karper, styles.mujairTypo]}>KARPER</Text>
-        </View>
-
-        <Pressable
-          style={[styles.icu2, styles.nikePosition]}
-          onPress={() => navigation.navigate('EditMujairC')}>
-          <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR C</Text>
-        </Pressable>
-        <Text style={styles.pilihRuangan}>Pilih Ruangan</Text>
-        <Image
-          style={[styles.mujairIcon, styles.mujairIconLayout]}
-          resizeMode="cover"
-          source={require('../../../assets/mujair.png')}
-        />
-        <Image
-          style={[styles.mujairIcon1, styles.mujairIconLayout]}
-          resizeMode="cover"
-          source={require('../../../assets/mujair.png')}
-        />
-        <Image
-          style={styles.mujairIcon2}
-          resizeMode="cover"
-          source={require('../../../assets/mujair1.png')}
-        />
-        <Image
-          style={[styles.fishIcon, styles.iconPosition]}
-          resizeMode="cover"
-          source={require('../../../assets/fish.png')}
-        />
-        <Image
-          style={[styles.neonatiIcon, styles.iconPosition]}
-          resizeMode="cover"
-          source={require('../../../assets/neonati.png')}
-        />
-        <Image
-          style={styles.karperIcon}
-          resizeMode="cover"
-          source={require('../../../assets/karper.png')}
-        />
-      </View>
-      <Text style={[styles.arilSangari, styles.halloAdminTypo]}>
-        Aril Sangari
-      </Text>
-      <Text style={[styles.halloAdmin, styles.halloAdminTypo]}>
-        Hallo Admin
-      </Text>
-
-      <Image
-        style={styles.memojiIcon}
-        resizeMode="cover"
-        source={require('../../../assets/memoji2.png')}
-      />
->>>>>>> Stashed changes
       <Pressable
         style={styles.bottomNavigation}
         onPress={() => navigation.navigate('EditScreenAdmin')}>
@@ -299,11 +198,7 @@ const EditScreenAdmin = () => {
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-<<<<<<< Updated upstream
           onPress={() => navigation.navigate('ProfileScreenAdmin')}>
-=======
-          onPress={() => navigation.navigate('ProfileScreenNurse1')}>
->>>>>>> Stashed changes
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
@@ -317,20 +212,8 @@ const EditScreenAdmin = () => {
 };
 
 const styles = StyleSheet.create({
-<<<<<<< Updated upstream
   container: {
     flex: 1,
-=======
-  pilihShadowBox: {
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    left: '50%',
-    position: 'absolute',
->>>>>>> Stashed changes
   },
   mujairShadowBox: {
     paddingVertical: Padding.p_3xs,
@@ -359,40 +242,26 @@ const styles = StyleSheet.create({
     top: 80,
     position: 'absolute',
   },
-<<<<<<< Updated upstream
   nikeShadowBox: {
     bottom: '58.17%',
     top: '26.29%',
-=======
-  icuShadowBox: {
-    gap: Gap.gap_sm,
->>>>>>> Stashed changes
     paddingVertical: Padding.p_3xs,
     paddingHorizontal: Padding.p_31xl,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-<<<<<<< Updated upstream
     width: 138,
-=======
->>>>>>> Stashed changes
     borderRadius: Border.br_3xs,
     elevation: 8,
     shadowRadius: 8,
     shadowColor: 'rgba(0, 0, 0, 0.5)',
-<<<<<<< Updated upstream
     height: '15.53%',
-=======
->>>>>>> Stashed changes
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
       height: 4,
     },
-<<<<<<< Updated upstream
     position: 'absolute',
-=======
->>>>>>> Stashed changes
     backgroundColor: Color.schemesOnPrimary,
   },
   icu1Typo: {
@@ -427,11 +296,7 @@ const styles = StyleSheet.create({
   },
   icuWrapperLayout: {
     width: 116,
-<<<<<<< Updated upstream
     height: 14,
-=======
-    height: 114,
->>>>>>> Stashed changes
     position: 'absolute',
   },
   framePosition: {
@@ -482,27 +347,12 @@ const styles = StyleSheet.create({
     height: 58,
     position: 'absolute',
     overflow: 'hidden',
-<<<<<<< Updated upstream
-=======
-  },
-  nikePosition: {
-    bottom: '58.17%',
-    top: '26.29%',
-    width: 138,
-    height: '15.53%',
-    position: 'absolute',
->>>>>>> Stashed changes
   },
   mujairIconLayout: {
     left: '9.35%',
     right: '64.84%',
-<<<<<<< Updated upstream
     width: '300.81%',
     height: '150.26%',
-=======
-    width: '25.81%',
-    height: '12.26%',
->>>>>>> Stashed changes
     maxHeight: '100%',
     maxWidth: '100%',
     position: 'absolute',
@@ -550,7 +400,6 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_xs,
     width: 328,
     display: 'none',
-<<<<<<< Updated upstream
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
@@ -559,8 +408,6 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     left: '50%',
     position: 'absolute',
-=======
->>>>>>> Stashed changes
     backgroundColor: Color.schemesOnPrimary,
   },
   mujair: {
@@ -608,11 +455,6 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   nike: {
-    bottom: '58.17%',
-    top: '26.29%',
-    width: 138,
-    height: '15.53%',
-    position: 'absolute',
     right: 4,
   },
   neonati1: {
@@ -653,7 +495,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   groupIcon: {
-<<<<<<< Updated upstream
     height: '63.72%',
     width: '115%',
     top: '5%',
@@ -665,18 +506,6 @@ const styles = StyleSheet.create({
   },
   groupIconIcu: {
     top: -25,
-=======
-    height: '8.72%',
-    width: '18.39%',
-    top: '47.28%',
-    right: '66.77%',
-    bottom: '44.01%',
-    left: '14.84%',
-    maxHeight: '100%',
-    maxWidth: '100%',
-    position: 'absolute',
-    overflow: 'hidden',
->>>>>>> Stashed changes
   },
   karper: {
     left: 47,
@@ -743,7 +572,7 @@ const styles = StyleSheet.create({
   frameParent: {
     left: 6,
     width: 49,
-    height: 21,
+    height: 11,
     top: 14,
     position: 'absolute',
   },
@@ -805,23 +634,15 @@ const styles = StyleSheet.create({
     right: -31,
     width: 129,
     height: 114,
-    gap: Gap.gap_sm,
     paddingVertical: Padding.p_3xs,
     paddingHorizontal: Padding.p_31xl,
     justifyContent: 'center',
-<<<<<<< Updated upstream
     borderRadius: Border.br_3xs,
     shadowColor: 'rgba(0, 0, 0, 0.5)',
     alignItems: 'center',
     flexDirection: 'row',
-=======
-    alignItems: 'center',
-    flexDirection: 'row',
-    borderRadius: Border.br_3xs,
->>>>>>> Stashed changes
     elevation: 8,
     shadowRadius: 8,
-    shadowColor: 'rgba(0, 0, 0, 0.5)',
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
@@ -836,7 +657,7 @@ const styles = StyleSheet.create({
   frameWrapper: {
     width: 134,
     left: 0,
-    height: 114,
+    height: 14,
   },
   pilihButtonInner: {
     top: 620,
@@ -844,21 +665,6 @@ const styles = StyleSheet.create({
   },
   icu2: {
     right: 172,
-    paddingVertical: Padding.p_3xs,
-    paddingHorizontal: Padding.p_31xl,
-    justifyContent: 'center',
-    borderRadius: Border.br_3xs,
-    shadowColor: 'rgba(0, 0, 0, 0.5)',
-    alignItems: 'center',
-    flexDirection: 'row',
-    elevation: 8,
-    shadowRadius: 8,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    backgroundColor: Color.schemesOnPrimary,
   },
   pilihRuangan: {
     marginLeft: -58,
@@ -878,7 +684,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   mujairIcon: {
-<<<<<<< Updated upstream
     top: '-5%',
     // left: 100,
     // right: '-100%',
@@ -896,22 +701,6 @@ const styles = StyleSheet.create({
     width: 150,
     height: 100,
     top: '-5%',
-=======
-    bottom: '61.44%',
-    top: '26.29%',
-    left: '9.35%',
-    right: '64.84%',
-    width: '25.81%',
-    height: '12.26%',
-  },
-  mujairIcon1: {
-    bottom: '80.79%',
-    left: '9.35%',
-    right: '64.84%',
-    width: '25.81%',
-    height: '12.26%',
-    top: '6.95%',
->>>>>>> Stashed changes
   },
   mujairIcon2: {
     top: 51,
@@ -928,18 +717,12 @@ const styles = StyleSheet.create({
     width: 80,
   },
   neonatiIcon: {
-<<<<<<< Updated upstream
     marginTop: -32,
     marginLeft: 17,
-=======
-    marginTop: -18,
-    marginLeft: 52,
->>>>>>> Stashed changes
     top: '50%',
     width: 60,
   },
   karperIcon: {
-<<<<<<< Updated upstream
     height: '143.72%',
     width: '285%',
     top: -20,
@@ -948,15 +731,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginLeft: 45,
     paddingLeft: 45,
-=======
-    marginLeft: 35,
-    top: 466,
-    width: 100,
-    height: 100,
-    left: '50%',
-    position: 'absolute',
-    overflow: 'hidden',
->>>>>>> Stashed changes
   },
   pilihButton: {
     height: '73.11%',
@@ -966,7 +740,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
     width: 310,
-<<<<<<< Updated upstream
     shadowOpacity: 1,
     shadowOffset: {
       width: 0,
@@ -975,8 +748,6 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     left: '50%',
     position: 'absolute',
-=======
->>>>>>> Stashed changes
   },
   arilSangari: {
     top: 90,
@@ -1013,7 +784,6 @@ const styles = StyleSheet.create({
     color: Color.colorMediumaquamarine,
   },
   bottomNavigation: {
-<<<<<<< Updated upstream
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -1028,43 +798,14 @@ const styles = StyleSheet.create({
     paddingVertical: 8, // Adjusted padding
     backgroundColor: '#ffffff',
     zIndex: 1000,
-=======
-    marginLeft: -180,
-    top: 744,
-    shadowColor: 'rgba(67, 67, 67, 0.3)',
-    width: 360,
-    height: 56,
-    justifyContent: 'space-between',
-    paddingHorizontal: Padding.p_41xl,
-    paddingVertical: Padding.p_9xs,
-    alignItems: 'center',
-    flexDirection: 'row',
-    elevation: 8,
-    shadowRadius: 8,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    left: '50%',
-    position: 'absolute',
-    backgroundColor: Color.schemesOnPrimary,
->>>>>>> Stashed changes
   },
   editScreenAdmin: {
     // borderRadius: Border.br_xl,
     flex: 1,
-<<<<<<< Updated upstream
     // width: '100%',
     height: 1004,
     // overflow: 'hidden',
     // backgroundColor: Color.schemesOnPrimary,
-=======
-    width: '100%',
-    height: 1004,
-    overflow: 'hidden',
-    backgroundColor: Color.schemesOnPrimary,
->>>>>>> Stashed changes
   },
 });
 
