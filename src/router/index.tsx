@@ -25,6 +25,9 @@ import {
   BOR,
   AVLOS,
   TOI,
+  BTO,
+  NDR,
+  GDR,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -138,6 +141,10 @@ const index = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen name="TOI" component={TOI} options={{headerShown: false}} />
+      <Stack.Screen name="BTO" component={BTO} options={{headerShown: false}} />
+      <Stack.Screen name="NDR" component={NDR} options={{headerShown: false}} />
+      <Stack.Screen name="GDR" component={GDR} options={{headerShown: false}} />
+
     </Stack.Navigator>
   );
 };
