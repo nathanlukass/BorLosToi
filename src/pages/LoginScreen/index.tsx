@@ -13,9 +13,13 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase, useFocusEffect} from '@react-navigation/native';
+import {
+  useNavigation,
+  ParamListBase,
+  useFocusEffect,
+} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
-import { showMessage} from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 import FlashMessage from 'react-native-flash-message';
 import UsernameField from '../../../components/UsernameField';
 import PasswordField from '../../../components/PasswordField';
@@ -83,26 +87,26 @@ const LoginScreen = ({route}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const handleLogin = () => {
-    if (selectedRole == 'Nurse'){
-      navigation.navigate('HomeScreenNurse')
-    }
-    else if (selectedRole == 'Admin'){
-      navigation.navigate('HomeScreenAdmin')
-    }
-    else{
+    if (selectedRole == 'Nurse') {
+      navigation.navigate('HomeScreenNurse');
+    } else if (selectedRole == 'Admin') {
+      navigation.navigate('HomeScreenAdmin');
+    } else {
       showMessage({
-        message: "select your role",
-        type: "danger",
-      })
+        message: 'Select your role!',
+        type: 'danger',
+      });
     }
-  }
+  };
 
   useFocusEffect(
     React.useCallback(() => {
       if (route.params?.loggedOut) {
-        Alert.alert("Logged Out", "You have been logged out successfully.");
+        Alert.alert('Logged Out!', "you've been logged out.");
+        navigation.setParams({loggedOut: false}); // Clear the loggedOut parameter after showing the alert
       }
-    }, [route.params?.loggedOut]))
+    }, [route.params?.loggedOut]),
+  );
 
   return (
     <View style={styles.loginScreenAdmin}>
@@ -525,9 +529,8 @@ const styles = StyleSheet.create({
     // alignSelf: 'center',
     // width: 385,
     // height: 800,
-    flex: 1
+    flex: 1,
     // overflow: 'hidden',
-
   },
   usernameFlexBox: {
     padding: Padding.p_3xs,
