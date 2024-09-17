@@ -26,510 +26,515 @@ const NurseInputPage = () => {
 
   return (
     <View style={styles.container}>
-    <ScrollView style={styles.containerScrollView}>
-      <View style={styles.nurseInputPage}>
-        <View style={[styles.rincianPasien, styles.rincianPasienShadowBox]}>
-          <View style={styles.judul}>
-            <Text style={[styles.totalHariPerawatan, styles.pasienFlexBox]}>
-              Total hari perawatan per pasienn
-            </Text>
-            <View style={[styles.judulChild, styles.judulPosition]} />
-          </View>
-          <View style={styles.subJudul}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas I</Text>
-          </View>
-          <View style={styles.subJudul}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas II</Text>
-          </View>
-          <View style={styles.subJudul}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas III</Text>
-          </View>
-        </View>
-        <View
-          style={[styles.jumlahHariPerawatan, styles.rincianPasienShadowBox]}>
-          <View style={styles.judul1}>
-            <Text style={styles.jumlahHariPerawatan1}>
-              Jumlah hari perawatan
-            </Text>
-            <View style={[styles.judulItem, styles.judulPosition]} />
-          </View>
-          <View style={styles.subJudul3}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Jumlah hari</Text>
-          </View>
-        </View>
-        <View
-          style={[styles.pasienMasukkeluarPadaHari, styles.pasienShadowBox1]}>
-          <View style={styles.judul2}>
-            <Text
-              style={[styles.pasienMasukkeluarPada, styles.pasienSpaceBlock]}>
-              Pasien masuk/keluar pada hari yang sama
-            </Text>
-            <View style={[styles.judulInner, styles.judulPosition]} />
-          </View>
-          <View style={styles.subJudul4}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>
-              Banya pasien :
-            </Text>
-          </View>
-        </View>
-        <LamaDirawat
-          lamaPerawatan="Lama perawatan"
-          lamaDiRawat="Lama di rawat :"
-          propTop={1356}
-        />
-        <View style={[styles.pasienYangMasihDiRawat, styles.pasienShadowBox1]}>
-          <View style={styles.judul3}>
-            <Text style={[styles.pasienYangMasih, styles.pasienTypo]}>
-              Pasien yang masih di rawat
-            </Text>
-            <View style={[styles.lineView, styles.judulPosition]} />
-          </View>
-          <View style={styles.subJudul5}>
-            <View style={[styles.amountSetting5, styles.amountPosition1]}>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.pasienYangMasih1, styles.pasienTypo1]}>
-              Pasien yang masih di rawat :
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.pasienKeluarRuangan, styles.pasienShadowBox]}>
-          <View style={styles.judul3}>
-            <Text style={[styles.pasienKeluarRuangan1, styles.pasienTypo]}>
-              Pasien keluar ruangan
-            </Text>
-            <View style={[styles.lineView, styles.judulPosition]} />
-          </View>
-          <View style={styles.hidup}>
-            <Text style={[styles.pasienKeluarHidupContainer, styles.totalTypo]}>
-              <Text style={styles.pasienKeluarHidupContainer1}>
-                <Text style={styles.pasienKeluar}>{'Pasien keluar '}</Text>
-                <Text style={styles.hidup1}>Hidup</Text>
-                <Text style={styles.pasienKeluar}> :</Text>
+      <ScrollView style={styles.containerScrollView}>
+        <View style={styles.nurseInputPage}>
+          <View style={[styles.rincianPasien, styles.rincianPasienShadowBox]}>
+            <View style={styles.judul}>
+              <Text style={[styles.totalHariPerawatan, styles.pasienFlexBox]}>
+                Total hari perawatan per pasienn
               </Text>
-            </Text>
-          </View>
-          <View style={styles.subJudul6}>
-            <View style={[styles.amountSetting6, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
+              <View style={[styles.judulChild, styles.judulPosition]} />
             </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Hidup</Text>
-          </View>
-          <View style={styles.subJudul6}>
-            <View style={[styles.amountSetting6, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
+            <View style={styles.subJudul}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
               </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas I</Text>
             </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Rujuk :</Text>
-          </View>
-          <View style={styles.subJudul6}>
-            <View style={[styles.amountSetting6, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
+            <View style={styles.subJudul}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
               </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas II</Text>
             </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>APS</Text>
-          </View>
-          <View style={styles.subJudul6}>
-            <View style={[styles.amountSetting6, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
+            <View style={styles.subJudul}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
               </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas III</Text>
             </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Lain-lain</Text>
           </View>
-          <View style={styles.subJudul6}>
-            <View style={[styles.amountSetting6, styles.amountPosition1]}>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Jumlah</Text>
-          </View>
-          <View style={styles.hidup}>
-            <Text style={[styles.pasienKeluarHidupContainer, styles.totalTypo]}>
-              <Text style={styles.pasienKeluarHidupContainer1}>
-                <Text style={styles.pasienKeluar}>{'Pasien keluar '}</Text>
-                <Text style={styles.menginggal}>Meninggal</Text>
-                <Text style={styles.pasienKeluar}> :</Text>
+          <View
+            style={[styles.jumlahHariPerawatan, styles.rincianPasienShadowBox]}>
+            <View style={styles.judul1}>
+              <Text style={styles.jumlahHariPerawatan1}>
+                Jumlah hari perawatan
               </Text>
+              <View style={[styles.judulItem, styles.judulPosition]} />
+            </View>
+            <View style={styles.subJudul3}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>
+                Jumlah hari
+              </Text>
+            </View>
+          </View>
+          <View
+            style={[styles.pasienMasukkeluarPadaHari, styles.pasienShadowBox1]}>
+            <View style={styles.judul2}>
+              <Text
+                style={[styles.pasienMasukkeluarPada, styles.pasienSpaceBlock]}>
+                Pasien masuk/keluar pada hari yang sama
+              </Text>
+              <View style={[styles.judulInner, styles.judulPosition]} />
+            </View>
+            <View style={styles.subJudul4}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>
+                Banya pasien :
+              </Text>
+            </View>
+          </View>
+          <LamaDirawat
+            lamaPerawatan="Lama perawatan"
+            lamaDiRawat="Lama di rawat :"
+            propTop={1356}
+          />
+          <View
+            style={[styles.pasienYangMasihDiRawat, styles.pasienShadowBox1]}>
+            <View style={styles.judul3}>
+              <Text style={[styles.pasienYangMasih, styles.pasienTypo]}>
+                Pasien yang masih di rawat
+              </Text>
+              <View style={[styles.lineView, styles.judulPosition]} />
+            </View>
+            <View style={styles.subJudul5}>
+              <View style={[styles.amountSetting5, styles.amountPosition1]}>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.pasienYangMasih1, styles.pasienTypo1]}>
+                Pasien yang masih di rawat :
+              </Text>
+            </View>
+          </View>
+          <View style={[styles.pasienKeluarRuangan, styles.pasienShadowBox]}>
+            <View style={styles.judul3}>
+              <Text style={[styles.pasienKeluarRuangan1, styles.pasienTypo]}>
+                Pasien keluar ruangan
+              </Text>
+              <View style={[styles.lineView, styles.judulPosition]} />
+            </View>
+            <View style={styles.hidup}>
+              <Text
+                style={[styles.pasienKeluarHidupContainer, styles.totalTypo]}>
+                <Text style={styles.pasienKeluarHidupContainer1}>
+                  <Text style={styles.pasienKeluar}>{'Pasien keluar '}</Text>
+                  <Text style={styles.hidup1}>Hidup</Text>
+                  <Text style={styles.pasienKeluar}> :</Text>
+                </Text>
+              </Text>
+            </View>
+            <View style={styles.subJudul6}>
+              <View style={[styles.amountSetting6, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Hidup</Text>
+            </View>
+            <View style={styles.subJudul6}>
+              <View style={[styles.amountSetting6, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Rujuk :</Text>
+            </View>
+            <View style={styles.subJudul6}>
+              <View style={[styles.amountSetting6, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>APS</Text>
+            </View>
+            <View style={styles.subJudul6}>
+              <View style={[styles.amountSetting6, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Lain-lain</Text>
+            </View>
+            <View style={styles.subJudul6}>
+              <View style={[styles.amountSetting6, styles.amountPosition1]}>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Jumlah</Text>
+            </View>
+            <View style={styles.hidup}>
+              <Text
+                style={[styles.pasienKeluarHidupContainer, styles.totalTypo]}>
+                <Text style={styles.pasienKeluarHidupContainer1}>
+                  <Text style={styles.pasienKeluar}>{'Pasien keluar '}</Text>
+                  <Text style={styles.menginggal}>Meninggal</Text>
+                  <Text style={styles.pasienKeluar}> :</Text>
+                </Text>
+              </Text>
+            </View>
+            <View style={styles.subJudul11}>
+              <View style={[styles.amountSetting11, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.v, styles.vTypo]}>V</Text>
+              <Text style={[styles.jam, styles.pasienTypo1]}>_ 48 jam</Text>
+            </View>
+            <View style={styles.subJudul11}>
+              <View style={[styles.amountSetting11, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.v1, styles.vTypo]}>V</Text>
+              <Text style={[styles.jam, styles.pasienTypo1]}>_ 48 jam</Text>
+            </View>
+            <View style={styles.subJudul6}>
+              <View style={[styles.amountSetting6, styles.amountPosition1]}>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Jumlah</Text>
+            </View>
+            <View style={styles.subJudul14}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.total, styles.jamPosition]}>Total</Text>
+            </View>
+          </View>
+          <LamaDirawat
+            lamaPerawatan="Pasien dipindahkan"
+            lamaDiRawat="Pasien dipindahkan :"
+            propTop={630}
+          />
+          <View style={[styles.pasienMasukRuangan, styles.pasienShadowBox]}>
+            <View style={styles.judul3}>
+              <Text style={[styles.pasienKeluarRuangan1, styles.pasienTypo]}>
+                Pasien masuk ruangan
+              </Text>
+              <View style={[styles.lineView, styles.judulPosition]} />
+            </View>
+            <View style={styles.subJudul}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>
+                Pasien masuk :
+              </Text>
+            </View>
+            <View style={styles.subJudul}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon1, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path1.png')}
+                  />
+                </View>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>
+                Pasien pindahan :
+              </Text>
+            </View>
+            <View style={styles.subJudul}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <Text style={styles.amount}>1</Text>
+              </View>
+              <Text style={[styles.kelasI, styles.pasienTypo1]}>Jumlah :</Text>
+            </View>
+          </View>
+          <View style={styles.pasienAwal}>
+            <View style={styles.judul6}>
+              <Text style={[styles.pasienAwal1, styles.pasienFlexBox]}>
+                Pasien awal
+              </Text>
+              <View style={[styles.lineView, styles.judulPosition]} />
+            </View>
+            <View style={[styles.subJudul18, styles.subJudul18Position]}>
+              <View style={[styles.amountSetting, styles.amountPosition1]}>
+                <View style={[styles.iconMinus, styles.iconPosition]}>
+                  <View style={[styles.rectangle, styles.rectanglePosition]} />
+                  <Image
+                    style={[styles.pathIcon26, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path2.png')}
+                  />
+                </View>
+                <View style={[styles.iconPlus, styles.iconPosition]}>
+                  <View
+                    style={[styles.rectangleCopy, styles.rectanglePosition]}
+                  />
+                  <Image
+                    style={[styles.pathIcon27, styles.pathIconLayout]}
+                    resizeMode="cover"
+                    source={require('../../../assets/path3.png')}
+                  />
+                </View>
+                <Text style={[styles.amount18, styles.amountPosition]}>1</Text>
+              </View>
+              <Text style={[styles.pasienAwal2, styles.pasienTypo1]}>
+                Pasien awal :
+              </Text>
+            </View>
+          </View>
+          <View style={[styles.jumlahBed, styles.jumlahBedShadowBox]}>
+            <Text style={[styles.jumlahTempatTidur, styles.mujairFlexBox]}>
+              Jumlah tempat tidur :
             </Text>
-          </View>
-          <View style={styles.subJudul11}>
-            <View style={[styles.amountSetting11, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
+            <View style={[styles.amountSetting19, styles.subJudul18Position]}>
+              <Text style={[styles.amount19, styles.amountPosition]}>3</Text>
             </View>
-            <Text style={[styles.v, styles.vTypo]}>V</Text>
-            <Text style={[styles.jam, styles.pasienTypo1]}>_ 48 jam</Text>
           </View>
-          <View style={styles.subJudul11}>
-            <View style={[styles.amountSetting11, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.v1, styles.vTypo]}>V</Text>
-            <Text style={[styles.jam, styles.pasienTypo1]}>_ 48 jam</Text>
+          <DatePickerr />
+          <View style={[styles.namaRuangan, styles.jumlahBedShadowBox]}>
+            <Text style={[styles.mujair, styles.inputTypo]}>Mujair</Text>
           </View>
-          <View style={styles.subJudul6}>
-            <View style={[styles.amountSetting6, styles.amountPosition1]}>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Jumlah</Text>
-          </View>
-          <View style={styles.subJudul14}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.total, styles.jamPosition]}>Total</Text>
-          </View>
-        </View>
-        <LamaDirawat
-          lamaPerawatan="Pasien dipindahkan"
-          lamaDiRawat="Pasien dipindahkan :"
-          propTop={630}
-        />
-        <View style={[styles.pasienMasukRuangan, styles.pasienShadowBox]}>
-          <View style={styles.judul3}>
-            <Text style={[styles.pasienKeluarRuangan1, styles.pasienTypo]}>
-              Pasien masuk ruangan
-            </Text>
-            <View style={[styles.lineView, styles.judulPosition]} />
-          </View>
-          <View style={styles.subJudul}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>
-              Pasien masuk :
-            </Text>
-          </View>
-          <View style={styles.subJudul}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon1, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path1.png')}
-                />
-              </View>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>
-              Pasien pindahan :
-            </Text>
-          </View>
-          <View style={styles.subJudul}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <Text style={styles.amount}>1</Text>
-            </View>
-            <Text style={[styles.kelasI, styles.pasienTypo1]}>Jumlah :</Text>
-          </View>
-        </View>
-        <View style={styles.pasienAwal}>
-          <View style={styles.judul6}>
-            <Text style={[styles.pasienAwal1, styles.pasienFlexBox]}>
-              Pasien awal
-            </Text>
-            <View style={[styles.lineView, styles.judulPosition]} />
-          </View>
-          <View style={[styles.subJudul18, styles.subJudul18Position]}>
-            <View style={[styles.amountSetting, styles.amountPosition1]}>
-              <View style={[styles.iconMinus, styles.iconPosition]}>
-                <View style={[styles.rectangle, styles.rectanglePosition]} />
-                <Image
-                  style={[styles.pathIcon26, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path2.png')}
-                />
-              </View>
-              <View style={[styles.iconPlus, styles.iconPosition]}>
-                <View
-                  style={[styles.rectangleCopy, styles.rectanglePosition]}
-                />
-                <Image
-                  style={[styles.pathIcon27, styles.pathIconLayout]}
-                  resizeMode="cover"
-                  source={require('../../../assets/path3.png')}
-                />
-              </View>
-              <Text style={[styles.amount18, styles.amountPosition]}>1</Text>
-            </View>
-            <Text style={[styles.pasienAwal2, styles.pasienTypo1]}>
-              Pasien awal :
-            </Text>
-          </View>
-        </View>
-        <View style={[styles.jumlahBed, styles.jumlahBedShadowBox]}>
-          <Text style={[styles.jumlahTempatTidur, styles.mujairFlexBox]}>
-            Jumlah tempat tidur :
-          </Text>
-          <View style={[styles.amountSetting19, styles.subJudul18Position]}>
-            <Text style={[styles.amount19, styles.amountPosition]}>3</Text>
-          </View>
-        </View>
-        <DatePickerr />
-        <View style={[styles.namaRuangan, styles.jumlahBedShadowBox]}>
-          <Text style={[styles.mujair, styles.inputTypo]}>Mujair</Text>
-        </View>
-        <Pressable
-          style={[styles.submitButton, styles.barAtasFlexBox]}
-          onPress={() => navigation.navigate('HomeScreenNurse1')}>
-          <Text style={[styles.submit, styles.submitClr]}>Submit</Text>
-        </Pressable>
-        <View style={[styles.waktu, styles.waktuLayout]}>
-          <View style={[styles.waktuChild, styles.barAtasPosition]} />
-          <Text style={[styles.waktuInputHarian, styles.submitClr]}>
-            Waktu input harian 12 : -- WITA
-          </Text>
-        </View>
-        <View style={[styles.barAtas, styles.barAtasPosition]}>
-          <Pressable onPress={() => navigation.navigate('HomeScreenNurse')}>
-            <Image
-              style={styles.iconArrowBack}
-              resizeMode="cover"
-              source={require('../../../assets/-icon-arrow-back.png')}
-            />
+          <Pressable
+            style={[styles.submitButton, styles.barAtasFlexBox]}
+            onPress={() => navigation.navigate('HomeScreenNurse1')}>
+            <Text style={[styles.submit, styles.submitClr]}>Submit</Text>
           </Pressable>
-          <Text style={[styles.inputHarian, styles.inputTypo]}>
-            Input Harian
-          </Text>
+          <View style={[styles.waktu, styles.waktuLayout]}>
+            <View style={[styles.waktuChild, styles.barAtasPosition]} />
+            <Text style={[styles.waktuInputHarian, styles.submitClr]}>
+              Waktu input harian 12 : -- WITA
+            </Text>
+          </View>
+          <View style={[styles.barAtas, styles.barAtasPosition]}>
+            <Pressable onPress={() => navigation.navigate('HomeScreenNurse')}>
+              <Image
+                style={styles.iconArrowBack}
+                resizeMode="cover"
+                source={require('../../../assets/-icon-arrow-back.png')}
+              />
+            </Pressable>
+            <Text style={[styles.inputHarian, styles.inputTypo]}>
+              Input Harian
+            </Text>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
       {/* <View
           style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
           <View style={[styles.homeParent, styles.parentFlexBox]}>

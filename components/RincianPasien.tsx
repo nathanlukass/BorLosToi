@@ -1,6 +1,6 @@
-import React, { useMemo } from "react";
-import { Text, StyleSheet, View, Image } from "react-native";
-import { Border, FontSize, FontFamily, Color, Padding } from "../GlobalStyles";
+import React, {useMemo} from 'react';
+import {Text, StyleSheet, View, Image} from 'react-native';
+import {Border, FontSize, FontFamily, Color, Padding} from '../GlobalStyles';
 
 export type RincianPasienType = {
   rincianPasienYangMasihDiRawat?: string;
@@ -14,8 +14,10 @@ export type RincianPasienType = {
 };
 
 const getStyleValue = (key: string, value: string | number | undefined) => {
-  if (value === undefined) return;
-  return { [key]: value === "unset" ? undefined : value };
+  if (value === undefined) {
+    return;
+  }
+  return {[key]: value === 'unset' ? undefined : value};
 };
 const RincianPasien = ({
   rincianPasienYangMasihDiRawat,
@@ -27,26 +29,26 @@ const RincianPasien = ({
 }: RincianPasienType) => {
   const rincianPasienStyle = useMemo(() => {
     return {
-      ...getStyleValue("top", judulTop),
+      ...getStyleValue('top', judulTop),
     };
   }, [judulTop]);
 
   const judulStyle = useMemo(() => {
     return {
-      ...getStyleValue("width", rincianPasienYangWidth),
+      ...getStyleValue('width', rincianPasienYangWidth),
     };
   }, [rincianPasienYangWidth]);
 
   const rincianPasienYangStyle = useMemo(() => {
     return {
-      ...getStyleValue("marginLeft", lineViewMarginLeft),
-      ...getStyleValue("width", lineViewWidth),
+      ...getStyleValue('marginLeft', lineViewMarginLeft),
+      ...getStyleValue('width', lineViewWidth),
     };
   }, [lineViewMarginLeft, lineViewWidth]);
 
   const lineViewStyle = useMemo(() => {
     return {
-      ...getStyleValue("marginLeft", subJudulMarginLeft),
+      ...getStyleValue('marginLeft', subJudulMarginLeft),
     };
   }, [subJudulMarginLeft]);
 
@@ -58,8 +60,7 @@ const RincianPasien = ({
             styles.rincianPasienYang,
             styles.judulChildPosition,
             rincianPasienYangStyle,
-          ]}
-        >
+          ]}>
           {rincianPasienYangMasihDiRawat}
         </Text>
         <View
@@ -73,7 +74,7 @@ const RincianPasien = ({
             <Image
               style={[styles.pathIcon, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path.png")}
+              source={require('../assets/path.png')}
             />
           </View>
           <View style={[styles.iconPlus, styles.iconPosition]}>
@@ -81,7 +82,7 @@ const RincianPasien = ({
             <Image
               style={[styles.pathIcon1, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path1.png")}
+              source={require('../assets/path1.png')}
             />
           </View>
           <Text style={[styles.amount, styles.amountTypo]}>1</Text>
@@ -95,7 +96,7 @@ const RincianPasien = ({
             <Image
               style={[styles.pathIcon, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path.png")}
+              source={require('../assets/path.png')}
             />
           </View>
           <View style={[styles.iconPlus, styles.iconPosition]}>
@@ -103,7 +104,7 @@ const RincianPasien = ({
             <Image
               style={[styles.pathIcon1, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path1.png")}
+              source={require('../assets/path1.png')}
             />
           </View>
           <Text style={[styles.amount, styles.amountTypo]}>1</Text>
@@ -117,7 +118,7 @@ const RincianPasien = ({
             <Image
               style={[styles.pathIcon, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path.png")}
+              source={require('../assets/path.png')}
             />
           </View>
           <View style={[styles.iconPlus, styles.iconPosition]}>
@@ -125,7 +126,7 @@ const RincianPasien = ({
             <Image
               style={[styles.pathIcon1, styles.pathIconLayout]}
               resizeMode="cover"
-              source={require("../assets/path1.png")}
+              source={require('../assets/path1.png')}
             />
           </View>
           <Text style={[styles.amount, styles.amountTypo]}>1</Text>
@@ -138,59 +139,59 @@ const RincianPasien = ({
 
 const styles = StyleSheet.create({
   judulChildPosition: {
-    left: "50%",
-    position: "absolute",
+    left: '50%',
+    position: 'absolute',
   },
   iconPosition: {
-    width: "28.29%",
-    bottom: "0%",
-    height: "100%",
-    top: "0%",
-    position: "absolute",
+    width: '28.29%',
+    bottom: '0%',
+    height: '100%',
+    top: '0%',
+    position: 'absolute',
   },
   rectanglePosition: {
     borderRadius: Border.br_5xs,
-    width: "100%",
-    left: "0%",
-    bottom: "0%",
-    right: "0%",
-    height: "100%",
-    top: "0%",
-    position: "absolute",
+    width: '100%',
+    left: '0%',
+    bottom: '0%',
+    right: '0%',
+    height: '100%',
+    top: '0%',
+    position: 'absolute',
   },
   pathIconLayout: {
-    maxHeight: "100%",
-    maxWidth: "100%",
-    left: "31.03%",
-    right: "30.6%",
-    width: "38.36%",
-    overflow: "hidden",
-    position: "absolute",
+    maxHeight: '100%',
+    maxWidth: '100%',
+    left: '31.03%',
+    right: '30.6%',
+    width: '38.36%',
+    overflow: 'hidden',
+    position: 'absolute',
   },
   amountTypo: {
-    textAlign: "left",
+    textAlign: 'left',
     fontSize: FontSize.m3BodySmall_size,
-    position: "absolute",
+    position: 'absolute',
   },
   rincianPasienYang: {
-    height: "54.05%",
+    height: '54.05%',
     marginLeft: -87.5,
     fontSize: FontSize.m3LabelLarge_size,
-    fontWeight: "600",
+    fontWeight: '600',
     fontFamily: FontFamily.poppinsSemiBold,
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
     width: 178,
     color: Color.notSoBlack,
-    top: "0%",
-    left: "50%",
-    alignItems: "center",
+    top: '0%',
+    left: '50%',
+    alignItems: 'center',
   },
   judulChild: {
     marginLeft: -133.7,
     top: 37,
-    borderStyle: "solid",
+    borderStyle: 'solid',
     borderColor: Color.notSoBlack,
     borderTopWidth: 0.3,
     height: 0,
@@ -206,52 +207,52 @@ const styles = StyleSheet.create({
     opacity: 0.1,
   },
   pathIcon: {
-    height: "5.45%",
-    top: "47.73%",
-    bottom: "46.82%",
+    height: '5.45%',
+    top: '47.73%',
+    bottom: '46.82%',
   },
   iconMinus: {
-    right: "71.71%",
-    left: "0%",
+    right: '71.71%',
+    left: '0%',
   },
   rectangleCopy: {
     backgroundColor: Color.colorCornflowerblue_100,
   },
   pathIcon1: {
-    height: "38.64%",
-    top: "30.91%",
-    bottom: "30.45%",
+    height: '38.64%',
+    top: '30.91%',
+    bottom: '30.45%',
   },
   iconPlus: {
-    left: "71.71%",
-    right: "0%",
-    width: "28.29%",
+    left: '71.71%',
+    right: '0%',
+    width: '28.29%',
   },
   amount: {
     marginTop: -11,
-    width: "6.46%",
-    top: "50%",
-    left: "46.34%",
+    width: '6.46%',
+    top: '50%',
+    left: '46.34%',
     letterSpacing: 1,
-    fontWeight: "500",
+    fontWeight: '500',
     fontFamily: FontFamily.poppinsMedium,
     color: Color.colorGray_100,
     opacity: 0.7,
   },
   amountSetting: {
-    width: "30.83%",
-    left: "69.17%",
-    overflow: "hidden",
-    bottom: "0%",
-    height: "100%",
-    right: "0%",
-    top: "0%",
-    position: "absolute",
+    width: '30.83%',
+    left: '69.17%',
+    overflow: 'hidden',
+    bottom: '0%',
+    height: '100%',
+    right: '0%',
+    top: '0%',
+    position: 'absolute',
   },
   kelasI: {
-    top: "18.18%",
+    top: '18.18%',
     fontFamily: FontFamily.poppinsRegular,
-    left: "0%",
+    left: '0%',
     color: Color.notSoBlack,
   },
   subJudul: {
@@ -262,11 +263,6 @@ const styles = StyleSheet.create({
   rincianPasien: {
     top: 1617,
     left: 17,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     shadowRadius: 8,
     elevation: 8,
     shadowOpacity: 1,
@@ -276,8 +272,8 @@ const styles = StyleSheet.create({
     height: 200,
     paddingHorizontal: Padding.p_9xl,
     paddingVertical: Padding.p_3xl,
-    alignItems: "center",
-    position: "absolute",
+    alignItems: 'center',
+    position: 'absolute',
   },
 });
 

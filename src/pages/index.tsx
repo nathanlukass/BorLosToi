@@ -16,6 +16,15 @@ import EditNike from './EditNike';
 import EditNeonati from './EditNeonati';
 import EditPayangka from './EditPayangka';
 import EditKarper from './EditKarper';
+import EditBomboya from './EditBomboya';
+import EditIcu from './EditIcu';
+import BORAVLOSTOIBTONDRGDR from './BorLosToiScreen';
+import BOR from './BorScreen';
+import AVLOS from './AvlosScreen';
+import TOI from './ToiScreen';
+import BTO from './BtoScreen';
+import NDR from './NdrScreen';
+import GDR from './GdrScreen';
 
 export {
   LoginScreen,
@@ -35,4 +44,13 @@ export {
   EditNeonati,
   EditPayangka,
   EditKarper,
+  EditBomboya,
+  EditIcu,
+  BORAVLOSTOIBTONDRGDR,
+  BOR,
+  AVLOS,
+  TOI,
+  BTO,
+  NDR,
+  GDR,
 };

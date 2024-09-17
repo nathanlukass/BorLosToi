@@ -1,6 +1,7 @@
 // import * as React from 'react';
 import React from 'react';
-import {View, StyleSheet, Text, Image, Pressable} from 'react-native';
+import { useCallback, useState } from 'react';
+import {View, StyleSheet, Text, Image, Pressable, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {Color, FontSize, FontFamily, Padding, Border} from '../GlobalStyles';
@@ -11,6 +12,10 @@ export type StatsType = {
 };
 
 const Stats = ({onClose}: StatsType) => {
+  const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
+  const closeLihatBORLOS = useCallback(() => {
+    setLihatBORLOSVisible(false);
+  }, []);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   return (
     <View style={styles.stats}>
@@ -46,24 +51,27 @@ const Stats = ({onClose}: StatsType) => {
         <Gap height={23} />
         <Text style={[styles.hasil1Typo]}>NDR :</Text>
       </View>
-      <View style={[styles.ket, styles.ketPosition]}>
-        <Text style={[styles.ket1, styles.ket1Typo]}>KET</Text>
-      </View>
-      <View style={[styles.standar, styles.ketPosition]}>
-        <Text style={[styles.ket1, styles.ket1Typo]}>STANDAR</Text>
-      </View>
-      <View style={[styles.hasil, styles.ketPosition]}>
-        <Text style={[styles.hasil1, styles.ket1Typo]}>HASIL</Text>
-      </View>
-      <Pressable
+      <TouchableOpacity
+      style={styles.buttonKet}>
+      <Text style={styles.buttonKetText}>KET</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+      style={styles.buttonStandar}>
+      <Text style={styles.buttonStandarText}>STANDAR</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+      style={styles.buttonHasil}>
+      <Text style={styles.buttonHasilText}>HASIL</Text>
+      </TouchableOpacity>
+      {/* <Pressable
         style={styles.backButton}
-        onPress={() => navigation.navigate('HomeScreenNurse')}>
+        onPress={closeLihatBORLOS}>
         <Image
           style={styles.vectorIcon}
           resizeMode="cover"
           source={require('../assets/vector2.png')}
         />
-      </Pressable>
+      </Pressable> */}
       <View style={styles.upArrow1Parent}>
         <Image
           style={styles.arrow1IconLayout}
@@ -101,6 +109,54 @@ const Stats = ({onClose}: StatsType) => {
 };
 
 const styles = StyleSheet.create({
+  buttonKet: {
+    left: 277,
+    top: 27,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 60,
+    height: 30,
+  },
+  buttonKetText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
+  buttonStandar: {
+    left: 185,
+    top: 27,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 80,
+    height: 30,
+  },
+  buttonStandarText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
+  buttonHasil: {
+    left: 113,
+    top: 27,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 60,
+    height: 30,
+  },
+  buttonHasilText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
   BorAvlosToiContainer: {
     flexDirection: 'column',
     // alignItems: 'center',
