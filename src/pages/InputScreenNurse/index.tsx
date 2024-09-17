@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -6,6 +7,9 @@ import {
   Image,
   Pressable,
   ScrollView,
+  Button,
+  TextInput,
+  TouchableOpacity,
 } from 'react-native';
 import LamaDirawat from '../../../components/LamaDirawat';
 import {DatePickerr} from '../../components';
@@ -23,6 +27,8 @@ import {
 
 const NurseInputPage = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  // const [bedCount, setBedCount] = useState(22);
+  const [initialPatients, setInitialPatients] = useState(1);
 
   return (
     <View style={styles.container}>
@@ -403,100 +409,40 @@ const NurseInputPage = () => {
               <Text style={[styles.pasienKeluarRuangan1, styles.pasienTypo]}>
                 Pasien masuk ruangan
               </Text>
-              <View style={[styles.lineView, styles.judulPosition]} />
-            </View>
-            <View style={styles.subJudul}>
-              <View style={[styles.amountSetting, styles.amountPosition1]}>
-                <View style={[styles.iconMinus, styles.iconPosition]}>
-                  <View style={[styles.rectangle, styles.rectanglePosition]} />
-                  <Image
-                    style={[styles.pathIcon, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path.png')}
-                  />
-                </View>
-                <View style={[styles.iconPlus, styles.iconPosition]}>
-                  <View
-                    style={[styles.rectangleCopy, styles.rectanglePosition]}
-                  />
-                  <Image
-                    style={[styles.pathIcon1, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path1.png')}
-                  />
-                </View>
-                <Text style={styles.amount}>1</Text>
-              </View>
               <Text style={[styles.kelasI, styles.pasienTypo1]}>
                 Pasien masuk :
               </Text>
             </View>
             <View style={styles.subJudul}>
-              <View style={[styles.amountSetting, styles.amountPosition1]}>
-                <View style={[styles.iconMinus, styles.iconPosition]}>
-                  <View style={[styles.rectangle, styles.rectanglePosition]} />
-                  <Image
-                    style={[styles.pathIcon, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path.png')}
-                  />
-                </View>
-                <View style={[styles.iconPlus, styles.iconPosition]}>
-                  <View
-                    style={[styles.rectangleCopy, styles.rectanglePosition]}
-                  />
-                  <Image
-                    style={[styles.pathIcon1, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path1.png')}
-                  />
-                </View>
-                <Text style={styles.amount}>1</Text>
-              </View>
               <Text style={[styles.kelasI, styles.pasienTypo1]}>
                 Pasien pindahan :
               </Text>
             </View>
             <View style={styles.subJudul}>
-              <View style={[styles.amountSetting, styles.amountPosition1]}>
-                <Text style={styles.amount}>1</Text>
-              </View>
+              <View style={[styles.amountSetting, styles.amountPosition1]} />
               <Text style={[styles.kelasI, styles.pasienTypo1]}>Jumlah :</Text>
             </View>
           </View>
           <View style={styles.pasienAwal}>
-            <View style={styles.judul6}>
-              <Text style={[styles.pasienAwal1, styles.pasienFlexBox]}>
-                Pasien awal
-              </Text>
-              <View style={[styles.lineView, styles.judulPosition]} />
-            </View>
-            <View style={[styles.subJudul18, styles.subJudul18Position]}>
-              <View style={[styles.amountSetting, styles.amountPosition1]}>
-                <View style={[styles.iconMinus, styles.iconPosition]}>
-                  <View style={[styles.rectangle, styles.rectanglePosition]} />
-                  <Image
-                    style={[styles.pathIcon26, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path2.png')}
-                  />
-                </View>
-                <View style={[styles.iconPlus, styles.iconPosition]}>
-                  <View
-                    style={[styles.rectangleCopy, styles.rectanglePosition]}
-                  />
-                  <Image
-                    style={[styles.pathIcon27, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path3.png')}
-                  />
-                </View>
-                <Text style={[styles.amount18, styles.amountPosition]}>1</Text>
-              </View>
-              <Text style={[styles.pasienAwal2, styles.pasienTypo1]}>
-                Pasien awal :
-              </Text>
-            </View>
+            <Text style={styles.label}>Pasien awal :</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                setInitialPatients(Math.max(0, initialPatients - 1))
+              }>
+              <Text style={styles.buttonText}>--</Text>
+            </TouchableOpacity>
+            <TextInput
+              value={initialPatients.toString()}
+              onChangeText={text => setInitialPatients(Number(text))}
+              keyboardType="numeric"
+              style={[styles.input, {marginHorizontal: 10}, {left: 88}]}
+            />
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setInitialPatients(initialPatients + 1)}>
+              <Text style={styles.buttonText}>+</Text>
+            </TouchableOpacity>
           </View>
           <View style={[styles.jumlahBed, styles.jumlahBedShadowBox]}>
             <Text style={[styles.jumlahTempatTidur, styles.mujairFlexBox]}>
@@ -535,37 +481,6 @@ const NurseInputPage = () => {
           </View>
         </View>
       </ScrollView>
-      {/* <View
-          style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
-          <View style={[styles.homeParent, styles.parentFlexBox]}>
-            <Image
-              style={styles.homeIcon}
-              resizeMode="cover"
-              source={require('../../../assets/home1.png')}
-            />
-            <Text style={[styles.home, styles.homeTypo]}>Home</Text>
-          </View>
-          <Pressable
-            style={styles.parentFlexBox}
-            onPress={() => navigation.navigate('NurseInputPage')}>
-            <Image
-              style={styles.homeIcon}
-              resizeMode="cover"
-              source={require('../../../assets/assignment.png')}
-            />
-            <Text style={[styles.riwayat, styles.homeTypo]}>Input</Text>
-          </Pressable>
-          <Pressable
-            style={styles.parentFlexBox}
-            onPress={() => navigation.navigate('ProfilScreenNurse')}>
-            <Image
-              style={styles.homeIcon}
-              resizeMode="cover"
-              source={require('../../../assets/account-circle1.png')}
-            />
-            <Text style={[styles.riwayat, styles.homeTypo]}>Profil</Text>
-          </Pressable>
-        </View> */}
     </View>
   );
 };
@@ -702,9 +617,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   pasienTypo1: {
-    fontFamily: FontFamily.poppinsRegular,
     textAlign: 'left',
-    fontSize: FontSize.m3BodySmall_size,
+    fontSize: 14,
+    top: 25,
   },
   pasienShadowBox1: {
     paddingVertical: Padding.p_2xl,
@@ -715,10 +630,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     elevation: 8,
     shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     left: 28,
     position: 'absolute',
@@ -735,8 +647,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
-    fontSize: FontSize.m3LabelLarge_size,
+    fontWeight: '900',
+    fontSize: 15,
     left: '50%',
     top: '0%',
     alignItems: 'center',
@@ -997,7 +909,7 @@ const styles = StyleSheet.create({
     width: 214,
   },
   lineView: {
-    top: 28,
+    top: 98,
   },
   judul3: {
     height: 28,
@@ -1125,8 +1037,8 @@ const styles = StyleSheet.create({
     top: '19.6%',
     bottom: '52.48%',
     zIndex: 0,
-    left: '50%',
-    width: 267,
+    left: '60%',
+    width: 26,
     position: 'absolute',
   },
   pathIcon26: {
@@ -1173,14 +1085,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 326,
     shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    color: 'rgba(0, 0, 0, 0.25)',
     left: 28,
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
+    flexDirection: 'row',
   },
   jumlahTempatTidur: {
     fontFamily: FontFamily.poppinsRegular,
@@ -1298,10 +1207,6 @@ const styles = StyleSheet.create({
     elevation: 4,
     shadowRadius: 4,
     shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     shadowColor: 'rgba(0, 0, 0, 0.25)',
     flexDirection: 'row',
     alignItems: 'center',
@@ -1315,6 +1220,26 @@ const styles = StyleSheet.create({
     // width: '100%',
     // backgroundColor: Color.schemesOnPrimary,
     // borderRadius: Border.br_xl,
+  },
+  label: {
+    fontSize: 17,
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginLeft: -90,
+    top: -1,
+    fontFamily: FontFamily.poppinsRegular,
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    flexDirection: 'row',
+    left: 80,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    flexDirection: 'row',
   },
 });
 
