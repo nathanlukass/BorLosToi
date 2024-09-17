@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, View, Image, Text, Pressable} from 'react-native';
+import {StyleSheet, View, Image, Text, Pressable,TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {
@@ -44,13 +44,11 @@ const BOR = () => {
 :
 :
 :
+:
+:
+:
 :`}</Text>
-        <Text style={[styles.text3, styles.textTypo]}>{`:
-:
-:
-
-
-`}</Text>
+        
         <Text style={[styles.mujairAMujair, styles.mujairTypo1]}>{`MUJAIR A
 MUJAIR B
 MUJAIR C
@@ -97,8 +95,6 @@ ICU`}</Text>
             resizeMode="cover"
             source={require('../../../assets/up-arrow11.png')}
           />
-        </View>
-        <View style={[styles.upArrow1Group, styles.arrow1Position]}>
           <Image
             style={styles.upArrow1Icon}
             resizeMode="cover"
@@ -107,7 +103,7 @@ ICU`}</Text>
           <Image
             style={styles.upArrow1Icon}
             resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
+            source={require('../../../assets/up-arrow11.png')}
           />
           <Image
             style={styles.upArrow1Icon}
@@ -115,268 +111,20 @@ ICU`}</Text>
             source={require('../../../assets/up-arrow11.png')}
           />
         </View>
+
       </View>
-      <View style={[styles.stats1, styles.statsPosition]}>
-        <Text style={[styles.text4, styles.textPosition]}>{`0
-0
-0
-0
-0
-0
-0
-0
-0`}</Text>
-        <Text style={[styles.text5, styles.textPosition]}>{`:
-:
-:
-:
-:
-:`}</Text>
-        <Text style={[styles.text6, styles.textTypo]}>{`:
-:
-:
-
-
-`}</Text>
-        <Text style={[styles.mujairAMujair1, styles.mujairTypo]}>{`MUJAIR A
-MUJAIR B
-MUJAIR C
-NIKE
-PAYANGKA
-NEONATI
-BOMBOYA
-KARPER
-ICU`}</Text>
-        <View style={[styles.ket2, styles.ketPosition]}>
-          <Text style={[styles.ket1, styles.ket1Typo]}>KET</Text>
-        </View>
-        <View style={[styles.hasil2, styles.ketPosition]}>
-          <Text style={[styles.hasil1, styles.ket1Typo]}>HASIL</Text>
-        </View>
-        <View style={[styles.upArrow1Parent, styles.arrow1Position]}>
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-        </View>
-        <View style={[styles.upArrow1Group, styles.arrow1Position]}>
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-        </View>
+      <View style={[styles.standarBor, styles.ketShadowBox]}>
+        <Text style={styles.standarbor}>STANDAR BOR : 60 - 85%</Text>
       </View>
-      <View style={[styles.stats1, styles.statsPosition]}>
-        <Text style={[styles.text4, styles.textPosition]}>{`0
-0
-0
-0
-0
-0
-0
-0
-0`}</Text>
-        <Text style={[styles.text5, styles.textPosition]}>{`:
-:
-:
-:
-:
-:`}</Text>
-        <Text style={[styles.text6, styles.textTypo]}>{`:
-:
-:
-
-
-`}</Text>
-        <Text style={[styles.mujairAMujair1, styles.mujairTypo]}>{`MUJAIR A
-MUJAIR B
-MUJAIR C
-NIKE
-PAYANGKA
-NEONATI
-BOMBOYA
-KARPER
-ICU`}</Text>
-        <View style={[styles.ket4, styles.ketPosition]}>
-          <Text style={[styles.ket1, styles.ket1Typo]}>KET</Text>
-        </View>
-        <View style={[styles.hasil4, styles.ketPosition]}>
-          <Text style={[styles.hasil1, styles.ket1Typo]}>HASIL</Text>
-        </View>
-        <View style={[styles.upArrow1Parent, styles.arrow1Position]}>
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-        </View>
-        <View style={[styles.upArrow1Group, styles.arrow1Position]}>
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-        </View>
-      </View>
-      <View style={[styles.stats1, styles.statsPosition]}>
-        <Text style={[styles.text10, styles.textPosition]}>{`0
-0
-0
-0
-0
-0
-0
-0
-0`}</Text>
-        <Text style={[styles.text5, styles.textPosition]}>{`:
-:
-:
-:
-:
-:`}</Text>
-        <Text style={[styles.text6, styles.textTypo]}>{`:
-:
-:
-
-
-`}</Text>
-        <Text style={[styles.mujairAMujair3, styles.mujairTypo]}>{`MUJAIR A
-MUJAIR B
-MUJAIR C
-NIKE
-PAYANGKA
-NEONATI
-BOMBOYA
-KARPER
-ICU`}</Text>
-        <View style={[styles.ket6, styles.ket6Position]}>
-          <Text style={[styles.ket1, styles.ket1Typo]}>KET</Text>
-        </View>
-        <View style={[styles.hasil6, styles.ket6Position]}>
-          <Text style={[styles.hasil1, styles.ket1Typo]}>HASIL</Text>
-        </View>
-        <View style={[styles.upArrow1Parent, styles.arrow1Position]}>
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-        </View>
-        <View style={[styles.upArrow1Group, styles.arrow1Position]}>
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-        </View>
-      </View>
+      <TouchableOpacity
+      style={styles.buttonKet}>
+      <Text style={styles.buttonKetText}>KET</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+      style={styles.buttonHasil}>
+      <Text style={styles.buttonHasilText}>HASIL</Text>
+      </TouchableOpacity>
+    
     </View>
   );
 };
@@ -387,6 +135,88 @@ const styles = StyleSheet.create({
     bottom: '0%',
     position: 'absolute',
   },
+  buttonKet: {
+    left: 280,
+    top: 180,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 60,
+    height: 30,
+  },
+  buttonKetText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
+  buttonStandar: {
+    left: 185,
+    top: 27,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 80,
+    height: 30,
+  },
+  buttonStandarText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
+  buttonHasil: {
+    left: 190,
+    top: 180,
+    position: 'absolute',
+    backgroundColor: Color.colorMediumaquamarine,
+    borderTopRightRadius: Border.br_3xs,
+    borderTopLeftRadius: Border.br_3xs,
+    width: 60,
+    height: 30,
+  },
+  buttonHasilText:{
+    // left: 15,
+    alignSelf: 'center',
+    top: 7,
+    color: 'white',
+  },
+  ketShadowBox: {
+    padding: Padding.p_base,
+    justifyContent: 'center',
+    elevation: 8,
+    shadowRadius: 8,
+    shadowOpacity: 1,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+  },
+  standarbor: {
+    alignSelf: 'stretch',
+    fontSize: 15,
+    textAlign: 'center',
+    color: Color.notSoBlack,
+    fontFamily: FontFamily.poppinsBold,
+    fontWeight: '700',
+    height: 200,
+    top: 93,
+  },
+  standarBor: {
+    marginLeft: -163,
+    top: 98,
+    borderRadius: Border.br_3xs,
+    width: 326,
+    height: 44,
+    padding: Padding.p_base,
+    justifyContent: 'center',
+    elevation: 8,
+    shadowRadius: 8,
+    left: '50%',
+    backgroundColor: Color.schemesOnPrimary,
+  },
   statsPosition: {
     left: '14.44%',
     right: '14.42%',
@@ -396,7 +226,7 @@ const styles = StyleSheet.create({
   },
   textTypo3: {
     fontFamily: FontFamily.poppinsRegular,
-    left: '45.29%',
+    left: '55%',
     width: '7.81%',
     textAlign: 'center',
   },
@@ -418,28 +248,28 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
   },
-  ketPosition1: {
-    padding: Padding.p_base,
-    justifyContent: 'center',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    elevation: 8,
-    shadowRadius: 8,
-    bottom: '93.33%',
-    width: '20.73%',
-    height: '6.67%',
-    alignItems: 'center',
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    flexDirection: 'row',
-    top: '0%',
-    position: 'absolute',
-  },
+  // ketPosition1: {
+  //   padding: Padding.p_base,
+  //   justifyContent: 'center',
+  //   backgroundColor: Color.colorMediumaquamarine,
+  //   borderTopRightRadius: Border.br_3xs,
+  //   borderTopLeftRadius: Border.br_3xs,
+  //   elevation: 8,
+  //   shadowRadius: 8,
+  //   bottom: '93.33%',
+  //   width: '20.73%',
+  //   height: '6.67%',
+  //   alignItems: 'center',
+  //   shadowOpacity: 1,
+  //   shadowOffset: {
+  //     width: 0,
+  //     height: 4,
+  //   },
+  //   shadowColor: 'rgba(0, 0, 0, 0.25)',
+  //   flexDirection: 'row',
+  //   top: '0%',
+  //   position: 'absolute',
+  // },
   ket1Typo: {
     color: Color.schemesOnPrimary,
     fontSize: FontSize.m3BodySmall_size,
@@ -456,6 +286,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
+    lineHeight: 30,
+    
   },
   textPosition: {
     top: '9.43%',
@@ -621,10 +453,11 @@ const styles = StyleSheet.create({
   },
   text1: {
     color: Color.colorBlack,
-    top: '8.83%',
-    height: '53.91%',
+    top: '10.5%',
+    height: '300%',
     fontSize: FontSize.m3LabelLarge_size,
     position: 'absolute',
+    lineHeight: 64,
   },
   text2: {
     left: '31.63%',
@@ -632,18 +465,19 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsMedium,
     color: Color.colorBlack,
     textAlign: 'left',
-    top: '8.83%',
-    height: '53.91%',
+    top: '10.5%',
+    height: '300%',
     fontSize: FontSize.m3LabelLarge_size,
     position: 'absolute',
+    lineHeight: 64,
   },
   text3: {
     height: '24.69%',
     top: '68.61%',
   },
   mujairAMujair: {
-    height: '84.84%',
-    top: '8.8%',
+    height: '300%',
+    top: '11%',
     width: '30.85%',
     fontWeight: '600',
     color: Color.colorBlack,
@@ -651,6 +485,7 @@ const styles = StyleSheet.create({
     fontSize: FontSize.m3LabelLarge_size,
     left: '0%',
     position: 'absolute',
+    lineHeight: 64,
   },
   ket1: {
     fontFamily: FontFamily.poppinsMedium,
@@ -664,37 +499,21 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
   },
-  hasil: {
-    padding: Padding.p_base,
-    justifyContent: 'center',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    elevation: 8,
-    shadowRadius: 8,
-    bottom: '93.33%',
-    width: '20.73%',
-    height: '6.67%',
-    alignItems: 'center',
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    flexDirection: 'row',
-    top: '0%',
-    position: 'absolute',
-  },
   upArrow1Icon: {
     height: 20,
     width: 20,
+    top: 20,
+    marginBottom: 10,
+    left: 20
   },
   upArrow1Parent: {
-    top: 34,
+    top: 40,
+    lineHeight: 30,
+    
   },
   upArrow1Group: {
     top: 281,
+    lineHeight: 30,
   },
   stats: {
     height: '51.13%',
