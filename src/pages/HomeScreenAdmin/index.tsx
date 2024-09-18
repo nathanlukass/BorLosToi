@@ -30,7 +30,7 @@ const HomeScreenAdmin = () => {
     <View style={styles.homeScreenAdmin}>
       <View style={[styles.welcomeBar, styles.welcomeLayout]}>
         <View style={[styles.welcomeBarChild, styles.childShadowBox]} />
-        <FrameComponent veronikaBedes="Joshua " />
+        <FrameComponent veronikaBedes="Geraldo Kawengian " />
         <Text style={styles.admin}>{'Admin '}</Text>
       </View>
       <View style={[styles.lihatBorlostoi1FlexBox, styles.lihatBorlostoi1]}>
@@ -189,9 +189,9 @@ const styles = StyleSheet.create({
   },
   admin: {
     top: 92,
-    left: 13,
+    left: 20,
     fontSize: FontSize.m3BodyLarge_size,
-    textAlign: 'left',
+    textAlign: 'center',
     color: Color.colorMediumaquamarine,
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
@@ -229,14 +229,14 @@ const styles = StyleSheet.create({
   },
   printOutHasil: {
     marginTop: -8.5,
-    left: 18,
+    left: 12,
     width: 310,
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsRegular,
   },
   printOutBox: {
     top: 262,
-    left: 32,
+    alignSelf: 'center',
     shadowOpacity: -10,
     shadowOffset: {
       width: 0,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   lihatBorLosContainer: {
-    left: 7,
+    left: 10,
     top: 10,
     position: 'absolute',
   },
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   homeScreenAdmin: {
-    // borderRadius: Border.br_xl,
+    borderRadius: Border.br_xl,
     flex: 1,
     height: 800,
     // overflow: 'hidden',

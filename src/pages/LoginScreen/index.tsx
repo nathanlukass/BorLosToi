@@ -13,19 +13,17 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase, useFocusEffect} from '@react-navigation/native';
+import {
+  useNavigation,
+  ParamListBase,
+  useFocusEffect,
+} from '@react-navigation/native';
 import SelectUserNurse from '../../../components/SelectUserNurse';
-import { showMessage} from 'react-native-flash-message';
+import {showMessage} from 'react-native-flash-message';
 import FlashMessage from 'react-native-flash-message';
 import UsernameField from '../../../components/UsernameField';
 import PasswordField from '../../../components/PasswordField';
-import {
-  FontFamily,
-  Color,
-  Padding,
-  Border,
-  FontSize,
-} from '../../../GlobalStyles';
+import { FontFamily, Color, Padding, Border, FontSize } from '../../../GlobalStyles';
 
 const LoginScreen = ({route}) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -83,27 +81,26 @@ const LoginScreen = ({route}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const handleLogin = () => {
-    if (selectedRole == 'Nurse'){
-      navigation.navigate('HomeScreenNurse')
-    }
-    else if (selectedRole == 'Admin'){
-      navigation.navigate('HomeScreenAdmin')
-    }
-    else{
+    if (selectedRole == 'Nurse') {
+      navigation.navigate('HomeScreenNurse');
+    } else if (selectedRole == 'Admin') {
+      navigation.navigate('HomeScreenAdmin');
+    } else {
       showMessage({
-        message: "select your role",
-        type: "danger",
-      })
+        message: 'Select your role!',
+        type: 'danger',
+      });
     }
-  }
+  };
 
   useFocusEffect(
     React.useCallback(() => {
       if (route.params?.loggedOut) {
-        Alert.alert("Logged Out!", "you've been logged out.");
-        navigation.setParams({ loggedOut: false }); // Clear the loggedOut parameter after showing the alert
+        Alert.alert('Logged Out!', "you've been logged out.");
+        navigation.setParams({loggedOut: false}); // Clear the loggedOut parameter after showing the alert
       }
-    }, [route.params?.loggedOut]))
+    }, [route.params?.loggedOut]),
+  );
 
   return (
     <View style={styles.loginScreenAdmin}>
@@ -351,17 +348,6 @@ const styles = StyleSheet.create({
     left: 21,
     position: 'absolute',
   },
-  fieldFlexBox: {
-    padding: Padding.p_3xs,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    height: 30,
-    width: 317,
-    borderStyle: 'solid',
-    borderRadius: Border.br_8xs,
-    position: 'absolute',
-  },
   groupLayout1: {
     height: 1,
     width: 142,
@@ -470,7 +456,6 @@ const styles = StyleSheet.create({
     top: 2,
     position: 'absolute',
     backgroundColor: '#21b557',
-    
   },
   login: {
     marginLeft: 22,
@@ -481,7 +466,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     top: 620,
-    left: 30,
+    alignSelf: 'center',
     width: 322,
     height: 130,
     position: 'absolute',
@@ -509,7 +494,7 @@ const styles = StyleSheet.create({
     color: Color.colorCornflowerblue_200,
   },
   welcomeToSamratContainer: {
-    marginLeft: -120.5,
+    marginLeft: -120,
     fontSize: FontSize.size_5xl,
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
@@ -519,7 +504,7 @@ const styles = StyleSheet.create({
   },
   welcomeToSamratIndikatorWrapper: {
     marginLeft: -123,
-    top: 56,
+    top: 50,
     height: 72,
   },
   loginScreenAdmin: {
@@ -527,27 +512,24 @@ const styles = StyleSheet.create({
     // alignSelf: 'center',
     // width: 385,
     // height: 800,
-    flex: 1
+    flex: 1,
     // overflow: 'hidden',
-
   },
   usernameFlexBox: {
     padding: Padding.p_3xs,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    left: 7,
   },
   usernameBg: {
     backgroundColor: Color.schemesOnPrimary,
     width: '100%',
     position: 'absolute',
-    left: 7,
   },
   selectUserType: {
     marginTop: -7,
     top: '80%',
-    left: 12,
+    left: 15,
     fontSize: FontSize.m3LabelLarge_size,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.colorDimgray,
@@ -570,7 +552,6 @@ const styles = StyleSheet.create({
     top: '-40%',
     right: '0.32%',
     bottom: '28.97%',
-    left: '-0.32%',
     borderRadius: Border.br_8xs,
     borderStyle: 'solid',
     borderColor: 'blue',
@@ -594,7 +575,7 @@ const styles = StyleSheet.create({
     paddingVertical: Padding.p_8xs,
   },
   property1default: {
-    left: -5,
+    left: -10,
     width: 317,
     height: 145,
     top: 250,

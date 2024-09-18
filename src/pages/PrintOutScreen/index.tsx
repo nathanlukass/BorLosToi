@@ -1,309 +1,208 @@
 import * as React from "react";
-import { StyleSheet, View, Image, Text, Pressable } from "react-native";
-import { Border, Color, FontFamily, FontSize, Gap } from "../../../GlobalStyles";
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/core';
+import { StyleSheet, View, Text, Pressable, Modal, FlatList, TouchableOpacity } from "react-native";
+import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, ParamListBase } from '@react-navigation/core';
 
 const PrintOutScreen = () => {
-    const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const [selectedRoom, setSelectedRoom] = React.useState('Pilih Ruangan');
+  const [selectedMonth, setSelectedMonth] = React.useState('Pilih Bulan');
+  const [roomModalVisible, setRoomModalVisible] = React.useState(false);
+  const [monthModalVisible, setMonthModalVisible] = React.useState(false);
+
+  const rooms = ['Mujair A', 'Mujair B', 'Mujair C', 'Nike', 'Payangka', 'Neonati', 'Bomboya', 'Karper', 'ICU'];
+  const months = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ];
+
+  const renderItem = ({ item, onSelect }) => (
+    <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>
+      <Text>{item}</Text>
+    </TouchableOpacity>
+  );
+
+  const handlePrint = () => {
+    if (selectedRoom !== 'Pilih Ruangan' && selectedMonth !== 'Pilih Bulan') {
+      alert(`Mencetak laporan untuk ${selectedRoom} bulan ${selectedMonth}`);
+    } else {
+      alert('Silakan pilih ruangan dan bulan terlebih dahulu.');
+    }
+  };
 
   return (
     <View style={styles.homeScreenAdmin}>
-        <View style={[styles.barAtas, styles.barAtasPosition]}>
+      <View style={[styles.barAtas, styles.barAtasPosition]}>
         <Pressable onPress={() => navigation.navigate('HomeScreenAdmin')}>
-            <Image
-              style={styles.iconArrowBack}
-              resizeMode="cover"
-              source={require('../../../assets/-icon-arrow-back.png')}
+          <Text style={styles.iconArrowBack}>{"< Back"}</Text>
+        </Pressable>
+        <Text style={[styles.inputHarian, styles.inputTypo]}>
+          Menu Print Out
+        </Text>
+      </View>
+
+      {/* Dropdown Pilih Bulan */}
+      <Pressable style={styles.dropdownn} onPress={() => setMonthModalVisible(true)}>
+        <Text style={styles.dropdownText}>{selectedMonth}</Text>
+      </Pressable>
+
+      {/* Dropdown Pilih Ruangan */}
+      <Pressable style={styles.dropdown} onPress={() => setRoomModalVisible(true)}>
+        <Text style={styles.dropdownText}>{selectedRoom}</Text>
+      </Pressable>
+
+      {/* Modal Pilih Bulan */}
+      <Modal
+        transparent={true}
+        visible={monthModalVisible}
+        onRequestClose={() => setMonthModalVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalBackground}
+          activeOpacity={1}
+          onPressOut={() => setMonthModalVisible(false)} // Menutup modal ketika klik di luar
+        >
+          <View style={styles.modalContent}>
+            <FlatList
+              data={months}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => renderItem({ item, onSelect: (value) => {
+                setSelectedMonth(value);
+                setMonthModalVisible(false);
+              } })}
             />
-          </Pressable>
-          <Text style={[styles.inputHarian, styles.inputTypo]}>
-           Menu Print Out 
-          </Text>
-        </View>
-      <View style={[styles.pilihBulan, styles.pilihShadowBox]}>
-        <View style={[styles.pilihBulanChild, styles.pilihChildPosition]} />
-        <Text style={styles.pilihBulan1}>Pilih bulan</Text>
-        <Image
-          style={styles.doubleDownIcon}
-          resizeMode="cover"
-          source={require("../../../assets/double-down.png")}
-        />
-      </View>
-      <View style={[styles.pilihRuangan, styles.pilihShadowBox]}>
-        <View style={[styles.pilihRuanganChild, styles.pilihChildPosition]} />
-        <Text style={styles.pilihBulan1}>Pilih ruangan</Text>
-        <Image
-          style={styles.doubleDownIcon}
-          resizeMode="cover"
-          source={require("../../../assets/double-down.png")}
-        />
-      </View>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Modal Pilih Ruangan */}
+      <Modal
+        transparent={true}
+        visible={roomModalVisible}
+        onRequestClose={() => setRoomModalVisible(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalBackground}
+          activeOpacity={1}
+          onPressOut={() => setRoomModalVisible(false)} // Menutup modal ketika klik di luar
+        >
+          <View style={styles.modalContent}>
+            <FlatList
+              data={rooms}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => renderItem({ item, onSelect: (value) => {
+                setSelectedRoom(value);
+                setRoomModalVisible(false);
+              } })}
+            />
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
+      {/* Tombol Print */}
+      <Pressable style={styles.printButton} onPress={handlePrint}>
+        <Text style={styles.printButtonText}>Print</Text>
+      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    iconArrowBack: {
-        width: 42,
-        height: 25,
-        zIndex: 0,
-      },
-      inputTypo: {
-        fontFamily: FontFamily.poppinsBold,
-        fontWeight: '700',
-      },
-      inputHarian: {
-        marginTop: -11.5,
-        marginLeft: -35,
-        fontSize: FontSize.m3BodyLarge_size,
-        zIndex: 1,
-        position: 'absolute',
-        textAlign: 'left',
-        top: '50%',
-        left: '50%',
-        color: Color.notSoBlack,
-      },
-      barAtasPosition: {
-        borderRadius: Border.br_8xs,
-        alignSelf: 'center',
-        position: 'absolute',
-      },
-      barAtas: {
-        top: 24,
-        width: 360,
-        height: 45,
-        justifyContent: 'space-between',
-        elevation: 4,
-        shadowRadius: 4,
-        shadowOpacity: 1,
-        shadowOffset: {
-          width: 0,
-          height: 2,
-        },
-        shadowColor: 'rgba(0, 0, 0, 0.25)',
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: Color.schemesOnPrimary,
-    },
-    childShadowBox: {
-    borderRadius: Border.br_xs,
-    elevation: 9,
-    shadowRadius: 9,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    backgroundColor: Color.schemesOnPrimary,
+  iconArrowBack: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
-  barPosition: {
-    left: 0,
-    position: "absolute",
-  },
-  selamatDatangPosition: {
-    height: 31,
-    left: 75,
-    alignItems: "center",
-    display: "flex",
-    textAlign: "left",
-    color: Color.notSoBlack,
-    position: "absolute",
-  },
-  textFlexBox: {
-    textAlign: "left",
-    position: "absolute",
-  },
-  pilihShadowBox: {
-    height: 36,
-    width: 328,
-    shadowOpacity: 1,
-    elevation: 4,
-    shadowRadius: 4,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    left: "50%",
-    marginLeft: -164,
-    position: "absolute",
-  },
-  pilihChildPosition: {
-    left: "0%",
-    bottom: "0%",
-    right: "0%",
-    top: "0%",
-    height: "100%",
-    position: "absolute",
-    width: "100%",
-  },
-  welcomeBarChild: {
-    height: 148,
-    left: 0,
-    position: "absolute",
-    top: 0,
-    width: 328,
-  },
-  memojiIcon: {
-    top: 4,
-    borderRadius: Border.br_980xl,
-    width: 55,
-    height: 55,
-    overflow: "hidden",
-  },
-  selamatDatang: {
-    width: 264,
-    fontFamily: FontFamily.poppinsRegular,
-    height: 31,
-    fontSize: FontSize.m3LabelLarge_size,
-    left: 75,
-    top: 0,
-  },
-  joshuaTengker: {
-    top: 25,
-    fontSize: FontSize.size_xl,
-    fontWeight: "700",
+  inputTypo: {
     fontFamily: FontFamily.poppinsBold,
-    width: 181,
-    height: 31,
-    left: 75,
+    fontWeight: '700',
   },
-  memojiParent: {
-    top: 9,
-    left: 14,
-    width: 332,
-    height: 62,
-    position: "absolute",
-  },
-  admin: {
-    top: 92,
-    left: 13,
+  inputHarian: {
+    marginTop: -11.5,
+    marginLeft: -35,
     fontSize: FontSize.m3BodyLarge_size,
-    fontWeight: "600",
-    fontFamily: FontFamily.poppinsSemiBold,
-    color: Color.colorMediumseagreen,
-  },
-  welcomeBar: {
-    top: 44,
-    height: 166,
-    width: 328,
-    shadowOpacity: 1,
-    elevation: 4,
-    shadowRadius: 4,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    left: "50%",
-    marginLeft: -164,
-    position: "absolute",
-  },
-  pilihBulanChild: {
-    borderRadius: Border.br_xs,
-    elevation: 9,
-    shadowRadius: 9,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
-    backgroundColor: Color.schemesOnPrimary,
-  },
-  pilihBulan1: {
-    height: "86.11%",
-    width: "94.51%",
-    top: "8.33%",
-    left: "5.49%",
-    alignItems: "center",
-    display: "flex",
+    zIndex: 1,
+    position: 'absolute',
+    textAlign: 'left',
+    top: '50%',
+    left: '50%',
     color: Color.notSoBlack,
-    textAlign: "left",
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    position: "absolute",
   },
-  doubleDownIcon: {
-    height: "61.11%",
-    width: "6.71%",
-    top: "19.44%",
-    right: "4.57%",
-    bottom: "19.44%",
-    left: "88.72%",
-    maxWidth: "100%",
-    maxHeight: "100%",
-    position: "absolute",
-    overflow: "hidden",
+  barAtasPosition: {
+    borderRadius: Border.br_8xs,
+    alignSelf: 'center',
+    position: 'absolute',
   },
-  pilihBulan: {
-    top: 190,
-  },
-  pilihRuanganChild: {
-    borderRadius: Border.br_xs,
-    elevation: 9,
-    shadowRadius: 9,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+  barAtas: {
+    top: 24,
+    width: 360,
+    height: 45,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Color.schemesOnPrimary,
   },
-  pilihRuangan: {
-    top: 120,
+  dropdown: {
+    height: 40,
+    marginTop: 3,
+    marginHorizontal: 30,
+    marginVertical: 15,
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Color.notSoBlack,
+    borderRadius: 8,
+    backgroundColor: Color.schemesOnPrimary,
   },
-  background: {
-    backgroundColor: Color.colorsBackgroundsLight,
+  dropdownn: {
+    height: 40,
+    marginTop: 100,
+    marginHorizontal: 30,
+    marginVertical: 15,
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Color.notSoBlack,
+    borderRadius: 8,
+    backgroundColor: Color.schemesOnPrimary,
   },
-  cellularIcon: {
-    width: 18,
-    height: 12,
-  },
-  wifiIcon: {
-    width: 16,
-    height: 12,
-  },
-  batteryIcon: {
-    width: 24,
-    height: 12,
-  },
-  icons: {
-    height: "50%",
-    width: "19.44%",
-    top: "25%",
-    right: "3.33%",
-    bottom: "25%",
-    left: "77.22%",
-    flexDirection: "row",
-    gap: Gap.gap_3xs,
-    position: "absolute",
-  },
-  text: {
-    top: "16.67%",
-    left: "3.33%",
-    fontWeight: "500",
-    fontFamily: FontFamily.m3LabelLarge,
-    color: Color.wireframesColorsTextLegibilityHighEmphasis,
+  dropdownText: {
     fontSize: FontSize.m3LabelLarge_size,
-    textAlign: "left",
+    color: Color.notSoBlack,
   },
-  androidStatusBar: {
-    right: 0,
-    height: 24,
-    top: 0,
-    left: 0,
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    width: 300,
+    maxHeight: 400,
+    backgroundColor: Color.schemesOnPrimary,
+    padding: 20,
+    borderRadius: 10,
+  },
+  item: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
   homeScreenAdmin: {
-    borderRadius: Border.br_xl,
     flex: 1,
-    height: 800,
-    overflow: "hidden",
-    width: "100%",
     backgroundColor: Color.schemesOnPrimary,
+  },
+  printButton: {
+    marginTop: 20,
+    alignSelf: 'center',
+    backgroundColor: Color.colorMediumaquamarine,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  printButtonText: {
+    fontSize: FontSize.m3BodyLarge_size,
+    color: Color.schemesOnPrimary,
   },
 });
 
