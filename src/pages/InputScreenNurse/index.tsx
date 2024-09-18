@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import LamaDirawat from '../../../components/LamaDirawat';
-import {DatePickerr} from '../../components';
+import {DatePickerr, InputButton} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/core';
 // import {useNavigation, ParamListBase} from '@react-navigation/natiSve';
@@ -23,12 +23,13 @@ import {
   FontFamily,
   FontSize,
 } from '../../../GlobalStyles';
+
 // import {ScrollView} from 'react-native-gesture-handler';
 
 const NurseInputPage = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   // const [bedCount, setBedCount] = useState(22);
-  const [initialPatients, setInitialPatients] = useState(1);
+
 
   return (
     <View style={styles.container}>
@@ -37,81 +38,23 @@ const NurseInputPage = () => {
           <View style={[styles.rincianPasien, styles.rincianPasienShadowBox]}>
             <View style={styles.judul}>
               <Text style={[styles.totalHariPerawatan, styles.pasienFlexBox]}>
-                Total hari perawatan per pasienn
+                Total hari perawatan per pasien
               </Text>
               <View style={[styles.judulChild, styles.judulPosition]} />
             </View>
+              <Text style={[styles.kelasI, styles.kelas1Text]}>Kelas I</Text>
             <View style={styles.subJudul}>
+              <InputButton top={-25} left={-5}/>
               <View style={[styles.amountSetting, styles.amountPosition1]}>
-                <View style={[styles.iconMinus, styles.iconPosition]}>
-                  <View style={[styles.rectangle, styles.rectanglePosition]} />
-                  <Image
-                    style={[styles.pathIcon, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path.png')}
-                  />
-                </View>
-                <View style={[styles.iconPlus, styles.iconPosition]}>
-                  <View
-                    style={[styles.rectangleCopy, styles.rectanglePosition]}
-                  />
-                  <Image
-                    style={[styles.pathIcon1, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path1.png')}
-                  />
-                </View>
-                <Text style={styles.amount}>1</Text>
-              </View>
-              <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas I</Text>
-            </View>
-            <View style={styles.subJudul}>
-              <View style={[styles.amountSetting, styles.amountPosition1]}>
-                <View style={[styles.iconMinus, styles.iconPosition]}>
-                  <View style={[styles.rectangle, styles.rectanglePosition]} />
-                  <Image
-                    style={[styles.pathIcon, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path.png')}
-                  />
-                </View>
-                <View style={[styles.iconPlus, styles.iconPosition]}>
-                  <View
-                    style={[styles.rectangleCopy, styles.rectanglePosition]}
-                  />
-                  <Image
-                    style={[styles.pathIcon1, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path1.png')}
-                  />
-                </View>
-                <Text style={styles.amount}>1</Text>
               </View>
               <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas II</Text>
             </View>
             <View style={styles.subJudul}>
+            <InputButton top={-25} left={-5}/>
               <View style={[styles.amountSetting, styles.amountPosition1]}>
-                <View style={[styles.iconMinus, styles.iconPosition]}>
-                  <View style={[styles.rectangle, styles.rectanglePosition]} />
-                  <Image
-                    style={[styles.pathIcon, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path.png')}
-                  />
-                </View>
-                <View style={[styles.iconPlus, styles.iconPosition]}>
-                  <View
-                    style={[styles.rectangleCopy, styles.rectanglePosition]}
-                  />
-                  <Image
-                    style={[styles.pathIcon1, styles.pathIconLayout]}
-                    resizeMode="cover"
-                    source={require('../../../assets/path1.png')}
-                  />
-                </View>
-                <Text style={styles.amount}>1</Text>
               </View>
               <Text style={[styles.kelasI, styles.pasienTypo1]}>Kelas III</Text>
+              <InputButton top={-70} left={-5}/>
             </View>
           </View>
           <View
@@ -399,11 +342,38 @@ const NurseInputPage = () => {
               <Text style={[styles.total, styles.jamPosition]}>Total</Text>
             </View>
           </View>
-          <LamaDirawat
-            lamaPerawatan="Pasien dipindahkan"
-            lamaDiRawat="Pasien dipindahkan :"
-            propTop={630}
-          />
+          <View style={[styles.lamaDirawat, lamaDirawatStyle]}>
+      <View style={styles.judul}>
+        <Text style={[styles.lamaPerawatan, styles.judulChildPosition]}>
+          {lamaPerawatan}
+        </Text>
+        <View style={[styles.judulChild, styles.judulChildPosition]} />
+      </View>
+      <View style={styles.subJudul}>
+        <View style={styles.amountSetting}>
+          <View style={[styles.iconMinus, styles.iconPosition]}>
+            <View style={[styles.rectangle, styles.rectanglePosition]} />
+            <Image
+              style={[styles.pathIcon, styles.pathIconLayout]}
+              resizeMode="cover"
+              source={require('../assets/path.png')}
+            />
+          </View>
+          <View style={[styles.iconPlus, styles.iconPosition]}>
+            <View style={[styles.rectangleCopy, styles.rectanglePosition]} />
+            <Image
+              style={[styles.pathIcon1, styles.pathIconLayout]}
+              resizeMode="cover"
+              source={require('../assets/path1.png')}
+            />
+          </View>
+          <Text style={[styles.amount, styles.amountTypo]}>1</Text>
+        </View>
+        <Text style={[styles.lamaDiRawat, styles.amountTypo]}>
+          {lamaDiRawat}
+        </Text>
+      </View>
+    </View>
           <View style={[styles.pasienMasukRuangan, styles.pasienShadowBox]}>
             <View style={styles.judul3}>
               <Text style={[styles.pasienKeluarRuangan1, styles.pasienTypo]}>
@@ -412,11 +382,13 @@ const NurseInputPage = () => {
               <Text style={[styles.kelasI, styles.pasienTypo1]}>
                 Pasien masuk :
               </Text>
+      <InputButton top={5} left={5}/>
             </View>
             <View style={styles.subJudul}>
               <Text style={[styles.kelasI, styles.pasienTypo1]}>
                 Pasien pindahan :
               </Text>
+      <InputButton top={5} left={5}/>
             </View>
             <View style={styles.subJudul}>
               <View style={[styles.amountSetting, styles.amountPosition1]} />
@@ -425,24 +397,7 @@ const NurseInputPage = () => {
           </View>
           <View style={styles.pasienAwal}>
             <Text style={styles.label}>Pasien awal :</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() =>
-                setInitialPatients(Math.max(0, initialPatients - 1))
-              }>
-              <Text style={styles.buttonText}>--</Text>
-            </TouchableOpacity>
-            <TextInput
-              value={initialPatients.toString()}
-              onChangeText={text => setInitialPatients(Number(text))}
-              keyboardType="numeric"
-              style={[styles.input, {marginHorizontal: 10}, {left: 88}]}
-            />
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => setInitialPatients(initialPatients + 1)}>
-              <Text style={styles.buttonText}>+</Text>
-            </TouchableOpacity>
+            <InputButton top={20} left={-100}/>
           </View>
           <View style={[styles.jumlahBed, styles.jumlahBedShadowBox]}>
             <Text style={[styles.jumlahTempatTidur, styles.mujairFlexBox]}>
@@ -620,6 +575,11 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 14,
     top: 25,
+  },
+  kelas1Text: {
+    left: 30,
+    fontSize: 14,
+    top: 88,
   },
   pasienShadowBox1: {
     paddingVertical: Padding.p_2xl,
@@ -826,7 +786,7 @@ const styles = StyleSheet.create({
     left: '69.17%',
   },
   kelasI: {
-    top: '18.18%',
+    top: '38.18%',
     color: Color.notSoBlack,
     position: 'absolute',
     left: '0%',
@@ -1225,7 +1185,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     alignItems: 'center',
     flexDirection: 'row',
-    marginLeft: -90,
+    marginLeft: -150,
     top: -1,
     fontFamily: FontFamily.poppinsRegular,
   },
@@ -1235,6 +1195,26 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     flexDirection: 'row',
     left: 80,
+  },
+  buttonPasienMasukMinus: {
+    backgroundColor: '#007BFF',
+    padding: 0,
+    borderRadius: 5,
+    flexDirection: 'row',
+    left: 180,
+    height: 30,
+    width: 23,
+    top: 15,
+  },
+  buttonPasienMasukPlus: {
+    backgroundColor: '#007BFF',
+    padding: 0,
+    borderRadius: 5,
+    flexDirection: 'row',
+    left: 250,
+    width: 23,
+    top: -43,
+    height: 30,
   },
   buttonText: {
     color: '#FFFFFF',
