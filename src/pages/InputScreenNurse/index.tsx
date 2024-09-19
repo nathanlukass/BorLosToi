@@ -342,38 +342,11 @@ const NurseInputPage = () => {
               <Text style={[styles.total, styles.jamPosition]}>Total</Text>
             </View>
           </View>
-          <View style={[styles.lamaDirawat, lamaDirawatStyle]}>
-      <View style={styles.judul}>
-        <Text style={[styles.lamaPerawatan, styles.judulChildPosition]}>
-          {lamaPerawatan}
-        </Text>
-        <View style={[styles.judulChild, styles.judulChildPosition]} />
-      </View>
-      <View style={styles.subJudul}>
-        <View style={styles.amountSetting}>
-          <View style={[styles.iconMinus, styles.iconPosition]}>
-            <View style={[styles.rectangle, styles.rectanglePosition]} />
-            <Image
-              style={[styles.pathIcon, styles.pathIconLayout]}
-              resizeMode="cover"
-              source={require('../assets/path.png')}
-            />
-          </View>
-          <View style={[styles.iconPlus, styles.iconPosition]}>
-            <View style={[styles.rectangleCopy, styles.rectanglePosition]} />
-            <Image
-              style={[styles.pathIcon1, styles.pathIconLayout]}
-              resizeMode="cover"
-              source={require('../assets/path1.png')}
-            />
-          </View>
-          <Text style={[styles.amount, styles.amountTypo]}>1</Text>
-        </View>
-        <Text style={[styles.lamaDiRawat, styles.amountTypo]}>
-          {lamaDiRawat}
-        </Text>
-      </View>
-    </View>
+          <LamaDirawat
+            lamaPerawatan="Pasien dipindahkan"
+            lamaDiRawat="Pasien dipindahkan :"
+            propTop={630}
+          />
           <View style={[styles.pasienMasukRuangan, styles.pasienShadowBox]}>
             <View style={styles.judul3}>
               <Text style={[styles.pasienKeluarRuangan1, styles.pasienTypo]}>
