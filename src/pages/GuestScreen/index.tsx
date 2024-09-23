@@ -39,9 +39,9 @@ const ScreenGuest = () => {
       <Stats1 />
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
-        onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}
-      />
-      <Text style={[styles.filter1, styles.filterTypo]}>Filter</Text>
+        onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
+      <Text style={[styles.filter1, styles.filterTypo]}>Filter by Ruangan</Text>
+      </Pressable>
       <Image
         style={[styles.vectorIcon, styles.vectorIconPosition]}
         resizeMode="cover"
@@ -71,8 +71,9 @@ const styles = StyleSheet.create({
     top: 10,
   },
   filterTypo: {
-    textAlign: 'left',
+    // textAlign: 'center',
     fontSize: FontSize.m3BodyLarge_size,
+    color: '#ffffff',
   },
   filterShadowBox: {
     shadowOpacity: 1,
@@ -108,14 +109,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   filter1: {
-    top: 5,
-    left: 12,
+    top: 8,
+    left: 22,
     fontWeight: '500',
     fontFamily: FontFamily.poppinsMedium,
     color: Color.schemesOnPrimary,
-    zIndex: 0,
+    zIndex: 1000,
     position: 'absolute',
-    textAlign: 'left',
   },
   vectorIcon: {
     marginLeft: 19.5,
@@ -124,14 +124,14 @@ const styles = StyleSheet.create({
     height: 15,
   },
   filter: {
-    top: 338,
-    left: 237,
+    top: 348,
+    left: 207,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowRadius: 7,
     elevation: 7,
     borderRadius: 15,
     backgroundColor: Color.colorMediumaquamarine,
-    width: 85,
+    width: 155,
     height: 35,
     justifyContent: 'flex-end',
     paddingLeft: Padding.p_xl,
