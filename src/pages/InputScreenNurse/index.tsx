@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -8,15 +8,21 @@ import {
   TextInput,
   TouchableOpacity,
   Pressable,
-  Image
+  Image,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/core';
-import { Padding, Border, Color, FontFamily, FontSize } from '../../../GlobalStyles';
-import { Gap, DatePickerr } from '../../components';
-import { ScreenWidth } from 'react-native-elements/dist/helpers';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/core';
+import {
+  Padding,
+  Border,
+  Color,
+  FontFamily,
+  FontSize,
+} from '../../../GlobalStyles';
+import {Gap, DatePickerr} from '../../components';
+import {ScreenWidth} from 'react-native-elements/dist/helpers';
 
-const InputButton = ({ label }: { label: string }) => {
+const InputButton = ({label}: {label: string}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const [value, setValue] = useState<number>(1);
@@ -26,15 +32,13 @@ const InputButton = ({ label }: { label: string }) => {
     setValue(Number(numericValue));
   };
 
-
   return (
     <View style={styles.inputButtonContainer}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.counterContainer}>
         <TouchableOpacity
           style={styles.buttonMinus}
-          onPress={() => setValue(Math.max(0, value - 1))}
-        >
+          onPress={() => setValue(Math.max(0, value - 1))}>
           <Text style={styles.buttonText}>-</Text>
         </TouchableOpacity>
 
@@ -47,8 +51,7 @@ const InputButton = ({ label }: { label: string }) => {
 
         <TouchableOpacity
           style={styles.buttonPlus}
-          onPress={() => setValue(value + 1)}
-        >
+          onPress={() => setValue(value + 1)}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
@@ -60,7 +63,7 @@ const NurseInputPage = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const handleSubmitButton = () => {
-    navigation.navigate('HomeScreenNurse', alert('Data berhasil diinput!'))
+    navigation.navigate('HomeScreenNurse', alert('Data berhasil diinput!'));
   };
 
   const datePickerStyle1 = {
@@ -74,7 +77,7 @@ const NurseInputPage = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {/* Header with title and time */}
         <View style={styles.header}>
-        <Pressable
+          <Pressable
             style={styles.iconArrowBack}
             onPress={() => navigation.navigate('HomeScreenNurse')}>
             <Image
@@ -90,7 +93,7 @@ const NurseInputPage = () => {
           <Text style={styles.timeText}>Waktu input harian -- : -- WITA</Text>
         </View>
 
-        <DatePickerr style={datePickerStyle1}/>
+        <DatePickerr style={datePickerStyle1} />
 
         <View style={styles.roomSection}>
           <Text style={styles.roomName}>Mujair</Text>
@@ -136,9 +139,9 @@ const NurseInputPage = () => {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{`Pasien yang masih dirawat`}</Text>
-          <InputButton label={"Pasien yang masih\ndirawat :"}/>
-          <Gap height={20}/>
+          <Text style={styles.sectionTitle}>{'Pasien yang masih dirawat'}</Text>
+          <InputButton label={'Pasien yang masih\ndirawat :'} />
+          <Gap height={20} />
         </View>
 
         <View style={styles.section}>
@@ -147,7 +150,9 @@ const NurseInputPage = () => {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien masuk/keluar pada hari yang sama</Text>
+          <Text style={styles.sectionTitle}>
+            Pasien masuk/keluar pada hari yang sama
+          </Text>
           <InputButton label="Banyak pasien :" />
         </View>
 
@@ -157,7 +162,9 @@ const NurseInputPage = () => {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Total hari perawatan per pasien</Text>
+          <Text style={styles.sectionTitle}>
+            Total hari perawatan per pasien
+          </Text>
           <InputButton label="Kelas I" />
           <InputButton label="Kelas II" />
           <InputButton label="Kelas III" />
@@ -199,8 +206,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
-    marginStart: "auto",
-    marginEnd: "auto",
+    marginStart: 'auto',
+    marginEnd: 'auto',
     left: -10,
   },
   timeContainer: {
@@ -233,7 +240,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 8,
   },
