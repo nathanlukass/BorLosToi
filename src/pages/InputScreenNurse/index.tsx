@@ -13,15 +13,19 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/core';
 import { Padding, Border, Color, FontFamily, FontSize } from '../../../GlobalStyles';
-import { Gap } from '../../components';
+import { Gap, DatePickerr } from '../../components';
+import { ScreenWidth } from 'react-native-elements/dist/helpers';
 
 const InputButton = ({ label }: { label: string }) => {
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
   const [value, setValue] = useState<number>(1);
 
   const handleChange = (text: string) => {
     const numericValue = text.replace(/[^0-9]/g, ''); // Ensure only numeric input
     setValue(Number(numericValue));
   };
+
 
   return (
     <View style={styles.inputButtonContainer}>
@@ -55,6 +59,16 @@ const InputButton = ({ label }: { label: string }) => {
 const NurseInputPage = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
+  const handleSubmitButton = () => {
+    navigation.navigate('HomeScreenNurse', alert('Data berhasil diinput!'))
+  };
+
+  const datePickerStyle1 = {
+    top: -7,
+    width: 350,
+    left: -27,
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -75,6 +89,8 @@ const NurseInputPage = () => {
         <View style={styles.timeContainer}>
           <Text style={styles.timeText}>Waktu input harian -- : -- WITA</Text>
         </View>
+
+        <DatePickerr style={datePickerStyle1}/>
 
         <View style={styles.roomSection}>
           <Text style={styles.roomName}>Mujair</Text>
@@ -147,7 +163,7 @@ const NurseInputPage = () => {
           <InputButton label="Kelas III" />
         </View>
 
-        <Pressable style={styles.submitButton} onPress={() => navigation.navigate('HomeScreenNurse')}>
+        <Pressable style={styles.submitButton} onPress={handleSubmitButton}>
           <Text style={styles.submitText}>Submit</Text>
         </Pressable>
       </ScrollView>
