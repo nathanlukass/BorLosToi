@@ -1,5 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable, Image } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+  Image,
+} from 'react-native';
 import {
   Padding,
   Border,
@@ -9,13 +17,12 @@ import {
 } from '../../../GlobalStyles';
 
 import Icon from 'react-native-vector-icons/Ionicons'; // Assuming Ionicons is installed
-import { Button } from 'react-native-elements'; // Assuming react-native-elements is installed
-import { useRoute, RouteProp } from '@react-navigation/native';
+import {Button} from 'react-native-elements'; // Assuming react-native-elements is installed
+import {useRoute, RouteProp} from '@react-navigation/native';
 
-type ChangePasswordRouteProp = RouteProp<{ params: { source: string } }, 'params'>;
+type ChangePasswordRouteProp = RouteProp<{params: {source: string}}, 'params'>;
 
-const ChangePassword = ({ navigation }) => {
-
+const ChangePassword = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
@@ -49,17 +56,15 @@ const ChangePassword = ({ navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-          <Pressable
-            style={styles.iconArrowBack}
-            onPress={handleBackPress}>
-            <Image
-              style={styles.icon}
-              resizeMode="cover"
-              source={require('../../../assets/-icon-arrow-back.png')}
-            />
-          </Pressable>
-          <Text style={styles.headerTitle}>Change Password</Text>
-        </View>
+        <Pressable style={styles.iconArrowBack} onPress={handleBackPress}>
+          <Image
+            style={styles.icon}
+            resizeMode="cover"
+            source={require('../../../assets/-icon-arrow-back.png')}
+          />
+        </Pressable>
+        <Text style={styles.headerTitle}>Change Password</Text>
+      </View>
 
       <Text style={styles.description}>Masukkan password baru anda</Text>
 
@@ -72,8 +77,17 @@ const ChangePassword = ({ navigation }) => {
           value={password}
           onChangeText={setPassword}
         />
-        <TouchableOpacity onPress={togglePasswordVisibility} style={styles.iconContainer}>
-          <Icon name={securePassword ? 'eye-off' : 'eye'} size={20} color="gray" />
+        <TouchableOpacity
+          onPress={togglePasswordVisibility}
+          style={styles.iconContainer}>
+          <Image
+            source={
+              securePassword
+                ? require('../../assets/images/Eye1.png')
+                : require('../../assets/images/Eye2.png')
+            }
+            style={{width: 26, height: 20}}
+          />
         </TouchableOpacity>
       </View>
 
@@ -86,8 +100,17 @@ const ChangePassword = ({ navigation }) => {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
         />
-        <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.iconContainer}>
-      <Icon name={securePassword ? 'eye-off' : 'eye'} size={20} color="gray" />
+        <TouchableOpacity
+          onPress={toggleConfirmPasswordVisibility}
+          style={styles.iconContainer}>
+          <Image
+            source={
+              secureConfirmPassword
+                ? require('../../assets/images/Eye1.png')
+                : require('../../assets/images/Eye2.png')
+            }
+            style={{width: 26, height: 20}}
+          />
         </TouchableOpacity>
       </View>
 
@@ -145,7 +168,6 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsBold,
     marginTop: 20,
     marginBottom: 20,
-
   },
   inputContainer: {
     flexDirection: 'row',
