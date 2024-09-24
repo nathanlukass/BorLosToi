@@ -57,7 +57,7 @@ const ProfileScreenNurse = () => {
         <Text style={styles.logOut}>Log Out</Text>
           </Pressable>
       </View>
-
+      <Pressable onPress={() => navigation.navigate('AboutApp')}>
       <View style={[styles.aboutApp, styles.aboutAppLayout]}>
         <View style={[styles.aboutAppChild, styles.standbydonorChildLayout]} />
         <Text style={[styles.aboutApp1, styles.aboutApp1Typo]}>About App</Text>
@@ -67,6 +67,9 @@ const ProfileScreenNurse = () => {
           source={require('../../../assets/-icon-info-empty.png')}
         />
       </View>
+      </Pressable>
+      <Pressable
+      onPress={() => navigation.navigate('ChangePassword', { source: 'nurse' })}>
       <View style={[styles.standbydonor, styles.standbydonorChildLayout]}>
         <View
           style={[styles.standbydonorChild, styles.standbydonorChildLayout]}
@@ -80,6 +83,7 @@ const ProfileScreenNurse = () => {
           source={require('../../../assets/settings1.png')}
         />
       </View>
+      </Pressable>
       <View style={styles.profileScreenNurseChild} />
       <Image
         style={[styles.memojiIcon, styles.profilePosition]}

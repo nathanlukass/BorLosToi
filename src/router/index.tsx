@@ -28,6 +28,8 @@ import {
   BTO,
   NDR,
   GDR,
+  AboutApp,
+  ChangePassword
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -140,10 +142,21 @@ const index = () => {
         component={AVLOS}
         options={{headerShown: false}}
       />
+      
       <Stack.Screen name="TOI" component={TOI} options={{headerShown: false}} />
       <Stack.Screen name="BTO" component={BTO} options={{headerShown: false}} />
       <Stack.Screen name="NDR" component={NDR} options={{headerShown: false}} />
       <Stack.Screen name="GDR" component={GDR} options={{headerShown: false}} />
+      <Stack.Screen
+        name="AboutApp"
+        component={AboutApp}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePassword}
+        options={{headerShown: false}}
+      />
 
     </Stack.Navigator>
   );
