@@ -57,7 +57,7 @@ const ProfileScreenAdmin = () => {
         <Text style={styles.logOut}>Log Out</Text>
         </Pressable>
       </View>
-      <Pressable onPress={() => navigation.navigate('AboutApp')}>
+      <Pressable onPress={() => navigation.navigate('AboutApp', { source: 'admin' })}>
       <View style={[styles.aboutApp, styles.aboutAppLayout]}>
         <View style={[styles.aboutAppChild, styles.standbydonorChildLayout]} />
         <Text style={[styles.aboutApp1, styles.aboutApp1Typo]}>About App</Text>

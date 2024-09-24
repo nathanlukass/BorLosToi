@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable} from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable, BackHandler} from 'react-native';
 import {
   Padding,
   Border,
@@ -7,13 +7,32 @@ import {
   FontFamily,
   FontSize,
 } from '../../../GlobalStyles';
+
 import Icon from 'react-native-vector-icons/Ionicons'; // Install this if not available
+import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
+
+type ChangePasswordRouteProp = RouteProp<{ params: { source: string } }, 'params'>;
 
 const AboutApp = ({ navigation }) => {
 
-  const goBack = () => {
-    navigation.goBack();
-  };
+  const route = useRoute<ChangePasswordRouteProp>();
+  const sourceScreen = route.params?.source;
+
+  const handleBackPress = useCallback(() => {
+    if (sourceScreen === 'nurse') {
+      navigation.navigate('ProfilScreenNurse'); // Navigate to nurse home screen
+    } else if (sourceScreen === 'admin') {
+      navigation.navigate('ProfileScreenAdmin'); // Navigate to admin home screen
+    }
+    return true;
+  }, [navigation, sourceScreen]);
+
+  useFocusEffect(
+    useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+      return () => BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    }, [handleBackPress])
+  );
 
   return (
     <View style={styles.container}>
@@ -21,7 +40,7 @@ const AboutApp = ({ navigation }) => {
       <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
-            onPress={() => navigation.navigate('ProfilScreenNurse')}>
+            onPress={handleBackPress}>
             <Image
               style={styles.icon}
               resizeMode="cover"

@@ -1,13 +1,5 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Pressable,
-  Image,
-} from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable, Image, BackHandler } from 'react-native';
 import {
   Padding,
   Border,
@@ -17,8 +9,8 @@ import {
 } from '../../../GlobalStyles';
 
 import Icon from 'react-native-vector-icons/Ionicons'; // Assuming Ionicons is installed
-import {Button} from 'react-native-elements'; // Assuming react-native-elements is installed
-import {useRoute, RouteProp} from '@react-navigation/native';
+import { Button } from 'react-native-elements'; // Assuming react-native-elements is installed
+import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 
 type ChangePasswordRouteProp = RouteProp<{params: {source: string}}, 'params'>;
 
@@ -44,13 +36,21 @@ const ChangePassword = ({navigation}) => {
   const route = useRoute<ChangePasswordRouteProp>();
   const sourceScreen = route.params?.source;
 
-  const handleBackPress = () => {
+  const handleBackPress = useCallback(() => {
     if (sourceScreen === 'nurse') {
-      navigation.navigate('HomeScreenNurse'); // Navigate to nurse home screen
+      navigation.navigate('ProfilScreenNurse'); // Navigate to nurse home screen
     } else if (sourceScreen === 'admin') {
-      navigation.navigate('HomeScreenAdmin'); // Navigate to admin home screen
+      navigation.navigate('ProfileScreenAdmin'); // Navigate to admin home screen
     }
-  };
+    return true;
+  }, [navigation, sourceScreen]);
+
+  useFocusEffect(
+    useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+      return () => BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    }, [handleBackPress])
+  );
 
   return (
     <View style={styles.container}>
@@ -100,10 +100,8 @@ const ChangePassword = ({navigation}) => {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
         />
-        <TouchableOpacity
-          onPress={toggleConfirmPasswordVisibility}
-          style={styles.iconContainer}>
-          <Image
+        <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.iconContainer}>
+        <Image
             source={
               secureConfirmPassword
                 ? require('../../assets/images/Eye1.png')
@@ -126,6 +124,8 @@ const ChangePassword = ({navigation}) => {
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   headerTitle: {
