@@ -25,6 +25,8 @@ import TOI from './ToiScreen';
 import BTO from './BtoScreen';
 import NDR from './NdrScreen';
 import GDR from './GdrScreen';
+import AboutApp from './AboutApp';
+import ChangePassword from './ChangePassword';
 
 export {
   LoginScreen,
@@ -53,4 +55,6 @@ export {
   BTO,
   NDR,
   GDR,
+  AboutApp,
+  ChangePassword,
 };
