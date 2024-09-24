@@ -57,7 +57,7 @@ const ProfileScreenNurse = () => {
         <Text style={styles.logOut}>Log Out</Text>
           </Pressable>
       </View>
-
+      <Pressable onPress={() => navigation.navigate('AboutApp', { source: 'nurse' })}>
       <View style={[styles.aboutApp, styles.aboutAppLayout]}>
         <View style={[styles.aboutAppChild, styles.standbydonorChildLayout]} />
         <Text style={[styles.aboutApp1, styles.aboutApp1Typo]}>About App</Text>
@@ -67,7 +67,10 @@ const ProfileScreenNurse = () => {
           source={require('../../../assets/-icon-info-empty.png')}
         />
       </View>
-      <View style={[styles.changePasswordContainer, styles.standbydonorChildLayout]}>
+      </Pressable>
+      <Pressable
+      onPress={() => navigation.navigate('ChangePassword', { source: 'nurse' })}>
+      <View style={[styles.standbydonor, styles.standbydonorChildLayout]}>
         <View
           style={[styles.standbydonorChild, styles.standbydonorChildLayout]}
         />
@@ -80,6 +83,7 @@ const ProfileScreenNurse = () => {
           source={require('../../../assets/settings1.png')}
         />
       </View>
+      </Pressable>
       <View style={styles.profileScreenNurseChild} />
       <Image
         style={[styles.memojiIcon, styles.profilePosition]}
@@ -113,7 +117,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontSize: FontSize.iconText_size,
   },
-  //icon
   aboutAppLayout: {
     height: 42,
     position: 'absolute',
@@ -132,7 +135,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
   },
   standbydonorChildLayout: {
-    width: 342,
+    width: 324,
     height: 42,
     position: 'absolute',
   },
@@ -190,9 +193,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     zIndex: 1000,
   },
-  //logout button
   logoutButtonChild: {
-    width: 342,
+    width: 325,
     left: 14,
     elevation: 9,
     shadowRadius: 9,
@@ -280,7 +282,7 @@ const styles = StyleSheet.create({
   changePassword: {
     left: 47,
     marginTop: 6,
-    width: 315,
+    width: 306,
     textAlign: 'left',
   },
   settingsIcon: {
@@ -288,15 +290,14 @@ const styles = StyleSheet.create({
     left: 12,
     position: 'absolute',
   },
-  changePasswordContainer: {
+  standbydonor: {
     top: 524,
     left: 32,
   },
-  //background hijau
   profileScreenNurseChild: {
     top: -2,
     backgroundColor: Color.colorMediumaquamarine,
-    width:420,
+    width: 364,
     height: 190,
     alignSelf: 'center',
   },

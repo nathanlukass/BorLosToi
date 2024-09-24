@@ -57,6 +57,7 @@ const ProfileScreenAdmin = () => {
         <Text style={styles.logOut}>Log Out</Text>
         </Pressable>
       </View>
+      <Pressable onPress={() => navigation.navigate('AboutApp', { source: 'admin' })}>
       <View style={[styles.aboutApp, styles.aboutAppLayout]}>
         <View style={[styles.aboutAppChild, styles.standbydonorChildLayout]} />
         <Text style={[styles.aboutApp1, styles.aboutApp1Typo]}>About App</Text>
@@ -66,6 +67,9 @@ const ProfileScreenAdmin = () => {
           source={require('../../../assets/-icon-info-empty.png')}
         />
       </View>
+      </Pressable>
+      <Pressable
+      onPress={() => navigation.navigate('ChangePassword', { source: 'admin' })}>
       <View style={[styles.standbydonor, styles.standbydonorChildLayout]}>
         <View
           style={[styles.standbydonorChild, styles.standbydonorChildLayout]}
@@ -79,13 +83,13 @@ const ProfileScreenAdmin = () => {
           source={require('../../../assets/settings1.png')}
         />
       </View>
+      </Pressable>
       <View style={styles.profileScreenNurseChild} />
       <Image
         style={[styles.memojiIcon, styles.profilePosition]}
         resizeMode="cover"
         source={require('../../../assets/memoji.png')}
       />
-
       <Text style={[styles.joshuaTengker, styles.adminLayout]}>
         Joshua Tengker
       </Text>
