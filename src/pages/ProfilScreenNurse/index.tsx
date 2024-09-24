@@ -67,7 +67,7 @@ const ProfileScreenNurse = () => {
           source={require('../../../assets/-icon-info-empty.png')}
         />
       </View>
-      <View style={[styles.standbydonor, styles.standbydonorChildLayout]}>
+      <View style={[styles.changePasswordContainer, styles.standbydonorChildLayout]}>
         <View
           style={[styles.standbydonorChild, styles.standbydonorChildLayout]}
         />
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontSize: FontSize.iconText_size,
   },
+  //icon
   aboutAppLayout: {
     height: 42,
     position: 'absolute',
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
   },
   standbydonorChildLayout: {
-    width: 324,
+    width: 342,
     height: 42,
     position: 'absolute',
   },
@@ -189,8 +190,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     zIndex: 1000,
   },
+  //logout button
   logoutButtonChild: {
-    width: 325,
+    width: 342,
     left: 14,
     elevation: 9,
     shadowRadius: 9,
@@ -278,7 +280,7 @@ const styles = StyleSheet.create({
   changePassword: {
     left: 47,
     marginTop: 6,
-    width: 306,
+    width: 315,
     textAlign: 'left',
   },
   settingsIcon: {
@@ -286,14 +288,15 @@ const styles = StyleSheet.create({
     left: 12,
     position: 'absolute',
   },
-  standbydonor: {
+  changePasswordContainer: {
     top: 524,
     left: 32,
   },
+  //background hijau
   profileScreenNurseChild: {
     top: -2,
     backgroundColor: Color.colorMediumaquamarine,
-    width: 364,
+    width:420,
     height: 190,
     alignSelf: 'center',
   },

@@ -33,7 +33,7 @@ export const Gap = {
 /* Colors */
 export const Color = {
   schemesOnPrimary: '#fff',
-  colorMediumaquamarine: '#4ec69e',
+  colorMediumaquamarine: '#21B557',
   colorSilver_100: '#bbb',
   colorSilver_200: '#b9b9b9',
   schemesOnSurface: '#1d1b20',

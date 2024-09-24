@@ -344,6 +344,7 @@ const styles = StyleSheet.create({
     top: 0,
     position: 'absolute',
   },
+  //label
   loginFieldPosition: {
     left: 21,
     position: 'absolute',
@@ -357,10 +358,12 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     position: 'absolute',
   },
+  //button as guest
   groupLayout: {
-    width: 320,
+    width: 336,
     height: 45,
     position: 'absolute',
+    marginStart:-2,
   },
   loginPosition: {
     color: Color.schemesOnPrimary,
@@ -452,10 +455,12 @@ const styles = StyleSheet.create({
     left: 0,
   },
   groupButton: {
-    left: 0,
+    left: -5,
     top: 2,
     position: 'absolute',
     backgroundColor: '#21b557',
+    borderRadius:5,
+    width:335,
   },
   login: {
     marginLeft: 22,
@@ -539,9 +544,10 @@ const styles = StyleSheet.create({
     zIndex: 0,
     position: 'absolute',
   },
+  //icon drop
   doubleDownIcon: {
     top: 12,
-    left: 280,
+    left: 295,
     width: 20,
     height: 20,
     zIndex: 1,
@@ -550,14 +556,13 @@ const styles = StyleSheet.create({
   usernameField: {
     height: '31%',
     top: '-40%',
-    right: '0.32%',
     bottom: '28.97%',
     borderRadius: Border.br_8xs,
     borderStyle: 'solid',
     borderColor: 'blue',
     borderWidth: 1,
     backgroundColor: Color.schemesOnPrimary,
-    width: '100%',
+    width: '107%',
     position: 'absolute',
   },
   usernameField1: {
