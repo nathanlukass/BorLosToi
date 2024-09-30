@@ -61,6 +61,7 @@ const InputButton = ({label}: {label: string}) => {
 
 const EditMujairA = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // Menggunakan state untuk input jumlah tempat tidur
 
   const handleSubmitButton = () => {
     navigation.navigate('EditScreenAdmin', alert('Data berhasil disimpan!'));
@@ -95,15 +96,20 @@ const EditMujairA = () => {
 
         <DatePickerr style={datePickerStyle1} />
 
-        {/* <View style={styles.roomSection}>
-          <Text style={styles.roomName}>Mujair</Text>
-        </View> */}
-
-        {/* Sections for input buttons */}
+        {/* Jumlah tempat tidur section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Jumlah tempat tidur: 22</Text>
+          <View style={styles.bedInputContainer}> 
+            <Text style={styles.sectionTitle}>Jumlah tempat tidur :</Text>
+            <TextInput
+              value={jumlahTempatTidur}
+              onChangeText={(text) => setJumlahTempatTidur(text)}
+              keyboardType="numeric"
+              style={styles.inputTempatTidur}
+            />
+          </View>
         </View>
 
+        {/* Sections for input buttons */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien awal</Text>
           <InputButton label="Pasien awal :" />
@@ -247,7 +253,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontFamily: FontFamily.poppinsMedium,
-    marginBottom: 10,
+    marginBottom: 7,
     color: Color.notSoBlack,
   },
   totalLabel: {
@@ -295,11 +301,27 @@ const styles = StyleSheet.create({
     width: 40,
     height: 35,
     textAlign: 'center',
-    fontSize: 10,
+    fontSize: 12,
     borderWidth: 1,
     borderColor: '#CCCCCC',
     marginHorizontal: 10,
     borderRadius: 5,
+  },
+  inputTempatTidur: {
+    width: 55,
+    height: 35,
+    textAlign: 'center',
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
+    marginStart: 'auto',
+    marginEnd: 25,
+    borderRadius: 5,
+    padding: 5,
+  },
+  bedInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center', // Ensures the input is aligned beside the text
   },
   submitButton: {
     backgroundColor: '#28A745',
