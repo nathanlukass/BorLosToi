@@ -68,8 +68,8 @@ const EditMujairA = () => {
 
   const datePickerStyle1 = {
     top: -7,
-    width: 350,
-    left: -27,
+    width: 370,
+    left: -30,
   };
 
   return (
@@ -273,8 +273,8 @@ const styles = StyleSheet.create({
   },
   buttonMinus: {
     backgroundColor: '#C1C9E9',
-    paddingVertical: 1,
-    paddingHorizontal: 9,
+    paddingVertical: 2,
+    paddingHorizontal: 12,
     borderRadius: 7,
     justifyContent: 'center',
     alignItems: 'center',

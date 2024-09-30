@@ -68,8 +68,8 @@ const NurseInputPage = () => {
 
   const datePickerStyle1 = {
     top: -7,
-    width: 350,
-    left: -27,
+    width: 370,
+    left: -30,
   };
 
   return (

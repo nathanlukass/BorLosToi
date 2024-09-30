@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
   },
   lihatBorlostoi: {
     top: 210,
-    left: 30,
     position: 'absolute',
   },
   homeIcon: {

@@ -32,13 +32,17 @@ const DashbordIsianHariIni = () => {
       <Text style={[styles.text5, styles.textPosition]}>0</Text>
       <View style={styles.dashbordIsianHariIniItem} />
       <Text style={styles.hariIni}>Hari ini</Text>
+      <Text style={styles.updatedText}>
+        {/* Diperbaharui {formattedDate}, {formattedTime} WITA */}
+        Diperbaharui 23 Sep 2024, 06:12 WITA
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   dashbordLayout: {
-    height: 280,
+    height: 300,
     width: 328,
     position: "absolute",
   },
@@ -105,10 +109,10 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsRegular,
     fontSize: FontSize.m3LabelLarge_size,
     marginLeft: -137,
-    top: 196,
+    top: 190,
   },
   jumlahHariPerawatan: {
-    top: 234,
+    top: 222,
     width: 204,
     height: 31,
     alignItems: "center",
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
   },
   pasienKeluarHidup: {
     width: 161,
-    top: 82,
+    top: 92,
     height: 31,
     alignItems: "center",
     display: "flex",
@@ -135,11 +139,11 @@ const styles = StyleSheet.create({
     marginLeft: -137,
   },
   pasienKeluarMati: {
-    top: 120,
+    top: 125,
   },
   pasienMasukRuangan: {
     width: 211,
-    top: 44,
+    top: 60,
     height: 31,
     alignItems: "center",
     display: "flex",
@@ -149,27 +153,28 @@ const styles = StyleSheet.create({
     fontSize: FontSize.m3LabelLarge_size,
     marginLeft: -137,
   },
+  //angka 0
   text: {
-    top: 44,
+    top: 60,
   },
   text1: {
-    top: 82,
+    top: 92,
   },
   text2: {
-    top: 120,
+    top: 125,
   },
   text3: {
     top: 158,
   },
   text4: {
-    top: 196,
+    top: 190,
   },
   text5: {
-    top: 234,
+    top: 222,
   },
   dashbordIsianHariIniItem: {
-    marginLeft: -132.1,
-    top: 37,
+    marginLeft: -130,
+    top: 50,
     borderStyle: "solid",
     borderColor: Color.notSoBlack,
     borderTopWidth: 0.2,
@@ -180,7 +185,7 @@ const styles = StyleSheet.create({
   },
   hariIni: {
     marginLeft: -53,
-    top: 3,
+    top: 16,
     fontSize: FontSize.size_mini,
     fontWeight: "500",
     fontFamily: FontFamily.poppinsMedium,
@@ -195,8 +200,19 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   dashbordIsianHariIni: {
-    top: 263,
-    left: 29,
+    top: 272,
+    left:42,
+  },
+  updatedText: {
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorMediumaquamarine,
+    textAlign: "center",
+    marginTop: 8,
+   // left: "50%",
+    marginLeft: 45,
+    fontSize:12,
+    position: "absolute",
+    bottom:10,  // Posisi di bagian bawah komponen
   },
 });
 

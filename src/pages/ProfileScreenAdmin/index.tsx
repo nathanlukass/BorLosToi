@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   profilePosition: {
-    left: '50%',
+    left: '48%',
     position: 'absolute',
   },
   adminLayout: {
@@ -296,12 +296,12 @@ const styles = StyleSheet.create({
   profileScreenNurseChild: {
     top: -2,
     backgroundColor: Color.colorMediumaquamarine,
-    width: 364,
+    width: 420,
     height: 190,
     alignSelf: 'center',
   },
   memojiIcon: {
-    marginLeft: -73,
+    marginLeft: -64,
     top: 93,
     borderRadius: Border.br_980xl,
     width: 148,

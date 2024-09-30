@@ -62,7 +62,7 @@ const EditScreenAdmin = () => {
               <Image
                 style={[styles.neonatiIcon, styles.iconPosition]}
                 resizeMode="cover"
-                source={require('../../../assets/neonati.png')}
+                source={require('../../../assets/mujair.png')}
               />
               <Text style={[styles.neonati1, styles.mujairTypo]}>NEONATI</Text>
             </Pressable>
