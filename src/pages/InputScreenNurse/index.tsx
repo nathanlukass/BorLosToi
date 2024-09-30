@@ -61,6 +61,7 @@ const InputButton = ({label}: {label: string}) => {
 
 const NurseInputPage = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
 
   const handleSubmitButton = () => {
     navigation.navigate('HomeScreenNurse', alert('Data berhasil diinput!'));
@@ -95,15 +96,24 @@ const NurseInputPage = () => {
 
         <DatePickerr style={datePickerStyle1} />
 
-        <View style={styles.roomSection}>
+        {/* <View style={styles.roomSection}>
           <Text style={styles.roomName}>Mujair</Text>
+        </View> */}
+
+        {/* Jumlah tempat tidur section */}
+        <View style={styles.section}>
+          <View style={styles.bedInputContainer}> 
+            <Text style={styles.label}>Jumlah tempat tidur:</Text>
+            <TextInput
+              value={jumlahTempatTidur}
+              onChangeText={(text) => setJumlahTempatTidur(text)}
+              keyboardType="numeric"
+              style={styles.inputTempatTidur}
+            />
+          </View>
         </View>
 
         {/* Sections for input buttons */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Jumlah tempat tidur: 22</Text>
-        </View>
-
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien awal</Text>
           <InputButton label="Pasien awal :" />
@@ -222,13 +232,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: FontFamily.poppinsBold,
   },
-  roomSection: {
-    backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
+  // roomSection: {
+  //   backgroundColor: '#FFFFFF',
+  //   padding: 15,
+  //   borderRadius: 5,
+  //   alignItems: 'center',
+  //   marginBottom: 20,
+  // },
   roomName: {
     fontSize: 14,
     fontFamily: FontFamily.poppinsBold,
@@ -246,7 +256,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 14,
-    fontFamily: FontFamily.poppinsMedium,
+    fontFamily: FontFamily.poppinsRegular,
     marginBottom: 10,
     color: Color.notSoBlack,
   },
@@ -300,6 +310,22 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     marginHorizontal: 10,
     borderRadius: 5,
+  },
+  inputTempatTidur: {
+    width: 55,
+    height: 35,
+    textAlign: 'center',
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
+    marginStart: 'auto',
+    marginEnd: 25,
+    borderRadius: 5,
+    padding: 5,
+  },
+  bedInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   submitButton: {
     backgroundColor: '#28A745',

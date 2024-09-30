@@ -61,6 +61,7 @@ const InputButton = ({label}: {label: string}) => {
 
 const EditKarper = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
 
   const handleSubmitButton = () => {
     navigation.navigate('EditScreenAdmin', alert('Data berhasil disimpan!'));
@@ -95,15 +96,20 @@ const EditKarper = () => {
 
         <DatePickerr style={datePickerStyle1} />
 
-        {/* <View style={styles.roomSection}>
-          <Text style={styles.roomName}>Mujair</Text>
-        </View> */}
-
-        {/* Sections for input buttons */}
+        {/* Jumlah tempat tidur section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Jumlah tempat tidur: 22</Text>
+          <View style={styles.bedInputContainer}> 
+            <Text style={styles.sectionTitle}>Jumlah tempat tidur:</Text>
+            <TextInput
+              value={jumlahTempatTidur}
+              onChangeText={(text) => setJumlahTempatTidur(text)}
+              keyboardType="numeric"
+              style={styles.inputTempatTidur}
+            />
+          </View>
         </View>
 
+        {/* Sections for input buttons */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien awal</Text>
           <InputButton label="Pasien awal :" />
@@ -300,6 +306,22 @@ const styles = StyleSheet.create({
     borderColor: '#CCCCCC',
     marginHorizontal: 10,
     borderRadius: 5,
+  },
+  inputTempatTidur: {
+    width: 55,
+    height: 35,
+    textAlign: 'center',
+    fontSize: 15,
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
+    marginStart: 'auto',
+    marginEnd: 25,
+    borderRadius: 5,
+    padding: 5,
+  },
+  bedInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center', // Untuk memastikan input berada di samping teks
   },
   submitButton: {
     backgroundColor: '#28A745',

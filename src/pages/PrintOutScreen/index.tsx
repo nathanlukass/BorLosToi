@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Pressable, Modal, FlatList, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Pressable, Modal, FlatList, TouchableOpacity, Image } from "react-native";
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/core';
@@ -34,8 +34,15 @@ const PrintOutScreen = () => {
   return (
     <View style={styles.homeScreenAdmin}>
       <View style={[styles.barAtas, styles.barAtasPosition]}>
-        <Pressable onPress={() => navigation.navigate('HomeScreenAdmin')}>
-          <Text style={styles.iconArrowBack}>{"< Back"}</Text>
+        <Pressable
+          style={styles.iconArrowBack}
+          onPress={() => navigation.navigate('HomeScreenAdmin')}
+        >
+          <Image
+            style={styles.icon}
+            resizeMode="cover"
+            source={require('../../../assets/-icon-arrow-back.png')}
+          />
         </Pressable>
         <Text style={[styles.inputHarian, styles.inputTypo]}>
           Menu Print Out
@@ -44,12 +51,12 @@ const PrintOutScreen = () => {
 
       {/* Dropdown Pilih Bulan */}
       <Pressable style={styles.dropdownn} onPress={() => setMonthModalVisible(true)}>
-        <Text style={styles.dropdownText}>{selectedMonth}</Text>
+        <Text style={styles.poppinsText}>{selectedMonth}</Text>
       </Pressable>
 
       {/* Dropdown Pilih Ruangan */}
       <Pressable style={styles.dropdown} onPress={() => setRoomModalVisible(true)}>
-        <Text style={styles.dropdownText}>{selectedRoom}</Text>
+        <Text style={styles.poppinsText}>{selectedRoom}</Text>
       </Pressable>
 
       {/* Modal Pilih Bulan */}
@@ -61,7 +68,7 @@ const PrintOutScreen = () => {
         <TouchableOpacity
           style={styles.modalBackground}
           activeOpacity={1}
-          onPressOut={() => setMonthModalVisible(false)} // Menutup modal ketika klik di luar
+          onPressOut={() => setMonthModalVisible(false)}
         >
           <View style={styles.modalContent}>
             <FlatList
@@ -85,7 +92,7 @@ const PrintOutScreen = () => {
         <TouchableOpacity
           style={styles.modalBackground}
           activeOpacity={1}
-          onPressOut={() => setRoomModalVisible(false)} // Menutup modal ketika klik di luar
+          onPressOut={() => setRoomModalVisible(false)}
         >
           <View style={styles.modalContent}>
             <FlatList
@@ -102,7 +109,7 @@ const PrintOutScreen = () => {
 
       {/* Tombol Print */}
       <Pressable style={styles.printButton} onPress={handlePrint}>
-        <Text style={styles.printButtonText}>Print</Text>
+      <Text style={styles.printButtonText}>Print</Text>       
       </Pressable>
     </View>
   );
@@ -110,16 +117,27 @@ const PrintOutScreen = () => {
 
 const styles = StyleSheet.create({
   iconArrowBack: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    width: 42,
+    height: 25,
+    zIndex: 0,
+    marginStart: -15,
+  },
+  icon: {
+    height: '100%',
+    width: '100%',
+  },
+  poppinsText: {
+    fontFamily: FontFamily.poppinsRegular,
+    fontSize: 14,
+    color: Color.notSoBlack,
   },
   inputTypo: {
     fontFamily: FontFamily.poppinsBold,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   inputHarian: {
     marginTop: -11.5,
-    marginLeft: -35,
+    marginLeft: -56,
     fontSize: FontSize.m3BodyLarge_size,
     zIndex: 1,
     position: 'absolute',
@@ -127,6 +145,7 @@ const styles = StyleSheet.create({
     top: '50%',
     left: '50%',
     color: Color.notSoBlack,
+    fontFamily: FontFamily.poppinsBold, // Menggunakan Poppins Bold untuk header
   },
   barAtasPosition: {
     borderRadius: Border.br_8xs,
@@ -166,10 +185,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: Color.schemesOnPrimary,
   },
-  dropdownText: {
-    fontSize: FontSize.m3LabelLarge_size,
-    color: Color.notSoBlack,
-  },
   modalBackground: {
     flex: 1,
     justifyContent: 'center',
@@ -201,8 +216,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   printButtonText: {
+    fontFamily: FontFamily.poppinsRegular,
     fontSize: FontSize.m3BodyLarge_size,
-    color: Color.schemesOnPrimary,
+    color: 'white', // Ubah warna teks menjadi putih
   },
 });
 
