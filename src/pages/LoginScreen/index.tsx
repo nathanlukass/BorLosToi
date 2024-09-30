@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   loginToContinue: {
-    lineHeight: 24,
+    lineHeight: 25,
     fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsRegular,
     alignSelf: 'center',
