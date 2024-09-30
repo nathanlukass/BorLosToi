@@ -360,10 +360,10 @@ const styles = StyleSheet.create({
   },
   //button as guest
   groupLayout: {
-    width: 336,
+    width: 342,
     height: 45,
     position: 'absolute',
-    marginStart:-2,
+    marginStart:-3,
   },
   loginPosition: {
     color: Color.schemesOnPrimary,
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     marginTop: -11.5,
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
-    left: '50%',
+    left: '48%',
     textAlign: 'center',
     lineHeight: 24,
     fontSize: FontSize.m3BodyLarge_size,
@@ -455,12 +455,12 @@ const styles = StyleSheet.create({
     left: 0,
   },
   groupButton: {
-    left: -5,
+    left: -6,
     top: 2,
     position: 'absolute',
     backgroundColor: '#21b557',
     borderRadius:5,
-    width:335,
+    width:342,
   },
   login: {
     marginLeft: 22,

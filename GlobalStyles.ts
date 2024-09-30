@@ -46,7 +46,7 @@ export const Color = {
   stateLayersOnSurfaceVariantOpacity12: 'rgba(73, 69, 79, 0.12)',
   schemesPrimary: '#65558f',
   schemesSurface: '#fef7ff',
-  colorCornflowerblue_100: '#65a0f3',
+  colorCornflowerblue_100: '#1E9DEC',
   colorCornflowerblue_200: '#1e9dec',
   colorBlueviolet: '#6b50f6',
   colorIndianred_100: '#e95b5b',
