@@ -1,7 +1,14 @@
 // import * as React from 'react';
 import React from 'react';
-import { useCallback, useState } from 'react';
-import {View, StyleSheet, Text, Image, Pressable, TouchableOpacity} from 'react-native';
+import {useCallback, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {Color, FontSize, FontFamily, Padding, Border} from '../GlobalStyles';
@@ -51,18 +58,15 @@ const Stats = ({onClose}: StatsType) => {
         <Gap height={23} />
         <Text style={[styles.hasil1Typo]}>NDR :</Text>
       </View>
-      <TouchableOpacity
-      style={styles.buttonKet}>
-      <Text style={styles.buttonKetText}>KET</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-      style={styles.buttonStandar}>
-      <Text style={styles.buttonStandarText}>STANDAR</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-      style={styles.buttonHasil}>
-      <Text style={styles.buttonHasilText}>HASIL</Text>
-      </TouchableOpacity>
+      <Pressable style={styles.buttonKet}>
+        <Text style={styles.buttonKetText}>KET</Text>
+      </Pressable>
+      <Pressable style={styles.buttonStandar}>
+        <Text style={styles.buttonStandarText}>STANDAR</Text>
+      </Pressable>
+      <Pressable style={styles.buttonHasil}>
+        <Text style={styles.buttonHasilText}>HASIL</Text>
+      </Pressable>
       {/* <Pressable
         style={styles.backButton}
         onPress={closeLihatBORLOS}>
@@ -76,32 +80,32 @@ const Stats = ({onClose}: StatsType) => {
         <Image
           style={styles.arrow1IconLayout}
           resizeMode="cover"
-          source={require('../assets/up-arrow1.png')}
+          source={require('../assets/red.png')}
         />
         <Image
           style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
           resizeMode="cover"
-          source={require('../assets/down-arrow2.png')}
+          source={require('../assets/green.png')}
         />
         <Image
           style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
           resizeMode="cover"
-          source={require('../assets/up-arrow1.png')}
+          source={require('../assets/red.png')}
         />
         <Image
           style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
           resizeMode="cover"
-          source={require('../assets/down-arrow2.png')}
+          source={require('../assets/green.png')}
         />
         <Image
           style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
           resizeMode="cover"
-          source={require('../assets/up-arrow1.png')}
+          source={require('../assets/red.png')}
         />
         <Image
           style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
           resizeMode="cover"
-          source={require('../assets/up-arrow1.png')}
+          source={require('../assets/red.png')}
         />
       </View>
     </View>
@@ -119,7 +123,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 30,
   },
-  buttonKetText:{
+  buttonKetText: {
     // left: 15,
     alignSelf: 'center',
     top: 7,
@@ -135,7 +139,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 30,
   },
-  buttonStandarText:{
+  buttonStandarText: {
     // left: 15,
     alignSelf: 'center',
     top: 7,
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 30,
   },
-  buttonHasilText:{
+  buttonHasilText: {
     // left: 15,
     alignSelf: 'center',
     top: 7,

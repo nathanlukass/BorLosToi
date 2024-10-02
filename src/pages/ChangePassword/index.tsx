@@ -1,5 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Pressable, Image, BackHandler } from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+  Image,
+  BackHandler,
+} from 'react-native';
 import {
   Padding,
   Border,
@@ -9,8 +18,8 @@ import {
 } from '../../../GlobalStyles';
 
 import Icon from 'react-native-vector-icons/Ionicons'; // Assuming Ionicons is installed
-import { Button } from 'react-native-elements'; // Assuming react-native-elements is installed
-import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
+import {Button} from 'react-native-elements'; // Assuming react-native-elements is installed
+import {useRoute, RouteProp, useFocusEffect} from '@react-navigation/native';
 
 type ChangePasswordRouteProp = RouteProp<{params: {source: string}}, 'params'>;
 
@@ -48,8 +57,9 @@ const ChangePassword = ({navigation}) => {
   useFocusEffect(
     useCallback(() => {
       BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-      return () => BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-    }, [handleBackPress])
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    }, [handleBackPress]),
   );
 
   return (
@@ -100,8 +110,10 @@ const ChangePassword = ({navigation}) => {
           value={confirmPassword}
           onChangeText={setConfirmPassword}
         />
-        <TouchableOpacity onPress={toggleConfirmPasswordVisibility} style={styles.iconContainer}>
-        <Image
+        <TouchableOpacity
+          onPress={toggleConfirmPasswordVisibility}
+          style={styles.iconContainer}>
+          <Image
             source={
               secureConfirmPassword
                 ? require('../../assets/images/Eye1.png')
@@ -124,8 +136,6 @@ const ChangePassword = ({navigation}) => {
     </View>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   headerTitle: {
