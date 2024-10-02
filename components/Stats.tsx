@@ -30,8 +30,8 @@ const Stats = ({onClose}: StatsType) => {
       <Text style={[styles.hari13Hari2]}>6-9 Hari</Text>
       <Text style={[styles.hari13Hari3]}>1-3 Hari</Text>
       <Text style={[styles.hari13Hari4]}>40-50 Kali</Text>
-      <Text style={[styles.hari13Hari5]}>{'< 20%'}</Text>
-      <Text style={[styles.hari13Hari6]}>{'< 45%'}</Text>
+      <Text style={[styles.hari13Hari5]}>{'< 20 ‰'}</Text>
+      <Text style={[styles.hari13Hari6]}>{'< 45 ‰'}</Text>
       <Text style={[styles.text]}>0</Text>
       <Text style={[styles.text2]}>0</Text>
       <Text style={[styles.text3]}>0</Text>
