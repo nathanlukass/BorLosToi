@@ -18,12 +18,15 @@ import {
   ParamListBase,
   useFocusEffect,
 } from '@react-navigation/native';
-import SelectUserNurse from '../../../components/SelectUserNurse';
 import {showMessage} from 'react-native-flash-message';
 import FlashMessage from 'react-native-flash-message';
-import UsernameField from '../../../components/UsernameField';
-import PasswordField from '../../../components/PasswordField';
-import { FontFamily, Color, Padding, Border, FontSize } from '../../../GlobalStyles';
+import {
+  FontFamily,
+  Color,
+  Padding,
+  Border,
+  FontSize,
+} from '../../../GlobalStyles';
 
 const LoginScreen = ({route}) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -34,6 +37,7 @@ const LoginScreen = ({route}) => {
   const [usernameIsFocused, usernameSetIsFocused] = useState(false);
   const [password, setpassword] = useState('');
   const [passwordIsFocused, passwordSetIsFocused] = useState(false);
+  const [data, setData] = useState([]);
 
   const toggleDropdown = () => {
     if (isDropdownOpen) {
@@ -101,14 +105,39 @@ const LoginScreen = ({route}) => {
       }
     }, [route.params?.loggedOut]),
   );
+  const getData = async () => {
+    try {
+      const response = await fetch('http://10.0.2.2:3000/users');
+      const jsonData = await response.json();
+
+      setData(jsonData.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // const user = data[0];
+  const user = data && data.length > 0 ? data[2] : null;
 
   return (
     <View style={styles.loginScreenAdmin}>
       <FlashMessage position="top" />
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
-        <Text style={[styles.loginToContinue, styles.orTypo]}>
-          Login to continue
-        </Text>
+        {user ? (
+          <Text
+            style={[styles.loginToContinue, styles.orTypo]}
+            key={user.user_id}>
+            {user.description}
+          </Text>
+        ) : (
+          <Text style={[styles.loginToContinue, styles.orTypo]}>
+            Loading...
+          </Text>
+        )}
       </View>
       <View
         style={[
