@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
-import {DatePickerr, FilterCheckBox} from '../../components';
+import { Image, StyleSheet, Text, View, Pressable } from 'react-native';
+import { DatePickerr, FilterCheckBox } from '../../components';
 import Stats1 from '../../../components/Stats1';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, ParamListBase } from '@react-navigation/native';
 import {
   FontSize,
   FontFamily,
@@ -14,10 +14,10 @@ import {
 
 const ScreenGuest = () => {
   const datePickerStyle1 = {
-    top: '25%',
+    top: '16%',
   };
   const datePickerStyle2 = {
-    top: '-40%',
+    top: '-60%',
   };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -37,15 +37,22 @@ const ScreenGuest = () => {
         </Text> */}
       </View>
       <Stats1 />
+      
+      <Pressable
+        style={[styles.okButton, styles.filterShadowBox]} 
+        onPress={() => console.log('OK Button Pressed')}>
+        <Text style={[styles.okButtonText, styles.filterTypo]}>OK</Text>
+      </Pressable>
+
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
-      <Text style={[styles.filter1, styles.filterTypo]}>Filter by Indikator</Text>
+        <Text style={[styles.filter1, styles.filterTypo]}>Filter by Indikator</Text>
       </Pressable>
       <Pressable
         style={[styles.filterRuangan, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BorlostoiRuangan')}>
-      <Text style={[styles.filter1Ruangan, styles.filterTypo]}>Filter by Ruangan</Text>
+        <Text style={[styles.filter1Ruangan, styles.filterTypo]}>Filter by Ruangan</Text>
       </Pressable>
       <Image
         style={[styles.vectorIcon, styles.vectorIconPosition]}
@@ -73,10 +80,9 @@ const ScreenGuest = () => {
 
 const styles = StyleSheet.create({
   datePickerStyle: {
-    top: 10,
+    top: 20,
   },
   filterTypo: {
-    // textAlign: 'center',
     fontSize: FontSize.m3BodyLarge_size,
     color: '#ffffff',
   },
@@ -115,7 +121,7 @@ const styles = StyleSheet.create({
   },
   filter1: {
     top: 8,
-    left: 22,
+    left: 20,
     fontWeight: '500',
     fontFamily: FontFamily.poppinsMedium,
     color: Color.schemesOnPrimary,
@@ -138,15 +144,15 @@ const styles = StyleSheet.create({
     height: 15,
   },
   filter: {
-    top: 318,
+    top: 620,
     left: 207,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowRadius: 7,
     elevation: 7,
-    borderRadius: 15,
+    borderRadius: 20,
     backgroundColor: Color.colorMediumaquamarine,
-    width: 155,
-    height: 35,
+    width: 180,
+    height: 40,
     justifyContent: 'flex-end',
     paddingLeft: Padding.p_xl,
     paddingTop: Padding.p_3xs,
@@ -154,21 +160,49 @@ const styles = StyleSheet.create({
     paddingBottom: Padding.p_3xs,
   },
   filterRuangan: {
-    top: 368,
+    top: 670,
     left: 207,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowRadius: 7,
     elevation: 7,
-    borderRadius: 15,
+    borderRadius: 20,
     backgroundColor: Color.colorMediumaquamarine,
-    width: 155,
-    height: 35,
+    width: 180,
+    height: 40,
     justifyContent: 'flex-end',
     paddingLeft: Padding.p_xl,
     paddingTop: Padding.p_3xs,
     paddingRight: Padding.p_3xs,
     paddingBottom: Padding.p_3xs,
   },
+  
+  // New OK button styles
+  okButton: {
+    top: 250, // Position it above the other buttons
+    left: 282,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowRadius: 7,
+    elevation: 7,
+    borderRadius: 20,
+    backgroundColor: Color.colorMediumaquamarine,
+    width: 100,
+    height: 40,
+    justifyContent: 'flex-end',
+    paddingLeft: Padding.p_xl,
+    paddingTop: Padding.p_3xs,
+    paddingRight: Padding.p_3xs,
+    paddingBottom: Padding.p_3xs,
+  },
+  okButtonText: {
+    top: 8,
+    left: 35,
+    fontWeight: '500',
+    fontFamily: FontFamily.poppinsMedium,
+    color: Color.schemesOnPrimary,
+    zIndex: 1000,
+    position: 'absolute',
+  },
+
   icon: {
     height: '100%',
     width: '100%',
@@ -180,36 +214,29 @@ const styles = StyleSheet.create({
   },
   backToLogin: {
     marginTop: -11.5,
-    marginLeft: -45,
+    marginLeft: -72,
     top: '50%',
-    fontWeight: '700',
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     textAlign: 'center',
-    fontSize: FontSize.m3BodyLarge_size,
+    fontSize: 16,
     zIndex: 1,
     left: '50%',
     alignSelf: 'center',
   },
   barAtas: {
-    top: 20,
-    left: 17,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
     shadowRadius: 4,
     elevation: 4,
     borderRadius: Border.br_8xs,
-    width: 360,
-    height: 45,
+    width: 410,
+    height: 60,
     justifyContent: 'space-between',
     backgroundColor: Color.schemesOnPrimary,
     alignSelf: 'center',
   },
   screenGuest: {
-    // borderRadius: Border.br_xl,
     flex: 1,
     height: 900,
-    // overflow: 'hidden',
-    // width: '100%',
     backgroundColor: Color.schemesOnPrimary,
   },
 });

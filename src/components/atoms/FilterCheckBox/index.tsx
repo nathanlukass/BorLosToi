@@ -27,13 +27,16 @@ export default FilterCheckBox
 
 const styles = StyleSheet.create({
   container: {
+    top:-55,
+    left:-8,
     flexDirection: 'row', // Align CheckBox and Text horizontally
     alignItems: 'center', // Center the items vertically
   },
   textStyle: {
-    marginLeft: 8, // Add some space between the CheckBox and the Text
-    fontSize: 16,   // Adjust the text size
-    color: '#000',  // Text color
+    top:0,
+    marginLeft: 8, 
+    fontSize: 16,   
+    color: '#000', 
     fontStyle: 'italic',
   }
 })
