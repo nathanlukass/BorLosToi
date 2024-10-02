@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
   },
   stats: {
     height: '39.03%',
-    top: '50%',
+    top: '35%',
     bottom: '10.98%',
   },
   hari13Hari2: {
