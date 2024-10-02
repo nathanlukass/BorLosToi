@@ -94,7 +94,7 @@ const BORAVLOSTOIBTONDRGDR = () => {
       <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
           style={styles.backButton}
-          onPress={() => navigation.navigate('LoginScreen')}>
+          onPress={() => navigation.navigate('ScreenGuest')}>
           <Image
             style={styles.icon}
             resizeMode="cover"

@@ -29,7 +29,8 @@ import {
   NDR,
   GDR,
   AboutApp,
-  ChangePassword
+  ChangePassword,
+  BorlostoiRuangan
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -155,6 +156,11 @@ const index = () => {
       <Stack.Screen
         name="ChangePassword"
         component={ChangePassword}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="BorlostoiRuangan"
+        component={BorlostoiRuangan}
         options={{headerShown: false}}
       />
 

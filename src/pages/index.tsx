@@ -27,6 +27,7 @@ import NDR from './NdrScreen';
 import GDR from './GdrScreen';
 import AboutApp from './AboutApp';
 import ChangePassword from './ChangePassword';
+import BorlostoiRuangan from './BorlostoiRuangan';
 
 export {
   LoginScreen,
@@ -57,4 +58,5 @@ export {
   GDR,
   AboutApp,
   ChangePassword,
+  BorlostoiRuangan,
 };
