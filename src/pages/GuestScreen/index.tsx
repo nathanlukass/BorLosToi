@@ -40,7 +40,12 @@ const ScreenGuest = () => {
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
-      <Text style={[styles.filter1, styles.filterTypo]}>Filter by Ruangan</Text>
+      <Text style={[styles.filter1, styles.filterTypo]}>Filter by Indikator</Text>
+      </Pressable>
+      <Pressable
+        style={[styles.filterRuangan, styles.filterShadowBox]}
+        onPress={() => navigation.navigate('BorlostoiRuangan')}>
+      <Text style={[styles.filter1Ruangan, styles.filterTypo]}>Filter by Ruangan</Text>
       </Pressable>
       <Image
         style={[styles.vectorIcon, styles.vectorIconPosition]}
@@ -117,6 +122,15 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     position: 'absolute',
   },
+  filter1Ruangan: {
+    top: 8,
+    left: 22,
+    fontWeight: '500',
+    fontFamily: FontFamily.poppinsMedium,
+    color: Color.schemesOnPrimary,
+    zIndex: 1000,
+    position: 'absolute',
+  },
   vectorIcon: {
     marginLeft: 19.5,
     top: 10,
@@ -124,7 +138,23 @@ const styles = StyleSheet.create({
     height: 15,
   },
   filter: {
-    top: 348,
+    top: 318,
+    left: 207,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowRadius: 7,
+    elevation: 7,
+    borderRadius: 15,
+    backgroundColor: Color.colorMediumaquamarine,
+    width: 155,
+    height: 35,
+    justifyContent: 'flex-end',
+    paddingLeft: Padding.p_xl,
+    paddingTop: Padding.p_3xs,
+    paddingRight: Padding.p_3xs,
+    paddingBottom: Padding.p_3xs,
+  },
+  filterRuangan: {
+    top: 368,
     left: 207,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowRadius: 7,
