@@ -1,6 +1,12 @@
+<<<<<<< Updated upstream
 import * as React from 'react';
 import { Image, StyleSheet, Text, View, Pressable } from 'react-native';
 import { DatePickerr, FilterCheckBox } from '../../components';
+=======
+import React, {useState} from 'react';
+import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
+import {DatePickerr, FilterCheckBox} from '../../components';
+>>>>>>> Stashed changes
 import Stats1 from '../../../components/Stats1';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/native';
@@ -13,11 +19,19 @@ import {
 } from '../../../GlobalStyles';
 
 const ScreenGuest = () => {
+  const [isFilterChecked, setIsFilterChecked] = useState(false); // State to track checkbox status
+
   const datePickerStyle1 = {
     top: '16%',
   };
+
   const datePickerStyle2 = {
+<<<<<<< Updated upstream
     top: '-60%',
+=======
+    top: '-45%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+>>>>>>> Stashed changes
   };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -26,15 +40,10 @@ const ScreenGuest = () => {
     <View style={styles.screenGuest}>
       <DatePickerr style={datePickerStyle1} />
       <View style={styles.groupParent}>
-        <FilterCheckBox />
-        {/* <Image
-          style={styles.groupIcon}
-          resizeMode="cover"
-          source={require('../../../assets/group.png')}
+        <FilterCheckBox
+          isChecked={isFilterChecked}
+          onChange={() => setIsFilterChecked(!isFilterChecked)}
         />
-        <Text style={[styles.filterByPeriod, styles.filterTypo]}>
-          Filter by Period
-        </Text> */}
       </View>
       <Stats1 />
       
@@ -47,18 +56,31 @@ const ScreenGuest = () => {
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
+<<<<<<< Updated upstream
         <Text style={[styles.filter1, styles.filterTypo]}>Filter by Indikator</Text>
+=======
+        <Text style={[styles.filter1, styles.filterTypo]}>
+          Filter by Indikator
+        </Text>
+>>>>>>> Stashed changes
       </Pressable>
       <Pressable
         style={[styles.filterRuangan, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BorlostoiRuangan')}>
+<<<<<<< Updated upstream
         <Text style={[styles.filter1Ruangan, styles.filterTypo]}>Filter by Ruangan</Text>
+=======
+        <Text style={[styles.filter1Ruangan, styles.filterTypo]}>
+          Filter by Ruangan
+        </Text>
+>>>>>>> Stashed changes
       </Pressable>
       <Image
         style={[styles.vectorIcon, styles.vectorIconPosition]}
         resizeMode="cover"
         source={require('../../../assets/vector.png')}
       />
+      {/* Conditionally render the second DatePickerr based on checkbox state */}
       <DatePickerr style={datePickerStyle2} />
       <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
@@ -105,12 +127,6 @@ const styles = StyleSheet.create({
   groupIcon: {
     width: 20,
     height: 20,
-  },
-  filterByPeriod: {
-    fontStyle: 'italic',
-    fontFamily: FontFamily.robotoItalic,
-    color: 'rgba(0, 0, 0, 0.3)',
-    marginLeft: 7,
   },
   groupParent: {
     top: 190,
