@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import React, {useMemo, useState, useRef, useEffect} from 'react';
 import {
   Text,
@@ -85,9 +84,9 @@ const LoginScreen = ({route}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const handleLogin = () => {
-    if (selectedRole == 'Nurse') {
+    if (selectedRole === 'Nurse') {
       navigation.navigate('HomeScreenNurse');
-    } else if (selectedRole == 'Admin') {
+    } else if (selectedRole === 'Admin') {
       navigation.navigate('HomeScreenAdmin');
     } else {
       showMessage({
@@ -99,45 +98,40 @@ const LoginScreen = ({route}) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      // Reset the selected role when the screen is focused
+      setSelectedRole(''); // Reset selectedRole to default
+
       if (route.params?.loggedOut) {
         Alert.alert('Logged Out!', "you've been logged out.");
         navigation.setParams({loggedOut: false}); // Clear the loggedOut parameter after showing the alert
       }
     }, [route.params?.loggedOut]),
   );
-  const getData = async () => {
-    try {
-      const response = await fetch('http://10.0.2.2:3000/users');
-      const jsonData = await response.json();
 
-      setData(jsonData.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const response = await fetch('http://10.0.2.2:3000/users');
+  //     const jsonData = await response.json();
 
-  useEffect(() => {
-    getData();
-  }, []);
+  //     setData(jsonData.data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
-  // const user = data[0];
-  const user = data && data.length > 0 ? data[2] : null;
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+
+  // const user = data && data.length > 0 ? data[2] : null;
 
   return (
     <View style={styles.loginScreenAdmin}>
       <FlashMessage position="top" />
       <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
-        {user ? (
-          <Text
-            style={[styles.loginToContinue, styles.orTypo]}
-            key={user.user_id}>
-            {user.description}
-          </Text>
-        ) : (
-          <Text style={[styles.loginToContinue, styles.orTypo]}>
-            Loading...
-          </Text>
-        )}
+        <Text style={[styles.loginToContinue, styles.orTypo]}>
+          Login to continue
+        </Text>
       </View>
       <View
         style={[
@@ -373,7 +367,6 @@ const styles = StyleSheet.create({
     top: 0,
     position: 'absolute',
   },
-  //label
   loginFieldPosition: {
     left: 21,
     position: 'absolute',
@@ -387,12 +380,10 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     position: 'absolute',
   },
-  //button as guest
   groupLayout: {
-    width: 342,
+    width: 320,
     height: 45,
     position: 'absolute',
-    marginStart:-3,
   },
   loginPosition: {
     color: Color.schemesOnPrimary,
@@ -400,7 +391,7 @@ const styles = StyleSheet.create({
     marginTop: -11.5,
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
-    left: '48%',
+    left: '50%',
     textAlign: 'center',
     lineHeight: 24,
     fontSize: FontSize.m3BodyLarge_size,
@@ -412,7 +403,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   loginToContinue: {
-    lineHeight: 25,
+    lineHeight: 24,
     fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsRegular,
     alignSelf: 'center',
@@ -484,12 +475,10 @@ const styles = StyleSheet.create({
     left: 0,
   },
   groupButton: {
-    left: -6,
+    left: 0,
     top: 2,
     position: 'absolute',
     backgroundColor: '#21b557',
-    borderRadius:5,
-    width:342,
   },
   login: {
     marginLeft: 22,
@@ -573,10 +562,9 @@ const styles = StyleSheet.create({
     zIndex: 0,
     position: 'absolute',
   },
-  //icon drop
   doubleDownIcon: {
     top: 12,
-    left: 295,
+    left: 280,
     width: 20,
     height: 20,
     zIndex: 1,
@@ -585,13 +573,14 @@ const styles = StyleSheet.create({
   usernameField: {
     height: '31%',
     top: '-40%',
+    right: '0.32%',
     bottom: '28.97%',
     borderRadius: Border.br_8xs,
     borderStyle: 'solid',
     borderColor: 'blue',
     borderWidth: 1,
     backgroundColor: Color.schemesOnPrimary,
-    width: '107%',
+    width: '100%',
     position: 'absolute',
   },
   usernameField1: {

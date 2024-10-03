@@ -1,32 +1,24 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
-// import CheckBox from '@react-native-community/checkbox';
-import DatePickerr from '../DatePickerr';
 
-
-
-const FilterCheckBox = () => {
-
-    const [checked, setChecked] = useState(false)
-
+const FilterCheckBox = ({isChecked, onChange}) => {
   return (
     <View style={styles.container}>
-    <CheckBox
-        disabled={false}
-        value={checked}
-        tintColors={{true: 'black', false: 'gray'}}
-        onValueChange={(newValue) => setChecked(newValue)}
-        />
-      <Text style={[styles.textStyle,{ color: checked ? 'black' : 'gray' }]}>Filter by Period</Text>
+      <CheckBox
+        value={isChecked}
+        onValueChange={onChange}
+        tintColors={{true: 'green', false: 'grey'}} // Adjust the tint color if desired
+        style={styles.checkbox}
+      />
+      <Text style={styles.label}>Filter by Period</Text>
     </View>
-  )
-}
-
-export default FilterCheckBox
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
+<<<<<<< Updated upstream
     top:-55,
     left:-8,
     flexDirection: 'row', // Align CheckBox and Text horizontally
@@ -40,3 +32,17 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
   }
 })
+=======
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    marginRight: 8, // Add some space between the checkbox and the text
+  },
+  label: {
+    marginLeft: 8,
+  },
+});
+
+export default FilterCheckBox;
+>>>>>>> Stashed changes
