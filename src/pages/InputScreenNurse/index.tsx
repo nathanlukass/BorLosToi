@@ -12,16 +12,9 @@ import {
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/core';
-import {
-  Padding,
-  Border,
-  Color,
-  FontFamily,
-  FontSize,
-} from '../../../GlobalStyles';
+import {FontFamily, Color} from '../../../GlobalStyles';
 import {Gap, DatePickerr} from '../../components';
-import {ScreenWidth} from 'react-native-elements/dist/helpers';
-
+import RealTimeClock from '../../components/atoms/Time';
 const InputButton = ({label}: {label: string}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
@@ -61,7 +54,7 @@ const InputButton = ({label}: {label: string}) => {
 
 const NurseInputPage = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  // const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
 
   const handleSubmitButton = () => {
     navigation.navigate('HomeScreenNurse', alert('Data berhasil diinput!'));
@@ -91,14 +84,11 @@ const NurseInputPage = () => {
         </View>
 
         <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>Waktu input harian -- : -- WITA</Text>
+          {/* Menggunakan komponen RealTimeClock */}
+          <RealTimeClock />
         </View>
 
         <DatePickerr style={datePickerStyle1} />
-
-        {/* <View style={styles.roomSection}>
-          <Text style={styles.roomName}>Mujair</Text>
-        </View> */}
 
         {/* Jumlah tempat tidur section */}
         <View style={styles.section}>
@@ -182,6 +172,9 @@ const NurseInputPage = () => {
     </View>
   );
 };
+
+export default NurseInputPage;
+
 
 const styles = StyleSheet.create({
   container: {

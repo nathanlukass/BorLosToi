@@ -21,6 +21,7 @@ import {
 } from '../../../GlobalStyles';
 import {Gap, DatePickerr} from '../../components';
 import {ScreenWidth} from 'react-native-elements/dist/helpers';
+import RealTimeClock from '../../components/atoms/Time';
 
 const InputButton = ({label}: {label: string}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -61,7 +62,7 @@ const InputButton = ({label}: {label: string}) => {
 
 const EditMujairC = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // Menggunakan state untuk input jumlah tempat tidur
 
   const handleSubmitButton = () => {
     navigation.navigate('EditScreenAdmin', alert('Data berhasil disimpan!'));
@@ -69,8 +70,8 @@ const EditMujairC = () => {
 
   const datePickerStyle1 = {
     top: -7,
-    width: 350,
-    left: -27,
+    width: 370,
+    left: -30,
   };
 
   return (
@@ -91,7 +92,7 @@ const EditMujairC = () => {
         </View>
 
         <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>Waktu input harian -- : -- WITA</Text>
+        <RealTimeClock />
         </View>
 
         <DatePickerr style={datePickerStyle1} />
@@ -99,7 +100,7 @@ const EditMujairC = () => {
         {/* Jumlah tempat tidur section */}
         <View style={styles.section}>
           <View style={styles.bedInputContainer}> 
-            <Text style={styles.sectionTitle}>Jumlah tempat tidur:</Text>
+            <Text style={styles.sectionTitle}>Jumlah tempat tidur :</Text>
             <TextInput
               value={jumlahTempatTidur}
               onChangeText={(text) => setJumlahTempatTidur(text)}
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 14,
     fontFamily: FontFamily.poppinsMedium,
-    marginBottom: 10,
+    marginBottom: 7,
     color: Color.notSoBlack,
   },
   totalLabel: {
@@ -279,8 +280,8 @@ const styles = StyleSheet.create({
   },
   buttonMinus: {
     backgroundColor: '#C1C9E9',
-    paddingVertical: 1,
-    paddingHorizontal: 9,
+    paddingVertical: 2,
+    paddingHorizontal: 12,
     borderRadius: 7,
     justifyContent: 'center',
     alignItems: 'center',
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 35,
     textAlign: 'center',
-    fontSize: 10,
+    fontSize: 12,
     borderWidth: 1,
     borderColor: '#CCCCCC',
     marginHorizontal: 10,
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
   },
   bedInputContainer: {
     flexDirection: 'row',
-    alignItems: 'center', // Untuk memastikan input berada di samping teks
+    alignItems: 'center', // Ensures the input is aligned beside the text
   },
   submitButton: {
     backgroundColor: '#28A745',

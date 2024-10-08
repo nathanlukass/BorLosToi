@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
 import {DatePickerr, FilterCheckBox} from '../../components';
-import Stats from '../../../components/Stats';
+import Stats1 from '../../../components/Stats1';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/native';
 import {
@@ -20,7 +20,8 @@ const ScreenGuest = () => {
   };
 
   const datePickerStyle2 = {
-    top: '-58%',
+    top: '-60%',
+    top: '-45%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
 
@@ -46,6 +47,7 @@ const ScreenGuest = () => {
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
+        <Text style={[styles.filter1, styles.filterTypo]}>Filter by Indikator</Text>
         <Text style={[styles.filter1, styles.filterTypo]}>
           Filter by Indikator
         </Text>
@@ -53,6 +55,7 @@ const ScreenGuest = () => {
       <Pressable
         style={[styles.filterRuangan, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BorlostoiRuangan')}>
+        <Text style={[styles.filter1Ruangan, styles.filterTypo]}>Filter by Ruangan</Text>
         <Text style={[styles.filter1Ruangan, styles.filterTypo]}>
           Filter by Ruangan
         </Text>

@@ -4,5 +4,6 @@ import GapHorizontal from './GapHorizontal';
 import DatePickerr from './DatePickerr';
 import FilterCheckBox from './FilterCheckBox';
 import InputButton from './InputButton';
+import RealTimeClock from'./Time';
 
-export {Gap, GapHorizontal, DatePickerr, FilterCheckBox, InputButton};
+export {Gap, GapHorizontal, DatePickerr, FilterCheckBox, InputButton, RealTimeClock};
