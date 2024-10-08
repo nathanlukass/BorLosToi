@@ -36,6 +36,7 @@ const EditScreenAdmin = () => {
               />
               <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR A</Text>
             </Pressable>
+            
             <Pressable
               style={[styles.mujairB, styles.mujairShadowBox]}
               onPress={() => navigation.navigate('EditMujairB')}>
