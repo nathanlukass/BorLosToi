@@ -9,16 +9,7 @@ import HomeScreenAdmin from './HomeScreenAdmin';
 import ProfileScreenAdmin from './ProfileScreenAdmin';
 import EditScreenAdmin from './EditScreenAdmin';
 import PrintOutScreen from './PrintOutScreen';
-import EditMujairA from './EditMujairA';
-import EditMujairB from './EditMujairB';
-import EditMujairC from './EditMujairC';
-import EditNike from './EditNike';
-import EditNeonati from './EditNeonati';
-import EditPayangka from './EditPayangka';
-import EditKarper from './EditKarper';
-import EditBomboya from './EditBomboya';
-import EditIcu from './EditIcu';
-import BORAVLOSTOIBTONDRGDR from './FilterByIndikator';
+import BORAVLOSTOIBTONDRGDR from './BorLosToiScreen';
 import BOR from './BorScreen';
 import AVLOS from './AvlosScreen';
 import TOI from './ToiScreen';
@@ -28,6 +19,28 @@ import GDR from './GdrScreen';
 import AboutApp from './AboutApp';
 import ChangePassword from './ChangePassword';
 import BorlostoiRuangan from './BorlostoiRuangan';
+import {
+  EditMujairA,
+  EditMujairB,
+  EditMujairC,
+  EditNike,
+  EditNeonati,
+  EditPayangka,
+  EditKarper,
+  EditBomboya,
+  EditIcu,
+} from './EditScreens';
+import {
+  StatsMujairA,
+  StatsMujairB,
+  StatsMujairC,
+  StatsNike,
+  StatsNeonati,
+  StatsPayangka,
+  StatsKarper,
+  StatsBomboya,
+  StatsICU,
+} from './FilterByRuangann';
 
 export {
   LoginScreen,
@@ -59,4 +72,13 @@ export {
   AboutApp,
   ChangePassword,
   BorlostoiRuangan,
+  StatsMujairA,
+  StatsMujairB,
+  StatsMujairC,
+  StatsNike,
+  StatsNeonati,
+  StatsPayangka,
+  StatsKarper,
+  StatsBomboya,
+  StatsICU,
 };

@@ -7,8 +7,8 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {
   Padding,
   Border,
@@ -40,7 +40,7 @@ const BorlostoiRuangan = () => {
           {/* Tombol MUJAIR A */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsMujairA')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
@@ -183,18 +183,18 @@ const styles = StyleSheet.create({
   buttonGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between', 
+    justifyContent: 'space-between',
     alignItems: 'center',
   },
   roomButton: {
-    width: '45%', 
+    width: '45%',
     height: 120,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: Border.br_3xs,
     backgroundColor: Color.schemesOnPrimary,
-    marginBottom: 20, 
-    top:10,
+    marginBottom: 20,
+    top: 10,
   },
   roomIcon: {
     width: 100,
@@ -210,18 +210,18 @@ const styles = StyleSheet.create({
   },
   shadowBox: {
     shadowColor: 'rgba(0, 0, 0, 0.5)',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 1,
     shadowRadius: 8,
     elevation: 8,
   },
   centeredButtonContainer: {
-    alignItems: 'center', 
-    width: '100%', 
+    alignItems: 'center',
+    width: '100%',
   },
   centeredButton: {
-    width: '45%', 
-    height: 120, 
+    width: '45%',
+    height: 120,
   },
 });
 

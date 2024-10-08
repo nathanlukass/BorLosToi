@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -13,15 +13,18 @@ import {
 import {DatePickerr, FilterCheckBox} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
-import {
-  FontSize,
-  FontFamily,
-  Color,
-  Padding,
-  Border,
-} from '../../../GlobalStyles';
+import {FontSize, FontFamily, Color, Border} from '../../../GlobalStyles';
 
 const BORAVLOSTOIBTONDRGDR = () => {
+  const [isFilterChecked, setIsFilterChecked] = useState(false); // State to track checkbox status
+
+  const datePickerStyle1 = {
+    top: '19%',
+  };
+  const datePickerStyle2 = {
+    top: '-55%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+  };
   const [selectedIndicator, setSelectedIndicator] =
     React.useState('Pilih Indikator');
   const [indicatorModalVisible, setIndicatorModalVisible] =
@@ -52,11 +55,19 @@ const BORAVLOSTOIBTONDRGDR = () => {
 
   return (
     <View style={styles.screenGuest}>
-      <DatePickerr style={styles.datePickerStyle1} />
+      <DatePickerr style={datePickerStyle1} />
+      <View style={styles.groupParent}>
+        <FilterCheckBox
+          isChecked={isFilterChecked}
+          onChange={() => setIsFilterChecked(!isFilterChecked)}
+        />
+      </View>
+      <DatePickerr style={datePickerStyle2} />
+      {/* <DatePickerr style={styles.datePickerStyle1} />
       <View style={styles.groupParent}>
         <FilterCheckBox />
       </View>
-      <DatePickerr style={styles.datePickerStyle2} />
+      <DatePickerr style={styles.datePickerStyle2} /> */}
 
       {/* Dropdown Pilih Indikator */}
       <Pressable
@@ -115,14 +126,9 @@ const styles = StyleSheet.create({
     height: 900,
     backgroundColor: Color.schemesOnPrimary,
   },
-  datePickerStyle1: {
-    top: '20%',
-  },
-  datePickerStyle2: {
-    top: '-45%',
-  },
+
   groupParent: {
-    top: 150,
+    top: 190,
     left: 31,
     alignItems: 'center',
     flexDirection: 'row',
@@ -130,15 +136,15 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 40,
-    width: 350,
+    width: 354,
     paddingHorizontal: 10,
     justifyContent: 'center',
-    borderWidth: 1.5,
+    borderWidth: 2,
     borderColor: Color.notSoBlack,
     borderRadius: 10,
     backgroundColor: Color.schemesOnPrimary,
     alignSelf: 'center',
-    bottom: 430,
+    bottom: 470,
   },
   dropdownText: {
     fontSize: FontSize.m3LabelLarge_size,
@@ -169,7 +175,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
-    bottom: 430,
+    bottom: 470,
     left: 135,
   },
   viewButtonText: {
@@ -192,17 +198,14 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   backToLogin: {
-    marginTop: -11.5,
-    marginLeft: -45,
-    top: '50%',
+    marginTop: 1,
     fontWeight: '700',
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
-    textAlign: 'center',
     fontSize: FontSize.m3BodyLarge_size,
     zIndex: 1,
-    left: '50%',
     alignSelf: 'center',
+    left: -200,
   },
   barAtas: {
     top: 20,

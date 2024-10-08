@@ -30,7 +30,8 @@ import {
   GDR,
   AboutApp,
   ChangePassword,
-  BorlostoiRuangan
+  BorlostoiRuangan,
+  StatsMujairA,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -143,7 +144,7 @@ const index = () => {
         component={AVLOS}
         options={{headerShown: false}}
       />
-      
+
       <Stack.Screen name="TOI" component={TOI} options={{headerShown: false}} />
       <Stack.Screen name="BTO" component={BTO} options={{headerShown: false}} />
       <Stack.Screen name="NDR" component={NDR} options={{headerShown: false}} />
@@ -163,7 +164,11 @@ const index = () => {
         component={BorlostoiRuangan}
         options={{headerShown: false}}
       />
-
+      <Stack.Screen
+        name="StatsMujairA"
+        component={StatsMujairA}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
