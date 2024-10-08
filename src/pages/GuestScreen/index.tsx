@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
 import {DatePickerr, FilterCheckBox} from '../../components';
-import Stats1 from '../../../components/Stats1';
+import Stats from '../../../components/Stats';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/native';
 import {
