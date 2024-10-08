@@ -21,11 +21,12 @@ import {
 } from '../../../GlobalStyles';
 import {Gap, DatePickerr} from '../../components';
 import {ScreenWidth} from 'react-native-elements/dist/helpers';
+import RealTimeClock from '../../components/atoms/Time';
 
 const InputButton = ({label}: {label: string}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const [value, setValue] = useState<number>(1);
+  const [value, setValue] = useState<number>(0);
 
   const handleChange = (text: string) => {
     const numericValue = text.replace(/[^0-9]/g, ''); // Ensure only numeric input
@@ -38,7 +39,7 @@ const InputButton = ({label}: {label: string}) => {
       <View style={styles.counterContainer}>
         <TouchableOpacity
           style={styles.buttonMinus}
-          onPress={() => setValue(Math.max(0, value - 1))}>
+          onPress={() => setValue(Math.max(0, value -1))}>
           <Text style={styles.buttonText}>-</Text>
         </TouchableOpacity>
 
@@ -51,7 +52,7 @@ const InputButton = ({label}: {label: string}) => {
 
         <TouchableOpacity
           style={styles.buttonPlus}
-          onPress={() => setValue(value + 1)}>
+          onPress={() => setValue(value + 2)}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
@@ -91,7 +92,7 @@ const EditMujairA = () => {
         </View>
 
         <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>Waktu input harian -- : -- WITA</Text>
+        <RealTimeClock />
         </View>
 
         <DatePickerr style={datePickerStyle1} />
