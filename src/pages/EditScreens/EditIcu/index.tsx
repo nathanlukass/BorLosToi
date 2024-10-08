@@ -21,6 +21,7 @@ import {
 } from '../../../../GlobalStyles';
 import {Gap, DatePickerr} from '../../../components';
 import {ScreenWidth} from 'react-native-elements/dist/helpers';
+import RealTimeClock from '../../../components/atoms/Time';
 
 const InputButton = ({label}: {label: string}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -91,7 +92,7 @@ const EditIcu = () => {
         </View>
 
         <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>Waktu input harian -- : -- WITA</Text>
+          <RealTimeClock />
         </View>
 
         <DatePickerr style={datePickerStyle1} />

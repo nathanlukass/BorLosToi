@@ -19,7 +19,7 @@ import {
   FontFamily,
   FontSize,
 } from '../../../../GlobalStyles';
-import {Gap, DatePickerr} from '../../../components';
+import {Gap, DatePickerr, RealTimeClock} from '../../../components';
 import {ScreenWidth} from 'react-native-elements/dist/helpers';
 
 const InputButton = ({label}: {label: string}) => {
@@ -91,7 +91,7 @@ const EditMujairA = () => {
         </View>
 
         <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>Waktu input harian -- : -- WITA</Text>
+          <RealTimeClock />
         </View>
 
         <DatePickerr style={datePickerStyle1} />
