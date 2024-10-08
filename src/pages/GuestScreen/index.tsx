@@ -1,13 +1,7 @@
-<<<<<<< Updated upstream
-import * as React from 'react';
-import { Image, StyleSheet, Text, View, Pressable } from 'react-native';
-import { DatePickerr, FilterCheckBox } from '../../components';
-=======
 import React, {useState} from 'react';
 import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
 import {DatePickerr, FilterCheckBox} from '../../components';
->>>>>>> Stashed changes
-import Stats1 from '../../../components/Stats1';
+import Stats from '../../../components/Stats';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/native';
 import {
@@ -26,12 +20,8 @@ const ScreenGuest = () => {
   };
 
   const datePickerStyle2 = {
-<<<<<<< Updated upstream
-    top: '-60%',
-=======
-    top: '-45%',
+    top: '-58%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
->>>>>>> Stashed changes
   };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -45,35 +35,27 @@ const ScreenGuest = () => {
           onChange={() => setIsFilterChecked(!isFilterChecked)}
         />
       </View>
-      <Stats1 />
+      <Stats />
       
       <Pressable
         style={[styles.okButton, styles.filterShadowBox]} 
         onPress={() => console.log('OK Button Pressed')}>
-        <Text style={[styles.okButtonText, styles.filterTypo]}>OK</Text>
+        <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
       </Pressable>
 
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
-<<<<<<< Updated upstream
-        <Text style={[styles.filter1, styles.filterTypo]}>Filter by Indikator</Text>
-=======
         <Text style={[styles.filter1, styles.filterTypo]}>
           Filter by Indikator
         </Text>
->>>>>>> Stashed changes
       </Pressable>
       <Pressable
         style={[styles.filterRuangan, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BorlostoiRuangan')}>
-<<<<<<< Updated upstream
-        <Text style={[styles.filter1Ruangan, styles.filterTypo]}>Filter by Ruangan</Text>
-=======
         <Text style={[styles.filter1Ruangan, styles.filterTypo]}>
           Filter by Ruangan
         </Text>
->>>>>>> Stashed changes
       </Pressable>
       <Image
         style={[styles.vectorIcon, styles.vectorIconPosition]}
@@ -211,7 +193,7 @@ const styles = StyleSheet.create({
   },
   okButtonText: {
     top: 8,
-    left: 35,
+    left: 30,
     fontWeight: '500',
     fontFamily: FontFamily.poppinsMedium,
     color: Color.schemesOnPrimary,

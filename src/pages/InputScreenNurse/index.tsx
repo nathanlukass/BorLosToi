@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -12,11 +12,19 @@ import {
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/core';
-import {FontFamily, Color} from '../../../GlobalStyles';
-
+import {
+  Padding,
+  Border,
+  Color,
+  FontFamily,
+  FontSize,
+} from '../../../GlobalStyles';
 import {Gap, DatePickerr} from '../../components';
+import {ScreenWidth} from 'react-native-elements/dist/helpers';
 
 const InputButton = ({label}: {label: string}) => {
+  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
   const [value, setValue] = useState<number>(1);
 
   const handleChange = (text: string) => {
@@ -53,32 +61,7 @@ const InputButton = ({label}: {label: string}) => {
 
 const NurseInputPage = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
-
-  // State untuk waktu real-time
-  const [currentTime, setCurrentTime] = useState<string>('');
-
-  // Effect untuk memperbarui waktu setiap detik
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-
-      // Menghitung perbedaan waktu UTC dengan zona waktu WITA (UTC+8)
-      const utcOffset = now.getTimezoneOffset() * 60000; // Offset in milliseconds
-      const witaTime = new Date(now.getTime() + utcOffset + 8 * 3600000); // Tambahkan 8 jam untuk WITA
-
-      const hours = String(witaTime.getHours()).padStart(2, '0');
-      const minutes = String(witaTime.getMinutes()).padStart(2, '0');
-      const seconds = String(witaTime.getSeconds()).padStart(2, '0');
-      setCurrentTime(`${hours}:${minutes}:${seconds} WITA`);
-    };
-
-    // Update every second
-    const intervalId = setInterval(updateTime, 1000);
-
-    // Cleanup the interval on component unmount
-    return () => clearInterval(intervalId);
-  }, []);
+  // const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
 
   const handleSubmitButton = () => {
     navigation.navigate('HomeScreenNurse', alert('Data berhasil diinput!'));
@@ -108,7 +91,7 @@ const NurseInputPage = () => {
         </View>
 
         <View style={styles.timeContainer}>
-          <Text style={styles.timeText}>Waktu input harian {currentTime}</Text>
+          <Text style={styles.timeText}>Waktu input harian -- : -- WITA</Text>
         </View>
 
         <DatePickerr style={datePickerStyle1} />
@@ -119,14 +102,9 @@ const NurseInputPage = () => {
 
         {/* Jumlah tempat tidur section */}
         <View style={styles.section}>
-          <View style={styles.bedInputContainer}>
+          <View style={styles.bedInputContainer}> 
             <Text style={styles.label}>Jumlah tempat tidur:</Text>
-            <TextInput
-              value={jumlahTempatTidur}
-              onChangeText={text => setJumlahTempatTidur(text)}
-              keyboardType="numeric"
-              style={styles.inputTempatTidur}
-            />
+            <Text style={styles.jumlahBed}>20</Text>
           </View>
         </View>
 
@@ -277,6 +255,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: Color.notSoBlack,
   },
+  jumlahBed:{
+    left:35,
+    margin:'auto',
+    top:8,
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsRegular,
+    marginBottom: 10,
+    color: Color.notSoBlack,
+  },
   totalLabel: {
     fontSize: 12,
     fontFamily: FontFamily.poppinsRegular,
@@ -328,18 +315,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     borderRadius: 5,
   },
-  inputTempatTidur: {
-    width: 55,
-    height: 35,
-    textAlign: 'center',
-    fontSize: 15,
-    borderWidth: 1,
-    borderColor: '#CCCCCC',
-    marginStart: 'auto',
-    marginEnd: 25,
-    borderRadius: 5,
-    padding: 5,
-  },
+  // inputTempatTidur: {
+  //   width: 55,
+  //   height: 35,
+  //   textAlign: 'center',
+  //   fontSize: 15,
+  //   borderWidth: 1,
+  //   borderColor: '#CCCCCC',
+  //   marginStart: 'auto',
+  //   marginEnd: 25,
+  //   borderRadius: 5,
+  //   padding: 5,
+  // },
   bedInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',

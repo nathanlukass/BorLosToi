@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
     color: 'black',
+    marginBottom: -4,
   },
   ketPosition: {
     padding: Padding.p_base,
@@ -454,6 +455,8 @@ const styles = StyleSheet.create({
   stats: {
     width: 360,
     height: 320,
+    top: 30,
+    margin: 'auto',
     maxWidth: '100%',
     maxHeight: '100%',
   },

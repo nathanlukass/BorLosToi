@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     height: 800,
     // overflow: 'hidden',
     // width: '100%',
-    backgroundColor: Color.schemesOnPrimary,
+    //backgroundColor: Color.schemesOnPrimary,
   },
 });
 

@@ -18,31 +18,19 @@ const FilterCheckBox = ({isChecked, onChange}) => {
 
 const styles = StyleSheet.create({
   container: {
-<<<<<<< Updated upstream
-    top:-55,
-    left:-8,
-    flexDirection: 'row', // Align CheckBox and Text horizontally
-    alignItems: 'center', // Center the items vertically
-  },
-  textStyle: {
-    top:0,
-    marginLeft: 8, 
-    fontSize: 16,   
-    color: '#000', 
-    fontStyle: 'italic',
-  }
-})
-=======
     flexDirection: 'row',
     alignItems: 'center',
   },
   checkbox: {
-    marginRight: 8, // Add some space between the checkbox and the text
+    marginRight: 8,
+    top:-48,
+    left:-8,
   },
   label: {
+    top :-48,
     marginLeft: 8,
+    left:-16
   },
 });
 
 export default FilterCheckBox;
->>>>>>> Stashed changes

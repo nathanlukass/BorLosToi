@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     top: 649,
-    left: 17,
+    left: 30,
     alignSelf: 'center',
     width: 329,
     height: 300,
@@ -260,7 +260,6 @@ const styles = StyleSheet.create({
   aboutApp: {
     top: 577,
     width: 322,
-    left: 32,
     alignSelf: 'center'
   },
   standbydonorChild: {
@@ -291,7 +290,7 @@ const styles = StyleSheet.create({
   },
   standbydonor: {
     top: 524,
-    left: 32,
+    alignSelf:'center',
   },
   profileScreenNurseChild: {
     top: -2,
