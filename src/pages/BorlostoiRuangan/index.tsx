@@ -44,93 +44,85 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/mujair.png')}
+              source={require('../../../assets/mujairA.png')}
             />
-            <Text style={styles.roomText}>MUJAIR A</Text>
           </Pressable>
 
           {/* Tombol MUJAIR B */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsMujairB')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/mujair.png')}
+              source={require('../../../assets/mujairB.png')}
             />
-            <Text style={styles.roomText}>MUJAIR B</Text>
           </Pressable>
 
           {/* Tombol MUJAIR C */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsMujairC')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/mujair.png')}
+              source={require('../../../assets/mujairC.png')}
             />
-            <Text style={styles.roomText}>MUJAIR C</Text>
           </Pressable>
 
           {/* Tombol NIKE */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsNike')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/vector1.png')}
+              source={require('../../../assets/nike.png')}
             />
-            <Text style={styles.roomText}>NIKE</Text>
           </Pressable>
 
           {/* Tombol PAYANGKA */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsPayangka')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/group1.png')}
+              source={require('../../../assets/payangka.png')}
             />
-            <Text style={styles.roomText}>PAYANGKA</Text>
           </Pressable>
 
           {/* Tombol NEONATI */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsNeonati')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/mujair.png')}
+              source={require('../../../assets/neonatii.png')}
             />
-            <Text style={styles.roomText}>NEONATI</Text>
           </Pressable>
 
           {/* Tombol BOMBOYA */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsBomboya')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/fish.png')}
+              source={require('../../../assets/bomboya.png')}
             />
-            <Text style={styles.roomText}>BOMBOYA</Text>
           </Pressable>
 
           {/* Tombol KARPER */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsKarper')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/karper.png')}
+              source={require('../../../assets/karperr.png')}
             />
-            <Text style={styles.roomText}>KARPER</Text>
           </Pressable>
         </View>
 
@@ -138,13 +130,12 @@ const BorlostoiRuangan = () => {
         <View style={styles.centeredButtonContainer}>
           <Pressable
             style={[styles.roomButton, styles.shadowBox, styles.centeredButton]} // Added centeredButton style
-            onPress={() => navigation.navigate('')}>
+            onPress={() => navigation.navigate('StatsICU')}>
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/group1.png')}
+              source={require('../../../assets/icu.png')}
             />
-            <Text style={styles.roomText}>ICU</Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -173,12 +164,15 @@ const styles = StyleSheet.create({
   icon: {
     width: '100%',
     height: '100%',
+    marginLeft: -40,
+    marginTop: -3,
   },
   headerTitle: {
     fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     textAlign: 'center',
+    left: 39,
   },
   buttonGrid: {
     flexDirection: 'row',
@@ -197,9 +191,9 @@ const styles = StyleSheet.create({
     top: 10,
   },
   roomIcon: {
-    width: 100,
-    height: 50,
-    marginBottom: 10,
+    width: 130,
+    height: 100,
+    marginBottom: 0,
   },
   roomText: {
     top: 8,

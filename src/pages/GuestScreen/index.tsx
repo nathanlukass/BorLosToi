@@ -59,9 +59,6 @@ const ScreenGuest = () => {
         <Text style={[styles.filter1Ruangan, styles.filterTypo]}>
           Filter by Ruangan
         </Text>
-        <Text style={[styles.filter1Ruangan, styles.filterTypo]}>
-          Filter by Ruangan
-        </Text>
       </Pressable>
       <Image
         style={[styles.vectorIcon, styles.vectorIconPosition]}
