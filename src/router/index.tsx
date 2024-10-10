@@ -32,6 +32,14 @@ import {
   ChangePassword,
   BorlostoiRuangan,
   StatsMujairA,
+  StatsMujairB,
+  StatsMujairC,
+  StatsNike,
+  StatsPayangka,
+  StatsNeonati,
+  StatsBomboya,
+  StatsKarper,
+  StatsICU,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -167,6 +175,46 @@ const index = () => {
       <Stack.Screen
         name="StatsMujairA"
         component={StatsMujairA}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StatsMujairB"
+        component={StatsMujairB}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StatsMujairC"
+        component={StatsMujairC}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StatsNike"
+        component={StatsNike}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StatsPayangka"
+        component={StatsPayangka}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StatsNeonati"
+        component={StatsNeonati}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StatsBomboya"
+        component={StatsBomboya}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StatsKarper"
+        component={StatsKarper}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="StatsICU"
+        component={StatsICU}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
