@@ -36,6 +36,7 @@ const LoginScreen = ({route}) => {
   const [usernameIsFocused, usernameSetIsFocused] = useState(false);
   const [password, setpassword] = useState('');
   const [passwordIsFocused, passwordSetIsFocused] = useState(false);
+  const [role, setRole] = useState('');
   const [data, setData] = useState([]);
 
   const toggleDropdown = () => {
@@ -83,30 +84,86 @@ const LoginScreen = ({route}) => {
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const handleLogin = () => {
-    if (selectedRole === 'Nurse') {
-      navigation.navigate('HomeScreenNurse');
-    } else if (selectedRole === 'Admin') {
-      navigation.navigate('HomeScreenAdmin');
-    } else {
+  const handleLogin = async () => {
+    if (!username || !password) {
+      showMessage({
+        message: 'Please enter both username and password!',
+        type: 'danger',
+      });
+      return;
+    }
+
+    if (!selectedRole) {
       showMessage({
         message: 'Select your role!',
         type: 'danger',
       });
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/login/authenticate',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+            role: selectedRole, // Send selectedRole to server for validation
+          }),
+        },
+      );
+
+      const jsonResponse = await response.json();
+      console.log(jsonResponse);
+
+      if (response.ok && jsonResponse.user) {
+        const userRole = jsonResponse.user.role;
+
+        // Verify that the role in the response matches the selected role
+        if (userRole.toLowerCase() === selectedRole.toLowerCase()) {
+          // Login successful, save user data
+          setData(jsonResponse.user);
+          showMessage({
+            message: 'Login successful!',
+            type: 'success',
+          });
+
+          // Navigate based on the user role
+          if (userRole === 'nurse') {
+            navigation.navigate('HomeScreenNurse', {
+              user: jsonResponse.user.username,
+            });
+          } else if (userRole === 'admin') {
+            navigation.navigate('HomeScreenAdmin', {
+              user: jsonResponse.user.username,
+            });
+          }
+        } else {
+          // Role mismatch
+          showMessage({
+            message: 'Role, Username or Password mismatch!',
+            type: 'danger',
+          });
+        }
+      } else {
+        // Login failed
+        showMessage({
+          message: jsonResponse.message || 'Login failed!',
+          type: 'danger',
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      showMessage({
+        message: 'An error occurred. Please try again later.',
+        type: 'danger',
+      });
     }
   };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      // Reset the selected role when the screen is focused
-      setSelectedRole(''); // Reset selectedRole to default
-
-      if (route.params?.loggedOut) {
-        Alert.alert('Logged Out!', "you've been logged out.");
-        navigation.setParams({loggedOut: false}); // Clear the loggedOut parameter after showing the alert
-      }
-    }, [route.params?.loggedOut]),
-  );
 
   // const getData = async () => {
   //   try {
@@ -212,8 +269,8 @@ const LoginScreen = ({route}) => {
           activeOpacity={1}
           onPress={() => usernameSetIsFocused(true)}>
           <TextInput
-            style={styles.inputUsername}
             value={username}
+            style={styles.inputUsername}
             onChangeText={setUsername}
             placeholder="Enter your username"
             onFocus={() => usernameSetIsFocused(true)}
@@ -243,9 +300,11 @@ const LoginScreen = ({route}) => {
             onFocus={() => passwordSetIsFocused(true)}
             onBlur={() => passwordSetIsFocused(false)}
             placeholderTextColor={Color.colorDimgray}
+            secureTextEntry={true} // Add this line for secure text entry
           />
         </TouchableOpacity>
       </View>
+
       <View style={[styles.property1default]}>
         <TouchableOpacity
           style={[
