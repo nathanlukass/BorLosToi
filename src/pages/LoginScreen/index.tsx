@@ -34,10 +34,14 @@ const LoginScreen = ({route}) => {
   const rotateAnim = useRef(new Animated.Value(0)).current; // Ref untuk animasi rotasi
   const [username, setUsername] = useState('');
   const [usernameIsFocused, usernameSetIsFocused] = useState(false);
-  const [password, setpassword] = useState('');
-  const [passwordIsFocused, passwordSetIsFocused] = useState(false);
   const [role, setRole] = useState('');
   const [data, setData] = useState([]);
+  const [password, setPassword] = useState('');
+  const [securePassword, setSecurePassword] = useState(true);
+
+  const togglePasswordVisibility = () => {
+    setSecurePassword(!securePassword);
+  };
 
   const toggleDropdown = () => {
     if (isDropdownOpen) {
@@ -281,6 +285,30 @@ const LoginScreen = ({route}) => {
       </View>
       <View style={styles.containerPassword}>
         <Text style={styles.labelPassword}>Password</Text>
+        <TextInput
+          style={styles.inputContainerPassword}
+          placeholder="Enter your password"
+          secureTextEntry={securePassword}
+          value={password}
+          onChangeText={setPassword}
+          placeholderTextColor={Color.colorDimgray}
+        />
+        <TouchableOpacity
+          onPress={togglePasswordVisibility}
+          style={styles.iiconContainer}>
+          <Image
+            source={
+              securePassword
+                ? require('../../assets/images/Eye1.png')
+                : require('../../assets/images/Eye2.png')
+            }
+            style={{width: 23, height: 18}}
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* <View style={styles.containerPassword}>
+        <Text style={styles.labelPassword}>Password</Text>
         <TouchableOpacity
           style={[
             styles.inputContainerPassword,
@@ -303,8 +331,7 @@ const LoginScreen = ({route}) => {
             secureTextEntry={true} // Add this line for secure text entry
           />
         </TouchableOpacity>
-      </View>
-
+      </View> */}
       <View style={[styles.property1default]}>
         <TouchableOpacity
           style={[
@@ -361,6 +388,38 @@ const styles = StyleSheet.create({
     left: -5,
     alignSelf: 'center',
   },
+  // inputContainerPassword: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   borderWidth: 1,
+  //   borderColor: 'grey', // Ganti dengan warna yang sesuai jika ada kondisi fokus
+  //   borderRadius: 8,
+  //   paddingHorizontal: 0,
+  //   marginVertical: 0,
+  // },
+  // inputPassword: {
+  //   flex: 1,
+  //   fontSize: 16,
+  //   paddingVertical: 0,
+  // },
+  iiconContainer: {
+    paddingHorizontal: 5,
+    marginBottom: -20,
+    marginLeft: 300,
+    top: -29,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 0,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    marginBottom: 20,
+  },
   labelPassword: {
     fontSize: FontSize.m3LabelLarge_size,
     fontFamily: FontFamily.poppinsRegular,
@@ -376,6 +435,8 @@ const styles = StyleSheet.create({
     backgroundColor: Color.schemesOnPrimary,
     paddingHorizontal: Padding.p_3xs,
     justifyContent: 'center',
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
   },
   inputPassword: {
     fontSize: FontSize.m3LabelLarge_size,
@@ -406,11 +467,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_3xs,
     justifyContent: 'center',
   },
-  inputUsername: {
-    fontSize: FontSize.m3LabelLarge_size,
-    fontFamily: FontFamily.poppinsRegular,
-    color: Color.colorBlack,
-  },
+  inputUsername: {},
   groupButtonBtn: {
     height: 45,
     width: 320,
