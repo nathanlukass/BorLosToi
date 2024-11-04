@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
   },
   pleaseSelectWhoYouAreWrapper: {
     top: 341,
-    width: 181,
+    width: 200,
     height: 21,
   },
   passwordField: {
