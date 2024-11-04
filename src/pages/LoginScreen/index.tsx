@@ -34,10 +34,17 @@ const LoginScreen = ({route}) => {
   const rotateAnim = useRef(new Animated.Value(0)).current; // Ref untuk animasi rotasi
   const [username, setUsername] = useState('');
   const [usernameIsFocused, usernameSetIsFocused] = useState(false);
+  const [passwordIsFocused, passwordSetIsFocused] = useState(false);
   const [role, setRole] = useState('');
   const [data, setData] = useState([]);
   const [password, setPassword] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
+
+  const resetLoginFields = () => {
+    setUsername('');
+    setPassword('');
+    setSelectedRole('');
+  };
 
   const togglePasswordVisibility = () => {
     setSecurePassword(!securePassword);
@@ -90,71 +97,46 @@ const LoginScreen = ({route}) => {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      showMessage({
+      return showMessage({
         message: 'Please enter both username and password!',
         type: 'danger',
       });
-      return;
     }
 
     if (!selectedRole) {
-      showMessage({
-        message: 'Select your role!',
-        type: 'danger',
-      });
-      return;
+      return showMessage({message: 'Select your role!', type: 'danger'});
     }
 
     try {
+      const formBody = new URLSearchParams({username, password}).toString();
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/login/authenticate',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password,
-            role: selectedRole, // Send selectedRole to server for validation
-          }),
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: formBody,
         },
       );
 
       const jsonResponse = await response.json();
-      console.log(jsonResponse);
-
       if (response.ok && jsonResponse.user) {
-        const userRole = jsonResponse.user.role;
-
-        // Verify that the role in the response matches the selected role
-        if (userRole.toLowerCase() === selectedRole.toLowerCase()) {
-          // Login successful, save user data
-          setData(jsonResponse.user);
-          showMessage({
-            message: 'Login successful!',
-            type: 'success',
-          });
-
-          // Navigate based on the user role
-          if (userRole === 'nurse') {
-            navigation.navigate('HomeScreenNurse', {
-              user: jsonResponse.user.username,
-            });
-          } else if (userRole === 'admin') {
-            navigation.navigate('HomeScreenAdmin', {
-              user: jsonResponse.user.username,
-            });
-          }
+        const userRole = jsonResponse.user.role.toLowerCase();
+        if (userRole === selectedRole.toLowerCase()) {
+          Alert.alert('Login Successful!');
+          navigation.navigate(
+            userRole === 'nurse' ? 'HomeScreenNurse' : 'HomeScreenAdmin',
+            {
+              user: jsonResponse.user, // Pass the entire user object to next page
+              resetLoginFields,
+            },
+          );
         } else {
-          // Role mismatch
           showMessage({
-            message: 'Role, Username or Password mismatch!',
+            message: 'Role, Username, or Password mismatch!',
             type: 'danger',
           });
         }
       } else {
-        // Login failed
         showMessage({
           message: jsonResponse.message || 'Login failed!',
           type: 'danger',
@@ -283,55 +265,43 @@ const LoginScreen = ({route}) => {
           />
         </TouchableOpacity>
       </View>
+
       <View style={styles.containerPassword}>
         <Text style={styles.labelPassword}>Password</Text>
-        <TextInput
-          style={styles.inputContainerPassword}
-          placeholder="Enter your password"
-          secureTextEntry={securePassword}
-          value={password}
-          onChangeText={setPassword}
-          placeholderTextColor={Color.colorDimgray}
-        />
-        <TouchableOpacity
-          onPress={togglePasswordVisibility}
-          style={styles.iiconContainer}>
-          <Image
-            source={
-              securePassword
-                ? require('../../assets/images/Eye1.png')
-                : require('../../assets/images/Eye2.png')
-            }
-            style={{width: 23, height: 18}}
-          />
-        </TouchableOpacity>
-      </View>
-
-      {/* <View style={styles.containerPassword}>
-        <Text style={styles.labelPassword}>Password</Text>
-        <TouchableOpacity
+        <View
           style={[
             styles.inputContainerPassword,
             {
               borderColor: passwordIsFocused
                 ? Color.colorMediumaquamarine
                 : 'grey',
+              flexDirection: 'row', // Arrange TextInput and icon in a row
+              alignItems: 'center', // Center vertically
             },
-          ]}
-          activeOpacity={1}
-          onPress={() => passwordSetIsFocused(true)}>
+          ]}>
           <TextInput
-            style={styles.inputPassword}
+            style={[styles.inputPassword, {flex: 1}]} // Make TextInput take remaining space
             value={password}
-            onChangeText={setpassword}
+            onChangeText={setPassword}
             placeholder="Enter your password"
             onFocus={() => passwordSetIsFocused(true)}
             onBlur={() => passwordSetIsFocused(false)}
             placeholderTextColor={Color.colorDimgray}
-            secureTextEntry={true} // Add this line for secure text entry
+            secureTextEntry={securePassword}
           />
-        </TouchableOpacity>
-      </View> */}
+          <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
+            <Image
+              source={
+                securePassword
+                  ? require('../../assets/images/Eye1.png')
+                  : require('../../assets/images/Eye2.png')
+              }
+              style={{width: 23, height: 18, marginLeft: 8}} // Add margin if needed
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <View style={[styles.property1default]}>
         <TouchableOpacity
           style={[
@@ -406,7 +376,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     marginBottom: -20,
     marginLeft: 300,
-    top: -29,
+    top: -30,
   },
   input: {
     flex: 1,
@@ -717,7 +687,7 @@ const styles = StyleSheet.create({
     left: -10,
     width: 317,
     height: 145,
-    top: 250,
+    top: 245,
     alignSelf: 'center',
   },
 });

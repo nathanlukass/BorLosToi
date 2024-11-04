@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, View, Text, Image, Pressable, Modal} from 'react-native';
 import FrameComponent from '../../../components/FrameComponent';
-import { useState,useEffect,useCallback } from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import Stats from '../../../components/Stats';
@@ -13,7 +13,9 @@ import {
   Padding,
 } from '../../../GlobalStyles';
 
-const HomeScreenAdmin = () => {
+const HomeScreenAdmin = ({route}) => {
+  const {user} = route.params;
+  const {username, role, ruangan, id_user, nama} = user; // Access all relevant fields
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
@@ -25,34 +27,33 @@ const HomeScreenAdmin = () => {
     setLihatBORLOSVisible(false);
   }, []);
 
-
   return (
     <View style={styles.homeScreenAdmin}>
       <View style={[styles.welcomeBar, styles.welcomeLayout]}>
         <View style={[styles.welcomeBarChild, styles.childShadowBox]} />
-        <FrameComponent veronikaBedes="Geraldo Kawengian " />
-        <Text style={styles.admin}>{'Admin '}</Text>
+        <FrameComponent veronikaBedes={nama} />
+        <Text style={styles.admin}>{'Admin'}</Text>
       </View>
       <View style={[styles.lihatBorlostoi1FlexBox, styles.lihatBorlostoi1]}>
         <View style={[styles.lihatBorlostoiItem, styles.lihatLayout]} />
-      <Pressable
-            style={styles.lihatBorLosContainer}
-            onPress={openLihatBORLOS}>
-            <Text style={styles.text}>
-              <Text style={styles.lihatBorLosContainer1}>
-                <Text style={styles.lihat}>
-                  <Text style={styles.lihat1}>Lihat</Text>
-                </Text>
-                <Text style={styles.borLosToiBtoGdrNdr}>
-                  <Text style={styles.lihat}>{'  '}</Text>
-                  <Text style={styles.borLosToi}>
-                    {'BOR LOS TOI BTO GDR & NDR'}
-                  </Text>
+        <Pressable
+          style={styles.lihatBorLosContainer}
+          onPress={openLihatBORLOS}>
+          <Text style={styles.text}>
+            <Text style={styles.lihatBorLosContainer1}>
+              <Text style={styles.lihat}>
+                <Text style={styles.lihat1}>Lihat</Text>
+              </Text>
+              <Text style={styles.borLosToiBtoGdrNdr}>
+                <Text style={styles.lihat}>{'  '}</Text>
+                <Text style={styles.borLosToi}>
+                  {'BOR LOS TOI BTO GDR & NDR'}
                 </Text>
               </Text>
             </Text>
-          </Pressable>
-          </View>
+          </Text>
+        </Pressable>
+      </View>
       <Pressable onPress={() => navigation.navigate('PrintOutScreen')}>
         <View style={[styles.printOutBox, styles.lihatLayout]}>
           <View style={[styles.lihatBorlostoiChild, styles.lihatLayout]} />
@@ -82,7 +83,7 @@ const HomeScreenAdmin = () => {
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate('ProfileScreenAdmin')}>
+          onPress={() => navigation.navigate('ProfileScreenAdmin', {user})}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
@@ -156,7 +157,6 @@ const styles = StyleSheet.create({
     top: '50%',
     textAlign: 'left',
     position: 'absolute',
-    
   },
   lihatBorlostoi1FlexBox: {
     justifyContent: 'space-between',
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: Color.schemesOnPrimary,
   },
- borLosToiBtoGdrNdr: {
+  borLosToiBtoGdrNdr: {
     color: Color.notSoBlack,
   },
   lihat: {
