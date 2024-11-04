@@ -31,10 +31,10 @@ const ProfileScreenAdmin = ({navigation, route}) => {
     <View style={styles.profileScreenAdmin}>
       <Pressable
         style={styles.bottomNavigation}
-        onPress={() => navigation.navigate('InputScreenNurse')}>
+        onPress={() => navigation.navigate('InputScreenNurse', {user})}>
         <Pressable
           style={[styles.homeParent, styles.parentFlexBox]}
-          onPress={() => navigation.navigate('HomeScreenAdmin')}>
+          onPress={() => navigation.navigate('HomeScreenAdmin', {user})}>
           <Image
             style={[styles.homeIcon, styles.iconLayout]}
             resizeMode="cover"
@@ -44,7 +44,7 @@ const ProfileScreenAdmin = ({navigation, route}) => {
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate('EditScreenAdmin')}>
+          onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
           <Image
             style={[styles.homeIcon, styles.iconLayout]}
             resizeMode="cover"

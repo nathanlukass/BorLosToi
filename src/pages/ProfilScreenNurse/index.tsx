@@ -36,7 +36,7 @@ const ProfileScreenNurse = ({route, navigation}) => {
         onPress={() => navigation.navigate('InputScreenNurse')}>
         <Pressable
           style={[styles.homeParent, styles.parentFlexBox]}
-          onPress={() => navigation.navigate('HomeScreenNurse')}>
+          onPress={() => navigation.navigate('HomeScreenNurse', {user})}>
           <Image
             style={[styles.homeIcon, styles.iconLayout]}
             resizeMode="cover"
@@ -46,7 +46,7 @@ const ProfileScreenNurse = ({route, navigation}) => {
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate('NurseInputPage')}>
+          onPress={() => navigation.navigate('NurseInputPage', {user})}>
           <Image
             style={[styles.homeIcon, styles.iconLayout]}
             resizeMode="cover"

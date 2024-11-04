@@ -73,7 +73,7 @@ const HomeScreenAdmin = ({route}) => {
         </View>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate('EditScreenAdmin')}>
+          onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
