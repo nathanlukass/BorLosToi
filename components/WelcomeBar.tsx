@@ -1,8 +1,8 @@
-import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import FrameComponent from "./FrameComponent";
-import { FontSize, Border, Color, FontFamily } from "../GlobalStyles";
-import { Gap } from "../src/components";
+import * as React from 'react';
+import {StyleSheet, View, Text} from 'react-native';
+import FrameComponent from './FrameComponent';
+import {FontSize, Border, Color, FontFamily} from '../GlobalStyles';
+import {Gap} from '../src/components';
 
 const WelcomeBar = () => {
   return (
@@ -10,7 +10,7 @@ const WelcomeBar = () => {
       <View style={[styles.welcomeBarChild, styles.welcomeLayout]} />
       <Text style={[styles.mujair, styles.mujairTypo]}>Mujair</Text>
       <FrameComponent veronikaBedes="Veronika Bedes" />
-      <Gap height={100}/>
+      <Gap height={100} />
       <Text style={[styles.ruangan, styles.mujairTypo]}>Ruangan :</Text>
     </View>
   );
@@ -19,18 +19,18 @@ const WelcomeBar = () => {
 const styles = StyleSheet.create({
   welcomeLayout: {
     width: 328,
-    position: "absolute",
+    position: 'absolute',
   },
   mujairTypo: {
-    textAlign: "left",
+    textAlign: 'left',
     fontSize: FontSize.m3BodyLarge_size,
     top: 92,
-    position: "absolute",
+    position: 'absolute',
   },
   welcomeBarChild: {
     top: 0,
     left: 0,
-    shadowColor: "rgba(0, 0, 0, 0.25)",
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -49,14 +49,14 @@ const styles = StyleSheet.create({
   },
   ruangan: {
     left: 13,
-    fontWeight: "600",
+    fontWeight: '600',
     fontFamily: FontFamily.poppinsSemiBold,
     color: Color.colorMediumaquamarine,
   },
   welcomeBar: {
     marginLeft: -164,
     top: 44,
-    left: "50%",
+    left: '50%',
     height: 166,
   },
 });

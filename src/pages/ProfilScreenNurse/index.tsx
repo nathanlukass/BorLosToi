@@ -8,13 +8,26 @@ import {
   Border,
   Color,
   Padding,
+  Alert,
 } from '../../../GlobalStyles';
 
-const ProfileScreenNurse = () => {
+const ProfileScreenNurse = ({route, navigation}) => {
+  const {user} = route.params; // Access user details from route parameters
+  const {username, role, ruangan, id_user, nama} = user; // Destructure user object
+
   const handleLogoutPress = () => {
-    navigation.navigate('LoginScreen', { loggedOut: true });
+    if (route.params && route.params.resetLoginFields) {
+      route.params.resetLoginFields();
+    }
+
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
+    });
+
+    alert("You've been logged out");
   };
-  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  // const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
     <View style={styles.profileScreenNurse}>
@@ -54,35 +67,42 @@ const ProfileScreenNurse = () => {
         <Pressable
           style={[styles.logoutButtonChild, styles.childShadowBox]}
           onPress={handleLogoutPress}>
-        <Text style={styles.logOut}>Log Out</Text>
-          </Pressable>
+          <Text style={styles.logOut}>Log Out</Text>
+        </Pressable>
       </View>
-      <Pressable onPress={() => navigation.navigate('AboutApp', { source: 'nurse' })}>
-      <View style={[styles.aboutApp, styles.aboutAppLayout]}>
-        <View style={[styles.aboutAppChild, styles.standbydonorChildLayout]} />
-        <Text style={[styles.aboutApp1, styles.aboutApp1Typo]}>About App</Text>
-        <Image
-          style={styles.iconInfoEmpty}
-          resizeMode="cover"
-          source={require('../../../assets/-icon-info-empty.png')}
-        />
-      </View>
+      <Pressable
+        onPress={() => navigation.navigate('AboutApp', {source: 'nurse'})}>
+        <View style={[styles.aboutApp, styles.aboutAppLayout]}>
+          <View
+            style={[styles.aboutAppChild, styles.standbydonorChildLayout]}
+          />
+          <Text style={[styles.aboutApp1, styles.aboutApp1Typo]}>
+            About App
+          </Text>
+          <Image
+            style={styles.iconInfoEmpty}
+            resizeMode="cover"
+            source={require('../../../assets/-icon-info-empty.png')}
+          />
+        </View>
       </Pressable>
       <Pressable
-      onPress={() => navigation.navigate('ChangePassword', { source: 'nurse' })}>
-      <View style={[styles.standbydonor, styles.standbydonorChildLayout]}>
-        <View
-          style={[styles.standbydonorChild, styles.standbydonorChildLayout]}
-        />
-        <Text style={[styles.changePassword, styles.aboutApp1Typo]}>
-          Change Password
-        </Text>
-        <Image
-          style={[styles.settingsIcon, styles.iconLayout]}
-          resizeMode="cover"
-          source={require('../../../assets/settings1.png')}
-        />
-      </View>
+        onPress={() =>
+          navigation.navigate('ChangePassword', {source: 'nurse'})
+        }>
+        <View style={[styles.standbydonor, styles.standbydonorChildLayout]}>
+          <View
+            style={[styles.standbydonorChild, styles.standbydonorChildLayout]}
+          />
+          <Text style={[styles.changePassword, styles.aboutApp1Typo]}>
+            Change Password
+          </Text>
+          <Image
+            style={[styles.settingsIcon, styles.iconLayout]}
+            resizeMode="cover"
+            source={require('../../../assets/settings1.png')}
+          />
+        </View>
       </Pressable>
       <View style={styles.profileScreenNurseChild} />
       <Image
@@ -91,9 +111,7 @@ const ProfileScreenNurse = () => {
         source={require('../../../assets/memoji.png')}
       />
 
-      <Text style={[styles.joshuaTengker, styles.adminLayout]}>
-        Joshua Tengker
-      </Text>
+      <Text style={[styles.joshuaTengker, styles.adminLayout]}>{nama}</Text>
       <Text style={[styles.admin, styles.adminLayout]}>Nurse</Text>
       <Text style={[styles.profile, styles.profilePosition]}>Profile</Text>
     </View>
@@ -262,8 +280,8 @@ const styles = StyleSheet.create({
     top: 577,
     width: 322,
     left: 32,
-    alignSelf: 'center'
-,  },
+    alignSelf: 'center',
+  },
   standbydonorChild: {
     borderRadius: Border.br_xs,
     elevation: 9,

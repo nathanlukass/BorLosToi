@@ -1,6 +1,8 @@
 import React, {useState, useCallback} from 'react';
 import {Image, StyleSheet, View, Text, Pressable, Modal} from 'react-native';
 import WelcomeBar from '../../../components/WelcomeBar';
+import FrameComponent from '../../../components/FrameComponent';
+import {Gap} from '../../../src/components';
 import DashbordIsianHariIni from '../../../components/DashbordIsianHariIni';
 import Stats from '../../../components/Stats';
 // import AndroidStatusBar from '../../../components/AndroidStatusBar';
@@ -14,7 +16,10 @@ import {
   Padding,
 } from '../../../GlobalStyles';
 
-const HomeScreenNurse = () => {
+const HomeScreenNurse = ({route}) => {
+  const {user} = route.params;
+  const {username, role, ruangan, id_user, nama} = user; // Access all relevant fields
+
   const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
@@ -29,7 +34,14 @@ const HomeScreenNurse = () => {
   return (
     <>
       <View style={styles.homeScreenNurse}>
-        <WelcomeBar />
+        {/* <WelcomeBar /> */}
+        <View style={[styles.welcomeBar, styles.welcomeLayout]}>
+          <View style={[styles.welcomeBarChild, styles.welcomeLayout]} />
+          <Text style={[styles.mujair, styles.mujairTypo]}>{ruangan}</Text>
+          <FrameComponent veronikaBedes={nama} />
+          <Gap height={100} />
+          <Text style={[styles.ruangan, styles.mujairTypo]}>Ruangan :</Text>
+        </View>
         <Image
           style={styles.logoApp4}
           resizeMode="cover"
@@ -91,7 +103,7 @@ const HomeScreenNurse = () => {
           </Pressable>
           <Pressable
             style={styles.parentFlexBox}
-            onPress={() => navigation.navigate('ProfilScreenNurse')}>
+            onPress={() => navigation.navigate('ProfilScreenNurse', {user})}>
             <Image
               style={styles.homeIcon}
               resizeMode="cover"
@@ -242,6 +254,48 @@ const styles = StyleSheet.create({
     // width: '100%',
     // backgroundColor: Color.schemesOnPrimary,
     // alignSelf: 'center',
+  },
+  welcomeLayout: {
+    width: 328,
+    position: 'absolute',
+  },
+  mujairTypo: {
+    textAlign: 'left',
+    fontSize: FontSize.m3BodyLarge_size,
+    top: 92,
+    position: 'absolute',
+  },
+  welcomeBarChild: {
+    top: 0,
+    left: 0,
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowRadius: 9,
+    elevation: 9,
+    shadowOpacity: 1,
+    borderRadius: Border.br_xs,
+    backgroundColor: Color.schemesOnPrimary,
+    height: 148,
+  },
+  mujair: {
+    left: 104,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
+  },
+  ruangan: {
+    left: 13,
+    fontWeight: '600',
+    fontFamily: FontFamily.poppinsSemiBold,
+    color: Color.colorMediumaquamarine,
+  },
+  welcomeBar: {
+    marginLeft: -164,
+    top: 44,
+    left: '50%',
+    height: 166,
   },
 });
 
