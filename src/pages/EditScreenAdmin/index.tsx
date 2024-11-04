@@ -17,7 +17,10 @@ import {
   FontSize,
 } from '../../../GlobalStyles';
 
-const EditScreenAdmin = () => {
+const EditScreenAdmin = ({route}) => {
+  const {user} = route.params; // Access user details from route parameters
+  const {username, role, ruangan, id_user, nama} = user; // Destructure user object
+
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   return (
@@ -28,7 +31,7 @@ const EditScreenAdmin = () => {
             <View style={styles.pilihButtonChild} />
             <Pressable
               style={[styles.mujairA, styles.mujairShadowBox]}
-              onPress={() => navigation.navigate('EditMujairA')}>
+              onPress={() => navigation.navigate('EditMujairA', {user})}>
               <Image
                 style={[styles.mujairIcon, styles.mujairIconLayout]}
                 resizeMode="cover"
@@ -36,10 +39,10 @@ const EditScreenAdmin = () => {
               />
               <Text style={[styles.mujair, styles.mujairTypo]}>MUJAIR A</Text>
             </Pressable>
-            
+
             <Pressable
               style={[styles.mujairB, styles.mujairShadowBox]}
-              onPress={() => navigation.navigate('EditMujairB')}>
+              onPress={() => navigation.navigate('EditMujairB', {user})}>
               <Image
                 style={[styles.mujairIcon, styles.mujairIconLayout]}
                 resizeMode="cover"
@@ -49,7 +52,7 @@ const EditScreenAdmin = () => {
             </Pressable>
             <Pressable
               style={[styles.nike, styles.nikeShadowBox]}
-              onPress={() => navigation.navigate('EditNike')}>
+              onPress={() => navigation.navigate('EditNike', {user})}>
               <Image
                 style={styles.vectorIcon}
                 resizeMode="cover"
@@ -59,7 +62,7 @@ const EditScreenAdmin = () => {
             </Pressable>
             <Pressable
               style={[styles.neonati, styles.mujairShadowBox]}
-              onPress={() => navigation.navigate('EditNeonati')}>
+              onPress={() => navigation.navigate('EditNeonati', {user})}>
               <Image
                 style={[styles.neonatiIcon, styles.iconPosition]}
                 resizeMode="cover"
@@ -69,7 +72,7 @@ const EditScreenAdmin = () => {
             </Pressable>
             <Pressable
               style={[styles.obgynginekologi, styles.obgynShadowBox]}
-              onPress={() => navigation.navigate('EditBomboya')}>
+              onPress={() => navigation.navigate('EditBomboya', {user})}>
               <Image
                 style={[styles.fishIcon, styles.iconPosition]}
                 resizeMode="cover"
@@ -79,7 +82,7 @@ const EditScreenAdmin = () => {
             </Pressable>
             <Pressable
               style={[styles.bomboya1, styles.mujairShadowBox]}
-              onPress={() => navigation.navigate('EditPayangka')}>
+              onPress={() => navigation.navigate('EditPayangka', {user})}>
               <Image
                 style={styles.groupIcon}
                 resizeMode="cover"
@@ -90,7 +93,7 @@ const EditScreenAdmin = () => {
 
             <Pressable
               style={[styles.obgyn, styles.obgynShadowBox]}
-              onPress={() => navigation.navigate('EditKarper')}>
+              onPress={() => navigation.navigate('EditKarper', {user})}>
               <Image
                 style={styles.karperIcon}
                 resizeMode="cover"
@@ -105,7 +108,7 @@ const EditScreenAdmin = () => {
                     <View style={[styles.groupParent, styles.groupLayout2]}>
                       <Pressable
                         style={styles.frameParent}
-                        onPress={() => navigation.navigate('EditIcu')}>
+                        onPress={() => navigation.navigate('EditIcu', {user})}>
                         <Image
                           style={styles.groupIconIcu}
                           resizeMode="cover"
@@ -121,7 +124,7 @@ const EditScreenAdmin = () => {
 
             <Pressable
               style={[styles.icu2, styles.nikeShadowBox]}
-              onPress={() => navigation.navigate('EditMujairC')}>
+              onPress={() => navigation.navigate('EditMujairC', {user})}>
               <Image
                 style={[styles.mujairIcon, styles.mujairIconLayout]}
                 resizeMode="cover"
@@ -162,7 +165,7 @@ const EditScreenAdmin = () => {
             /> */}
           </View>
           <Text style={[styles.arilSangari, styles.halloAdminTypo]}>
-            Aril Sangari
+            {nama}
           </Text>
           <Text style={[styles.halloAdmin, styles.halloAdminTypo]}>
             Hallo Admin
@@ -176,10 +179,10 @@ const EditScreenAdmin = () => {
       </ScrollView>
       <Pressable
         style={styles.bottomNavigation}
-        onPress={() => navigation.navigate('EditScreenAdmin')}>
+        onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
         <Pressable
           style={[styles.homeParent, styles.parentFlexBox]}
-          onPress={() => navigation.navigate('HomeScreenAdmin')}>
+          onPress={() => navigation.navigate('HomeScreenAdmin', {user})}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
@@ -189,7 +192,7 @@ const EditScreenAdmin = () => {
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate('EditScreenAdmin')}>
+          onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"
@@ -199,7 +202,7 @@ const EditScreenAdmin = () => {
         </Pressable>
         <Pressable
           style={styles.parentFlexBox}
-          onPress={() => navigation.navigate('ProfileScreenAdmin')}>
+          onPress={() => navigation.navigate('ProfileScreenAdmin', {user})}>
           <Image
             style={styles.homeIcon}
             resizeMode="cover"

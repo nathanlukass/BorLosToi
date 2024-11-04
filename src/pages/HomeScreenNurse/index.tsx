@@ -19,6 +19,7 @@ import {
 const HomeScreenNurse = ({route}) => {
   const {user} = route.params;
   const {username, role, ruangan, id_user, nama} = user; // Access all relevant fields
+  console.log('Route params:', route.params);
 
   const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -93,7 +94,7 @@ const HomeScreenNurse = ({route}) => {
           </View>
           <Pressable
             style={styles.parentFlexBox}
-            onPress={() => navigation.navigate('NurseInputPage')}>
+            onPress={() => navigation.navigate('NurseInputPage', {user})}>
             <Image
               style={styles.homeIcon}
               resizeMode="cover"

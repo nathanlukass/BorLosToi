@@ -52,7 +52,10 @@ const InputButton = ({label}: {label: string}) => {
   );
 };
 
-const NurseInputPage = () => {
+const NurseInputPage = ({route}) => {
+  const {user} = route.params; // Access user details from route parameters
+  const {username, role, ruangan, id_user, nama} = user; // Destructure user object
+
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
 
@@ -73,7 +76,7 @@ const NurseInputPage = () => {
         <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
-            onPress={() => navigation.navigate('HomeScreenNurse')}>
+            onPress={() => navigation.navigate('HomeScreenNurse', {user})}>
             <Image
               style={styles.icon}
               resizeMode="cover"
@@ -92,7 +95,7 @@ const NurseInputPage = () => {
 
         {/* Jumlah tempat tidur section */}
         <View style={styles.section}>
-          <View style={styles.bedInputContainer}> 
+          <View style={styles.bedInputContainer}>
             <Text style={styles.label}>Jumlah tempat tidur:</Text>
             <Text style={styles.jumlahBed}>20</Text>
           </View>
@@ -175,7 +178,6 @@ const NurseInputPage = () => {
 
 export default NurseInputPage;
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -248,10 +250,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: Color.notSoBlack,
   },
-  jumlahBed:{
-    left:35,
-    margin:'auto',
-    top:8,
+  jumlahBed: {
+    left: 35,
+    margin: 'auto',
+    top: 8,
     fontSize: 16,
     fontFamily: FontFamily.poppinsRegular,
     marginBottom: 10,
