@@ -6149,11 +6149,6 @@ react-native-gesture-handler@^2.18.1, "react-native-gesture-handler@>= 1.0.0":
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
-react-native-image-crop-picker@^0.41.4:
-  version "0.41.4"
-  resolved "https://registry.npmjs.org/react-native-image-crop-picker/-/react-native-image-crop-picker-0.41.4.tgz"
-  integrity sha512-busd3bjSf3afMF3V30+4bN6V92jBTp22zEamPj0QtAQz8MQT4zmXLeZ9m2KRIXylFeJM94We9AEAgg/TvWQUvw==
-
 react-native-iphone-screen-helper@^2.0.2:
   version "2.1.1"
   resolved "https://registry.npmjs.org/react-native-iphone-screen-helper/-/react-native-iphone-screen-helper-2.1.1.tgz"
@@ -6214,7 +6209,7 @@ react-native-vector-icons@*, react-native-vector-icons@^10.2.0, react-native-vec
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native@*, "react-native@>= 0.62", react-native@>=0.40.0, react-native@>=0.42.0, react-native@0.75.1:
+react-native@*, "react-native@>= 0.62", react-native@>=0.42.0, react-native@0.75.1:
   version "0.75.1"
   dependencies:
     "@jest/create-cache-key-function" "^29.6.3"

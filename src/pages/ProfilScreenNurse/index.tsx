@@ -1,6 +1,5 @@
 import * as React from 'react';
-import ImagePicker from 'react-native-image-crop-picker';
-import {Image, StyleSheet, Text, View, Pressable, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {
@@ -29,9 +28,6 @@ const ProfileScreenNurse = ({route, navigation}) => {
     alert("You've been logged out");
   };
   // const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const pilihfoto = () => {
-    console.warn('Choose Photo')
-  }
 
   return (
     <View style={styles.profileScreenNurse}>
@@ -58,14 +54,14 @@ const ProfileScreenNurse = ({route, navigation}) => {
           />
           <Text style={[styles.riwayat, styles.homeTypo]}>Edit</Text>
         </Pressable>
-        <TouchableOpacity style={styles.parentFlexBox} onPress={pilihfoto}>
+        <View style={styles.parentFlexBox}>
           <Image
             style={[styles.homeIcon, styles.iconLayout]}
             resizeMode="cover"
             source={require('../../../assets/account-circle.png')}
           />
           <Text style={[styles.profil, styles.homeTypo]}>Profil</Text>
-        </TouchableOpacity>
+        </View>
       </Pressable>
       <View style={[styles.logoutButton, styles.aboutAppLayout]}>
         <Pressable
