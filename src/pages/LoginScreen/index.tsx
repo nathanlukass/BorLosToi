@@ -296,7 +296,7 @@ const LoginScreen = ({route}) => {
                   ? require('../../assets/images/Eye1.png')
                   : require('../../assets/images/Eye2.png')
               }
-              style={{width: 23, height: 18, marginLeft: 8}} // Add margin if needed
+              style={{width: 22, height: 18, marginLeft: 8}} // Add margin if needed
             />
           </TouchableOpacity>
         </View>
@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
   },
   pleaseSelectWhoYouAreWrapper: {
     top: 341,
-    width: 181,
+    width: 200,
     height: 21,
   },
   passwordField: {
@@ -636,14 +636,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   selectUserType: {
-    marginTop: -7,
-    top: '80%',
+    marginTop: -5,
+    top: '70%',
     left: 15,
     fontSize: FontSize.m3LabelLarge_size,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.colorDimgray,
     textAlign: 'left',
-    width: 119,
+    width: 100,
     height: 19,
     zIndex: 0,
     position: 'absolute',

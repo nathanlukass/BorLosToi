@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/native';
+import ImagePicker from 'react-native-image-crop-picker';
+import {Image, StyleSheet, Text, View, Pressable, TouchableOpacity, TouchableHighlight} from 'react-native';
 import {
   FontFamily,
   FontSize,
@@ -10,6 +9,8 @@ import {
   Padding,
   Alert,
 } from '../../../GlobalStyles';
+import { TouchableRipple } from 'react-native-paper';
+import { useState } from 'react';
 
 const ProfileScreenNurse = ({route, navigation}) => {
   const {user} = route.params; // Access user details from route parameters
@@ -28,6 +29,15 @@ const ProfileScreenNurse = ({route, navigation}) => {
     alert("You've been logged out");
   };
   // const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const pilihfoto = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true
+    }).then(image => {
+      console.log(image);
+    });
+  }
 
   return (
     <View style={styles.profileScreenNurse}>
@@ -104,12 +114,16 @@ const ProfileScreenNurse = ({route, navigation}) => {
           />
         </View>
       </Pressable>
-      <View style={styles.profileScreenNurseChild} />
-      <Image
-        style={[styles.memojiIcon, styles.profilePosition]}
+      <View style={styles.profileScreenNurseChild}>
+        <TouchableOpacity onPress={pilihfoto}>
+        <Image
+        style={[styles.memojiIcon, styles.profilePosition]} 
         resizeMode="cover"
         source={require('../../../assets/memoji.png')}
       />
+        </TouchableOpacity>
+      
+      </View>
 
       <Text style={[styles.joshuaTengker, styles.adminLayout]}>{nama}</Text>
       <Text style={[styles.admin, styles.adminLayout]}>Nurse</Text>
