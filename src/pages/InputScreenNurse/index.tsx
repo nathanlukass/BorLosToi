@@ -19,6 +19,7 @@ import RealTimeClock from '../../components/atoms/Time';
 
 const NurseInputPage = ({ route }) => {
   const { user } = route.params;
+  const {username, role, ruangan, id_user, nama} = user; // Access all relevant fields
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState('22');
@@ -30,6 +31,18 @@ const NurseInputPage = ({ route }) => {
   const [pasienRujuk, setPasienRujuk] = useState('0');
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
+  
+  // New state variables for additional fields
+  const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
+  const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
+  const [pasienMasihDirawat, setPasienMasihDirawat] = useState('0');
+  const [pasienLamaDirawat, setPasienLamaDirawat] = useState('0');
+  const [banyakPasien, setBanyakPasien] = useState('0');
+  const [jumlahHari, setJumlahHari] = useState('0');
+  const [kelas1, setKelas1] = useState('0');
+  const [kelas2, setKelas2] = useState('0');
+  const [kelas3, setKelas3] = useState('0');
+  const [namaruangan, setRuangan] = useState(ruangan);
 
   const increment = (setter) => () => setter((prev) => (parseInt(prev, 10) + 1).toString());
   const decrement = (setter) => () =>
@@ -56,6 +69,16 @@ const NurseInputPage = ({ route }) => {
             Pasien_Rujuk: pasienRujuk,
             Pasien_Aps: pasienAps,
             Pasien_lain_lain: pasienLainLain,
+            Pasien_kurang_dari_48jam: pasienKurangDari48Jam,
+            Pasien_lebih_dari_48jam: pasienLebihDari48Jam,
+            Pasien_Masih_Dirawat: pasienMasihDirawat,
+            Pasien_Lama_Dirawat: pasienLamaDirawat,
+            Banyak_Pasien: banyakPasien,
+            Jumlah_Hari: jumlahHari,
+            Kelas_1: kelas1,
+            Kelas_2: kelas2,
+            Kelas_3: kelas3,
+            Ruangan: namaruangan,
           }).toString(),
         }
       );
@@ -67,6 +90,7 @@ const NurseInputPage = ({ route }) => {
       } else {
         Alert.alert('Gagal', 'Data gagal diinput: ' + result.message);
       }
+
     } catch (error) {
       Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
     }
@@ -107,12 +131,12 @@ const NurseInputPage = ({ route }) => {
               source={require('../../../assets/-icon-arrow-back.png')}
             />
           </Pressable>
-          <Text style={styles.headerTitle}>Mujair A</Text>
+          <Text style={styles.headerTitle}>{ruangan}</Text>
         </View>
 
         {/* Subtitle Text */}
         <View style={styles.timeInfoContainer}>
-          <RealTimeClock/>
+        <RealTimeClock/>        
         </View>
 
         <DatePickerr style={{ top: -7, width: 370, left: -30 }} />
@@ -123,25 +147,48 @@ const NurseInputPage = ({ route }) => {
           <Text style={styles.jumlahBed}>{jumlahTempatTidur}</Text>
         </View>
 
-        {/* Pasien Awal Section */}
-        <Text style={styles.sectionTitle}>Pasien Awal</Text>
-        {renderInputField('Pasien awal', pasienAwal, setPasienAwal)}
+        {/* Existing sections */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Pasien Awal</Text>
+          {renderInputField('Pasien awal', pasienAwal, setPasienAwal)}
+        </View>
 
-        {/* Pasien Masuk Ruangan Section */}
-        <Text style={styles.sectionTitle}>Pasien Masuk Ruangan</Text>
-        {renderInputField('Pasien masuk', pasienMasuk, setPasienMasuk)}
-        {renderInputField('Pasien pindahan', pasienPindahan, setPasienPindahan)}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Pasien Masuk Ruangan</Text>
+          {renderInputField('Pasien masuk', pasienMasuk, setPasienMasuk)}
+          {renderInputField('Pasien pindahan', pasienPindahan, setPasienPindahan)}
+        </View>
 
-        {/* Pasien Dipindahkan Section */}
-        <Text style={styles.sectionTitle}>Pasien Dipindahkan</Text>
-        {renderInputField('Pasien dipindahkan', pasienDipindahkan, setPasienDipindahkan)}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Pasien Dipindahkan</Text>
+          {renderInputField('Pasien dipindahkan', pasienDipindahkan, setPasienDipindahkan)}
+        </View>
 
-        {/* Pasien Keluar Ruangan Section */}
-        <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
-        {renderInputField('Hidup', pasienHidup, setPasienHidup)}
-        {renderInputField('Rujuk', pasienRujuk, setPasienRujuk)}
-        {renderInputField('APS', pasienAps, setPasienAps)}
-        {renderInputField('Lain-lain', pasienLainLain, setPasienLainLain)}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
+          {renderInputField('Hidup', pasienHidup, setPasienHidup)}
+          {renderInputField('Rujuk', pasienRujuk, setPasienRujuk)}
+          {renderInputField('APS', pasienAps, setPasienAps)}
+          {renderInputField('Lain-lain', pasienLainLain, setPasienLainLain)}
+        </View>
+
+        {/* New sections */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Additional Patient Info</Text>
+          {renderInputField('Kurang dari 48 jam', pasienKurangDari48Jam, setPasienKurangDari48Jam)}
+          {renderInputField('Lebih dari 48 jam', pasienLebihDari48Jam, setPasienLebihDari48Jam)}
+          {renderInputField('Masih dirawat', pasienMasihDirawat, setPasienMasihDirawat)}
+          {renderInputField('Lama dirawat', pasienLamaDirawat, setPasienLamaDirawat)}
+          {renderInputField('Banyak pasien', banyakPasien, setBanyakPasien)}
+          {renderInputField('Jumlah hari', jumlahHari, setJumlahHari)}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Kelas Pasien</Text>
+          {renderInputField('Kelas 1', kelas1, setKelas1)}
+          {renderInputField('Kelas 2', kelas2, setKelas2)}
+          {renderInputField('Kelas 3', kelas3, setKelas3)}
+        </View>
 
         {/* Submit Button */}
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmitButton2}>
@@ -249,9 +296,9 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 40,
-    height: 35,
+    height: 40,
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 15,
     borderWidth: 1,
     borderColor: '#CCCCCC',
     borderRadius: 5,
