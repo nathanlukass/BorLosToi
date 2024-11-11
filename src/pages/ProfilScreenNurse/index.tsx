@@ -62,7 +62,7 @@ const ProfileScreenNurse = ({route, navigation}) => {
             resizeMode="cover"
             source={require('../../../assets/assignment.png')}
           />
-          <Text style={[styles.riwayat, styles.homeTypo]}>Edit</Text>
+          <Text style={[styles.riwayat, styles.homeTypo]}>input</Text>
         </Pressable>
         <View style={styles.parentFlexBox}>
           <Image

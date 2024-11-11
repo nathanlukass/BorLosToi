@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import { useState } from 'react';
 import {
   Text,
   StyleSheet,
@@ -9,65 +9,112 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  Alert,
 } from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/core';
-import {FontFamily, Color} from '../../../GlobalStyles';
-import {Gap, DatePickerr} from '../../components';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, ParamListBase } from '@react-navigation/core';
+import { FontFamily, Color } from '../../../GlobalStyles';
+import { Gap, DatePickerr } from '../../components';
 import RealTimeClock from '../../components/atoms/Time';
-const InputButton = ({label}: {label: string}) => {
+
+const NurseInputPage = ({ route }) => {
+  const { user } = route.params;
+  const {username, role, ruangan, id_user, nama} = user; // Access all relevant fields
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const [value, setValue] = useState<number>(1);
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState('22');
+  const [pasienAwal, setPasienAwal] = useState('0');
+  const [pasienMasuk, setPasienMasuk] = useState('0');
+  const [pasienPindahan, setPasienPindahan] = useState('0');
+  const [pasienDipindahkan, setPasienDipindahkan] = useState('0');
+  const [pasienHidup, setPasienHidup] = useState('0');
+  const [pasienRujuk, setPasienRujuk] = useState('0');
+  const [pasienAps, setPasienAps] = useState('0');
+  const [pasienLainLain, setPasienLainLain] = useState('0');
+  
+  // New state variables for additional fields
+  const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
+  const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
+  const [pasienMasihDirawat, setPasienMasihDirawat] = useState('0');
+  const [pasienLamaDirawat, setPasienLamaDirawat] = useState('0');
+  const [banyakPasien, setBanyakPasien] = useState('0');
+  const [jumlahHari, setJumlahHari] = useState('0');
+  const [kelas1, setKelas1] = useState('0');
+  const [kelas2, setKelas2] = useState('0');
+  const [kelas3, setKelas3] = useState('0');
+  const [namaruangan, setRuangan] = useState(ruangan);
 
-  const handleChange = (text: string) => {
-    const numericValue = text.replace(/[^0-9]/g, ''); // Ensure only numeric input
-    setValue(Number(numericValue));
+  const increment = (setter) => () => setter((prev) => (parseInt(prev, 10) + 1).toString());
+  const decrement = (setter) => () =>
+    setter((prev) => {
+      const newValue = parseInt(prev, 10) - 1;
+      return newValue >= 0 ? newValue.toString() : '0';
+    });
+
+  const handleSubmitButton2 = async () => {
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/insert_nurse',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            Pasien_Awal: pasienAwal,
+            Pasien_Masuk: pasienMasuk,
+            Pasien_Pindahan: pasienPindahan,
+            Pasien_Dipindahkan: pasienDipindahkan,
+            Pasien_Hidup: pasienHidup,
+            Pasien_Rujuk: pasienRujuk,
+            Pasien_Aps: pasienAps,
+            Pasien_lain_lain: pasienLainLain,
+            Pasien_kurang_dari_48jam: pasienKurangDari48Jam,
+            Pasien_lebih_dari_48jam: pasienLebihDari48Jam,
+            Pasien_Masih_Dirawat: pasienMasihDirawat,
+            Pasien_Lama_Dirawat: pasienLamaDirawat,
+            Banyak_Pasien: banyakPasien,
+            Jumlah_Hari: jumlahHari,
+            Kelas_1: kelas1,
+            Kelas_2: kelas2,
+            Kelas_3: kelas3,
+            Ruangan: namaruangan,
+          }).toString(),
+        }
+      );
+
+      const result = await response.json();
+      if (result.status === 'success') {
+        Alert.alert('Sukses', 'Data berhasil diinput');
+        navigation.navigate('HomeScreenNurse', { user });
+      } else {
+        Alert.alert('Gagal', 'Data gagal diinput: ' + result.message);
+      }
+
+    } catch (error) {
+      Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
+    }
   };
 
-  return (
-    <View style={styles.inputButtonContainer}>
+  const renderInputField = (label, value, setValue) => (
+    <View style={styles.fieldContainer}>
       <Text style={styles.label}>{label}</Text>
-      <View style={styles.counterContainer}>
-        <TouchableOpacity
-          style={styles.buttonMinus}
-          onPress={() => setValue(Math.max(0, value - 1))}>
+      <View style={styles.inputContainer}>
+        <TouchableOpacity style={[styles.button, styles.decrementButton]} onPress={decrement(setValue)}>
           <Text style={styles.buttonText}>-</Text>
         </TouchableOpacity>
-
         <TextInput
-          value={value.toString()}
-          onChangeText={handleChange}
-          keyboardType="numeric"
           style={styles.input}
+          value={String(value)}
+          keyboardType="numeric"
+          onChangeText={(text) => setValue(text.replace(/[^0-9]/g, ''))}
         />
-
-        <TouchableOpacity
-          style={styles.buttonPlus}
-          onPress={() => setValue(value + 1)}>
+        <TouchableOpacity style={[styles.button, styles.incrementButton]} onPress={increment(setValue)}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-};
-
-const NurseInputPage = ({route}) => {
-  const {user} = route.params; // Access user details from route parameters
-  const {username, role, ruangan, id_user, nama} = user; // Destructure user object
-
-  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
-
-  const handleSubmitButton = () => {
-    navigation.navigate('HomeScreenNurse', alert('Data berhasil diinput!'));
-  };
-
-  const datePickerStyle1 = {
-    top: -7,
-    width: 370,
-    left: -30,
-  };
 
   return (
     <View style={styles.container}>
@@ -76,107 +123,81 @@ const NurseInputPage = ({route}) => {
         <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
-            onPress={() => navigation.navigate('HomeScreenNurse', {user})}>
+            onPress={() => navigation.navigate('HomeScreenNurse', { user })}
+          >
             <Image
               style={styles.icon}
               resizeMode="cover"
               source={require('../../../assets/-icon-arrow-back.png')}
             />
           </Pressable>
-          <Text style={styles.headerTitle}>Input Harian</Text>
+          <Text style={styles.headerTitle}>{ruangan}</Text>
         </View>
 
-        <View style={styles.timeContainer}>
-          {/* Menggunakan komponen RealTimeClock */}
-          <RealTimeClock />
+        {/* Subtitle Text */}
+        <View style={styles.timeInfoContainer}>
+        <RealTimeClock/>        
         </View>
 
-        <DatePickerr style={datePickerStyle1} />
+        <DatePickerr style={{ top: -7, width: 370, left: -30 }} />
 
-        {/* Jumlah tempat tidur section */}
+        {/* Fields with increment/decrement buttons */}
         <View style={styles.section}>
-          <View style={styles.bedInputContainer}>
-            <Text style={styles.label}>Jumlah tempat tidur:</Text>
-            <Text style={styles.jumlahBed}>20</Text>
-          </View>
+          <Text style={styles.label}>Jumlah tempat tidur:</Text>
+          <Text style={styles.jumlahBed}>{jumlahTempatTidur}</Text>
         </View>
 
-        {/* Sections for input buttons */}
+        {/* Existing sections */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien awal</Text>
-          <InputButton label="Pasien awal :" />
+          <Text style={styles.sectionTitle}>Pasien Awal</Text>
+          {renderInputField('Pasien awal', pasienAwal, setPasienAwal)}
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien masuk ruangan</Text>
-          <InputButton label="Pasien masuk :" />
-          <InputButton label="Pasien pindahan :" />
-          <Text style={styles.totalLabel}>Jumlah : 1</Text>
+          <Text style={styles.sectionTitle}>Pasien Masuk Ruangan</Text>
+          {renderInputField('Pasien masuk', pasienMasuk, setPasienMasuk)}
+          {renderInputField('Pasien pindahan', pasienPindahan, setPasienPindahan)}
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien dipindahkan</Text>
-          <InputButton label="Pasien dipindahkan :" />
+          <Text style={styles.sectionTitle}>Pasien Dipindahkan</Text>
+          {renderInputField('Pasien dipindahkan', pasienDipindahkan, setPasienDipindahkan)}
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien keluar ruangan</Text>
-          <InputButton label="Hidup" />
-          <InputButton label="Rujuk" />
-          <InputButton label="APS" />
-          <InputButton label="Lain-lain" />
-          <Text style={styles.totalLabel}>Jumlah : 1</Text>
+          <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
+          {renderInputField('Hidup', pasienHidup, setPasienHidup)}
+          {renderInputField('Rujuk', pasienRujuk, setPasienRujuk)}
+          {renderInputField('APS', pasienAps, setPasienAps)}
+          {renderInputField('Lain-lain', pasienLainLain, setPasienLainLain)}
+        </View>
+
+        {/* New sections */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Additional Patient Info</Text>
+          {renderInputField('Kurang dari 48 jam', pasienKurangDari48Jam, setPasienKurangDari48Jam)}
+          {renderInputField('Lebih dari 48 jam', pasienLebihDari48Jam, setPasienLebihDari48Jam)}
+          {renderInputField('Masih dirawat', pasienMasihDirawat, setPasienMasihDirawat)}
+          {renderInputField('Lama dirawat', pasienLamaDirawat, setPasienLamaDirawat)}
+          {renderInputField('Banyak pasien', banyakPasien, setBanyakPasien)}
+          {renderInputField('Jumlah hari', jumlahHari, setJumlahHari)}
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien keluar Meninggal</Text>
-          <InputButton label="≤ 48 jam" />
-          <InputButton label="≥ 48 jam" />
-          <Text style={styles.totalLabel}>Jumlah : 1</Text>
-          <Text style={styles.totalLabel}>Total : 1</Text>
+          <Text style={styles.sectionTitle}>Kelas Pasien</Text>
+          {renderInputField('Kelas 1', kelas1, setKelas1)}
+          {renderInputField('Kelas 2', kelas2, setKelas2)}
+          {renderInputField('Kelas 3', kelas3, setKelas3)}
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{'Pasien yang masih dirawat'}</Text>
-          <InputButton label={'Pasien yang masih\ndirawat :'} />
-          <Gap height={20} />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Lama perawatan</Text>
-          <InputButton label="Lama di rawat :" />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Pasien masuk/keluar pada hari yang sama
-          </Text>
-          <InputButton label="Banyak pasien :" />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Jumlah hari perawatan</Text>
-          <InputButton label="Jumlah hari" />
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Total hari perawatan per pasien
-          </Text>
-          <InputButton label="Kelas I" />
-          <InputButton label="Kelas II" />
-          <InputButton label="Kelas III" />
-        </View>
-
-        <Pressable style={styles.submitButton} onPress={handleSubmitButton}>
+        {/* Submit Button */}
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmitButton2}>
           <Text style={styles.submitText}>Submit</Text>
-        </Pressable>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
 };
-
-export default NurseInputPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -193,138 +214,95 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 20,
   },
-  backButton: {
-    // backgroundColor: 'black',
-    borderRadius: 5,
-    padding: 10,
-  },
-  backText: {
-    color: 'black',
-    fontSize: 20,
-  },
   headerTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     marginStart: 'auto',
     marginEnd: 'auto',
     left: -10,
   },
-  timeContainer: {
+  timeInfoContainer: {
     backgroundColor: '#007BFF',
-    padding: 10,
+    paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
     marginBottom: 20,
   },
-  timeText: {
+  timeInfoText: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontFamily: FontFamily.poppinsBold,
-  },
-  // roomSection: {
-  //   backgroundColor: '#FFFFFF',
-  //   padding: 15,
-  //   borderRadius: 5,
-  //   alignItems: 'center',
-  //   marginBottom: 20,
-  // },
-  roomName: {
-    fontSize: 14,
-    fontFamily: FontFamily.poppinsBold,
-    color: Color.notSoBlack,
+    fontFamily: FontFamily.poppinsRegular,
   },
   section: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 15,
     marginBottom: 20,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 8,
   },
-  sectionTitle: {
-    fontSize: 14,
-    fontFamily: FontFamily.poppinsRegular,
-    marginBottom: 10,
-    color: Color.notSoBlack,
+  fieldContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
   },
   jumlahBed: {
-    left: 35,
-    margin: 'auto',
-    top: 8,
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: FontFamily.poppinsRegular,
-    marginBottom: 10,
     color: Color.notSoBlack,
   },
-  totalLabel: {
-    fontSize: 12,
-    fontFamily: FontFamily.poppinsRegular,
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
     color: Color.notSoBlack,
+    marginBottom: 10,
     marginTop: 10,
   },
-  inputButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  label: {
-    fontSize: 14,
-    fontFamily: FontFamily.poppinsRegular,
-    color: Color.notSoBlack,
-  },
-  counterContainer: {
+  inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginLeft: 'auto',
   },
-  buttonMinus: {
-    backgroundColor: '#C1C9E9',
-    paddingVertical: 1,
-    paddingHorizontal: 9,
-    borderRadius: 7,
+  button: {
+    width: 30,
+    height: 30,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 5,
+    marginHorizontal: 5,
   },
-  buttonPlus: {
-    backgroundColor: '#1E9DEC',
-    paddingVertical: 1,
-    paddingHorizontal: 8,
-    borderRadius: 7,
-    justifyContent: 'center',
-    alignItems: 'center',
+  decrementButton: {
+    backgroundColor: '#D3D3D3',
+  },
+  incrementButton: {
+    backgroundColor: '#007AFF',
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   input: {
     width: 40,
-    height: 35,
+    height: 40,
     textAlign: 'center',
-    fontSize: 10,
+    fontSize: 15,
     borderWidth: 1,
     borderColor: '#CCCCCC',
-    marginHorizontal: 10,
     borderRadius: 5,
-  },
-  // inputTempatTidur: {
-  //   width: 55,
-  //   height: 35,
-  //   textAlign: 'center',
-  //   fontSize: 15,
-  //   borderWidth: 1,
-  //   borderColor: '#CCCCCC',
-  //   marginStart: 'auto',
-  //   marginEnd: 25,
-  //   borderRadius: 5,
-  //   padding: 5,
-  // },
-  bedInputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    marginHorizontal: 5,
   },
   submitButton: {
     backgroundColor: '#28A745',
@@ -343,10 +321,6 @@ const styles = StyleSheet.create({
     height: 25,
     zIndex: 0,
     marginStart: -15,
-  },
-  icon: {
-    height: '100%',
-    width: '100%',
   },
 });
 
