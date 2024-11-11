@@ -59,7 +59,9 @@ const InputButton = ({label}: {label: string}) => {
   );
 };
 
-const EditMujairA = () => {
+const EditMujairA = ({route}) => {
+  const {user} = route.params; // Access user details from route parameters
+  const {username, role, ruangan, id_user, nama} = user; // Destructure user objec
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // Menggunakan state untuk input jumlah tempat tidur
 
@@ -80,7 +82,7 @@ const EditMujairA = () => {
         <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
-            onPress={() => navigation.navigate('EditScreenAdmin')}>
+            onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
             <Image
               style={styles.icon}
               resizeMode="cover"
