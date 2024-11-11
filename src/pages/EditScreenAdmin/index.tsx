@@ -20,6 +20,7 @@ import {
 const EditScreenAdmin = ({route}) => {
   const {user} = route.params; // Access user details from route parameters
   const {username, role, ruangan, id_user, nama} = user; // Destructure user object
+  console.log('Route params:', route.params);
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
