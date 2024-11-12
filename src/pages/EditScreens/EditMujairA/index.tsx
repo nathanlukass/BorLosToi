@@ -9,9 +9,8 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  Alert,
 } from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/core';
 import {
   Padding,
   Border,
@@ -19,13 +18,14 @@ import {
   FontFamily,
   FontSize,
 } from '../../../../GlobalStyles';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/core';
 import {Gap, DatePickerr, RealTimeClock} from '../../../components';
-import {ScreenWidth} from 'react-native-elements/dist/helpers';
 import moment from 'moment';
 
 const EditMujairA = ({route}) => {
-  const {user} = route.params; // Access user details from route parameters
-  const {username, role, ruangan, id_user, nama} = user; // Destructure user objec
+  const {user} = route.params;
+  const {ruangan} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState('22');
@@ -37,8 +37,6 @@ const EditMujairA = ({route}) => {
   const [pasienRujuk, setPasienRujuk] = useState('0');
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
-
-  // New state variables for additional fields
   const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
   const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
   const [pasienMasihDirawat, setPasienMasihDirawat] = useState('0');
@@ -57,6 +55,57 @@ const EditMujairA = ({route}) => {
       const newValue = parseInt(prev, 10) - 1;
       return newValue >= 0 ? newValue.toString() : '0';
     });
+
+  // Fetch data for the selected date and populate form fields
+  const handleDateChange = async date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_input_data',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            date: formattedDate,
+          }).toString(),
+        },
+      );
+
+      const result = await response.json();
+      console.log('API Response:', result); // Debugging line
+
+      if (result.status === 'success' && result.data) {
+        const data = result.data;
+        // Update state with fetched data
+        setPasienAwal(data.Pasien_Awal);
+        setPasienMasuk(data.Pasien_Masuk);
+        setPasienPindahan(data.Pasien_Pindahan);
+        setPasienDipindahkan(data.Pasien_Dipindahkan);
+        setPasienHidup(data.Pasien_Hidup);
+        setPasienRujuk(data.Pasien_Rujuk);
+        setPasienAps(data.Pasien_Aps);
+        setPasienLainLain(data.Pasien_lain_lain);
+        setPasienKurangDari48Jam(data.Pasien_kurang_dari_48jam);
+        setPasienLebihDari48Jam(data.Pasien_lebih_dari_48jam);
+        setPasienMasihDirawat(data.Pasien_Masih_Dirawat);
+        setPasienLamaDirawat(data.Pasien_Lama_Dirawat);
+        setBanyakPasien(data.Banyak_Pasien);
+        setJumlahHari(data.Jumlah_Hari);
+        setKelas1(data.Kelas_1);
+        setKelas2(data.Kelas_2);
+        setKelas3(data.Kelas_3);
+      } else {
+        Alert.alert(
+          'Error',
+          'No data found for the selected date. Please try another date.',
+        );
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to fetch data: ' + error.message);
+    }
+  };
 
   const handleSubmitButton2 = async () => {
     try {
@@ -101,10 +150,6 @@ const EditMujairA = ({route}) => {
       Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
     }
   };
-  const handleDateChange = date => {
-    const formattedDate = moment(date).format('YYYY-MM-DD'); // "2024-11-30"
-    console.log(formattedDate);
-  };
 
   const renderInputField = (label, value, setValue) => (
     <View style={styles.fieldContainer}>
@@ -129,10 +174,10 @@ const EditMujairA = ({route}) => {
       </View>
     </View>
   );
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Header with title and time */}
         <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
@@ -146,7 +191,6 @@ const EditMujairA = ({route}) => {
           <Text style={styles.headerTitle}>{'Mujair A'}</Text>
         </View>
 
-        {/* Subtitle Text */}
         <View style={styles.timeInfoContainer}>
           <RealTimeClock />
         </View>
@@ -155,13 +199,11 @@ const EditMujairA = ({route}) => {
           onDateChange={handleDateChange}
         />
 
-        {/* Fields with increment/decrement buttons */}
         <View style={styles.section}>
           <Text style={styles.label}>Jumlah tempat tidur:</Text>
           <Text style={styles.jumlahBed}>{jumlahTempatTidur}</Text>
         </View>
 
-        {/* Existing sections */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien Awal</Text>
           {renderInputField('Pasien awal', pasienAwal, setPasienAwal)}
@@ -194,7 +236,6 @@ const EditMujairA = ({route}) => {
           {renderInputField('Lain-lain', pasienLainLain, setPasienLainLain)}
         </View>
 
-        {/* New sections */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Additional Patient Info</Text>
           {renderInputField(
@@ -228,7 +269,6 @@ const EditMujairA = ({route}) => {
           {renderInputField('Kelas 3', kelas3, setKelas3)}
         </View>
 
-        {/* Submit Button */}
         <TouchableOpacity
           style={styles.submitButton}
           onPress={handleSubmitButton2}>
