@@ -29,6 +29,7 @@ const EditMujairA = ({route}) => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState('22');
+  const [selectedDate, setSelectedDate] = useState('');
   const [pasienAwal, setPasienAwal] = useState('0');
   const [pasienMasuk, setPasienMasuk] = useState('0');
   const [pasienPindahan, setPasienPindahan] = useState('0');
@@ -59,6 +60,7 @@ const EditMujairA = ({route}) => {
   // Fetch data for the selected date and populate form fields
   const handleDateChange = async date => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
     try {
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_input_data',
@@ -110,13 +112,15 @@ const EditMujairA = ({route}) => {
   const handleSubmitButton2 = async () => {
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/insert_nurse',
+        'https://samratindikator.online/borlostoi/public/insert/update_nurse',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
+
           body: new URLSearchParams({
+            Tanggal: selectedDate, // Include the selected date to identify the record to update
             Pasien_Awal: pasienAwal,
             Pasien_Masuk: pasienMasuk,
             Pasien_Pindahan: pasienPindahan,
@@ -141,8 +145,8 @@ const EditMujairA = ({route}) => {
 
       const result = await response.json();
       if (result.status === 'success') {
-        Alert.alert('Sukses', 'Data berhasil diinput');
-        navigation.navigate('HomeScreenNurse', {user});
+        Alert.alert('Sukses', 'Data berhasil diubah');
+        navigation.navigate('EditScreenAdmin', {user});
       } else {
         Alert.alert('Gagal', 'Data gagal diinput: ' + result.message);
       }
