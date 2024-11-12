@@ -21,6 +21,7 @@ import {
 } from '../../../../GlobalStyles';
 import {Gap, DatePickerr, RealTimeClock} from '../../../components';
 import {ScreenWidth} from 'react-native-elements/dist/helpers';
+import moment from 'moment';
 
 const EditMujairA = ({route}) => {
   const {user} = route.params; // Access user details from route parameters
@@ -36,7 +37,7 @@ const EditMujairA = ({route}) => {
   const [pasienRujuk, setPasienRujuk] = useState('0');
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
-  
+
   // New state variables for additional fields
   const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
   const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
@@ -49,9 +50,10 @@ const EditMujairA = ({route}) => {
   const [kelas3, setKelas3] = useState('0');
   const [namaruangan, setRuangan] = useState(ruangan);
 
-  const increment = (setter) => () => setter((prev) => (parseInt(prev, 10) + 1).toString());
-  const decrement = (setter) => () =>
-    setter((prev) => {
+  const increment = setter => () =>
+    setter(prev => (parseInt(prev, 10) + 1).toString());
+  const decrement = setter => () =>
+    setter(prev => {
       const newValue = parseInt(prev, 10) - 1;
       return newValue >= 0 ? newValue.toString() : '0';
     });
@@ -85,42 +87,48 @@ const EditMujairA = ({route}) => {
             Kelas_3: kelas3,
             Ruangan: namaruangan,
           }).toString(),
-        }
+        },
       );
 
       const result = await response.json();
       if (result.status === 'success') {
         Alert.alert('Sukses', 'Data berhasil diinput');
-        navigation.navigate('HomeScreenNurse', { user });
+        navigation.navigate('HomeScreenNurse', {user});
       } else {
         Alert.alert('Gagal', 'Data gagal diinput: ' + result.message);
       }
-
     } catch (error) {
       Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
     }
+  };
+  const handleDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD'); // "2024-11-30"
+    console.log(formattedDate);
   };
 
   const renderInputField = (label, value, setValue) => (
     <View style={styles.fieldContainer}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputContainer}>
-        <TouchableOpacity style={[styles.button, styles.decrementButton]} onPress={decrement(setValue)}>
+        <TouchableOpacity
+          style={[styles.button, styles.decrementButton]}
+          onPress={decrement(setValue)}>
           <Text style={styles.buttonText}>-</Text>
         </TouchableOpacity>
         <TextInput
           style={styles.input}
           value={String(value)}
           keyboardType="numeric"
-          onChangeText={(text) => setValue(text.replace(/[^0-9]/g, ''))}
+          onChangeText={text => setValue(text.replace(/[^0-9]/g, ''))}
         />
-        <TouchableOpacity style={[styles.button, styles.incrementButton]} onPress={increment(setValue)}>
+        <TouchableOpacity
+          style={[styles.button, styles.incrementButton]}
+          onPress={increment(setValue)}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -128,8 +136,7 @@ const EditMujairA = ({route}) => {
         <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
-            onPress={() => navigation.navigate('HomeScreenAdmin', { user })}
-          >
+            onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
             <Image
               style={styles.icon}
               resizeMode="cover"
@@ -141,10 +148,12 @@ const EditMujairA = ({route}) => {
 
         {/* Subtitle Text */}
         <View style={styles.timeInfoContainer}>
-        <RealTimeClock/>        
+          <RealTimeClock />
         </View>
-
-        <DatePickerr style={{ top: -7, width: 370, left: -30 }} />
+        <DatePickerr
+          style={{top: -7, width: 370, left: -30}}
+          onDateChange={handleDateChange}
+        />
 
         {/* Fields with increment/decrement buttons */}
         <View style={styles.section}>
@@ -161,12 +170,20 @@ const EditMujairA = ({route}) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien Masuk Ruangan</Text>
           {renderInputField('Pasien masuk', pasienMasuk, setPasienMasuk)}
-          {renderInputField('Pasien pindahan', pasienPindahan, setPasienPindahan)}
+          {renderInputField(
+            'Pasien pindahan',
+            pasienPindahan,
+            setPasienPindahan,
+          )}
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien Dipindahkan</Text>
-          {renderInputField('Pasien dipindahkan', pasienDipindahkan, setPasienDipindahkan)}
+          {renderInputField(
+            'Pasien dipindahkan',
+            pasienDipindahkan,
+            setPasienDipindahkan,
+          )}
         </View>
 
         <View style={styles.section}>
@@ -180,10 +197,26 @@ const EditMujairA = ({route}) => {
         {/* New sections */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Additional Patient Info</Text>
-          {renderInputField('Kurang dari 48 jam', pasienKurangDari48Jam, setPasienKurangDari48Jam)}
-          {renderInputField('Lebih dari 48 jam', pasienLebihDari48Jam, setPasienLebihDari48Jam)}
-          {renderInputField('Masih dirawat', pasienMasihDirawat, setPasienMasihDirawat)}
-          {renderInputField('Lama dirawat', pasienLamaDirawat, setPasienLamaDirawat)}
+          {renderInputField(
+            'Kurang dari 48 jam',
+            pasienKurangDari48Jam,
+            setPasienKurangDari48Jam,
+          )}
+          {renderInputField(
+            'Lebih dari 48 jam',
+            pasienLebihDari48Jam,
+            setPasienLebihDari48Jam,
+          )}
+          {renderInputField(
+            'Masih dirawat',
+            pasienMasihDirawat,
+            setPasienMasihDirawat,
+          )}
+          {renderInputField(
+            'Lama dirawat',
+            pasienLamaDirawat,
+            setPasienLamaDirawat,
+          )}
           {renderInputField('Banyak pasien', banyakPasien, setBanyakPasien)}
           {renderInputField('Jumlah hari', jumlahHari, setJumlahHari)}
         </View>
@@ -196,7 +229,9 @@ const EditMujairA = ({route}) => {
         </View>
 
         {/* Submit Button */}
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmitButton2}>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleSubmitButton2}>
           <Text style={styles.submitText}>Submit</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -245,7 +280,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 8,
   },
@@ -258,7 +293,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 15,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 8,
   },

@@ -24,8 +24,6 @@ import {ScreenWidth} from 'react-native-elements/dist/helpers';
 import RealTimeClock from '../../../components/atoms/Time';
 
 const InputButton = ({label}: {label: string}) => {
-  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
   const [value, setValue] = useState<number>(1);
 
   const handleChange = (text: string) => {
@@ -60,7 +58,9 @@ const InputButton = ({label}: {label: string}) => {
   );
 };
 
-const EditNeonati = () => {
+const EditNeonati = ({route}) => {
+  const {user} = route.params; // Access user details from route parameters
+  const {username, role, ruangan, id_user, nama} = user; // Destructure user objec
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState<string>('22'); // State untuk input tempat tidur
 
@@ -81,7 +81,7 @@ const EditNeonati = () => {
         <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
-            onPress={() => navigation.navigate('EditScreenAdmin')}>
+            onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
             <Image
               style={styles.icon}
               resizeMode="cover"
