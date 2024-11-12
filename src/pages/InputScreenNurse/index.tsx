@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import {useState} from 'react';
 import {
   Text,
   StyleSheet,
@@ -11,14 +11,15 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/core';
-import { FontFamily, Color } from '../../../GlobalStyles';
-import { Gap, DatePickerr } from '../../components';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/core';
+import {FontFamily, Color} from '../../../GlobalStyles';
+import {Gap, DatePickerr} from '../../components';
 import RealTimeClock from '../../components/atoms/Time';
+import moment from 'moment';
 
-const NurseInputPage = ({ route }) => {
-  const { user } = route.params;
+const NurseInputPage = ({route}) => {
+  const {user} = route.params;
   const {username, role, ruangan, id_user, nama} = user; // Access all relevant fields
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
@@ -31,7 +32,7 @@ const NurseInputPage = ({ route }) => {
   const [pasienRujuk, setPasienRujuk] = useState('0');
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
-  
+
   // New state variables for additional fields
   const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
   const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
@@ -44,12 +45,63 @@ const NurseInputPage = ({ route }) => {
   const [kelas3, setKelas3] = useState('0');
   const [namaruangan, setRuangan] = useState(ruangan);
 
-  const increment = (setter) => () => setter((prev) => (parseInt(prev, 10) + 1).toString());
-  const decrement = (setter) => () =>
-    setter((prev) => {
+  const increment = setter => () =>
+    setter(prev => (parseInt(prev, 10) + 1).toString());
+  const decrement = setter => () =>
+    setter(prev => {
       const newValue = parseInt(prev, 10) - 1;
       return newValue >= 0 ? newValue.toString() : '0';
     });
+
+  const handleDateChange = async date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_input_data',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            date: formattedDate,
+          }).toString(),
+        },
+      );
+
+      const result = await response.json();
+      console.log('API Response:', result); // Debugging line
+
+      if (result.status === 'success' && result.data) {
+        const data = result.data;
+        // Update state with fetched data
+        setPasienAwal(data.Pasien_Awal);
+        setPasienMasuk(data.Pasien_Masuk);
+        setPasienPindahan(data.Pasien_Pindahan);
+        setPasienDipindahkan(data.Pasien_Dipindahkan);
+        setPasienHidup(data.Pasien_Hidup);
+        setPasienRujuk(data.Pasien_Rujuk);
+        setPasienAps(data.Pasien_Aps);
+        setPasienLainLain(data.Pasien_lain_lain);
+        setPasienKurangDari48Jam(data.Pasien_kurang_dari_48jam);
+        setPasienLebihDari48Jam(data.Pasien_lebih_dari_48jam);
+        setPasienMasihDirawat(data.Pasien_Masih_Dirawat);
+        setPasienLamaDirawat(data.Pasien_Lama_Dirawat);
+        setBanyakPasien(data.Banyak_Pasien);
+        setJumlahHari(data.Jumlah_Hari);
+        setKelas1(data.Kelas_1);
+        setKelas2(data.Kelas_2);
+        setKelas3(data.Kelas_3);
+      } else {
+        Alert.alert(
+          'Error',
+          'No data found for the selected date. Please try another date.',
+        );
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to fetch data: ' + error.message);
+    }
+  };
 
   const handleSubmitButton2 = async () => {
     try {
@@ -80,17 +132,16 @@ const NurseInputPage = ({ route }) => {
             Kelas_3: kelas3,
             Ruangan: namaruangan,
           }).toString(),
-        }
+        },
       );
 
       const result = await response.json();
       if (result.status === 'success') {
         Alert.alert('Sukses', 'Data berhasil diinput');
-        navigation.navigate('HomeScreenNurse', { user });
+        navigation.navigate('HomeScreenNurse', {user});
       } else {
         Alert.alert('Gagal', 'Data gagal diinput: ' + result.message);
       }
-
     } catch (error) {
       Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
     }
@@ -100,16 +151,20 @@ const NurseInputPage = ({ route }) => {
     <View style={styles.fieldContainer}>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputContainer}>
-        <TouchableOpacity style={[styles.button, styles.decrementButton]} onPress={decrement(setValue)}>
+        <TouchableOpacity
+          style={[styles.button, styles.decrementButton]}
+          onPress={decrement(setValue)}>
           <Text style={styles.buttonText}>-</Text>
         </TouchableOpacity>
         <TextInput
           style={styles.input}
           value={String(value)}
           keyboardType="numeric"
-          onChangeText={(text) => setValue(text.replace(/[^0-9]/g, ''))}
+          onChangeText={text => setValue(text.replace(/[^0-9]/g, ''))}
         />
-        <TouchableOpacity style={[styles.button, styles.incrementButton]} onPress={increment(setValue)}>
+        <TouchableOpacity
+          style={[styles.button, styles.incrementButton]}
+          onPress={increment(setValue)}>
           <Text style={styles.buttonText}>+</Text>
         </TouchableOpacity>
       </View>
@@ -123,8 +178,7 @@ const NurseInputPage = ({ route }) => {
         <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
-            onPress={() => navigation.navigate('HomeScreenNurse', { user })}
-          >
+            onPress={() => navigation.navigate('HomeScreenNurse', {user})}>
             <Image
               style={styles.icon}
               resizeMode="cover"
@@ -136,10 +190,13 @@ const NurseInputPage = ({ route }) => {
 
         {/* Subtitle Text */}
         <View style={styles.timeInfoContainer}>
-        <RealTimeClock/>        
+          <RealTimeClock />
         </View>
 
-        <DatePickerr style={{ top: -7, width: 370, left: -30 }} />
+        <DatePickerr
+          style={{top: -7, width: 370, left: -30}}
+          onDateChange={handleDateChange}
+        />
 
         {/* Fields with increment/decrement buttons */}
         <View style={styles.section}>
@@ -156,12 +213,20 @@ const NurseInputPage = ({ route }) => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien Masuk Ruangan</Text>
           {renderInputField('Pasien masuk', pasienMasuk, setPasienMasuk)}
-          {renderInputField('Pasien pindahan', pasienPindahan, setPasienPindahan)}
+          {renderInputField(
+            'Pasien pindahan',
+            pasienPindahan,
+            setPasienPindahan,
+          )}
         </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien Dipindahkan</Text>
-          {renderInputField('Pasien dipindahkan', pasienDipindahkan, setPasienDipindahkan)}
+          {renderInputField(
+            'Pasien dipindahkan',
+            pasienDipindahkan,
+            setPasienDipindahkan,
+          )}
         </View>
 
         <View style={styles.section}>
@@ -175,10 +240,26 @@ const NurseInputPage = ({ route }) => {
         {/* New sections */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Additional Patient Info</Text>
-          {renderInputField('Kurang dari 48 jam', pasienKurangDari48Jam, setPasienKurangDari48Jam)}
-          {renderInputField('Lebih dari 48 jam', pasienLebihDari48Jam, setPasienLebihDari48Jam)}
-          {renderInputField('Masih dirawat', pasienMasihDirawat, setPasienMasihDirawat)}
-          {renderInputField('Lama dirawat', pasienLamaDirawat, setPasienLamaDirawat)}
+          {renderInputField(
+            'Kurang dari 48 jam',
+            pasienKurangDari48Jam,
+            setPasienKurangDari48Jam,
+          )}
+          {renderInputField(
+            'Lebih dari 48 jam',
+            pasienLebihDari48Jam,
+            setPasienLebihDari48Jam,
+          )}
+          {renderInputField(
+            'Masih dirawat',
+            pasienMasihDirawat,
+            setPasienMasihDirawat,
+          )}
+          {renderInputField(
+            'Lama dirawat',
+            pasienLamaDirawat,
+            setPasienLamaDirawat,
+          )}
           {renderInputField('Banyak pasien', banyakPasien, setBanyakPasien)}
           {renderInputField('Jumlah hari', jumlahHari, setJumlahHari)}
         </View>
@@ -191,7 +272,9 @@ const NurseInputPage = ({ route }) => {
         </View>
 
         {/* Submit Button */}
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmitButton2}>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleSubmitButton2}>
           <Text style={styles.submitText}>Submit</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -240,7 +323,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 8,
   },
@@ -253,7 +336,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 15,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 8,
   },
