@@ -1,5 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Text} from 'react-native';
+import {
+  FontFamily,
+  FontSize,
+  Color,
+} from '../../../../GlobalStyles';
 
 
 // Komponen RealTimeClock
@@ -27,7 +32,12 @@ const RealTimeClock = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  return <Text style={{fontSize: 20, color : 'white', fontWeight: '600'}}>Waktu input harian: {currentTime}</Text>;
+  return <Text style = {
+    { fontFamily: FontFamily.poppinsBold,
+      color:'white',
+      fontSize: 16,
+  }
+}> Waktu input harian {currentTime} </Text>;
 };
 
 export default RealTimeClock;

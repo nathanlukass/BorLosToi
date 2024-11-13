@@ -18,12 +18,12 @@ import {Gap, DatePickerr} from '../../components';
 import RealTimeClock from '../../components/atoms/Time';
 import moment from 'moment';
 
-const NurseInputPage = ({route}) => {
-  const {user} = route.params;
-  const {username, role, ruangan, id_user, nama} = user; // Access all relevant fields
+const NurseInputPage = ({ route }) => {
+  const { user } = route.params;
+  const { username, role, ruangan, id_user, nama } = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const [jumlahTempatTidur, setJumlahTempatTidur] = useState('22');
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState('30');
   const [pasienAwal, setPasienAwal] = useState('0');
   const [pasienMasuk, setPasienMasuk] = useState('0');
   const [pasienPindahan, setPasienPindahan] = useState('0');
@@ -174,8 +174,7 @@ const NurseInputPage = ({route}) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Header with title and time */}
-        <View style={styles.header}>
+        <View style={styles.sectionHeader}>
           <Pressable
             style={styles.iconArrowBack}
             onPress={() => navigation.navigate('HomeScreenNurse', {user})}>
@@ -190,7 +189,7 @@ const NurseInputPage = ({route}) => {
 
         {/* Subtitle Text */}
         <View style={styles.timeInfoContainer}>
-          <RealTimeClock />
+          <RealTimeClock />        
         </View>
 
         <DatePickerr
@@ -199,7 +198,7 @@ const NurseInputPage = ({route}) => {
         />
 
         {/* Fields with increment/decrement buttons */}
-        <View style={styles.section}>
+        <View style={styles.sectionJumlahBed}>
           <Text style={styles.label}>Jumlah tempat tidur:</Text>
           <Text style={styles.jumlahBed}>{jumlahTempatTidur}</Text>
         </View>
@@ -219,49 +218,35 @@ const NurseInputPage = ({route}) => {
             setPasienPindahan,
           )}
         </View>
-
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien Dipindahkan</Text>
+        <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
+        <View style={styles.row}>
+        <Text style={[styles.subsectionTitle, { marginRight: 6 }]}>Pasien keluar</Text>
+        <Text style={[styles.subsectionTitle, { color: '#00A676' }]}>Hidup</Text>
+        </View>
           {renderInputField(
             'Pasien dipindahkan',
             pasienDipindahkan,
             setPasienDipindahkan,
           )}
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
           {renderInputField('Hidup', pasienHidup, setPasienHidup)}
           {renderInputField('Rujuk', pasienRujuk, setPasienRujuk)}
           {renderInputField('APS', pasienAps, setPasienAps)}
           {renderInputField('Lain-lain', pasienLainLain, setPasienLainLain)}
+
+        {/* Pasien keluar Meninggal */}
+        <View style={styles.row}>
+        <Text style={[styles.subsectionTitle, { marginRight: 6 }]}>Pasien keluar</Text>
+        <Text style={[styles.subsectionTitle, { color: '#FF5A5F' }]}>Meninggal</Text>
+        </View>       
+          {renderInputField('Kurang dari 48 jam', pasienKurangDari48Jam, setPasienKurangDari48Jam)}
+          {renderInputField('Lebih dari 48 jam', pasienLebihDari48Jam, setPasienLebihDari48Jam)}
         </View>
 
-        {/* New sections */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Additional Patient Info</Text>
-          {renderInputField(
-            'Kurang dari 48 jam',
-            pasienKurangDari48Jam,
-            setPasienKurangDari48Jam,
-          )}
-          {renderInputField(
-            'Lebih dari 48 jam',
-            pasienLebihDari48Jam,
-            setPasienLebihDari48Jam,
-          )}
-          {renderInputField(
-            'Masih dirawat',
-            pasienMasihDirawat,
-            setPasienMasihDirawat,
-          )}
-          {renderInputField(
-            'Lama dirawat',
-            pasienLamaDirawat,
-            setPasienLamaDirawat,
-          )}
-          {renderInputField('Banyak pasien', banyakPasien, setBanyakPasien)}
-          {renderInputField('Jumlah hari', jumlahHari, setJumlahHari)}
+        <Text style={styles.sectionTitle}>Pasien yang masih dirawat</Text>
+          {renderInputField('Lama dirawat', pasienLamaDirawat, setPasienLamaDirawat)}
+          {renderInputField('Pasien keluar/masuk \npada hari yang sama', banyakPasien, setBanyakPasien)}
         </View>
 
         <View style={styles.section}>
@@ -270,6 +255,7 @@ const NurseInputPage = ({route}) => {
           {renderInputField('Kelas 2', kelas2, setKelas2)}
           {renderInputField('Kelas 3', kelas3, setKelas3)}
         </View>
+    
 
         {/* Submit Button */}
         <TouchableOpacity
@@ -285,11 +271,41 @@ const NurseInputPage = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: '#FFFFFFF',
   },
   scrollContainer: {
     padding: 20,
     paddingBottom: 40,
+  },
+  row: {
+    top: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  subsectionTitle: {
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    marginTop: 15,
+    marginBottom: 10,
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginEnd: 75,
+    paddingVertical: 5,
+  },
+  totalLabel: {
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
+  },
+  totalValue: {
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    textAlign: 'right',
   },
   header: {
     flexDirection: 'row',
@@ -301,9 +317,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
-    marginStart: 'auto',
-    marginEnd: 'auto',
-    left: -10,
+    textAlign: 'center',
+    flex: 1,
   },
   timeInfoContainer: {
     backgroundColor: '#007BFF',
@@ -311,21 +326,54 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     marginBottom: 20,
+    marginTop:65,
   },
   timeInfoText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontFamily: FontFamily.poppinsRegular,
   },
+  sectionJumlahBed : {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 6,
+    width: '120%',
+    position: 'absolute',
+    alignSelf: 'center',
+    justifyContent:'center',
+  },
+  
   section: {
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
     shadowRadius: 8,
+    elevation: 6,
   },
   fieldContainer: {
     flexDirection: 'row',
@@ -344,19 +392,26 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.notSoBlack,
+    marginLeft: 155,
   },
   sectionTitle: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     marginBottom: 10,
     marginTop: 10,
   },
+  label: {
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     marginLeft: 'auto',
+    marginBottom:5,
   },
   button: {
     width: 30,
@@ -374,23 +429,26 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsBold,
   },
   input: {
     width: 40,
-    height: 40,
+    height: 35,
     textAlign: 'center',
     fontSize: 15,
+    fontFamily: FontFamily.poppinsRegular,
     borderWidth: 1,
     borderColor: '#CCCCCC',
     borderRadius: 5,
     marginHorizontal: 5,
+    paddingBottom: 5,
+    paddingVertical: 5,
   },
   submitButton: {
     backgroundColor: '#28A745',
     paddingVertical: 15,
-    borderRadius: 25,
+    borderRadius: 50,
     alignItems: 'center',
     marginTop: 15,
   },
@@ -400,10 +458,10 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsBold,
   },
   iconArrowBack: {
-    width: 42,
-    height: 25,
-    zIndex: 0,
-    marginStart: -15,
+    position: 'absolute',
+    left: 10,
+    width: 30,
+    height: 30,
   },
 });
 

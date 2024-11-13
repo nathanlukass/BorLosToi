@@ -193,8 +193,8 @@ const LoginScreen = ({route}) => {
       </View>
       <View style={styles.loginButton}>
         <View style={[styles.lineParent, styles.lineParentLayout]}>
-          <View style={[styles.groupChild, styles.groupLayout1]} />
-          <View style={[styles.groupItem, styles.groupLayout1]} />
+          <View style={[styles.groupChild, styles.line]} />
+          <View style={[styles.groupItem, styles.line]} />
           <Text style={[styles.or, styles.orTypo]}>or</Text>
         </View>
         <Pressable
@@ -209,11 +209,10 @@ const LoginScreen = ({route}) => {
         </Pressable>
         <View style={[styles.groupContainer, styles.groupLayout]}>
           <Button
-            style={styles.groupButton}
-            mode="outlined"
+            style={styles.LoginButton}
             onPress={handleLogin}
             contentStyle={styles.groupButtonBtn}>
-            <Text style={[styles.login, styles.loginPosition]}>Login</Text>
+            <Text style={[styles.loginPosition]}>Login</Text>
           </Button>
         </View>
       </View>
@@ -256,7 +255,7 @@ const LoginScreen = ({route}) => {
           onPress={() => usernameSetIsFocused(true)}>
           <TextInput
             value={username}
-            style={styles.inputUsername}
+            style={styles.inputUsernameText}
             onChangeText={setUsername}
             placeholder="Enter your username"
             onFocus={() => usernameSetIsFocused(true)}
@@ -296,7 +295,12 @@ const LoginScreen = ({route}) => {
                   ? require('../../assets/images/Eye1.png')
                   : require('../../assets/images/Eye2.png')
               }
-              style={{width: 22, height: 18, marginLeft: 8}} // Add margin if needed
+              style={{
+                      width: 22,
+                      height: 16,
+                      marginEnd: 5,
+                      tintColor: '#6A6A6A',
+                    }} 
             />
           </TouchableOpacity>
         </View>
@@ -305,7 +309,7 @@ const LoginScreen = ({route}) => {
       <View style={[styles.property1default]}>
         <TouchableOpacity
           style={[
-            styles.usernameField,
+            styles.selectRollField,
             styles.usernameFlexBox,
             {
               borderColor: isDropdownOpen
@@ -334,12 +338,12 @@ const LoginScreen = ({route}) => {
               {opacity: fadeAnim},
             ]}>
             <TouchableOpacity
-              style={[styles.usernameField1, styles.usernameFlexBox]}
+              style={[styles.jarakRole, styles.usernameFlexBox]}
               onPress={() => selectRole('Nurse')}>
               <Text style={styles.selectUserType}>Nurse</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.usernameField1, styles.usernameFlexBox]}
+              style={[styles.jarakRole, styles.usernameFlexBox]}
               onPress={() => selectRole('Admin')}>
               <Text style={styles.selectUserType}>Admin</Text>
             </TouchableOpacity>
@@ -353,7 +357,7 @@ const LoginScreen = ({route}) => {
 const styles = StyleSheet.create({
   containerPassword: {
     marginVertical: 10,
-    width: '83%',
+    width: '90%',
     top: 410,
     left: -5,
     alignSelf: 'center',
@@ -415,10 +419,11 @@ const styles = StyleSheet.create({
   },
   containerUsername: {
     marginVertical: 10,
-    width: '83%',
+    width: '90%',
     top: 420,
     left: -5,
     alignSelf: 'center',
+    paddingHorizontal:2,
   },
   labelUsername: {
     fontSize: FontSize.m3LabelLarge_size,
@@ -428,7 +433,6 @@ const styles = StyleSheet.create({
     left: 10,
   },
   inputContainerUsername: {
-    // alignSelf: 'center',
     left: 7.5,
     height: 45,
     borderRadius: Border.br_8xs,
@@ -437,13 +441,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: Padding.p_3xs,
     justifyContent: 'center',
   },
-  inputUsername: {},
-  groupButtonBtn: {
-    height: 45,
-    width: 320,
+  inputUsernameText: {
+    fontFamily: FontFamily.poppinsRegular,
+
   },
+  // groupButtonBtn: {
+  //   height: 45,
+  //   width: 700,
+  // },
   lineParentLayout: {
-    height: 24,
+    height: 60,
     position: 'absolute',
   },
   orTypo: {
@@ -457,9 +464,9 @@ const styles = StyleSheet.create({
     left: 21,
     position: 'absolute',
   },
-  groupLayout1: {
+  line: {
     height: 1,
-    width: 142,
+    width: 170,
     borderTopWidth: 1,
     borderColor: Color.colorLightgray,
     top: 15,
@@ -467,9 +474,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   groupLayout: {
-    width: 320,
+    width: 360,
     height: 45,
     position: 'absolute',
+    
   },
   loginPosition: {
     color: Color.schemesOnPrimary,
@@ -513,7 +521,7 @@ const styles = StyleSheet.create({
     left: 13,
   },
   loginField: {
-    top: 420,
+    top: 45,
     width: 319,
     height: 138,
   },
@@ -560,18 +568,22 @@ const styles = StyleSheet.create({
     top: 85,
     left: 0,
   },
-  groupButton: {
+  LoginButton: {
     left: 0,
     top: 2,
     position: 'absolute',
     backgroundColor: '#21b557',
+    borderRadius: Border.br_8xs,
+    width:-20,
+    
   },
-  login: {
-    marginLeft: 22,
-  },
+  // login: {
+  //   marginLeft: 40,
+  // },
   groupContainer: {
     left: 1,
     top: 0,
+    
   },
   loginButton: {
     top: 620,
@@ -617,18 +629,15 @@ const styles = StyleSheet.create({
     height: 72,
   },
   loginScreenAdmin: {
-    // borderRadius: Border.br_xl,
-    // alignSelf: 'center',
-    // width: 385,
-    // height: 800,
     flex: 1,
-    // overflow: 'hidden',
+    // backgroundColor: 'white',
   },
   usernameFlexBox: {
     padding: Padding.p_3xs,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    
   },
   usernameBg: {
     backgroundColor: Color.schemesOnPrimary,
@@ -650,27 +659,27 @@ const styles = StyleSheet.create({
   },
   doubleDownIcon: {
     top: 12,
-    left: 280,
+    left: 330,
     width: 20,
     height: 20,
     zIndex: 1,
     position: 'absolute',
   },
-  usernameField: {
+  selectRollField: {
     height: '31%',
     top: '-40%',
-    right: '0.32%',
-    bottom: '28.97%',
+    right: '3.5%',
+    // bottom: '28.97%',
     borderRadius: Border.br_8xs,
-    borderStyle: 'solid',
+    //borderStyle: 'solid',
     borderColor: 'blue',
     borderWidth: 1,
     backgroundColor: Color.schemesOnPrimary,
-    width: '100%',
-    position: 'absolute',
+    width: '115%',
+    // position: 'absolute',
   },
-  usernameField1: {
-    height: 50,
+  jarakRole: {
+    height: 45,
   },
   usernameFieldParent: {
     alignSelf: 'center',
