@@ -9,6 +9,11 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Dimensions,
+
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -27,6 +32,12 @@ import {
   FontSize,
 } from '../../../GlobalStyles';
 
+// Get screen dimensions
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const scaleFactor = screenWidth / 375;
+const scaleSize = (size) => scaleFactor * size; // 375 is an average base width
+const scaleHeight = (size) => (screenHeight / 850) * size; // 812 is an average base height
+
 const LoginScreen = ({route}) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState('');
@@ -39,6 +50,7 @@ const LoginScreen = ({route}) => {
   const [data, setData] = useState([]);
   const [password, setPassword] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
+  const [hoveredOption, setHoveredOption] = useState(null);
 
   const resetLoginFields = () => {
     setUsername('');
@@ -169,315 +181,231 @@ const LoginScreen = ({route}) => {
   // const user = data && data.length > 0 ? data[2] : null;
 
   return (
-    <View style={styles.loginScreenAdmin}>
-      <FlashMessage position="top" />
-      <View style={[styles.loginToContinueWrapper, styles.lineParentLayout]}>
-        <Text style={[styles.loginToContinue, styles.orTypo]}>
-          Login to continue
-        </Text>
-      </View>
-      <View
-        style={[
-          styles.pleaseSelectWhoYouAreWrapper,
-          styles.loginFieldPosition,
-        ]}>
-        <Text style={[styles.pleaseSelectWho, styles.orTypo]}>
-          Please select who you are
-        </Text>
-      </View>
-      <View style={[styles.loginField, styles.loginFieldPosition]}>
-        {/* Tambahkan komponen UsernameField di sini */}
-        {/* <UsernameField /> */}
-        {/* Tambahkan PasswordField di sini */}
-        {/* <PasswordField /> */}
-      </View>
-      <View style={styles.loginButton}>
-        <View style={[styles.lineParent, styles.lineParentLayout]}>
-          <View style={[styles.groupChild, styles.line]} />
-          <View style={[styles.groupItem, styles.line]} />
-          <Text style={[styles.or, styles.orTypo]}>or</Text>
-        </View>
-        <Pressable
-          style={[styles.groupParent, styles.groupLayout]}
-          onPress={() => navigation.navigate('ScreenGuest')}>
-          <View style={[styles.rectangleWrapper, styles.groupLayout]}>
-            <View style={[styles.groupInner, styles.groupLayout]} />
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'android' ? 'padding' : 'height'}
+      keyboardVerticalOffset={scaleHeight(60)} >
+
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.BackgroundScreen}>
+          <FlashMessage position="top" />
+        {/* Bagian untuk Gambar dan Teks Welcome */}
+          <View style={[styles.welcomeWrapper]}>
+            <Text style={[styles.title1]}>{'Welcome to\n(app name)'}</Text>
+            <Image 
+              style={styles.samratIcon}
+              resizeMode="cover"
+              source={require('../../../assets/samrat1.png')}/>
+            </View>
+            <Text style={[styles.title2 ]}>Login to continue</Text>
+
+        {/* select role wrapper */}
+          <View style={[styles.fieldContainer]}>
+            <View style={styles.jarakTextField}>
+              <Text style={[styles.title3]}>Please select who you are</Text>
+              <TouchableOpacity
+                style={[styles.TextField,{
+                  borderColor: isDropdownOpen
+                  ? Color.colorMediumaquamarine
+                  : 'grey',
+                },
+              ]}
+              onPress={toggleDropdown}>
+              <Text style={styles.textGrey1}>
+                {selectedRole || 'Select user type'}
+              </Text>
+              <Animated.Image
+                style={[
+                  styles.arrowDownIcon,
+                  { transform: [{ rotate: rotateIcon }] },
+                ]}
+                resizeMode="cover"
+                source={require('../../../assets/arrow_drop_down.png')}
+              />
+            </TouchableOpacity>
+            {isDropdownOpen && (
+              <Animated.View
+                style={[
+                  styles.roleBg,
+                  {
+                    opacity: fadeAnim,
+                    top: 70,
+                    zIndex: 10,
+                    height: 106,
+                    width: '100%',
+                  },
+                ]}>
+                <TouchableOpacity
+                  style={[
+                    styles.jarakRole,
+                    hoveredOption === 'Nurse' && styles.hoveredOption, // Gaya saat di-hover
+                  ]}
+                    onPress={() => selectRole('Nurse')}
+                    onPressIn={() => setHoveredOption('Nurse')} // Menandai opsi di-hover
+                    onPressOut={() => setHoveredOption(null)}  // Menghapus tanda hover saat disentuh selesai
+                  >
+                    <Text style={styles.textGrey1}>Nurse</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.jarakRole,
+                      hoveredOption === 'Admin' && styles.hoveredOption, // Gaya saat di-hover
+                    ]}
+                    onPress={() => selectRole('Admin')}
+                    onPressIn={() => setHoveredOption('Admin')} // Menandai opsi di-hover
+                    onPressOut={() => setHoveredOption(null)}  // Menghapus tanda hover saat disentuh selesai
+                  >
+                  <Text style={styles.textGrey1}>Admin</Text>
+                </TouchableOpacity>
+              </Animated.View>
+            )}
           </View>
-          <Text style={[styles.asAGuest, styles.loginPosition]}>
-            As a guest
-          </Text>
-        </Pressable>
-        <View style={[styles.groupContainer, styles.groupLayout]}>
-          <Button
-            style={styles.LoginButton}
-            onPress={handleLogin}
-            contentStyle={styles.groupButtonBtn}>
-            <Text style={[styles.loginPosition]}>Login</Text>
-          </Button>
-        </View>
-      </View>
-      <Image
-        style={styles.samratIcon}
-        resizeMode="cover"
-        source={require('../../../assets/samrat1.png')}
-      />
-      <View
-        style={[
-          styles.welcomeToSamratIndikatorWrapper,
-          styles.welcomePosition,
-        ]}>
-        <Text style={[styles.welcomeToSamratContainer, styles.welcomePosition]}>
-          <Text style={styles.welcomeTo}>Welcome to</Text>
-          <Text style={styles.text}>{' \n'}</Text>
-          <Text style={styles.samrat}>Samrat</Text>
-          <Text style={styles.text1}> </Text>
-          <Text style={styles.indikator}>Indikator</Text>
-          <Text style={styles.text}> </Text>
-        </Text>
-      </View>
-      {/* <SelectUserNurse
-        selectUserNursePosition="absolute"
-        selectUserNurseTop={368}
-        selectUserNurseLeft={27}
-      /> */}
-      <View style={styles.containerUsername}>
-        <Text style={styles.labelUsername}>Username</Text>
-        <TouchableOpacity
-          style={[
-            styles.inputContainerUsername,
-            {
-              borderColor: usernameIsFocused
-                ? Color.colorMediumaquamarine
-                : 'grey',
-            },
-          ]}
-          activeOpacity={1}
-          onPress={() => usernameSetIsFocused(true)}>
-          <TextInput
-            value={username}
-            style={styles.inputUsernameText}
-            onChangeText={setUsername}
-            placeholder="Enter your username"
-            onFocus={() => usernameSetIsFocused(true)}
-            onBlur={() => usernameSetIsFocused(false)}
-            placeholderTextColor={Color.colorDimgray}
-          />
-        </TouchableOpacity>
-      </View>
+  
+    {/* username */}
+          <View style={styles.jarakTextField}>
+            <Text style={styles.title3}>Username</Text>
+              <TouchableOpacity style={[styles.TextField,
+                  {
+                    borderColor: usernameIsFocused
+                        ? Color.colorMediumaquamarine
+                        : 'grey',
+                  },
+                ]}
+                activeOpacity={1}
+                onPress={() => usernameSetIsFocused(true)}>
+                <TextInput
+                  value={username}
+                  style={styles.textGrey2}
+                  onChangeText={setUsername}
+                  placeholder="Enter your username"
+                  onFocus={() => usernameSetIsFocused(true)}
+                  onBlur={() => usernameSetIsFocused(false)}
+                  placeholderTextColor={Color.colorDimgray}
+                />
+              </TouchableOpacity>
+            </View>
 
-      <View style={styles.containerPassword}>
-        <Text style={styles.labelPassword}>Password</Text>
-        <View
-          style={[
-            styles.inputContainerPassword,
-            {
-              borderColor: passwordIsFocused
-                ? Color.colorMediumaquamarine
-                : 'grey',
-              flexDirection: 'row', // Arrange TextInput and icon in a row
-              alignItems: 'center', // Center vertically
-            },
-          ]}>
-          <TextInput
-            style={[styles.inputPassword, {flex: 1}]} // Make TextInput take remaining space
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Enter your password"
-            onFocus={() => passwordSetIsFocused(true)}
-            onBlur={() => passwordSetIsFocused(false)}
-            placeholderTextColor={Color.colorDimgray}
-            secureTextEntry={securePassword}
-          />
-          <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
-            <Image
-              source={
-                securePassword
-                  ? require('../../assets/images/Eye1.png')
-                  : require('../../assets/images/Eye2.png')
-              }
-              style={{
-                      width: 22,
-                      height: 16,
-                      marginEnd: 5,
-                      tintColor: '#6A6A6A',
-                    }} 
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+ {/* password */}
+            <View style={styles.jarakTextField}>
+              <Text style={styles.title3}>Password</Text>
+              <View style={[ styles.TextField, { 
+                      borderColor: passwordIsFocused
+                      ? Color.colorMediumaquamarine
+                      : 'grey', flexDirection: 'row', alignItems: 'center'},
+                ]}>
+                <TextInput
+                  style={[styles. textGrey2,{flex: 1}]} 
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder="Enter your password"
+                  onFocus={() => passwordSetIsFocused(true)}
+                  onBlur={() => passwordSetIsFocused(false)}
+                  placeholderTextColor={Color.colorDimgray}
+                  secureTextEntry={securePassword}/>
+                  <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
+                    <Image
+                      source={
+                        securePassword
+                          ? require('../../assets/images/Eye1.png')
+                          : require('../../assets/images/Eye2.png')}
+                      style={{
+                              width: 22,
+                              height: 16,
+                              right:8,
+                              tintColor: '#6A6A6A',
+                            }} 
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
 
-      <View style={[styles.property1default]}>
-        <TouchableOpacity
-          style={[
-            styles.selectRollField,
-            styles.usernameFlexBox,
-            {
-              borderColor: isDropdownOpen
-                ? Color.colorMediumaquamarine
-                : 'grey',
-            },
-          ]}
-          onPress={toggleDropdown}>
-          <Text style={styles.selectUserType}>
-            {selectedRole || 'Select user type'}
-          </Text>
-          <Animated.Image
-            style={[
-              styles.doubleDownIcon,
-              {transform: [{rotate: rotateIcon}]}, // Menggunakan animasi rotasi untuk ikon
-            ]}
-            resizeMode="cover"
-            source={require('../../../assets/double-down.png')}
-          />
-        </TouchableOpacity>
-        {isDropdownOpen && (
-          <Animated.View
-            style={[
-              styles.usernameFieldParent,
-              styles.usernameBg,
-              {opacity: fadeAnim},
-            ]}>
-            <TouchableOpacity
-              style={[styles.jarakRole, styles.usernameFlexBox]}
-              onPress={() => selectRole('Nurse')}>
-              <Text style={styles.selectUserType}>Nurse</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.jarakRole, styles.usernameFlexBox]}
-              onPress={() => selectRole('Admin')}>
-              <Text style={styles.selectUserType}>Admin</Text>
-            </TouchableOpacity>
-          </Animated.View>
-        )}
-      </View>
-    </View>
+            <View style={styles.BtnLoginWrapper}>
+            {/* ROLE LOGIN BUTTON */}
+            <Pressable style={styles.BtnRoleLogin} onPress={handleLogin}>
+              <Text style={styles.loginPosition}>Login</Text>
+            </Pressable>
+
+            {/* OR Separator */}
+            <View style={styles.lineWrapper}>
+              <View style={styles.lineLeftRight} />
+              <Text style={styles.orText}>or</Text>
+              <View style={styles.lineLeftRight} />
+            </View>
+
+            {/* GUEST BUTTON */}
+            <Pressable style={styles.BtnGuest} onPress={() => navigation.navigate('ScreenGuest')}>
+              <Text style={[styles.loginPosition]}>As a guest</Text>
+            </Pressable>
+          </View>
+
+        </View>
+      </ScrollView>
+  </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  containerPassword: {
-    marginVertical: 10,
-    width: '90%',
-    top: 410,
-    left: -5,
-    alignSelf: 'center',
-  },
-  // inputContainerPassword: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   borderWidth: 1,
-  //   borderColor: 'grey', // Ganti dengan warna yang sesuai jika ada kondisi fokus
-  //   borderRadius: 8,
-  //   paddingHorizontal: 0,
-  //   marginVertical: 0,
-  // },
-  // inputPassword: {
-  //   flex: 1,
-  //   fontSize: 16,
-  //   paddingVertical: 0,
-  // },
-  iiconContainer: {
-    paddingHorizontal: 5,
-    marginBottom: -20,
-    marginLeft: 300,
-    top: -30,
-  },
-  input: {
+  container: {
     flex: 1,
-    fontSize: 16,
-    paddingVertical: 0,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    marginBottom: 20,
+  scrollContainer: {
+    flexGrow: 1,
   },
-  labelPassword: {
-    fontSize: FontSize.m3LabelLarge_size,
-    fontFamily: FontFamily.poppinsRegular,
-    color: Color.colorDimgray,
-    marginBottom: 5,
-    left: 10,
+  BackgroundScreen: {
+    flex: 1,
   },
-  inputContainerPassword: {
-    left: 7.5,
-    height: 45,
-    borderRadius: Border.br_8xs,
-    borderWidth: 1,
-    backgroundColor: Color.schemesOnPrimary,
-    paddingHorizontal: Padding.p_3xs,
-    justifyContent: 'center',
-    fontSize: FontSize.m3LabelLarge_size,
-    fontFamily: FontFamily.poppinsRegular,
-  },
-  inputPassword: {
-    fontSize: FontSize.m3LabelLarge_size,
-    fontFamily: FontFamily.poppinsRegular,
-    color: Color.colorBlack,
-  },
-  containerUsername: {
-    marginVertical: 10,
-    width: '90%',
-    top: 420,
-    left: -5,
-    alignSelf: 'center',
-    paddingHorizontal:2,
-  },
-  labelUsername: {
-    fontSize: FontSize.m3LabelLarge_size,
-    fontFamily: FontFamily.poppinsRegular,
-    color: Color.colorDimgray,
-    marginBottom: 5,
-    left: 10,
-  },
-  inputContainerUsername: {
-    left: 7.5,
-    height: 45,
-    borderRadius: Border.br_8xs,
-    borderWidth: 1,
-    backgroundColor: Color.schemesOnPrimary,
-    paddingHorizontal: Padding.p_3xs,
-    justifyContent: 'center',
-  },
-  inputUsernameText: {
-    fontFamily: FontFamily.poppinsRegular,
-
-  },
-  // groupButtonBtn: {
-  //   height: 45,
-  //   width: 700,
-  // },
-  lineParentLayout: {
-    height: 60,
-    position: 'absolute',
-  },
-  orTypo: {
+  // text styles
+  title1: {
+    fontSize: FontSize.size_5xl,
+    fontFamily: FontFamily.poppinsSemiBold,
+    fontWeight: '600',
     textAlign: 'center',
-    fontFamily: FontFamily.poppinsRegular,
     color: Color.notSoBlack,
-    top: 0,
+    marginBottom:10,
+  },
+  title2: {
+    lineHeight: 24,
+    fontSize: FontSize.m3BodyLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    alignSelf: 'center',
+    color: Color.notSoBlack,
+  },
+  title3:{
+    left:4,
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsRegular,
+    color: '#000000',
+  },
+  textGrey1: {
+    left: 16,
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.colorDimgray,
+    width: 100,
+    height: 19,
+    zIndex: 0,
     position: 'absolute',
   },
-  loginFieldPosition: {
-    left: 21,
-    position: 'absolute',
+  textGrey2: {
+    fontFamily: FontFamily.poppinsRegular,
+    top:3,
   },
-  line: {
-    height: 1,
-    width: 170,
-    borderTopWidth: 1,
-    borderColor: Color.colorLightgray,
-    top: 15,
-    borderStyle: 'solid',
-    position: 'absolute',
+  fieldContainer: {
+    marginTop: 16,
+    alignSelf: 'center',
+    width: '90%',
   },
-  groupLayout: {
-    width: 360,
+  TextField: {
+    width: '100%',
     height: 45,
-    position: 'absolute',
-    
+    borderRadius: Border.br_8xs,
+    borderColor: '#21b557',
+    borderWidth: 1,
+    backgroundColor: Color.schemesOnPrimary,
+    paddingHorizontal:Padding.p_3xs,
+    justifyContent:'center',
+    marginBottom:20, 
   },
   loginPosition: {
     color: Color.schemesOnPrimary,
@@ -485,220 +413,103 @@ const styles = StyleSheet.create({
     marginTop: -11.5,
     fontFamily: FontFamily.poppinsSemiBold,
     fontWeight: '600',
-    left: '50%',
+    //left: '50%',
     textAlign: 'center',
     lineHeight: 24,
-    fontSize: FontSize.m3BodyLarge_size,
+    fontSize: scaleSize(14),
     position: 'absolute',
   },
-  welcomePosition: {
-    width: 241,
-    left: '50%',
-    position: 'absolute',
+  jarakTextField: {
+    marginBottom: -scaleHeight(10),
   },
-  loginToContinue: {
-    lineHeight: 24,
+  jarakRole: {
+    height: 45,
+    top:16,
+  },
+  orText: {
+    marginHorizontal: 8,
     fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsRegular,
-    alignSelf: 'center',
-  },
-  loginToContinueWrapper: {
-    top: 284,
-    alignSelf: 'center',
-    width: 138,
-  },
-  pleaseSelectWho: {
-    fontSize: FontSize.m3LabelLarge_size,
-    left: 20,
-  },
-  pleaseSelectWhoYouAreWrapper: {
-    top: 341,
-    width: 200,
-    height: 21,
-  },
-  passwordField: {
-    top: 93,
-    left: 13,
-  },
-  loginField: {
-    top: 45,
-    width: 319,
-    height: 138,
-  },
-  groupChild: {
-    left: 0,
-  },
-  groupItem: {
-    left: 180,
-  },
-  or: {
-    alignSelf: 'center',
-    lineHeight: 24,
-    fontSize: FontSize.m3BodyLarge_size,
-    fontFamily: FontFamily.poppinsRegular,
-  },
-  lineParent: {
-    top: 53,
-    width: 321,
-    left: 1,
-  },
-  groupInner: {
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 9,
-    elevation: 9,
-    shadowOpacity: 1,
-    backgroundColor: Color.colorCornflowerblue_100,
-    borderRadius: Border.br_8xs,
-    width: 320,
-    left: 0,
-    top: 0,
-  },
-  rectangleWrapper: {
-    left: 2,
-    top: 0,
+    color: Color.notSoBlack,
+    textAlign: 'center',
   },
   asAGuest: {
     marginLeft: -39,
   },
-  groupParent: {
-    top: 85,
-    left: 0,
+
+  //button
+  BtnContainer: {
+    alignSelf: 'center',
+    width: '90%', // Matches TextField width in fieldContainer
+    paddingVertical: 20,
   },
-  LoginButton: {
-    left: 0,
-    top: 2,
-    position: 'absolute',
+  BtnGuest: {
+    width: '100%',
+    height: 45,
+    // position: 'absolute',
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius: Border.br_8xs,
+    backgroundColor:'#1E9DEC',
+    // marginVertical:10,
+    marginTop: 10,
+    // top:90,  
+  },
+  BtnRoleLogin: {
+    // top: 2,
     backgroundColor: '#21b557',
     borderRadius: Border.br_8xs,
-    width:-20,
-    
+    width:'100%',
+    height: 45,
+    justifyContent:'center',
+    alignItems:'center',
+    // marginVertical:10,
+    marginBottom: 10,
   },
-  // login: {
-  //   marginLeft: 40,
-  // },
-  groupContainer: {
-    left: 1,
-    top: 0,
-    
-  },
-  loginButton: {
-    top: 620,
+  BtnLoginWrapper: {
     alignSelf: 'center',
-    width: 322,
-    height: 130,
+    width: '90%',
+    paddingVertical:20,
+  },
+  lineWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 0,
+  },
+  lineLeftRight: {
+    flex: 1,
+    height: 1,
+    backgroundColor: Color.colorLightgray,
+  },
+  lineLeft: {
+    left: 0,
+  },
+  lineRight: {
+    left: 200,
+  },
+  welcomeWrapper: {
+    alignItems:'center',
+    marginTop: 34,
+  },
+  roleBg: {
+    backgroundColor: Color.schemesOnPrimary,
+    width: '160%',
+    position: 'absolute',
+  
+  },
+  hoveredOption: {
+    backgroundColor: '#4EC69E',
+  },
+  arrowDownIcon: {
+    width: 25,
+    height: 25, 
+    right:10,
     position: 'absolute',
   },
   samratIcon: {
-    alignSelf: 'center',
-    top: 129,
-    width: 133,
-    height: 142,
-    position: 'absolute',
-  },
-  welcomeTo: {
-    color: Color.notSoBlack,
-  },
-  text: {
-    color: Color.colorBlack,
-  },
-  samrat: {
-    color: Color.colorCrimson,
-  },
-  text1: {
-    color: Color.colorMediumaquamarine,
-  },
-  indikator: {
-    color: Color.colorCornflowerblue_200,
-  },
-  welcomeToSamratContainer: {
-    marginLeft: -120,
-    fontSize: FontSize.size_5xl,
-    fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
-    width: 241,
-    textAlign: 'center',
-    top: 0,
-  },
-  welcomeToSamratIndikatorWrapper: {
-    marginLeft: -123,
-    top: 50,
-    height: 72,
-  },
-  loginScreenAdmin: {
-    flex: 1,
-    // backgroundColor: 'white',
-  },
-  usernameFlexBox: {
-    padding: Padding.p_3xs,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    
-  },
-  usernameBg: {
-    backgroundColor: Color.schemesOnPrimary,
-    width: '100%',
-    position: 'absolute',
-  },
-  selectUserType: {
-    marginTop: -5,
-    top: '70%',
-    left: 15,
-    fontSize: FontSize.m3LabelLarge_size,
-    fontFamily: FontFamily.poppinsRegular,
-    color: Color.colorDimgray,
-    textAlign: 'left',
     width: 100,
-    height: 19,
-    zIndex: 0,
-    position: 'absolute',
-  },
-  doubleDownIcon: {
-    top: 12,
-    left: 330,
-    width: 20,
-    height: 20,
-    zIndex: 1,
-    position: 'absolute',
-  },
-  selectRollField: {
-    height: '31%',
-    top: '-40%',
-    right: '3.5%',
-    // bottom: '28.97%',
-    borderRadius: Border.br_8xs,
-    //borderStyle: 'solid',
-    borderColor: 'blue',
-    borderWidth: 1,
-    backgroundColor: Color.schemesOnPrimary,
-    width: '115%',
-    // position: 'absolute',
-  },
-  jarakRole: {
-    height: 45,
-  },
-  usernameFieldParent: {
-    alignSelf: 'center',
-    height: '70%',
-    top: -10,
-    bottom: '0%',
-    left: '0%',
-    borderBottomRightRadius: Border.br_3xs,
-    borderBottomLeftRadius: Border.br_3xs,
-    paddingHorizontal: 0,
-    paddingVertical: Padding.p_8xs,
-  },
-  property1default: {
-    left: -10,
-    width: 317,
-    height: 145,
-    top: 245,
-    alignSelf: 'center',
+    height: 100,
+    marginBottom:10,
   },
 });
-
 export default LoginScreen;
