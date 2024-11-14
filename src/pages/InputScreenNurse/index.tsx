@@ -184,8 +184,12 @@ const NurseInputPage = ({ route }) => {
               source={require('../../../assets/-icon-arrow-back.png')}
             />
           </Pressable>
+          <View>
           <Text style={styles.headerTitle}>{ruangan}</Text>
+          </View>
+        
         </View>
+        
 
         {/* Subtitle Text */}
         <View style={styles.timeInfoContainer}>
@@ -193,7 +197,9 @@ const NurseInputPage = ({ route }) => {
         </View>
 
         <DatePickerr
-          style={{top: -7, width: 370, left: -30}}
+          style={{top: -7, width: 350,
+            alignSelf: 'center',
+          }}
           onDateChange={handleDateChange}
         />
 
@@ -314,7 +320,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     textAlign: 'center',
@@ -325,8 +331,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop:65,
+    marginBottom: 15,
+    marginTop: 55,
   },
   timeInfoText: {
     color: '#FFFFFF',
@@ -340,7 +346,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
     padding: 15,
-    marginBottom: 30,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
@@ -389,20 +395,21 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   jumlahBed: {
-    fontSize: 15,
+    fontWeight: 'bold',
+    fontSize: 16,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.notSoBlack,
     marginLeft: 155,
   },
   sectionTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     marginBottom: 10,
     marginTop: 10,
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.notSoBlack,
   },
@@ -450,18 +457,17 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 50,
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 10,
   },
   submitText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: FontFamily.poppinsBold,
   },
   iconArrowBack: {
-    position: 'absolute',
-    left: 10,
-    width: 30,
-    height: 30,
+
+    width: 42,
+    height: 25,
   },
 });
 

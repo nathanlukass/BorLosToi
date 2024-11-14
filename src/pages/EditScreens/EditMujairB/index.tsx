@@ -9,9 +9,8 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  Alert,
 } from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigation, ParamListBase} from '@react-navigation/core';
 import {
   Padding,
   Border,
@@ -19,15 +18,18 @@ import {
   FontFamily,
   FontSize,
 } from '../../../../GlobalStyles';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/core';
 import {Gap, DatePickerr, RealTimeClock} from '../../../components';
-import {ScreenWidth} from 'react-native-elements/dist/helpers';
+import moment from 'moment';
 
 const EditMujairB = ({route}) => {
-  const {user} = route.params; // Access user details from route parameters
-  const {username, role, ruangan, id_user, nama} = user; // Destructure user objec
+  const {user} = route.params;
+  const {ruangan} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
+  const titleRuangan = "Mujair B";
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState('22');
+  const [selectedDate, setSelectedDate] = useState('');
   const [pasienAwal, setPasienAwal] = useState('0');
   const [pasienMasuk, setPasienMasuk] = useState('0');
   const [pasienPindahan, setPasienPindahan] = useState('0');
@@ -36,8 +38,6 @@ const EditMujairB = ({route}) => {
   const [pasienRujuk, setPasienRujuk] = useState('0');
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
-
-  // New state variables for additional fields
   const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
   const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
   const [pasienMasihDirawat, setPasienMasihDirawat] = useState('0');
@@ -47,7 +47,7 @@ const EditMujairB = ({route}) => {
   const [kelas1, setKelas1] = useState('0');
   const [kelas2, setKelas2] = useState('0');
   const [kelas3, setKelas3] = useState('0');
-  const [namaruangan, setRuangan] = useState(ruangan);
+  const [namaruangan, setRuangan] = useState(titleRuangan);
 
   const increment = setter => () =>
     setter(prev => (parseInt(prev, 10) + 1).toString());
@@ -57,16 +57,71 @@ const EditMujairB = ({route}) => {
       return newValue >= 0 ? newValue.toString() : '0';
     });
 
-  const handleSubmitButton2 = async () => {
+  // Fetch data for the selected date and populate form fields
+  const handleDateChange = async date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/insert_nurse',
+        'https://samratindikator.online/borlostoi/public/insert/get_input_data',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
+            date: formattedDate,
+            ruangan: titleRuangan
+          }).toString(),
+        },
+      );
+
+      const result = await response.json();
+      console.log('API Response:', result); // Debugging line
+
+      if (result.status === 'success' && result.data) {
+        const data = result.data;
+        // Update state with fetched data
+        setPasienAwal(data.Pasien_Awal);
+        setPasienMasuk(data.Pasien_Masuk);
+        setPasienPindahan(data.Pasien_Pindahan);
+        setPasienDipindahkan(data.Pasien_Dipindahkan);
+        setPasienHidup(data.Pasien_Hidup);
+        setPasienRujuk(data.Pasien_Rujuk);
+        setPasienAps(data.Pasien_Aps);
+        setPasienLainLain(data.Pasien_lain_lain);
+        setPasienKurangDari48Jam(data.Pasien_kurang_dari_48jam);
+        setPasienLebihDari48Jam(data.Pasien_lebih_dari_48jam);
+        setPasienMasihDirawat(data.Pasien_Masih_Dirawat);
+        setPasienLamaDirawat(data.Pasien_Lama_Dirawat);
+        setBanyakPasien(data.Banyak_Pasien);
+        setJumlahHari(data.Jumlah_Hari);
+        setKelas1(data.Kelas_1);
+        setKelas2(data.Kelas_2);
+        setKelas3(data.Kelas_3);
+      } else {
+        Alert.alert(
+          'Error',
+          'No data found for the selected date. Please try another date.',
+        );
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to fetch data: ' + error.message);
+    }
+  };
+
+  const handleSubmitButton2 = async () => {
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/update_nurse',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+
+          body: new URLSearchParams({
+            Tanggal: selectedDate, // Include the selected date to identify the record to update
             Pasien_Awal: pasienAwal,
             Pasien_Masuk: pasienMasuk,
             Pasien_Pindahan: pasienPindahan,
@@ -91,8 +146,8 @@ const EditMujairB = ({route}) => {
 
       const result = await response.json();
       if (result.status === 'success') {
-        Alert.alert('Sukses', 'Data berhasil diinput');
-        navigation.navigate('HomeScreenNurse', {user});
+        Alert.alert('Sukses', 'Data berhasil diubah');
+        navigation.navigate('EditScreenAdmin', {user});
       } else {
         Alert.alert('Gagal', 'Data gagal diinput: ' + result.message);
       }
@@ -128,7 +183,6 @@ const EditMujairB = ({route}) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Header with title and time */}
         <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
@@ -139,18 +193,19 @@ const EditMujairB = ({route}) => {
               source={require('../../../../assets/-icon-arrow-back.png')}
             />
           </Pressable>
-          <Text style={styles.headerTitle}>{'Mujair B'}</Text>
+          <Text style={styles.headerTitle}>{titleRuangan}</Text>
         </View>
 
-        {/* Subtitle Text */}
         <View style={styles.timeInfoContainer}>
           <RealTimeClock />
         </View>
-
-        <DatePickerr style={{top: -7, width: 370, left: -30}} />
+        <DatePickerr
+          style={{top: -7, width: 370, left: -30}}
+          onDateChange={handleDateChange}
+        />
 
         {/* Fields with increment/decrement buttons */}
-        <View style={styles.section}>
+        <View style={styles.sectionJumlahBed}>
           <Text style={styles.label}>Jumlah tempat tidur:</Text>
           <Text style={styles.jumlahBed}>{jumlahTempatTidur}</Text>
         </View>
@@ -170,49 +225,35 @@ const EditMujairB = ({route}) => {
             setPasienPindahan,
           )}
         </View>
-
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien Dipindahkan</Text>
+        <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
+        <View style={styles.row}>
+        <Text style={[styles.subsectionTitle, { marginRight: 6 }]}>Pasien keluar</Text>
+        <Text style={[styles.subsectionTitle, { color: '#00A676' }]}>Hidup</Text>
+        </View>
           {renderInputField(
             'Pasien dipindahkan',
             pasienDipindahkan,
             setPasienDipindahkan,
           )}
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
           {renderInputField('Hidup', pasienHidup, setPasienHidup)}
           {renderInputField('Rujuk', pasienRujuk, setPasienRujuk)}
           {renderInputField('APS', pasienAps, setPasienAps)}
           {renderInputField('Lain-lain', pasienLainLain, setPasienLainLain)}
+
+        {/* Pasien keluar Meninggal */}
+        <View style={styles.row}>
+        <Text style={[styles.subsectionTitle, { marginRight: 6 }]}>Pasien keluar</Text>
+        <Text style={[styles.subsectionTitle, { color: '#FF5A5F' }]}>Meninggal</Text>
+        </View>       
+          {renderInputField('Kurang dari 48 jam', pasienKurangDari48Jam, setPasienKurangDari48Jam)}
+          {renderInputField('Lebih dari 48 jam', pasienLebihDari48Jam, setPasienLebihDari48Jam)}
         </View>
 
-        {/* New sections */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Additional Patient Info</Text>
-          {renderInputField(
-            'Kurang dari 48 jam',
-            pasienKurangDari48Jam,
-            setPasienKurangDari48Jam,
-          )}
-          {renderInputField(
-            'Lebih dari 48 jam',
-            pasienLebihDari48Jam,
-            setPasienLebihDari48Jam,
-          )}
-          {renderInputField(
-            'Masih dirawat',
-            pasienMasihDirawat,
-            setPasienMasihDirawat,
-          )}
-          {renderInputField(
-            'Lama dirawat',
-            pasienLamaDirawat,
-            setPasienLamaDirawat,
-          )}
-          {renderInputField('Banyak pasien', banyakPasien, setBanyakPasien)}
-          {renderInputField('Jumlah hari', jumlahHari, setJumlahHari)}
+        <Text style={styles.sectionTitle}>Pasien yang masih dirawat</Text>
+          {renderInputField('Lama dirawat', pasienLamaDirawat, setPasienLamaDirawat)}
+          {renderInputField('Pasien keluar/masuk \npada hari yang sama', banyakPasien, setBanyakPasien)}
         </View>
 
         <View style={styles.section}>
@@ -222,7 +263,6 @@ const EditMujairB = ({route}) => {
           {renderInputField('Kelas 3', kelas3, setKelas3)}
         </View>
 
-        {/* Submit Button */}
         <TouchableOpacity
           style={styles.submitButton}
           onPress={handleSubmitButton2}>
@@ -236,47 +276,108 @@ const EditMujairB = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: '#FFFFFFF',
   },
   scrollContainer: {
     padding: 20,
     paddingBottom: 40,
   },
+  row: {
+    top: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  subsectionTitle: {
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    marginTop: 15,
+    marginBottom: 10,
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginEnd: 75,
+    paddingVertical: 5,
+  },
+  totalLabel: {
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
+  },
+  totalValue: {
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    textAlign: 'right',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
-    marginStart: 'auto',
-    marginEnd: 'auto',
-    left: -10,
+    textAlign: 'center',
+    flex: 1,
   },
   timeInfoContainer: {
     backgroundColor: '#007BFF',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 15,
+    marginTop: 55,
   },
   timeInfoText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontFamily: FontFamily.poppinsRegular,
   },
+  sectionJumlahBed : {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 6,
+    width: '120%',
+    position: 'absolute',
+    alignSelf: 'center',
+    justifyContent:'center',
+  },
+  
   section: {
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
     shadowRadius: 8,
+    elevation: 6,
   },
   fieldContainer: {
     flexDirection: 'row',
@@ -292,22 +393,30 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   jumlahBed: {
-    fontSize: 15,
+    fontWeight: 'bold',
+    fontSize: 16,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.notSoBlack,
+    marginLeft: 155,
   },
   sectionTitle: {
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     marginBottom: 10,
     marginTop: 10,
   },
+  label: {
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     marginLeft: 'auto',
+    marginBottom:5,
   },
   button: {
     width: 30,
@@ -325,29 +434,32 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsBold,
   },
   input: {
     width: 40,
-    height: 40,
+    height: 35,
     textAlign: 'center',
     fontSize: 15,
+    fontFamily: FontFamily.poppinsRegular,
     borderWidth: 1,
     borderColor: '#CCCCCC',
     borderRadius: 5,
     marginHorizontal: 5,
+    paddingBottom: 5,
+    paddingVertical: 5,
   },
   submitButton: {
     backgroundColor: '#28A745',
     paddingVertical: 15,
-    borderRadius: 25,
+    borderRadius: 50,
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 10,
   },
   submitText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: FontFamily.poppinsBold,
   },
   iconArrowBack: {

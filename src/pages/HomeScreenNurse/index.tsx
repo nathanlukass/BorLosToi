@@ -50,12 +50,12 @@ const HomeScreenNurse = ({route}) => {
         />
         <DashbordIsianHariIni />
         <View style={[styles.lihatBorlostoi, styles.lihatLayout]}>
-          <View
+        <View
             style={[
               styles.lihatBorlostoiChild,
               styles.bottomNavigationShadowBox,
             ]}
-          />
+          /> 
           <Pressable
             style={styles.lihatBorLosContainer}
             onPress={openLihatBORLOS}>
