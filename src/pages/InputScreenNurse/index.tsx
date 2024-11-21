@@ -17,25 +17,30 @@ import {FontFamily, Color} from '../../../GlobalStyles';
 import {Gap, DatePickerr} from '../../components';
 import RealTimeClock from '../../components/atoms/Time';
 import moment from 'moment';
+import PasienAwal from '../../../components/PasienAwal';
 
 const NurseInputPage = ({route}) => {
   const {user} = route.params;
   const {username, role, ruangan, id_user, nama} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const [jumlahTempatTidur, setJumlahTempatTidur] = useState('30');
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState(22);
   const [pasienAwal, setPasienAwal] = useState('0');
   const [pasienMasuk, setPasienMasuk] = useState('0');
   const [pasienPindahan, setPasienPindahan] = useState('0');
+  const [jumlah, setJumlah] = useState('0');
   const [pasienDipindahkan, setPasienDipindahkan] = useState('0');
   const [pasienHidup, setPasienHidup] = useState('0');
   const [pasienRujuk, setPasienRujuk] = useState('0');
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
+  const [jumlah_PKH, setJumlahPKH] = useState('0');
 
   // New state variables for additional fields
   const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
   const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
+  const [jumlah_PKM, setJumlahPKM] = useState('0');
+
   const [pasienMasihDirawat, setPasienMasihDirawat] = useState('0');
   const [pasienLamaDirawat, setPasienLamaDirawat] = useState('0');
   const [banyakPasien, setBanyakPasien] = useState('0');
@@ -89,7 +94,7 @@ const NurseInputPage = ({route}) => {
         setPasienMasihDirawat(data.Pasien_Masih_Dirawat);
         setPasienLamaDirawat(data.Pasien_Lama_Dirawat);
         setBanyakPasien(data.Banyak_Pasien);
-        setJumlahHari(data.Jumlah_Hari);
+        setJumlahHari(data.Jumlah_Hari_Perawatan);
         setKelas1(data.Kelas_1);
         setKelas2(data.Kelas_2);
         setKelas3(data.Kelas_3);
@@ -127,13 +132,36 @@ const NurseInputPage = ({route}) => {
             Pasien_Masih_Dirawat: pasienMasihDirawat,
             Pasien_Lama_Dirawat: pasienLamaDirawat,
             Banyak_Pasien: banyakPasien,
-            Jumlah_Hari: jumlahHari,
+            Jumlah_Hari_Perawatan: jumlahHari,
             Kelas_1: kelas1,
             Kelas_2: kelas2,
             Kelas_3: kelas3,
             Ruangan: namaruangan,
           }).toString(),
         },
+      );
+
+      console.log(
+        new URLSearchParams({
+          Pasien_Awal: pasienAwal,
+          Pasien_Masuk: pasienMasuk,
+          Pasien_Pindahan: pasienPindahan,
+          Pasien_Dipindahkan: pasienDipindahkan,
+          Pasien_Hidup: pasienHidup,
+          Pasien_Rujuk: pasienRujuk,
+          Pasien_Aps: pasienAps,
+          Pasien_lain_lain: pasienLainLain,
+          Pasien_kurang_dari_48jam: pasienKurangDari48Jam,
+          Pasien_lebih_dari_48jam: pasienLebihDari48Jam,
+          Pasien_Masih_Dirawat: pasienMasihDirawat,
+          Pasien_Lama_Dirawat: pasienLamaDirawat,
+          Banyak_Pasien: banyakPasien,
+          Jumlah_Hari_Perawatan: jumlahHari,
+          Kelas_1: kelas1,
+          Kelas_2: kelas2,
+          Kelas_3: kelas3,
+          Ruangan: namaruangan,
+        }).toString(),
       );
 
       const result = await response.json();

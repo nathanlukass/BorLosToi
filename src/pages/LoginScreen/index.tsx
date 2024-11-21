@@ -13,7 +13,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
-
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -33,10 +32,10 @@ import {
 } from '../../../GlobalStyles';
 
 // Get screen dimensions
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 const scaleFactor = screenWidth / 375;
-const scaleSize = (size) => scaleFactor * size; // 375 is an average base width
-const scaleHeight = (size) => (screenHeight / 850) * size; // 812 is an average base height
+const scaleSize = size => scaleFactor * size; // 375 is an average base width
+const scaleHeight = size => (screenHeight / 850) * size; // 812 is an average base height
 
 const LoginScreen = ({route}) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -184,65 +183,67 @@ const LoginScreen = ({route}) => {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'android' ? 'padding' : 'height'}
-      keyboardVerticalOffset={scaleHeight(60)} >
-
+      keyboardVerticalOffset={scaleHeight(60)}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.BackgroundScreen}>
           <FlashMessage position="top" />
-        {/* Bagian untuk Gambar dan Teks Welcome */}
+          {/* Bagian untuk Gambar dan Teks Welcome */}
           <View style={[styles.welcomeWrapper]}>
             <Text style={[styles.title1]}>{'Welcome to\n(app name)'}</Text>
-            <Image 
+            <Image
               style={styles.samratIcon}
               resizeMode="cover"
-              source={require('../../../assets/samrat1.png')}/>
-            </View>
-            <Text style={[styles.title2 ]}>Login to continue</Text>
+              source={require('../../../assets/samrat1.png')}
+            />
+          </View>
+          <Text style={[styles.title2]}>Login to continue</Text>
 
-        {/* select role wrapper */}
+          {/* select role wrapper */}
           <View style={[styles.fieldContainer]}>
             <View style={styles.jarakTextField}>
               <Text style={[styles.title3]}>Please select who you are</Text>
               <TouchableOpacity
-                style={[styles.TextField,{
-                  borderColor: isDropdownOpen
-                  ? Color.colorMediumaquamarine
-                  : 'grey',
-                },
-              ]}
-              onPress={toggleDropdown}>
-              <Text style={styles.textGrey1}>
-                {selectedRole || 'Select user type'}
-              </Text>
-              <Animated.Image
                 style={[
-                  styles.arrowDownIcon,
-                  { transform: [{ rotate: rotateIcon }] },
-                ]}
-                resizeMode="cover"
-                source={require('../../../assets/arrow_drop_down.png')}
-              />
-            </TouchableOpacity>
-            {isDropdownOpen && (
-              <Animated.View
-                style={[
-                  styles.roleBg,
+                  styles.TextField,
                   {
-                    opacity: fadeAnim,
-                    top: 70,
-                    zIndex: 10,
-                    height: 106,
-                    width: '100%',
+                    borderColor: isDropdownOpen
+                      ? Color.colorMediumaquamarine
+                      : 'grey',
                   },
-                ]}>
-                <TouchableOpacity
+                ]}
+                onPress={toggleDropdown}>
+                <Text style={styles.textGrey1}>
+                  {selectedRole || 'Select user type'}
+                </Text>
+                <Animated.Image
                   style={[
-                    styles.jarakRole,
-                    hoveredOption === 'Nurse' && styles.hoveredOption, // Gaya saat di-hover
+                    styles.arrowDownIcon,
+                    {transform: [{rotate: rotateIcon}]},
                   ]}
+                  resizeMode="cover"
+                  source={require('../../../assets/arrow_drop_down.png')}
+                />
+              </TouchableOpacity>
+              {isDropdownOpen && (
+                <Animated.View
+                  style={[
+                    styles.roleBg,
+                    {
+                      opacity: fadeAnim,
+                      top: 70,
+                      zIndex: 10,
+                      height: 106,
+                      width: '100%',
+                    },
+                  ]}>
+                  <TouchableOpacity
+                    style={[
+                      styles.jarakRole,
+                      hoveredOption === 'Nurse' && styles.hoveredOption, // Gaya saat di-hover
+                    ]}
                     onPress={() => selectRole('Nurse')}
                     onPressIn={() => setHoveredOption('Nurse')} // Menandai opsi di-hover
-                    onPressOut={() => setHoveredOption(null)}  // Menghapus tanda hover saat disentuh selesai
+                    onPressOut={() => setHoveredOption(null)} // Menghapus tanda hover saat disentuh selesai
                   >
                     <Text style={styles.textGrey1}>Nurse</Text>
                   </TouchableOpacity>
@@ -253,22 +254,24 @@ const LoginScreen = ({route}) => {
                     ]}
                     onPress={() => selectRole('Admin')}
                     onPressIn={() => setHoveredOption('Admin')} // Menandai opsi di-hover
-                    onPressOut={() => setHoveredOption(null)}  // Menghapus tanda hover saat disentuh selesai
+                    onPressOut={() => setHoveredOption(null)} // Menghapus tanda hover saat disentuh selesai
                   >
-                  <Text style={styles.textGrey1}>Admin</Text>
-                </TouchableOpacity>
-              </Animated.View>
-            )}
-          </View>
-  
-    {/* username */}
-          <View style={styles.jarakTextField}>
-            <Text style={styles.title3}>Username</Text>
-              <TouchableOpacity style={[styles.TextField,
+                    <Text style={styles.textGrey1}>Admin</Text>
+                  </TouchableOpacity>
+                </Animated.View>
+              )}
+            </View>
+
+            {/* username */}
+            <View style={styles.jarakTextField}>
+              <Text style={styles.title3}>Username</Text>
+              <TouchableOpacity
+                style={[
+                  styles.TextField,
                   {
                     borderColor: usernameIsFocused
-                        ? Color.colorMediumaquamarine
-                        : 'grey',
+                      ? Color.colorMediumaquamarine
+                      : 'grey',
                   },
                 ]}
                 activeOpacity={1}
@@ -285,42 +288,51 @@ const LoginScreen = ({route}) => {
               </TouchableOpacity>
             </View>
 
- {/* password */}
+            {/* password */}
             <View style={styles.jarakTextField}>
               <Text style={styles.title3}>Password</Text>
-              <View style={[ styles.TextField, { 
-                      borderColor: passwordIsFocused
+              <View
+                style={[
+                  styles.TextField,
+                  {
+                    borderColor: passwordIsFocused
                       ? Color.colorMediumaquamarine
-                      : 'grey', flexDirection: 'row', alignItems: 'center'},
+                      : 'grey',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  },
                 ]}>
                 <TextInput
-                  style={[styles. textGrey2,{flex: 1}]} 
+                  style={[styles.textGrey2, {flex: 1}]}
                   value={password}
                   onChangeText={setPassword}
                   placeholder="Enter your password"
                   onFocus={() => passwordSetIsFocused(true)}
                   onBlur={() => passwordSetIsFocused(false)}
                   placeholderTextColor={Color.colorDimgray}
-                  secureTextEntry={securePassword}/>
-                  <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
-                    <Image
-                      source={
-                        securePassword
-                          ? require('../../assets/images/Eye1.png')
-                          : require('../../assets/images/Eye2.png')}
-                      style={{
-                              width: 22,
-                              height: 16,
-                              right:8,
-                              tintColor: '#6A6A6A',
-                            }} 
-                    />
-                  </TouchableOpacity>
-                </View>
+                  secureTextEntry={securePassword}
+                />
+                <TouchableOpacity
+                  onPress={() => setSecurePassword(!securePassword)}>
+                  <Image
+                    source={
+                      securePassword
+                        ? require('../../assets/images/Eye1.png')
+                        : require('../../assets/images/Eye2.png')
+                    }
+                    style={{
+                      width: 22,
+                      height: 16,
+                      right: 8,
+                      tintColor: '#6A6A6A',
+                    }}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
+          </View>
 
-            <View style={styles.BtnLoginWrapper}>
+          <View style={styles.BtnLoginWrapper}>
             {/* ROLE LOGIN BUTTON */}
             <Pressable style={styles.BtnRoleLogin} onPress={handleLogin}>
               <Text style={styles.loginPosition}>Login</Text>
@@ -334,14 +346,15 @@ const LoginScreen = ({route}) => {
             </View>
 
             {/* GUEST BUTTON */}
-            <Pressable style={styles.BtnGuest} onPress={() => navigation.navigate('ScreenGuest')}>
+            <Pressable
+              style={styles.BtnGuest}
+              onPress={() => navigation.navigate('ScreenGuest')}>
               <Text style={[styles.loginPosition]}>As a guest</Text>
             </Pressable>
           </View>
-
         </View>
       </ScrollView>
-  </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -362,7 +375,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     color: Color.notSoBlack,
-    marginBottom:10,
+    marginBottom: 10,
   },
   title2: {
     lineHeight: 24,
@@ -371,9 +384,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: Color.notSoBlack,
   },
-  title3:{
-    left:4,
-    fontSize: 14,
+  title3: {
+    left: 4,
+    fontSize: 15,
     fontFamily: FontFamily.poppinsRegular,
     color: '#000000',
   },
@@ -389,7 +402,7 @@ const styles = StyleSheet.create({
   },
   textGrey2: {
     fontFamily: FontFamily.poppinsRegular,
-    top:3,
+    top: 3,
   },
   fieldContainer: {
     marginTop: 16,
@@ -403,9 +416,9 @@ const styles = StyleSheet.create({
     borderColor: '#21b557',
     borderWidth: 1,
     backgroundColor: Color.schemesOnPrimary,
-    paddingHorizontal:Padding.p_3xs,
-    justifyContent:'center',
-    marginBottom:20, 
+    paddingHorizontal: Padding.p_3xs,
+    justifyContent: 'center',
+    marginBottom: 20,
   },
   loginPosition: {
     color: Color.schemesOnPrimary,
@@ -424,7 +437,7 @@ const styles = StyleSheet.create({
   },
   jarakRole: {
     height: 45,
-    top:16,
+    top: 16,
   },
   orText: {
     marginHorizontal: 8,
@@ -447,29 +460,30 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 45,
     // position: 'absolute',
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: Border.br_8xs,
-    backgroundColor:'#1E9DEC',
+    backgroundColor: '#1E9DEC',
     // marginVertical:10,
     marginTop: 10,
-    // top:90,  
+    // top:90,
   },
   BtnRoleLogin: {
     // top: 2,
     backgroundColor: '#21b557',
     borderRadius: Border.br_8xs,
-    width:'100%',
+    width: '100%',
     height: 45,
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     // marginVertical:10,
     marginBottom: 10,
   },
   BtnLoginWrapper: {
     alignSelf: 'center',
     width: '90%',
-    paddingVertical:20,
+    paddingVertical: 20,
+    marginTop: 10,
   },
   lineWrapper: {
     flexDirection: 'row',
@@ -488,28 +502,28 @@ const styles = StyleSheet.create({
     left: 200,
   },
   welcomeWrapper: {
-    alignItems:'center',
+    alignItems: 'center',
     marginTop: 34,
   },
   roleBg: {
     backgroundColor: Color.schemesOnPrimary,
     width: '160%',
     position: 'absolute',
-  
   },
   hoveredOption: {
     backgroundColor: '#4EC69E',
   },
   arrowDownIcon: {
     width: 25,
-    height: 25, 
-    right:10,
+    height: 25,
+    right: 10,
     position: 'absolute',
   },
   samratIcon: {
-    width: 100,
-    height: 100,
-    marginBottom:10,
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+    marginTop: 20,
   },
 });
 export default LoginScreen;
