@@ -23,19 +23,23 @@ const NurseInputPage = ({route}) => {
   const {username, role, ruangan, id_user, nama} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const [jumlahTempatTidur, setJumlahTempatTidur] = useState('30');
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState(22);
   const [pasienAwal, setPasienAwal] = useState('0');
   const [pasienMasuk, setPasienMasuk] = useState('0');
   const [pasienPindahan, setPasienPindahan] = useState('0');
+  const [jumlah, setJumlah] = useState('0');
   const [pasienDipindahkan, setPasienDipindahkan] = useState('0');
   const [pasienHidup, setPasienHidup] = useState('0');
   const [pasienRujuk, setPasienRujuk] = useState('0');
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
+  const [jumlah_PKH, setJumlahPKH] = useState('0');
 
   // New state variables for additional fields
   const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
   const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
+  const [jumlah_PKM, setJumlahPKM] = useState('0');
+
   const [pasienMasihDirawat, setPasienMasihDirawat] = useState('0');
   const [pasienLamaDirawat, setPasienLamaDirawat] = useState('0');
   const [banyakPasien, setBanyakPasien] = useState('0');
@@ -54,7 +58,23 @@ const NurseInputPage = ({route}) => {
     });
 
   const handleDateChange = async date => {
-    const formattedDate = moment(date).format('YYYY-MM-DD');
+    if (!date || !ruangan) {
+      Alert.alert('Error', 'Both date and room must be selected.');
+      return;
+    }
+
+    const formattedDate = moment(date).format('YYYY-MM-DD'); // Format tanggal
+    const normalizedRuangan = ruangan.replace(/\u00A0/g, ' ').trim();
+    // Bersihkan spasi tambahan
+
+    console.log('Formatted Date:', formattedDate);
+    console.log('Normalized Ruangan:', normalizedRuangan); // Debugging
+
+    if (normalizedRuangan !== 'Mujair A' && normalizedRuangan !== 'Mujair B') {
+      Alert.alert('Error', 'Invalid room selected.');
+      return;
+    }
+
     try {
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_input_data',
@@ -64,48 +84,75 @@ const NurseInputPage = ({route}) => {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
-            date: formattedDate,
-            ruangan: ruangan,
+            tanggal: formattedDate,
+            ruangan: normalizedRuangan,
           }).toString(),
         },
       );
 
-      const result = await response.json();
-      console.log('API Response:', result); // Debugging line
+      const rawResponse = await response.text();
+      console.log('Raw Response:', rawResponse);
 
-      if (result.status === 'success' && result.data) {
-        const data = result.data;
-        // Update state with fetched data
-        setPasienAwal(data.Pasien_Awal);
-        setPasienMasuk(data.Pasien_Masuk);
-        setPasienPindahan(data.Pasien_Pindahan);
-        setPasienDipindahkan(data.Pasien_Dipindahkan);
-        setPasienHidup(data.Pasien_Hidup);
-        setPasienRujuk(data.Pasien_Rujuk);
-        setPasienAps(data.Pasien_Aps);
-        setPasienLainLain(data.Pasien_lain_lain);
-        setPasienKurangDari48Jam(data.Pasien_kurang_dari_48jam);
-        setPasienLebihDari48Jam(data.Pasien_lebih_dari_48jam);
-        setPasienMasihDirawat(data.Pasien_Masih_Dirawat);
-        setPasienLamaDirawat(data.Pasien_Lama_Dirawat);
-        setBanyakPasien(data.Banyak_Pasien);
-        setJumlahHari(data.Jumlah_Hari);
-        setKelas1(data.Kelas_1);
-        setKelas2(data.Kelas_2);
-        setKelas3(data.Kelas_3);
-      } else {
-        Alert.alert(
-          'Error',
-          'No data found for the selected date. Please try another date.',
-        );
+      let result;
+      try {
+        result = JSON.parse(rawResponse);
+        console.log('Parsed JSON:', result);
+
+        if (result.status === 'success' && result.data) {
+          const data = result.data;
+          // Update state dengan data dari server
+          setPasienAwal(data.pasien_awal || '0');
+          setPasienMasuk(data.pasien_masuk || '0');
+          setPasienPindahan(data.pasien_pindahan || '0');
+          setPasienDipindahkan(data.pasien_dipindahkan || '0');
+          setPasienHidup(data.pasien_hidup || '0');
+          setPasienRujuk(data.pasien_rujuk || '0');
+          setPasienAps(data.pasien_aps || '0');
+          setPasienLainLain(data.pasien_lain_lain || '0');
+          setPasienKurangDari48Jam(data.pasien_kurang_dari_48jam || '0');
+          setPasienLebihDari48Jam(data.pasien_lebih_dari_48jam || '0');
+          setPasienMasihDirawat(data.pasien_masih_dirawat || '0');
+          setPasienLamaDirawat(data.pasien_lama_dirawat || '0');
+          setBanyakPasien(data.banyak_pasien || '0');
+          setJumlahHari(data.jumlah_hari_perawatan || '0');
+          setKelas1(data.kelas_1 || '0');
+          setKelas2(data.kelas_2 || '0');
+          setKelas3(data.kelas_3 || '0');
+        } else {
+          Alert.alert('Error', result.message || 'No data found.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
       }
     } catch (error) {
-      Alert.alert('Error', 'Failed to fetch data: ' + error.message);
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
     }
   };
 
   const handleSubmitButton2 = async () => {
     try {
+      const normalizedRuangan = ruangan.replace(/\u00A0/g, '').trim(); // Bersihkan spasi tambahan
+      const formattedDate = moment(selectedDate).format('YYYY-MM-DD'); // Format tanggal
+
+      if (
+        normalizedRuangan !== 'Mujair A' &&
+        normalizedRuangan !== 'Mujair B'
+      ) {
+        console.error('Invalid room:', normalizedRuangan);
+        Alert.alert('Error', 'Invalid room selected.');
+        return;
+      }
+
+      console.log('Request Body:', {
+        tanggal: formattedDate,
+        ruangan: normalizedRuangan,
+      });
+
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/insert_nurse',
         {
@@ -114,37 +161,50 @@ const NurseInputPage = ({route}) => {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
-            Pasien_Awal: pasienAwal,
-            Pasien_Masuk: pasienMasuk,
-            Pasien_Pindahan: pasienPindahan,
-            Pasien_Dipindahkan: pasienDipindahkan,
-            Pasien_Hidup: pasienHidup,
-            Pasien_Rujuk: pasienRujuk,
-            Pasien_Aps: pasienAps,
-            Pasien_lain_lain: pasienLainLain,
-            Pasien_kurang_dari_48jam: pasienKurangDari48Jam,
-            Pasien_lebih_dari_48jam: pasienLebihDari48Jam,
-            Pasien_Masih_Dirawat: pasienMasihDirawat,
-            Pasien_Lama_Dirawat: pasienLamaDirawat,
-            Banyak_Pasien: banyakPasien,
-            Jumlah_Hari: jumlahHari,
-            Kelas_1: kelas1,
-            Kelas_2: kelas2,
-            Kelas_3: kelas3,
-            Ruangan: namaruangan,
+            tanggal: formattedDate,
+            ruangan: normalizedRuangan,
+            pasien_awal: pasienAwal,
+            pasien_masuk: pasienMasuk,
+            pasien_pindahan: pasienPindahan,
+            pasien_dipindahkan: pasienDipindahkan,
+            pasien_hidup: pasienHidup,
+            pasien_rujuk: pasienRujuk,
+            pasien_aps: pasienAps,
+            pasien_lain_lain: pasienLainLain,
+            pasien_kurang_dari_48jam: pasienKurangDari48Jam,
+            pasien_lebih_dari_48jam: pasienLebihDari48Jam,
+            pasien_lama_dirawat: pasienLamaDirawat,
+            banyak_pasien: banyakPasien,
+            kelas_1: kelas1,
+            kelas_2: kelas2,
+            kelas_3: kelas3,
           }).toString(),
         },
       );
 
-      const result = await response.json();
-      if (result.status === 'success') {
-        Alert.alert('Sukses', 'Data berhasil diinput');
-        navigation.navigate('HomeScreenNurse', {user});
-      } else {
-        Alert.alert('Gagal', 'Data gagal diinput: ' + result.message);
+      const rawResponse = await response.text();
+      console.log('Raw Response:', rawResponse);
+
+      let result;
+      try {
+        result = JSON.parse(rawResponse);
+        console.log('Parsed JSON:', result);
+
+        if (result.status === 'success') {
+          Alert.alert('Sukses', 'Data berhasil diinput.');
+        } else {
+          Alert.alert('Error', result.message || 'Data gagal diinput.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
       }
     } catch (error) {
-      Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
     }
   };
 
@@ -264,6 +324,11 @@ const NurseInputPage = ({route}) => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Pasien yang masih dirawat</Text>
+          {/* {renderInputField(
+            'Masih dirawat',
+            pasienMasihDirawat,
+            setPasienMasihDirawat,
+          )} */}
           {renderInputField(
             'Lama dirawat',
             pasienLamaDirawat,

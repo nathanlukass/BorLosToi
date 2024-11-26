@@ -27,7 +27,7 @@ const EditMujairB = ({route}) => {
   const {user} = route.params;
   const {ruangan} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-  const titleRuangan = "Mujair B";
+  const titleRuangan = 'Mujair B';
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState('22');
   const [selectedDate, setSelectedDate] = useState('');
   const [pasienAwal, setPasienAwal] = useState('0');
@@ -71,7 +71,7 @@ const EditMujairB = ({route}) => {
           },
           body: new URLSearchParams({
             date: formattedDate,
-            ruangan: titleRuangan
+            ruangan: titleRuangan,
           }).toString(),
         },
       );
@@ -95,7 +95,7 @@ const EditMujairB = ({route}) => {
         setPasienMasihDirawat(data.Pasien_Masih_Dirawat);
         setPasienLamaDirawat(data.Pasien_Lama_Dirawat);
         setBanyakPasien(data.Banyak_Pasien);
-        setJumlahHari(data.Jumlah_Hari);
+        setJumlahHari(data.Jumlah_Hari_Perawatan);
         setKelas1(data.Kelas_1);
         setKelas2(data.Kelas_2);
         setKelas3(data.Kelas_3);
@@ -135,7 +135,7 @@ const EditMujairB = ({route}) => {
             Pasien_Masih_Dirawat: pasienMasihDirawat,
             Pasien_Lama_Dirawat: pasienLamaDirawat,
             Banyak_Pasien: banyakPasien,
-            Jumlah_Hari: jumlahHari,
+            Jumlah_Hari_Perawatan: jumlahHari,
             Kelas_1: kelas1,
             Kelas_2: kelas2,
             Kelas_3: kelas3,
@@ -226,11 +226,15 @@ const EditMujairB = ({route}) => {
           )}
         </View>
         <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
-        <View style={styles.row}>
-        <Text style={[styles.subsectionTitle, { marginRight: 6 }]}>Pasien keluar</Text>
-        <Text style={[styles.subsectionTitle, { color: '#00A676' }]}>Hidup</Text>
-        </View>
+          <Text style={styles.sectionTitle}>Pasien Keluar Ruangan</Text>
+          <View style={styles.row}>
+            <Text style={[styles.subsectionTitle, {marginRight: 6}]}>
+              Pasien keluar
+            </Text>
+            <Text style={[styles.subsectionTitle, {color: '#00A676'}]}>
+              Hidup
+            </Text>
+          </View>
           {renderInputField(
             'Pasien dipindahkan',
             pasienDipindahkan,
@@ -241,19 +245,39 @@ const EditMujairB = ({route}) => {
           {renderInputField('APS', pasienAps, setPasienAps)}
           {renderInputField('Lain-lain', pasienLainLain, setPasienLainLain)}
 
-        {/* Pasien keluar Meninggal */}
-        <View style={styles.row}>
-        <Text style={[styles.subsectionTitle, { marginRight: 6 }]}>Pasien keluar</Text>
-        <Text style={[styles.subsectionTitle, { color: '#FF5A5F' }]}>Meninggal</Text>
-        </View>       
-          {renderInputField('Kurang dari 48 jam', pasienKurangDari48Jam, setPasienKurangDari48Jam)}
-          {renderInputField('Lebih dari 48 jam', pasienLebihDari48Jam, setPasienLebihDari48Jam)}
+          {/* Pasien keluar Meninggal */}
+          <View style={styles.row}>
+            <Text style={[styles.subsectionTitle, {marginRight: 6}]}>
+              Pasien keluar
+            </Text>
+            <Text style={[styles.subsectionTitle, {color: '#FF5A5F'}]}>
+              Meninggal
+            </Text>
+          </View>
+          {renderInputField(
+            'Kurang dari 48 jam',
+            pasienKurangDari48Jam,
+            setPasienKurangDari48Jam,
+          )}
+          {renderInputField(
+            'Lebih dari 48 jam',
+            pasienLebihDari48Jam,
+            setPasienLebihDari48Jam,
+          )}
         </View>
 
         <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Pasien yang masih dirawat</Text>
-          {renderInputField('Lama dirawat', pasienLamaDirawat, setPasienLamaDirawat)}
-          {renderInputField('Pasien keluar/masuk \npada hari yang sama', banyakPasien, setBanyakPasien)}
+          <Text style={styles.sectionTitle}>Pasien yang masih dirawat</Text>
+          {renderInputField(
+            'Lama dirawat',
+            pasienLamaDirawat,
+            setPasienLamaDirawat,
+          )}
+          {renderInputField(
+            'Pasien keluar/masuk \npada hari yang sama',
+            banyakPasien,
+            setBanyakPasien,
+          )}
         </View>
 
         <View style={styles.section}>
@@ -337,7 +361,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: FontFamily.poppinsRegular,
   },
-  sectionJumlahBed : {
+  sectionJumlahBed: {
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -346,7 +370,7 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 6,
@@ -358,23 +382,23 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 6,
     width: '120%',
     position: 'absolute',
     alignSelf: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
-  
+
   section: {
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 6,
@@ -416,7 +440,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginLeft: 'auto',
-    marginBottom:5,
+    marginBottom: 5,
   },
   button: {
     width: 30,
