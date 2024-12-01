@@ -61,7 +61,13 @@ const EditMujairA = ({route}) => {
   const handleDateChange = async date => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setSelectedDate(formattedDate);
+
+    // Log the values to verify
+    console.log('Selected Date:', formattedDate);
+    console.log('Ruangan yang dikirim:', titleRuangan);
+
     try {
+      // Pastikan parameter yang dikirim ada dan valid
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_input_data',
         {
@@ -71,17 +77,16 @@ const EditMujairA = ({route}) => {
           },
           body: new URLSearchParams({
             date: formattedDate,
-            ruangan: titleRuangan,
+            ruangan: titleRuangan, // Pastikan ini terisi dengan benar
           }).toString(),
         },
       );
 
       const result = await response.json();
-      console.log('API Response:', result); // Debugging line
+      console.log('API Response:', result); // Log the API response
 
       if (result.status === 'success' && result.data) {
         const data = result.data;
-        // Update state with fetched data
         setPasienAwal(data.Pasien_Awal);
         setPasienMasuk(data.Pasien_Masuk);
         setPasienPindahan(data.Pasien_Pindahan);
@@ -115,7 +120,7 @@ const EditMujairA = ({route}) => {
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/update_nurse',
         {
-          method: 'POST',
+          method: 'PUT', // Ganti menjadi PUT untuk update
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
