@@ -69,10 +69,10 @@ class DatePickerr extends React.Component<IProps, IState> {
             overlayStyle={styles.overlayStyle}>
             <View style={styles.headerStyle}>
               <TouchableOpacity onPress={this.hideOverlay}>
-                <Text style={{paddingHorizontal: 15}}>Cancel</Text>
+                <Text style={{paddingHorizontal: 16}}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={this.hideOverlay}>
-                <Text style={{paddingHorizontal: 15, color: 'green'}}>
+                <Text style={{paddingHorizontal: 16, color: 'green'}}>
                   Done
                 </Text>
               </TouchableOpacity>
