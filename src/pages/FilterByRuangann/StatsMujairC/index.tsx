@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import {Alert} from 'react-native';
 import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
 import {DatePickerr, FilterCheckBox} from '../../../components';
 import Stats1 from '../../../../components/Stats1';
@@ -12,9 +13,19 @@ import {
   Border,
 } from '../../../../GlobalStyles';
 import {Gap} from '../../../../src/components';
+import moment from 'moment';
 
 const StatsMujairC = () => {
-  const [isFilterChecked, setIsFilterChecked] = useState(false); // State to track checkbox status
+  const [isFilterChecked, setIsFilterChecked] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [statsData, setStatsData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [bor, setNilaiBor] = useState('');
+  const [avlos, setNilaiAvlos] = useState('');
+  const [toi, setNilaiToi] = useState('');
+  const [gdr, setNilaiGdr] = useState('');
+  const [ndr, setNilaiNdr] = useState('');
+  const [bto, setNilaiBto] = useState('');
 
   const datePickerStyle1 = {
     top: '27%',
@@ -26,27 +37,112 @@ const StatsMujairC = () => {
   };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
+  const handleDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
+    console.log('Selected Date: ', formattedDate);
+    fetchStatsData(formattedDate);
+  };
+
+  const fetchStatsData = async date => {
+    if (!date) {
+      console.error('Tanggal belum dipilih');
+      return;
+    }
+
+    setLoading(true);
+    console.log('Mengirim request dengan data:', {
+      date: date,
+      ruangan: 'Mujair C',
+    });
+
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            tanggal: date,
+            ruangan: 'Mujair C',
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
+
+      // Jika respons adalah HTML, mungkin ada kesalahan pada server
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
+      }
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        if (result.status === 'success' && result.data) {
+          const data = result.data;
+          setNilaiBor(data.BOR || '0');
+          setNilaiAvlos(data.AVLOS || '0');
+          setNilaiToi(data.TOI || '0');
+          setNilaiGdr(data.GDR || '0');
+          setNilaiBto(data.BTO || '0');
+          setNilaiNdr(data.NDR || '0');
+        } else {
+          Alert.alert('Error', result.message || 'No data found.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false); // Jangan lupa set loading false setelah request selesai
+    }
+  };
+
   return (
     <View style={styles.screenGuest}>
-      <DatePickerr style={datePickerStyle1} />
+      {/* First DatePicker */}
+      <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
+
+      {/* Filter Checkbox */}
       <View style={styles.groupParent}>
         <FilterCheckBox
           isChecked={isFilterChecked}
           onChange={() => setIsFilterChecked(!isFilterChecked)}
         />
       </View>
+
+      {/* Lihat Button */}
       <Pressable
         style={[styles.okButton, styles.filterShadowBox]}
         onPress={() => console.log('OK Button Pressed')}>
         <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
       </Pressable>
+
       <Image
         style={[styles.vectorIcon, styles.vectorIconPosition]}
         resizeMode="cover"
         source={require('../../../../assets/vector.png')}
       />
-      {/* Conditionally render the second DatePickerr based on checkbox state */}
-      <DatePickerr style={datePickerStyle2} />
+
+      {/* Conditionally render second DatePicker based on checkbox */}
+      <DatePickerr style={datePickerStyle2} onDateChange={handleDateChange} />
+
+      {/* Navigation Bar */}
       <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
           style={styles.backButton}
@@ -70,12 +166,12 @@ const StatsMujairC = () => {
         <Text style={[styles.hari13Hari4]}>40-50 Kali</Text>
         <Text style={[styles.hari13Hari5]}>{'< 20 ‰'}</Text>
         <Text style={[styles.hari13Hari6]}>{'< 45 ‰'}</Text>
-        <Text style={[styles.text]}>0</Text>
-        <Text style={[styles.text2]}>0</Text>
-        <Text style={[styles.text3]}>0</Text>
-        <Text style={[styles.text4]}>0</Text>
-        <Text style={[styles.text5]}>0</Text>
-        <Text style={[styles.text6]}>0</Text>
+        <Text style={[styles.text]}>{bor}</Text>
+        <Text style={[styles.text2]}>{avlos}</Text>
+        <Text style={[styles.text3]}>{toi}</Text>
+        <Text style={[styles.text4]}>{bto}</Text>
+        <Text style={[styles.text5]}>{gdr}</Text>
+        <Text style={[styles.text6]}>{ndr}</Text>
         <View style={styles.BorAvlosToiContainer}>
           <Text style={[styles.hasil1Typo]}>BOR :</Text>
           <Gap height={22} />
