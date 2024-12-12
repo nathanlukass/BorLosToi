@@ -13,18 +13,117 @@ import {
 } from '../../../GlobalStyles';
 
 const ScreenGuest = () => {
-  const [isFilterChecked, setIsFilterChecked] = useState(false); // State to track checkbox status
+  const [isFilterChecked, setIsFilterChecked] = useState(false); // State to track checkbox status3
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Menyimpan tahun yang dipilih
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Menyimpan bulan yang dipilih (1-12)
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [statsData, setStatsData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [bor, setNilaiBor] = useState('');
+  const [avlos, setNilaiAvlos] = useState('');
+  const [toi, setNilaiToi] = useState('');
+  const [gdr, setNilaiGdr] = useState('');
+  const [ndr, setNilaiNdr] = useState('');
+  const [bto, setNilaiBto] = useState('');
+
+  const currentYear = new Date().getFullYear();
+  // Generate pilihan tahun (tahun ini dan dua tahun sebelumnya)
+  const yearOptions = [currentYear, currentYear - 1, currentYear - 2];
+
+  // Generate pilihan bulan (1-12)
+  const monthOptions = Array.from({length: 12}, (_, index) => index + 1);
 
   const datePickerStyle1 = {
-    top: '16%',
+    top: '26%',
   };
 
   const datePickerStyle2 = {
-    top: '-60%',
+    top: '-170%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
+  const handleDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
+    console.log('Selected Date: ', formattedDate);
+    fetchStatsData(formattedDate);
+  };
+
+  const fetchStatsData = async date => {
+    if (!date) {
+      console.error('Tanggal belum dipilih');
+      return;
+    }
+
+    setLoading(true);
+    console.log('Mengirim request dengan data:', {
+      date: date,
+    });
+
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_rs ',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            tanggal: date,
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
+
+      // Jika respons adalah HTML, mungkin ada kesalahan pada server
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
+      }
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        // Jika tidak ada data atau status bukan 'success', set semua nilai menjadi 0
+        if (result.status === 'success' && result.data) {
+          const data = result.data;
+          setNilaiBor(data.BOR || '0');
+          setNilaiAvlos(data.AVLOS || '0');
+          setNilaiToi(data.TOI || '0');
+          setNilaiGdr(data.GDR || '0');
+          setNilaiBto(data.BTO || '0');
+          setNilaiNdr(data.NDR || '0');
+        } else {
+          // Jika tidak ada data atau gagal, set nilai default 0
+          setNilaiBor('0');
+          setNilaiAvlos('0');
+          setNilaiToi('0');
+          setNilaiGdr('0');
+          setNilaiBto('0');
+          setNilaiNdr('0');
+          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false); // Jangan lupa set loading false setelah request selesai
+    }
+  };
 
   return (
     <View style={styles.screenGuest}>
@@ -35,13 +134,105 @@ const ScreenGuest = () => {
           onChange={() => setIsFilterChecked(!isFilterChecked)}
         />
       </View>
-      <Stats1 />
+      <View style={styles.headerContainer}>
+        <Pressable style={styles.buttonHasil}>
+          <Text style={styles.buttonText}>HASIL</Text>
+        </Pressable>
+        <Pressable style={styles.buttonStandar}>
+          <Text style={styles.buttonText}>STANDAR</Text>
+        </Pressable>
+        <Pressable style={styles.buttonKet}>
+          <Text style={styles.buttonText}>KET</Text>
+        </Pressable>
+      </View>
+      <View style={styles.tableContainer}>
+        {/* Rows */}
+        {[
+          {label: 'BOR :', value: 'bor', standard: '60-85%', icon: 'green'},
+          {
+            label: 'AVLOS :',
+            value: 'avlos',
+            standard: '6-9 Hari',
+            icon: 'green',
+          },
+          {label: 'TOI :', value: 'toi', standard: '1-3 Hari', icon: 'red'},
+          {label: 'BTO :', value: 'bto', standard: '40-50 Kali', icon: 'green'},
+          {label: 'GDR :', value: 'gdr', standard: '< 20 ‰', icon: 'red'},
+          {label: 'NDR :', value: 'ndr', standard: '< 45 ‰', icon: 'red'},
+        ].map((row, index) => {
+          // Logic to check if the value is within the standard range
+          let icon = 'green'; // Default to green
+          if (row.standard.includes('%')) {
+            const [min, max] = row.standard
+              .split('-')
+              .map(item => parseFloat(item));
+            if (row.value < min || row.value > max) {
+              icon = 'red'; // If the value is outside the range, use red
+            }
+          } else if (row.standard.includes('Hari')) {
+            const [min, max] = row.standard
+              .split('-')
+              .map(item => parseFloat(item));
+            if (row.value < min || row.value > max) {
+              icon = 'red'; // If the value is outside the range, use red
+            }
+          }
+          if (row.standard.includes('-')) {
+            const [min, max] = row.standard
+              .split('-')
+              .map(item => parseFloat(item));
+            if (row.value < min || row.value > max) {
+              icon = 'red'; // Set ke merah jika di luar rentang
+            }
+          } else if (
+            row.standard.includes('Kali') ||
+            row.standard.includes('‰')
+          ) {
+            const max = parseFloat(row.standard.split(' ')[1]);
+            if (row.value > max) {
+              icon = 'red'; // If the value exceeds the max standard, use red
+            }
+          }
 
-      <Pressable
+          return (
+            <View key={index} style={styles.row}>
+              <Text style={styles.rowLabel}>{row.label}</Text>
+              <Text style={styles.rowStandard}>{row.standard}</Text>
+              <Text style={styles.rowValue}>{row.value}</Text>
+              <Image
+                style={styles.rowIcon}
+                source={
+                  icon === 'red'
+                    ? require('../../../assets/red.png') // Path ke ikon merah
+                    : require('../../../assets/green.png') // Path ke ikon hijau
+                }
+              />
+            </View>
+          );
+        })}
+        <View style={styles.legendContainer}>
+          <View style={styles.legendItem}>
+            <Image
+              source={require('../../../assets/green.png')} // Ikon hijau
+              style={styles.legendIcon}
+            />
+            <Text style={styles.legendText}>Memenuhi standar</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <Image
+              source={require('../../../assets/red.png')} // Ikon merah
+              style={styles.legendIcon}
+            />
+            <Text style={styles.legendText}>Tidak memenuhi standar</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* <Pressable
         style={[styles.okButton, styles.filterShadowBox]}
         onPress={() => console.log('OK Button Pressed')}>
         <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
-      </Pressable>
+      </Pressable> */}
 
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
@@ -239,6 +430,107 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 900,
     backgroundColor: Color.schemesOnPrimary,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    bottom: 230,
+  },
+  // Header Section
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16,
+  },
+  buttonHasil: {
+    backgroundColor: '#2E7D32',
+    paddingVertical: 8,
+    paddingHorizontal: 11,
+    borderRadius: 8,
+    left: 70,
+  },
+  buttonStandar: {
+    backgroundColor: '#2E7D32',
+    paddingVertical: 8,
+    paddingHorizontal: 11,
+    borderRadius: 8,
+    left: 40,
+  },
+  buttonKet: {
+    backgroundColor: '#2E7D32',
+    paddingVertical: 8,
+    paddingHorizontal: 11,
+    borderRadius: 8,
+    left: 10,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  // Table Section
+  tableContainer: {
+    marginTop: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  rowLabel: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000000',
+    fontWeight: 'bold',
+    left: 20,
+  },
+  rowStandard: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000000',
+    textAlign: 'center',
+    left: 60,
+  },
+  rowValue: {
+    flex: 1,
+    fontSize: 16,
+    color: 'black', // Warna hijau gelap untuk nilai
+    textAlign: 'center',
+    fontWeight: 'bold',
+    left: -160,
+  },
+  rowIcon: {
+    flex: 0.2,
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+    left: -30,
+  },
+  legendContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'right',
+    marginTop: 20, // Jarak dari tabel
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16, // Jarak antar item
+  },
+  legendIcon: {
+    width: 25,
+    height: 25,
+    resizeMode: 'contain',
+    marginRight: 5, // Jarak ikon ke teks
+  },
+  legendText: {
+    fontSize: 14,
+    color: '#000000',
+    fontWeight: 'bold',
   },
 });
 

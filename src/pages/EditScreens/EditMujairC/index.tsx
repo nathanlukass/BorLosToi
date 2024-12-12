@@ -61,6 +61,15 @@ const EditMujairC = ({route}) => {
   const handleDateChange = async date => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setSelectedDate(formattedDate);
+
+    console.log('Selected Date:', formattedDate);
+    console.log('Ruangan yang dikirim:', titleRuangan);
+
+    if (!titleRuangan || !formattedDate) {
+      Alert.alert('Error', 'Tanggal dan Ruangan harus diisi.');
+      return;
+    }
+
     try {
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_input_data',
@@ -70,35 +79,34 @@ const EditMujairC = ({route}) => {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
-            date: formattedDate,
+            tanggal: formattedDate,
             ruangan: titleRuangan,
           }).toString(),
         },
       );
 
       const result = await response.json();
-      console.log('API Response:', result); // Debugging line
+      console.log('API Response:', result);
 
       if (result.status === 'success' && result.data) {
         const data = result.data;
-        // Update state with fetched data
-        setPasienAwal(data.Pasien_Awal);
-        setPasienMasuk(data.Pasien_Masuk);
-        setPasienPindahan(data.Pasien_Pindahan);
-        setPasienDipindahkan(data.Pasien_Dipindahkan);
-        setPasienHidup(data.Pasien_Hidup);
-        setPasienRujuk(data.Pasien_Rujuk);
-        setPasienAps(data.Pasien_Aps);
-        setPasienLainLain(data.Pasien_lain_lain);
-        setPasienKurangDari48Jam(data.Pasien_kurang_dari_48jam);
-        setPasienLebihDari48Jam(data.Pasien_lebih_dari_48jam);
-        setPasienMasihDirawat(data.Pasien_Masih_Dirawat);
-        setPasienLamaDirawat(data.Pasien_Lama_Dirawat);
-        setBanyakPasien(data.Banyak_Pasien);
-        setJumlahHari(data.Jumlah_Hari_Perawatan);
-        setKelas1(data.Kelas_1);
-        setKelas2(data.Kelas_2);
-        setKelas3(data.Kelas_3);
+        setPasienAwal(data.pasien_awal);
+        setPasienMasuk(data.pasien_masuk);
+        setPasienPindahan(data.pasien_pindahan);
+        setPasienDipindahkan(data.pasien_dipindahkan);
+        setPasienHidup(data.pasien_hidup);
+        setPasienRujuk(data.pasien_rujuk);
+        setPasienAps(data.pasien_aps);
+        setPasienLainLain(data.pasien_lain_lain);
+        setPasienKurangDari48Jam(data.pasien_kurang_dari_48jam);
+        setPasienLebihDari48Jam(data.pasien_lebih_dari_48jam);
+        setPasienMasihDirawat(data.pasien_masih_dirawat);
+        setPasienLamaDirawat(data.pasien_lama_dirawat);
+        setBanyakPasien(data.banyak_pasien);
+        setJumlahHari(data.jumlah_hari_perawatan);
+        setKelas1(data.kelas_1);
+        setKelas2(data.kelas_2);
+        setKelas3(data.kelas_3);
       } else {
         Alert.alert(
           'Error',
@@ -119,40 +127,57 @@ const EditMujairC = ({route}) => {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-
           body: new URLSearchParams({
-            Tanggal: selectedDate, // Include the selected date to identify the record to update
-            Pasien_Awal: pasienAwal,
-            Pasien_Masuk: pasienMasuk,
-            Pasien_Pindahan: pasienPindahan,
-            Pasien_Dipindahkan: pasienDipindahkan,
-            Pasien_Hidup: pasienHidup,
-            Pasien_Rujuk: pasienRujuk,
-            Pasien_Aps: pasienAps,
-            Pasien_lain_lain: pasienLainLain,
-            Pasien_kurang_dari_48jam: pasienKurangDari48Jam,
-            Pasien_lebih_dari_48jam: pasienLebihDari48Jam,
-            Pasien_Masih_Dirawat: pasienMasihDirawat,
-            Pasien_Lama_Dirawat: pasienLamaDirawat,
-            Banyak_Pasien: banyakPasien,
-            Jumlah_Hari_Perawatan: jumlahHari,
-            Kelas_1: kelas1,
-            Kelas_2: kelas2,
-            Kelas_3: kelas3,
-            Ruangan: namaruangan,
+            tanggal: selectedDate,
+            pasien_awal: pasienAwal,
+            pasien_masuk: pasienMasuk,
+            pasien_pindahan: pasienPindahan,
+            pasien_dipindahkan: pasienDipindahkan,
+            pasien_hidup: pasienHidup,
+            pasien_rujuk: pasienRujuk,
+            pasien_aps: pasienAps,
+            pasien_lain_lain: pasienLainLain,
+            pasien_kurang_dari_48jam: pasienKurangDari48Jam,
+            pasien_lebih_dari_48jam: pasienLebihDari48Jam,
+            pasien_Masih_Dirawat: pasienMasihDirawat,
+            pasien_lama_dirawat: pasienLamaDirawat,
+            banyak_pasien: banyakPasien,
+            jumlah_hari_Perawatan: jumlahHari,
+            kelas_1: kelas1,
+            kelas_2: kelas2,
+            kelas_3: kelas3,
+            ruangan: namaruangan,
           }).toString(),
         },
       );
 
-      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseBody = await response.text();
+      let result;
+      try {
+        result = JSON.parse(responseBody);
+      } catch (err) {
+        result = {status: 'success', message: responseBody};
+      }
+
       if (result.status === 'success') {
-        Alert.alert('Sukses', 'Data berhasil diubah');
-        navigation.navigate('EditScreenAdmin', {user});
+        Alert.alert('Sukses', 'Data berhasil diubah', [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('EditScreenAdmin', {user}),
+          },
+        ]);
       } else {
-        Alert.alert('Gagal', 'Data gagal diinput: ' + result.message);
+        Alert.alert(
+          'Gagal',
+          `Data gagal diinput: ${result.message || 'Tidak diketahui'}`,
+        );
       }
     } catch (error) {
-      Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
+      Alert.alert('Error', `Terjadi kesalahan: ${error.message}`);
     }
   };
 
@@ -183,7 +208,20 @@ const EditMujairC = ({route}) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
+        <View style={[styles.barAtas]}>
+          <Pressable
+            style={styles.backButton}
+            onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
+            <Image
+              style={styles.icon}
+              resizeMode="cover"
+              source={require('../../../../assets/-icon-arrow-back.png')}
+            />
+          </Pressable>
+          <Text style={[styles.text]}>{titleRuangan}</Text>
+        </View>
+
+        {/* <View style={styles.header}>
           <Pressable
             style={styles.iconArrowBack}
             onPress={() => navigation.navigate('EditScreenAdmin', {user})}>
@@ -194,13 +232,13 @@ const EditMujairC = ({route}) => {
             />
           </Pressable>
           <Text style={styles.headerTitle}>{titleRuangan}</Text>
-        </View>
+        </View> */}
 
         <View style={styles.timeInfoContainer}>
           <RealTimeClock />
         </View>
         <DatePickerr
-          style={{top: -7, width: 370, left: -30}}
+          style={{top: -8, width: 370, alignSelf: 'center'}}
           onDateChange={handleDateChange}
         />
 
@@ -365,7 +403,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Color.schemesOnPrimary,
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
@@ -393,7 +431,7 @@ const styles = StyleSheet.create({
   },
 
   section: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Color.schemesOnPrimary,
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
@@ -406,7 +444,7 @@ const styles = StyleSheet.create({
   fieldContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Color.schemesOnPrimary,
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
@@ -491,6 +529,35 @@ const styles = StyleSheet.create({
     height: 25,
     zIndex: 0,
     marginStart: -15,
+  },
+  barAtas: {
+    elevation: 4,
+    width: 410,
+    height: 60,
+    backgroundColor: Color.schemesOnPrimary,
+    alignSelf: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    position: 'absolute',
+    justifyContent: 'center',
+  },
+  backButton: {
+    width: 45,
+    height: 29,
+    position: 'absolute',
+    left: -4,
+    top: '50%',
+    transform: [{translateY: -12.5}],
+  },
+  text: {
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    textAlign: 'center',
+    fontSize: 18,
+    position: 'absolute',
+    top: '40%',
+    transform: [{translateY: -8}],
+    zIndex: 1,
   },
 });
 
