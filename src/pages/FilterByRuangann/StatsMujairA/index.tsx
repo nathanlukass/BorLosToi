@@ -275,12 +275,14 @@ const StatsMujairA = () => {
           ].map((row, index) => {
             // Logic to check if the value is within the standard range
             let icon = 'green'; // Default to green
-            if (row.standard.includes('%')) {
+            if (row.standard.includes('-')) {
               const [min, max] = row.standard
+                .replace(/[^\d\-\.]/g, '') // Hapus teks non-angka
                 .split('-')
                 .map(item => parseFloat(item));
-              if (row.value < min || row.value > max) {
-                icon = 'red'; // If the value is outside the range, use red
+
+              if (parseFloat(row.value) < min || parseFloat(row.value) > max) {
+                icon = 'red'; // Di luar rentang
               }
             } else if (row.standard.includes('Hari')) {
               const [min, max] = row.standard

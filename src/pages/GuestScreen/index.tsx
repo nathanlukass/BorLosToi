@@ -11,11 +11,12 @@ import {
   Padding,
   Border,
 } from '../../../GlobalStyles';
+import moment from 'moment';
+import {Alert} from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 
 const ScreenGuest = () => {
-  const [isFilterChecked, setIsFilterChecked] = useState(false); // State to track checkbox status3
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Menyimpan tahun yang dipilih
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Menyimpan bulan yang dipilih (1-12)
+  const [isFilterChecked, setIsFilterChecked] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [statsData, setStatsData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,19 +27,14 @@ const ScreenGuest = () => {
   const [ndr, setNilaiNdr] = useState('');
   const [bto, setNilaiBto] = useState('');
 
-  const currentYear = new Date().getFullYear();
-  // Generate pilihan tahun (tahun ini dan dua tahun sebelumnya)
-  const yearOptions = [currentYear, currentYear - 1, currentYear - 2];
-
-  // Generate pilihan bulan (1-12)
-  const monthOptions = Array.from({length: 12}, (_, index) => index + 1);
+  const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
 
   const datePickerStyle1 = {
-    top: '26%',
+    top: '60%',
   };
 
   const datePickerStyle2 = {
-    top: '-170%',
+    top: '-450%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
 
@@ -46,8 +42,8 @@ const ScreenGuest = () => {
 
   const handleDateChange = date => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
-    setSelectedDate(formattedDate);
     console.log('Selected Date: ', formattedDate);
+    setSelectedDate(formattedDate);
     fetchStatsData(formattedDate);
   };
 
@@ -59,19 +55,19 @@ const ScreenGuest = () => {
 
     setLoading(true);
     console.log('Mengirim request dengan data:', {
-      date: date,
+      tanggal: date,
     });
 
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_rs ',
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_rs',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
-            tanggal: date,
+            tanggal: date, // hanya mengirim tanggal
           }).toString(),
         },
       );
@@ -91,9 +87,9 @@ const ScreenGuest = () => {
         result = JSON.parse(responseText);
         console.log('Parsed JSON:', result);
 
-        // Jika tidak ada data atau status bukan 'success', set semua nilai menjadi 0
+        // Jika status sukses dan ada data, tampilkan data
         if (result.status === 'success' && result.data) {
-          const data = result.data;
+          const data = result.data; // Mengambil data pertama jika ada
           setNilaiBor(data.BOR || '0');
           setNilaiAvlos(data.AVLOS || '0');
           setNilaiToi(data.TOI || '0');
@@ -101,7 +97,7 @@ const ScreenGuest = () => {
           setNilaiBto(data.BTO || '0');
           setNilaiNdr(data.NDR || '0');
         } else {
-          // Jika tidak ada data atau gagal, set nilai default 0
+          // Jika tidak ada data, set nilai default 0
           setNilaiBor('0');
           setNilaiAvlos('0');
           setNilaiToi('0');
@@ -125,13 +121,90 @@ const ScreenGuest = () => {
     }
   };
 
+  const handleMonthChange = value => {
+    if (value) {
+      setSelectedMonth(value);
+      console.log('Bulan yang dipilih: ', value);
+      fetchStatsDataByMonth(value);
+    }
+  };
+
+  const fetchStatsDataByMonth = async month => {
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_rs_monthly',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            bulan: month, // Kirim bulan dengan format key=value
+          }).toString(),
+        },
+      );
+
+      const data = await response.json();
+      console.log('Data yang diterima:', data);
+
+      if (data.status === 'success') {
+        Alert.alert('Berhasil', `Data untuk bulan ${month} berhasil dimuat.`);
+      } else {
+        Alert.alert(
+          'Tidak ada data',
+          `Tidak ditemukan data untuk bulan ${month}.`,
+        );
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Kesalahan', 'Gagal memuat data. Silakan coba lagi.');
+    }
+  };
+
   return (
     <View style={styles.screenGuest}>
-      <DatePickerr style={datePickerStyle1} />
+      <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
       <View style={styles.groupParent}>
         <FilterCheckBox
           isChecked={isFilterChecked}
           onChange={() => setIsFilterChecked(!isFilterChecked)}
+        />
+      </View>
+      <View style={styles.container1}>
+        <Text style={styles.label}>Pilih Bulan : </Text>
+        <RNPickerSelect
+          onValueChange={value => handleMonthChange(value)}
+          items={[
+            {label: 'January', value: '1'},
+            {label: 'February', value: '2'},
+            {label: 'March', value: '3'},
+            {label: 'April', value: '4'},
+            {label: 'May', value: '5'},
+            {label: 'June', value: '6'},
+            {label: 'July', value: '7'},
+            {label: 'August', value: '8'},
+            {label: 'September', value: '9'},
+            {label: 'October', value: '10'},
+            {label: 'November', value: '11'},
+            {label: 'December', value: '12'},
+          ]}
+          style={{
+            inputAndroid: {
+              color: 'white',
+              backgroundColor: '#1E9DEC',
+              top: -80,
+              alignItems: 'center',
+              borderRadius: 8, // Tambahkan border radius di sini
+              paddingVertical: 10, // Untuk memberikan jarak vertikal dalam
+              paddingHorizontal: 12, // Untuk jarak horizontal
+            },
+          }}
+          value={selectedMonth}
+          placeholder={{
+            label: 'Select a month...',
+            value: null,
+            color: 'red',
+          }}
         />
       </View>
       <View style={styles.headerContainer}>
@@ -148,17 +221,17 @@ const ScreenGuest = () => {
       <View style={styles.tableContainer}>
         {/* Rows */}
         {[
-          {label: 'BOR :', value: 'bor', standard: '60-85%', icon: 'green'},
+          {label: 'BOR :', value: bor, standard: '60-85%', icon: 'green'},
           {
             label: 'AVLOS :',
-            value: 'avlos',
+            value: avlos,
             standard: '6-9 Hari',
             icon: 'green',
           },
-          {label: 'TOI :', value: 'toi', standard: '1-3 Hari', icon: 'red'},
-          {label: 'BTO :', value: 'bto', standard: '40-50 Kali', icon: 'green'},
-          {label: 'GDR :', value: 'gdr', standard: '< 20 ‰', icon: 'red'},
-          {label: 'NDR :', value: 'ndr', standard: '< 45 ‰', icon: 'red'},
+          {label: 'TOI :', value: toi, standard: '1-3 Hari', icon: 'red'},
+          {label: 'BTO :', value: bto, standard: '40-50 Kali', icon: 'green'},
+          {label: 'GDR :', value: gdr, standard: '< 20 ‰', icon: 'red'},
+          {label: 'NDR :', value: ndr, standard: '< 45 ‰', icon: 'red'},
         ].map((row, index) => {
           // Logic to check if the value is within the standard range
           let icon = 'green'; // Default to green
@@ -227,13 +300,6 @@ const ScreenGuest = () => {
           </View>
         </View>
       </View>
-
-      {/* <Pressable
-        style={[styles.okButton, styles.filterShadowBox]}
-        onPress={() => console.log('OK Button Pressed')}>
-        <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
-      </Pressable> */}
-
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
@@ -336,7 +402,7 @@ const styles = StyleSheet.create({
     height: 15,
   },
   filter: {
-    top: 620,
+    top: 740,
     left: 207,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowRadius: 7,
@@ -352,7 +418,7 @@ const styles = StyleSheet.create({
     paddingBottom: Padding.p_3xs,
   },
   filterRuangan: {
-    top: 670,
+    top: 790,
     left: 207,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowRadius: 7,
@@ -442,13 +508,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 16,
+    top: -70,
   },
   buttonHasil: {
     backgroundColor: '#2E7D32',
     paddingVertical: 8,
     paddingHorizontal: 11,
     borderRadius: 8,
-    left: 70,
+    left: 80,
   },
   buttonStandar: {
     backgroundColor: '#2E7D32',
@@ -471,7 +538,7 @@ const styles = StyleSheet.create({
   },
   // Table Section
   tableContainer: {
-    marginTop: 1,
+    marginTop: -80,
   },
   row: {
     flexDirection: 'row',
@@ -501,7 +568,7 @@ const styles = StyleSheet.create({
     color: 'black', // Warna hijau gelap untuk nilai
     textAlign: 'center',
     fontWeight: 'bold',
-    left: -160,
+    left: -178,
   },
   rowIcon: {
     flex: 0.2,
@@ -531,6 +598,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000000',
     fontWeight: 'bold',
+  },
+  container1: {
+    flex: 1,
+    padding: 106,
+    backgroundColor: 'white',
+    top: 125,
+  },
+  label: {
+    fontSize: 21,
+    fontWeight: 'bold',
+    top: -100,
+    alignSelf: 'center',
   },
 });
 
