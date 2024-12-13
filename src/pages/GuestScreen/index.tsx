@@ -123,9 +123,10 @@ const ScreenGuest = () => {
 
   const handleMonthChange = value => {
     if (value) {
-      setSelectedMonth(value);
-      console.log('Bulan yang dipilih: ', value);
-      fetchStatsDataByMonth(value);
+      const formattedMonth = value.toString().padStart(2, '0'); // Format jadi dua digit
+      setSelectedMonth(formattedMonth);
+      console.log('Bulan yang dipilih:', formattedMonth);
+      fetchStatsDataByMonth(formattedMonth);
     }
   };
 
@@ -138,26 +139,56 @@ const ScreenGuest = () => {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-          body: new URLSearchParams({
-            bulan: month, // Kirim bulan dengan format key=value
-          }).toString(),
+          body: new URLSearchParams({month: month}).toString(),
         },
       );
 
-      const data = await response.json();
-      console.log('Data yang diterima:', data);
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
 
-      if (data.status === 'success') {
-        Alert.alert('Berhasil', `Data untuk bulan ${month} berhasil dimuat.`);
-      } else {
-        Alert.alert(
-          'Tidak ada data',
-          `Tidak ditemukan data untuk bulan ${month}.`,
-        );
+      // Jika respons adalah HTML, mungkin ada kesalahan pada server
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
+      }
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        // Jika status sukses dan ada data, tampilkan data
+        if (result.status === 'success' && result.data) {
+          const data = result.data; // Mengambil data pertama jika ada
+          setNilaiBor(data.bor || '0');
+          setNilaiAvlos(data.avlos || '0');
+          setNilaiToi(data.toi || '0');
+          setNilaiGdr(data.gdr || '0');
+          setNilaiBto(data.bto || '0');
+          setNilaiNdr(data.ndr || '0');
+        } else {
+          // Jika tidak ada data, set nilai default 0
+          setNilaiBor('0');
+          setNilaiAvlos('0');
+          setNilaiToi('0');
+          setNilaiGdr('0');
+          setNilaiBto('0');
+          setNilaiNdr('0');
+          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
       }
     } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Kesalahan', 'Gagal memuat data. Silakan coba lagi.');
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false); // Jangan lupa set loading false setelah request selesai
     }
   };
 

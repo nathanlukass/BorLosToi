@@ -135,13 +135,16 @@ const StatsPayangka = () => {
   const fetchStatsDataByMonth = async month => {
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_data',
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_monthly',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-          body: `bulan=${month}&ruangan=Payangka`,
+          body: new URLSearchParams({
+            month: month, // Parameter bulan
+            ruangan: 'Payangka', // Parameter ruangan
+          }).toString(), // Mengonversi ke format key=value
         },
       );
 
@@ -289,8 +292,7 @@ const StatsPayangka = () => {
               if (row.value < min || row.value > max) {
                 icon = 'red'; // If the value is outside the range, use red
               }
-            }
-            if (row.standard.includes('-')) {
+            } else if (row.standard.includes('-')) {
               const [min, max] = row.standard
                 .split('-')
                 .map(item => parseFloat(item));

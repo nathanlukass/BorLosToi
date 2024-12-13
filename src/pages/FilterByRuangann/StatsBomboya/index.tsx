@@ -135,13 +135,16 @@ const StatsBomboya = () => {
   const fetchStatsDataByMonth = async month => {
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_data',
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_monthly',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-          body: `bulan=${month}&ruangan=Bomboya`,
+          body: new URLSearchParams({
+            month: month, // Parameter bulan
+            ruangan: 'Bomboya', // Parameter ruangan
+          }).toString(), // Mengonversi ke format key=value
         },
       );
 

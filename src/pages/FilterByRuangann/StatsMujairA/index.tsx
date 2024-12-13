@@ -12,7 +12,7 @@ import {
   Border,
 } from '../../../../GlobalStyles';
 import {Gap} from '../../../../src/components';
-import moment from 'moment';
+import moment, {months} from 'moment';
 import {Alert} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
@@ -141,7 +141,10 @@ const StatsMujairA = () => {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-          body: `bulan=${month}&ruangan=Mujair A`,
+          body: new URLSearchParams({
+            month: month,
+            ruangan: 'Mujair A',
+          }).toString(),
         },
       );
 
