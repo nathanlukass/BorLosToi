@@ -29,17 +29,21 @@ const ScreenGuest = () => {
 
   const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
 
+  // State untuk tanggal mulai dan tanggal akhir
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
   const datePickerStyle1 = {
-    top: '85%',
+    top: '50%',
   };
 
   const datePickerStyle2 = {
-    top: '-820%',
+    top: '21%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
 
   const datePickerStyle3 = {
-    top: '100%',
+    top: '-25%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
 
@@ -296,9 +300,8 @@ const ScreenGuest = () => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setStartDate(formattedDate);
     console.log('Start Date: ', formattedDate);
-
     if (endDate) {
-      fetchStatsDataByRange(formattedDate, endDate);
+      fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
     }
   };
 
@@ -306,25 +309,18 @@ const ScreenGuest = () => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setEndDate(formattedDate);
     console.log('End Date: ', formattedDate);
-
     if (startDate) {
-      fetchStatsDataByRange(startDate, formattedDate);
+      fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
     }
   };
 
   const fetchStatsDataByRange = async (startDate, endDate) => {
     if (!startDate || !endDate) {
-      console.error('Tanggal awal dan akhir belum dipilih');
-      Alert.alert('Error', 'Tanggal awal dan akhir harus dipilih.');
+      Alert.alert('Error', 'Tanggal mulai dan akhir harus dipilih.');
       return;
     }
 
     setLoading(true);
-    console.log('Mengirim request dengan data:', {
-      start_date: startDate,
-      end_date: endDate,
-    });
-
     try {
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_stats_rs_range',
@@ -341,32 +337,33 @@ const ScreenGuest = () => {
       );
 
       const responseText = await response.text();
-      console.log('Response dari server:', responseText);
+      console.log('Raw Response:', responseText);
 
-      if (responseText.startsWith('<')) {
-        console.error('Response mengandung HTML, ada masalah di server.');
-        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
-        return;
+      const jsonParts = responseText
+        .split('}')
+        .filter(part => part.trim() !== '')
+        .map(part => `${part}}`);
+
+      for (const jsonPart of jsonParts) {
+        try {
+          const result = JSON.parse(jsonPart.trim());
+          console.log('Parsed JSON:', result);
+
+          // Tangani data statistik dan data status secara terpisah
+          if (result.status === 'success') {
+            setNilaiBor(result.BOR || '0');
+            setNilaiAvlos(result.AVLOS || '0');
+            setNilaiToi(result.TOI || '0');
+            setNilaiGdr(result.GDR || '0');
+            setNilaiBto(result.BTO || '0');
+            setNilaiNdr(result.NDR || '0');
+          } else if (!result.status && result.TotalPatientDays) {
+            setStatsData(result); // Simpan statistik utama
+          }
+        } catch (error) {
+          console.error('JSON Parsing Error:', error.message);
+        }
       }
-
-      const result = JSON.parse(responseText);
-      console.log('Parsed JSON:', result);
-
-      if (result.status === 'success' && result.data) {
-        const data = result.data;
-        setNilaiBor(data.BOR || '0');
-        setNilaiAvlos(data.AVLOS || '0');
-        setNilaiToi(data.TOI || '0');
-        setNilaiGdr(data.GDR || '0');
-        setNilaiBto(data.BTO || '0');
-        setNilaiNdr(data.NDR || '0');
-      } else {
-        console.log('No data found for the range.');
-        Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
-      }
-    } catch (error) {
-      console.error('Fetch Error:', error.message);
-      Alert.alert('Error', 'Gagal mengambil data rentang tanggal.');
     } finally {
       setLoading(false);
     }
@@ -375,13 +372,14 @@ const ScreenGuest = () => {
   return (
     <View style={styles.screenGuest}>
       <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
-
       <View style={styles.groupParent}>
         <FilterCheckBox
           isChecked={isFilterChecked}
           onChange={() => setIsFilterChecked(!isFilterChecked)}
         />
       </View>
+
+      {/* Conditionally render second DatePicker based on checkbox */}
       <DatePickerr
         style={datePickerStyle2}
         onDateChange={handleStartDateChange}
@@ -392,6 +390,7 @@ const ScreenGuest = () => {
         onDateChange={handleEndDateChange}
         placeholder="Pilih Tanggal Akhir"
       />
+
       <View style={styles.container1}>
         <Text style={styles.label}>Pilih Bulan : </Text>
         <RNPickerSelect
@@ -429,99 +428,137 @@ const ScreenGuest = () => {
           }}
         />
       </View>
-      <View style={styles.headerContainer}>
-        <Pressable style={styles.buttonHasil}>
-          <Text style={styles.buttonText}>HASIL</Text>
-        </Pressable>
-        <Pressable style={styles.buttonStandar}>
-          <Text style={styles.buttonText}>STANDAR</Text>
-        </Pressable>
-        <Pressable style={styles.buttonKet}>
-          <Text style={styles.buttonText}>KET</Text>
-        </Pressable>
-      </View>
-      <View style={styles.tableContainer}>
-        {/* Rows */}
-        {[
-          {label: 'BOR :', value: bor, standard: '60-85%', icon: 'green'},
-          {
-            label: 'AVLOS :',
-            value: avlos,
-            standard: '6-9 Hari',
-            icon: 'green',
-          },
-          {label: 'TOI :', value: toi, standard: '1-3 Hari', icon: 'red'},
-          {label: 'BTO :', value: bto, standard: '40-50 Kali', icon: 'green'},
-          {label: 'GDR :', value: gdr, standard: '< 20 ‰', icon: 'red'},
-          {label: 'NDR :', value: ndr, standard: '< 45 ‰', icon: 'red'},
-        ].map((row, index) => {
-          // Logic to check if the value is within the standard range
-          let icon = 'green'; // Default to green
-          if (row.standard.includes('%')) {
-            const [min, max] = row.standard
-              .split('-')
-              .map(item => parseFloat(item));
-            if (row.value < min || row.value > max) {
-              icon = 'red'; // If the value is outside the range, use red
-            }
-          } else if (row.standard.includes('Hari')) {
-            const [min, max] = row.standard
-              .split('-')
-              .map(item => parseFloat(item));
-            if (row.value < min || row.value > max) {
-              icon = 'red'; // If the value is outside the range, use red
-            }
-          }
-          if (row.standard.includes('-')) {
-            const [min, max] = row.standard
-              .split('-')
-              .map(item => parseFloat(item));
-            if (row.value < min || row.value > max) {
-              icon = 'red'; // Set ke merah jika di luar rentang
-            }
-          } else if (
-            row.standard.includes('Kali') ||
-            row.standard.includes('‰')
-          ) {
-            const max = parseFloat(row.standard.split(' ')[1]);
-            if (row.value > max) {
-              icon = 'red'; // If the value exceeds the max standard, use red
-            }
-          }
+      <View style={styles.container}>
+        {/* Header Section */}
+        <View style={styles.headerContainer}>
+          <Pressable style={styles.buttonHasil}>
+            <Text style={styles.buttonText}>HASIL</Text>
+          </Pressable>
+          <Pressable style={styles.buttonStandar}>
+            <Text style={styles.buttonText}>STANDAR</Text>
+          </Pressable>
+          <Pressable style={styles.buttonKet}>
+            <Text style={styles.buttonText}>KET</Text>
+          </Pressable>
+        </View>
 
-          return (
-            <View key={index} style={styles.row}>
-              <Text style={styles.rowLabel}>{row.label}</Text>
-              <Text style={styles.rowStandard}>{row.standard}</Text>
-              <Text style={styles.rowValue}>{row.value}</Text>
+        {/* Main Table */}
+        <View style={styles.tableContainer}>
+          {/* Rows */}
+          {[
+            {
+              label: 'BOR :',
+              value: bor,
+              standard: '60-85%',
+              icon: 'green',
+              symbol: '%',
+            },
+            {
+              label: 'AVLOS :',
+              value: avlos,
+              standard: '6-9 Hari',
+              icon: 'green',
+              symbol: ' Hari',
+            },
+            {
+              label: 'TOI :',
+              value: toi,
+              standard: '1-3 Hari',
+              icon: 'red',
+              symbol: ' Hari',
+            },
+            {
+              label: 'BTO :',
+              value: bto,
+              standard: '40-50 Kali',
+              icon: 'green',
+              symbol: ' Kali',
+            },
+            {
+              label: 'GDR :',
+              value: gdr,
+              standard: '< 20 ‰',
+              icon: 'red',
+              symbol: ' ‰',
+            },
+            {
+              label: 'NDR :',
+              value: ndr,
+              standard: '< 45 ‰',
+              icon: 'red',
+              symbol: ' ‰',
+            },
+          ].map((row, index) => {
+            // Logic to check if the value is within the standard range
+            let icon = 'green'; // Default to green
+            if (row.standard.includes('-')) {
+              const [min, max] = row.standard
+                .replace(/[^\d\-\.]/g, '') // Remove non-numeric text
+                .split('-')
+                .map(item => parseFloat(item));
+
+              if (parseFloat(row.value) < min || parseFloat(row.value) > max) {
+                icon = 'red'; // Out of range
+              }
+            } else if (row.standard.includes('Hari')) {
+              const [min, max] = row.standard
+                .split('-')
+                .map(item => parseFloat(item));
+              if (row.value < min || row.value > max) {
+                icon = 'red'; // If the value is outside the range, use red
+              }
+            } else if (
+              row.standard.includes('Kali') ||
+              row.standard.includes('‰')
+            ) {
+              const max = parseFloat(row.standard.split(' ')[1]);
+              if (row.value > max) {
+                icon = 'red'; // If the value exceeds the max standard, use red
+              }
+            }
+
+            return (
+              <View key={index} style={styles.row}>
+                <Text style={styles.rowLabel}>{row.label}</Text>
+                <Text style={styles.rowStandard}>{row.standard}</Text>
+                <Text
+                  style={[
+                    styles.rowValue,
+                    {color: icon === 'red' ? 'red' : 'green'},
+                  ]}>
+                  {row.value}
+                  {row.symbol}
+                </Text>
+                <Image
+                  style={styles.rowIcon}
+                  source={
+                    icon === 'red'
+                      ? require('../../../assets/red.png') // Path to red icon
+                      : require('../../../assets/green.png') // Path to green icon
+                  }
+                />
+              </View>
+            );
+          })}
+          <View style={styles.legendContainer}>
+            <View style={styles.legendItem}>
               <Image
-                style={styles.rowIcon}
-                source={
-                  icon === 'red'
-                    ? require('../../../assets/red.png') // Path ke ikon merah
-                    : require('../../../assets/green.png') // Path ke ikon hijau
-                }
+                source={require('../../../assets/green.png')} // Green icon
+                style={styles.legendIcon}
               />
+              <Text style={styles.legendText}>Memenuhi standar</Text>
             </View>
-          );
-        })}
-        <View style={styles.legendContainer}>
-          <View style={styles.legendItem}>
-            <Image
-              source={require('../../../assets/green.png')} // Ikon hijau
-              style={styles.legendIcon}
-            />
-            <Text style={styles.legendText}>Memenuhi standar</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <Image
-              source={require('../../../assets/red.png')} // Ikon merah
-              style={styles.legendIcon}
-            />
-            <Text style={styles.legendText}>Tidak memenuhi standar</Text>
+            <View style={styles.legendItem}>
+              <Image
+                source={require('../../../assets/red.png')} // Red icon
+                style={styles.legendIcon}
+              />
+              <Text style={styles.legendText}>Tidak memenuhi standar</Text>
+            </View>
           </View>
         </View>
       </View>
+
       <Pressable
         style={[styles.filter, styles.filterShadowBox]}
         onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
@@ -545,7 +582,6 @@ const ScreenGuest = () => {
         source={require('../../../assets/vector.png')}
       />
       {/* Conditionally render the second DatePickerr based on checkbox state */}
-      <DatePickerr style={datePickerStyle2} />
       <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
           style={styles.backButton}
@@ -723,7 +759,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
     padding: 16,
-    bottom: 230,
+    bottom: 250,
   },
   // Header Section
   headerContainer: {
@@ -760,7 +796,7 @@ const styles = StyleSheet.create({
   },
   // Table Section
   tableContainer: {
-    marginTop: -80,
+    marginTop: -90,
   },
   row: {
     flexDirection: 'row',
@@ -790,7 +826,7 @@ const styles = StyleSheet.create({
     color: 'black', // Warna hijau gelap untuk nilai
     textAlign: 'center',
     fontWeight: 'bold',
-    left: -178,
+    left: -150,
   },
   rowIcon: {
     flex: 0.2,
@@ -803,7 +839,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'right',
-    marginTop: 20, // Jarak dari tabel
+    marginTop: 5, // Jarak dari tabel
   },
   legendItem: {
     flexDirection: 'row',
@@ -825,7 +861,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 106,
     backgroundColor: 'white',
-    top: 85,
+    top: -95,
   },
   label: {
     fontSize: 21,

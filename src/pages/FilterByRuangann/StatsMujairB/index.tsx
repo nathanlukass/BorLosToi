@@ -40,11 +40,16 @@ const StatsMujairB = () => {
   const [endDate, setEndDate] = useState(null);
 
   const datePickerStyle1 = {
-    top: '47%',
+    top: '55%',
   };
 
   const datePickerStyle2 = {
-    top: '25%',
+    top: '35%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+  };
+
+  const datePickerStyle3 = {
+    top: '-10%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
   // const datePickerStyle3 = {
@@ -60,25 +65,6 @@ const StatsMujairB = () => {
     console.log('Selected Date: ', formattedDate);
     fetchStatsData(formattedDate);
   };
-
-  const handleStartDateChange = date => {
-    const formattedDate = moment(date).format('YYYY-MM-DD');
-    setStartDate(formattedDate);
-    console.log('Start Date: ', formattedDate);
-    if (endDate) {
-      fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
-    }
-  };
-
-  const handleEndDateChange = date => {
-    const formattedDate = moment(date).format('YYYY-MM-DD');
-    setEndDate(formattedDate);
-    console.log('End Date: ', formattedDate);
-    if (startDate) {
-      fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
-    }
-  };
-
   const fetchStatsData = async date => {
     if (!date) {
       console.error('Tanggal belum dipilih');
@@ -152,6 +138,24 @@ const StatsMujairB = () => {
     }
   };
 
+  const handleStartDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setStartDate(formattedDate);
+    console.log('Start Date: ', formattedDate);
+    if (endDate) {
+      fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
+    }
+  };
+
+  const handleEndDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setEndDate(formattedDate);
+    console.log('End Date: ', formattedDate);
+    if (startDate) {
+      fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
+    }
+  };
+
   const fetchStatsDataByRange = async (startDate, endDate) => {
     if (!startDate || !endDate) {
       Alert.alert('Error', 'Tanggal mulai dan akhir harus dipilih.');
@@ -184,26 +188,25 @@ const StatsMujairB = () => {
         .map(part => `${part}}`);
 
       for (const jsonPart of jsonParts) {
-        const result = JSON.parse(jsonPart);
-        console.log('Parsed JSON:', result);
+        try {
+          const result = JSON.parse(jsonPart.trim());
+          console.log('Parsed JSON:', result);
 
-        if (result.status === 'success' && result.data) {
-          const data = result.data;
-          setStatsData(data); // Simpan data ke state
-          setNilaiBor(data.BOR || '0');
-          setNilaiAvlos(data.AVLOS || '0');
-          setNilaiToi(data.TOI || '0');
-          setNilaiGdr(data.GDR || '0');
-          setNilaiBto(data.BTO || '0');
-          setNilaiNdr(data.NDR || '0');
+          // Tangani data statistik dan data status secara terpisah
+          if (result.status === 'success') {
+            setNilaiBor(result.BOR || '0');
+            setNilaiAvlos(result.AVLOS || '0');
+            setNilaiToi(result.TOI || '0');
+            setNilaiGdr(result.GDR || '0');
+            setNilaiBto(result.BTO || '0');
+            setNilaiNdr(result.NDR || '0');
+          } else if (!result.status && result.TotalPatientDays) {
+            setStatsData(result); // Simpan statistik utama
+          }
+        } catch (error) {
+          console.error('JSON Parsing Error:', error.message);
         }
       }
-    } catch (error) {
-      console.error('Fetch Error:', error.message);
-      Alert.alert(
-        'Error',
-        'Failed to fetch data. Please check your network connection.',
-      );
     } finally {
       setLoading(false);
     }
@@ -231,33 +234,70 @@ const StatsMujairB = () => {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
-            month: month,
-            ruangan: 'Mujair B',
-          }).toString(),
+            month: month, // Parameter bulan
+            ruangan: 'Mujair B', // Parameter ruangan
+          }).toString(), // Mengonversi ke format key=value
         },
       );
 
-      const data = await response.json();
-      console.log('Data yang diterima:', data);
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
 
-      if (data.status === 'success') {
-        Alert.alert('Berhasil', `Data untuk bulan ${month} berhasil dimuat.`);
-      } else {
-        Alert.alert(
-          'Error',
-          'Failed to fetch data. Please check your network connection.',
-        );
-      } finally {
-        setLoading(false); // Jangan lupa set loading false setelah request selesai
+      // Jika respons adalah HTML, mungkin ada kesalahan pada server
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
       }
-    };
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        // Jika status sukses dan ada data, tampilkan data
+        if (result.status === 'success' && result.data) {
+          const data = result.data; // Mengambil data pertama jika ada
+          setNilaiBor(data.bor || '0');
+          setNilaiAvlos(data.avlos || '0');
+          setNilaiToi(data.toi || '0');
+          setNilaiGdr(data.gdr || '0');
+          setNilaiBto(data.bto || '0');
+          setNilaiNdr(data.ndr || '0');
+        } else {
+          // Jika tidak ada data, set nilai default 0
+          setNilaiBor('0');
+          setNilaiAvlos('0');
+          setNilaiToi('0');
+          setNilaiGdr('0');
+          setNilaiBto('0');
+          setNilaiNdr('0');
+          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false); // Jangan lupa set loading false setelah request selesai
+    }
+  };
 
   return (
     <View style={styles.screenGuest}>
       {/* First DatePicker */}
       <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
-      <DatePickerr onDateChange={handleStartDateChange} />
-      <DatePickerr onDateChange={handleEndDateChange} style={styles.datePickerStyle2} />
+      {/* <DatePickerr onDateChange={handleStartDateChange} />
+      <DatePickerr
+        onDateChange={handleEndDateChange}
+        style={styles.datePickerStyle2}
+      /> */}
       {/* Filter Checkbox */}
       <View style={styles.groupParent}>
         <FilterCheckBox
@@ -346,60 +386,68 @@ const StatsMujairB = () => {
 
         {/* Main Table */}
         <View style={styles.tableContainer}>
+          {/* Rows */}
           {[
             {
               label: 'BOR :',
-              value: bor || 'Data tidak tersedia',
+              value: bor,
               standard: '60-85%',
+              icon: 'green',
+              symbol: '%',
             },
             {
               label: 'AVLOS :',
-              value: avlos || 'Data tidak tersedia',
+              value: avlos,
               standard: '6-9 Hari',
+              icon: 'green',
+              symbol: ' Hari',
             },
             {
               label: 'TOI :',
-              value: toi || 'Data tidak tersedia',
+              value: toi,
               standard: '1-3 Hari',
+              icon: 'red',
+              symbol: ' Hari',
             },
             {
               label: 'BTO :',
-              value: bto || 'Data tidak tersedia',
+              value: bto,
               standard: '40-50 Kali',
+              icon: 'green',
+              symbol: ' Kali',
             },
             {
               label: 'GDR :',
-              value: gdr || 'Data tidak tersedia',
+              value: gdr,
               standard: '< 20 ‰',
+              icon: 'red',
+              symbol: ' ‰',
             },
             {
               label: 'NDR :',
-              value: ndr || 'Data tidak tersedia',
+              value: ndr,
               standard: '< 45 ‰',
+              icon: 'red',
+              symbol: ' ‰',
             },
           ].map((row, index) => {
-            let icon = 'green';
-            if (row.standard.includes('%')) {
+            // Logic to check if the value is within the standard range
+            let icon = 'green'; // Default to green
+            if (row.standard.includes('-')) {
               const [min, max] = row.standard
                 .replace(/[^\d\-\.]/g, '') // Remove non-numeric text
                 .split('-')
                 .map(item => parseFloat(item));
-              if (row.value < min || row.value > max) {
-                icon = 'red';
+
+              if (parseFloat(row.value) < min || parseFloat(row.value) > max) {
+                icon = 'red'; // Out of range
               }
             } else if (row.standard.includes('Hari')) {
               const [min, max] = row.standard
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
-                icon = 'red';
-              }
-            } else if (row.standard.includes('-')) {
-              const [min, max] = row.standard
-                .split('-')
-                .map(item => parseFloat(item));
-              if (row.value < min || row.value > max) {
-                icon = 'red';
+                icon = 'red'; // If the value is outside the range, use red
               }
             } else if (
               row.standard.includes('Kali') ||
@@ -407,7 +455,7 @@ const StatsMujairB = () => {
             ) {
               const max = parseFloat(row.standard.split(' ')[1]);
               if (row.value > max) {
-                icon = 'red';
+                icon = 'red'; // If the value exceeds the max standard, use red
               }
             }
 
@@ -415,20 +463,41 @@ const StatsMujairB = () => {
               <View key={index} style={styles.row}>
                 <Text style={styles.rowLabel}>{row.label}</Text>
                 <Text style={styles.rowStandard}>{row.standard}</Text>
-                <Text style={[styles.rowValue, {color: icon === 'red' ? 'red' : 'green'}]}>
-                  {row.value}{row.symbol}
+                <Text
+                  style={[
+                    styles.rowValue,
+                    {color: icon === 'red' ? 'red' : 'green'},
+                  ]}>
+                  {row.value}
+                  {row.symbol}
                 </Text>
                 <Image
                   style={styles.rowIcon}
                   source={
                     icon === 'red'
-                      ? require('../../../../assets/red.png')
-                      : require('../../../../assets/green.png')
+                      ? require('../../../../assets/red.png') // Path to red icon
+                      : require('../../../../assets/green.png') // Path to green icon
                   }
                 />
               </View>
             );
           })}
+          <View style={styles.legendContainer}>
+            <View style={styles.legendItem}>
+              <Image
+                source={require('../../../../assets/green.png')} // Green icon
+                style={styles.legendIcon}
+              />
+              <Text style={styles.legendText}>Memenuhi standar</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <Image
+                source={require('../../../../assets/red.png')} // Red icon
+                style={styles.legendIcon}
+              />
+              <Text style={styles.legendText}>Tidak memenuhi standar</Text>
+            </View>
+          </View>
         </View>
       </View>
     </View>

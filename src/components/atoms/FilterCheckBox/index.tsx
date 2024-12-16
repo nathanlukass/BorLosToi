@@ -18,7 +18,7 @@ const FilterCheckBox = ({isChecked, onChange}) => {
 
 const styles = StyleSheet.create({
   container: {
-    top: -55,
+    top: -65,
     left: -8,
     flexDirection: 'row', // Align CheckBox and Text horizontally
     alignItems: 'center', // Center the items vertically

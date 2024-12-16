@@ -1,225 +1,223 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import {
-  Image,
   StyleSheet,
-  Text,
   View,
+  Text,
   Pressable,
-  Modal,
-  FlatList,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
+  Image,
+  ScrollView,
 } from 'react-native';
-import {DatePickerr, FilterCheckBox} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
-import {FontSize, FontFamily, Color, Border} from '../../../GlobalStyles';
+import {
+  Padding,
+  Border,
+  Color,
+  FontFamily,
+  FontSize,
+} from '../../../GlobalStyles';
 
-const BORAVLOSTOIBTONDRGDR = () => {
-  const [isFilterChecked, setIsFilterChecked] = useState(false); // State to track checkbox status
-
-  const datePickerStyle1 = {
-    top: '19%',
-  };
-  const datePickerStyle2 = {
-    top: '-55%',
-    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
-  };
-  const [selectedIndicator, setSelectedIndicator] =
-    React.useState('Pilih Indikator');
-  const [indicatorModalVisible, setIndicatorModalVisible] =
-    React.useState(false);
-
-  const indicators = ['BOR', 'AVLOS', 'TOI', 'BTO', 'NDR', 'GDR'];
-
+const BorlostoiScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => {
-        setSelectedIndicator(item);
-        setIndicatorModalVisible(false);
-      }}
-      style={styles.item}>
-      <Text>{item}</Text>
-    </TouchableOpacity>
-  );
-
-  const handleViewPress = () => {
-    if (selectedIndicator !== 'Pilih Indikator') {
-      navigation.navigate(selectedIndicator);
-    } else {
-      alert('Silakan pilih indikator terlebih dahulu');
-    }
-  };
-
   return (
-    <View style={styles.screenGuest}>
-      <DatePickerr style={datePickerStyle1} />
-      <View style={styles.groupParent}>
-        <FilterCheckBox
-          isChecked={isFilterChecked}
-          onChange={() => setIsFilterChecked(!isFilterChecked)}
-        />
-      </View>
-      <DatePickerr style={datePickerStyle2} />
-      {/* <DatePickerr style={styles.datePickerStyle1} />
-      <View style={styles.groupParent}>
-        <FilterCheckBox />
-      </View>
-      <DatePickerr style={styles.datePickerStyle2} /> */}
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.headerContainer}>
+          <Pressable
+            style={styles.backButton}
+            onPress={() => navigation.navigate('ScreenGuest')}>
+            <Image
+              style={styles.icon}
+              resizeMode="cover"
+              source={require('../../../assets/-icon-arrow-back.png')}
+            />
+          </Pressable>
+          <Text style={styles.headerTitle}>Filter by Ruangan</Text>
+        </View>
 
-      {/* Dropdown Pilih Indikator */}
-      <Pressable
-        style={styles.dropdown}
-        onPress={() => setIndicatorModalVisible(true)}>
-        <Text style={styles.dropdownText}>{selectedIndicator}</Text>
-      </Pressable>
+        <View style={styles.buttonGrid}>
+          {/* Tombol MUJAIR A */}
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox]}
+            onPress={() => navigation.navigate('StatsMujairA')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/mujairA.jpg')}
+            />
+          </Pressable>
 
-      {/* Modal Pilih Indikator */}
-      <Modal
-        transparent={true}
-        visible={indicatorModalVisible}
-        onRequestClose={() => setIndicatorModalVisible(false)}>
-        <TouchableWithoutFeedback
-          onPress={() => setIndicatorModalVisible(false)}>
-          <View style={styles.modalBackground}>
-            <TouchableWithoutFeedback>
-              <View style={styles.modalContent}>
-                <FlatList
-                  data={indicators}
-                  keyExtractor={item => item}
-                  renderItem={renderItem}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
+          {/* Tombol MUJAIR B */}
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox]}
+            onPress={() => navigation.navigate('StatsMujairB')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/mujairB.jpg')}
+            />
+          </Pressable>
 
-      {/* Tombol Lihat */}
-      <Pressable style={styles.viewButton} onPress={handleViewPress}>
-        <Text style={styles.viewButtonText}>Lihat</Text>
-      </Pressable>
+          {/* Tombol MUJAIR C */}
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox]}
+            onPress={() => navigation.navigate('StatsMujairC')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/mujairC.jpg')}
+            />
+          </Pressable>
 
-      <View style={[styles.barAtas, styles.filterShadowBox]}>
-        <Pressable
-          style={styles.backButton}
-          onPress={() => navigation.navigate('ScreenGuest')}>
-          <Image
-            style={styles.icon}
-            resizeMode="cover"
-            source={require('../../../assets/-icon-arrow-back.png')}
-          />
-        </Pressable>
-        <Text style={[styles.backToLogin, styles.vectorIconPosition]}>
-          Back to login page
-        </Text>
-      </View>
+          {/* Tombol NIKE */}
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox]}
+            onPress={() => navigation.navigate('StatsNike')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/nike.jpg')}
+            />
+          </Pressable>
+
+          {/* Tombol PAYANGKA */}
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox]}
+            onPress={() => navigation.navigate('StatsPayangka')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/payangka.jpg')}
+            />
+          </Pressable>
+
+          {/* Tombol NEONATI */}
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox]}
+            onPress={() => navigation.navigate('StatsNeonati')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/neonati.jpg')}
+            />
+          </Pressable>
+
+          {/* Tombol BOMBOYA */}
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox]}
+            onPress={() => navigation.navigate('StatsBomboya')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/bomboya.jpg')}
+            />
+          </Pressable>
+
+          {/* Tombol KARPER */}
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox]}
+            onPress={() => navigation.navigate('StatsKarper')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/karper.jpg')}
+            />
+          </Pressable>
+        </View>
+
+        {/* ICU button centered */}
+        <View style={styles.centeredButtonContainer}>
+          <Pressable
+            style={[styles.roomButton, styles.shadowBox, styles.centeredButton]} // Added centeredButton style
+            onPress={() => navigation.navigate('StatsICU')}>
+            <Image
+              style={styles.roomIcon}
+              resizeMode="cover"
+              source={require('../../../assets/icu.jpg')}
+            />
+          </Pressable>
+        </View>
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  screenGuest: {
+  container: {
     flex: 1,
-    height: 900,
-    backgroundColor: Color.schemesOnPrimary,
   },
-
-  groupParent: {
-    top: 190,
-    left: 31,
-    alignItems: 'center',
+  scrollContainer: {
+    paddingVertical: 20,
+    paddingHorizontal: 42,
+  },
+  headerContainer: {
     flexDirection: 'row',
-    position: 'absolute',
-  },
-  dropdown: {
-    height: 40,
-    width: 354,
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: Color.notSoBlack,
-    borderRadius: 10,
-    backgroundColor: Color.schemesOnPrimary,
-    alignSelf: 'center',
-    bottom: 470,
-  },
-  dropdownText: {
-    fontSize: FontSize.m3LabelLarge_size,
-    color: Color.notSoBlack,
-  },
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContent: {
-    width: 250,
-    maxHeight: 300,
-    backgroundColor: Color.schemesOnPrimary,
-    padding: 20,
-    borderRadius: 10,
-  },
-  item: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'grey',
-  },
-  viewButton: {
-    marginTop: 20,
-    alignSelf: 'center',
-    backgroundColor: Color.colorMediumaquamarine,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-    bottom: 470,
-    left: 135,
-  },
-  viewButtonText: {
-    fontSize: FontSize.m3BodyLarge_size,
-    color: Color.schemesOnPrimary,
-  },
-  filterShadowBox: {
-    shadowOpacity: 1,
-    alignItems: 'center',
-    flexDirection: 'row',
-    position: 'absolute',
-  },
-  icon: {
-    height: '100%',
-    width: '100%',
+    marginBottom: 20,
   },
   backButton: {
     width: 42,
     height: 25,
-    zIndex: 0,
+    marginRight: 20,
   },
-  backToLogin: {
-    marginTop: 1,
-    fontWeight: '700',
+  icon: {
+    width: '100%',
+    height: '100%',
+    marginLeft: -40,
+    marginTop: -3,
+  },
+  headerTitle: {
+    fontSize: FontSize.m3BodyLarge_size,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
-    fontSize: FontSize.m3BodyLarge_size,
-    zIndex: 1,
-    alignSelf: 'center',
-    left: -200,
+    textAlign: 'center',
+    left: 39,
   },
-  barAtas: {
-    top: 20,
-    left: 17,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    shadowRadius: 4,
-    elevation: 4,
-    borderRadius: Border.br_8xs,
-    width: 460,
-    height: 45,
+  buttonGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    backgroundColor: Color.schemesOnPrimary,
-    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  roomButton: {
+    width: '45%',
+    height: 140,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    backgroundColor: '#fffaf6',
+    marginBottom: 20,
+    top: 20,
+  },
+  roomIcon: {
+    width: 135,
+    height: 125,
+    alignItems: 'center',
+    borderRadius: 30,
+  },
+  // roomText: {
+  //   top: 8,
+  //   fontSize: FontSize.m3BodySmall_size,
+  //   fontFamily: FontFamily.poppinsMedium,
+  //   color: Color.notSoBlack,
+  //   textAlign: 'center',
+  // },
+  shadowBox: {
+    shadowColor: 'rgba(0, 0, 0, 0.5)',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 1,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  centeredButtonContainer: {
+    alignItems: 'center',
+    width: '100%',
+  },
+  centeredButton: {
+    width: '45%',
+    height: 120,
   },
 });
 
-export default BORAVLOSTOIBTONDRGDR;
+export default BorlostoiScreen;
