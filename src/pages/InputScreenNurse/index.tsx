@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -23,7 +23,7 @@ const NurseInputPage = ({route}) => {
   const {username, role, ruangan, id_user, nama} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
-  const [jumlahTempatTidur, setJumlahTempatTidur] = useState(22);
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState('');
   const [pasienAwal, setPasienAwal] = useState('0');
   const [pasienMasuk, setPasienMasuk] = useState('0');
   const [pasienPindahan, setPasienPindahan] = useState('0');
@@ -328,6 +328,40 @@ const NurseInputPage = ({route}) => {
       </View>
     </View>
   );
+
+  const fetchJumlahBed = async () => {
+      try {
+        const response = await fetch(
+          'https://samratindikator.online/borlostoi/public/insert/get_bed_quantity',
+          {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+              ruangan: ruangan,
+            }).toString(),
+          }
+        );
+    
+        const rawText = await response.text(); 
+        console.log('Response raw text:', rawText);
+    
+        const result = JSON.parse(rawText);
+    
+        // Akses langsung key "jumlah bed Mujair A"
+        if (result.status === 'success' && result['jumlah bed Mujair A'] !== undefined) {
+          setJumlahTempatTidur(result['jumlah bed Mujair A'].toString());
+        } else {
+          Alert.alert('Error', 'Data jumlah tempat tidur tidak ditemukan.');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error.message);
+        Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
+      }
+    };
+
+    useEffect(() => {
+        fetchJumlahBed(); // Fetch data saat komponen dimuat
+      }, []);
 
   return (
     <View style={styles.container}>
