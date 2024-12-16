@@ -187,13 +187,16 @@ const StatsMujairB = () => {
         .filter(part => part.trim() !== '')
         .map(part => `${part}}`);
 
+      let dataFound = false; // Flag untuk cek apakah ada data berhasil diparsing
+
       for (const jsonPart of jsonParts) {
         try {
           const result = JSON.parse(jsonPart.trim());
           console.log('Parsed JSON:', result);
 
-          // Tangani data statistik dan data status secara terpisah
+          // Jika data ditemukan
           if (result.status === 'success') {
+            dataFound = true;
             setNilaiBor(result.BOR || '0');
             setNilaiAvlos(result.AVLOS || '0');
             setNilaiToi(result.TOI || '0');
@@ -201,12 +204,39 @@ const StatsMujairB = () => {
             setNilaiBto(result.BTO || '0');
             setNilaiNdr(result.NDR || '0');
           } else if (!result.status && result.TotalPatientDays) {
+            dataFound = true;
             setStatsData(result); // Simpan statistik utama
           }
         } catch (error) {
           console.error('JSON Parsing Error:', error.message);
         }
       }
+
+      // Jika tidak ada data ditemukan
+      if (!dataFound) {
+        setNilaiBor('0');
+        setNilaiAvlos('0');
+        setNilaiToi('0');
+        setNilaiGdr('0');
+        setNilaiBto('0');
+        setNilaiNdr('0');
+        Alert.alert(
+          'No Data',
+          'Data tidak tersedia untuk rentang tanggal yang dipilih.',
+        );
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+      setNilaiBor('0');
+      setNilaiAvlos('0');
+      setNilaiToi('0');
+      setNilaiGdr('0');
+      setNilaiBto('0');
+      setNilaiNdr('0');
     } finally {
       setLoading(false);
     }
