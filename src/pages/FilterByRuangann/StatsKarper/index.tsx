@@ -133,34 +133,69 @@ const StatsKarper = () => {
   };
 
   const fetchStatsDataByMonth = async month => {
-    try {
-      const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_data',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+      try {
+        const response = await fetch(
+          'https://samratindikator.online/borlostoi/public/insert/get_stats_data_monthly',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              month: month, // Parameter bulan
+              ruangan: 'Karper', // Parameter ruangan
+            }).toString(), // Mengonversi ke format key=value
           },
-          body: `bulan=${month}&ruangan=Karper`,
-        },
-      );
-
-      const data = await response.json();
-      console.log('Data yang diterima:', data);
-
-      if (data.status === 'success') {
-        Alert.alert('Berhasil', `Data untuk bulan ${month} berhasil dimuat.`);
-      } else {
-        Alert.alert(
-          'Tidak ada data',
-          `Tidak ditemukan data untuk bulan ${month}.`,
         );
+  
+        const responseText = await response.text();
+        console.log('Response dari server:', responseText);
+  
+        // Jika respons adalah HTML, mungkin ada kesalahan pada server
+        if (responseText.startsWith('<')) {
+          console.error('Response mengandung HTML, ada masalah di server.');
+          Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+          return;
+        }
+  
+        let result;
+        try {
+          result = JSON.parse(responseText);
+          console.log('Parsed JSON:', result);
+  
+          // Jika status sukses dan ada data, tampilkan data
+          if (result.status === 'success' && result.data) {
+            const data = result.data; // Mengambil data pertama jika ada
+            setNilaiBor(data.bor || '0');
+            setNilaiAvlos(data.avlos || '0');
+            setNilaiToi(data.toi || '0');
+            setNilaiGdr(data.gdr || '0');
+            setNilaiBto(data.bto || '0');
+            setNilaiNdr(data.ndr || '0');
+          } else {
+            // Jika tidak ada data, set nilai default 0
+            setNilaiBor('0');
+            setNilaiAvlos('0');
+            setNilaiToi('0');
+            setNilaiGdr('0');
+            setNilaiBto('0');
+            setNilaiNdr('0');
+            Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+          }
+        } catch (jsonError) {
+          console.error('JSON Parse Error:', jsonError.message);
+          Alert.alert('Error', 'Invalid response from server.');
+        }
+      } catch (error) {
+        console.error('Fetch Error:', error.message);
+        Alert.alert(
+          'Error',
+          'Failed to fetch data. Please check your network connection.',
+        );
+      } finally {
+        setLoading(false); // Jangan lupa set loading false setelah request selesai
       }
-    } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Kesalahan', 'Gagal memuat data. Silakan coba lagi.');
-    }
-  };
+    };
 
   return (
     <View style={styles.screenGuest}>
@@ -261,26 +296,23 @@ const StatsKarper = () => {
         <View style={styles.tableContainer}>
           {/* Rows */}
           {[
-            {label: 'BOR :', value: bor, standard: '60-85%', icon: 'green'},
-            {
-              label: 'AVLOS :',
-              value: avlos,
-              standard: '6-9 Hari',
-              icon: 'green',
-            },
-            {label: 'TOI :', value: toi, standard: '1-3 Hari', icon: 'red'},
-            {label: 'BTO :', value: bto, standard: '40-50 Kali', icon: 'green'},
-            {label: 'GDR :', value: gdr, standard: '< 20 ‰', icon: 'red'},
-            {label: 'NDR :', value: ndr, standard: '< 45 ‰', icon: 'red'},
+            {label: 'BOR :', value: bor, standard: '60-85%', icon: 'green', symbol: '%'},
+            {label: 'AVLOS :', value: avlos, standard: '6-9 Hari', icon: 'green', symbol: ' Hari'},
+            {label: 'TOI :', value: toi, standard: '1-3 Hari', icon: 'red', symbol: ' Hari'},
+            {label: 'BTO :', value: bto, standard: '40-50 Kali', icon: 'green', symbol: ' Kali'},
+            {label: 'GDR :', value: gdr, standard: '< 20 ‰', icon: 'red', symbol: ' ‰'},
+            {label: 'NDR :', value: ndr, standard: '< 45 ‰', icon: 'red', symbol: ' ‰'},
           ].map((row, index) => {
             // Logic to check if the value is within the standard range
             let icon = 'green'; // Default to green
-            if (row.standard.includes('%')) {
+            if (row.standard.includes('-')) {
               const [min, max] = row.standard
+                .replace(/[^\d\-\.]/g, '') // Remove non-numeric text
                 .split('-')
                 .map(item => parseFloat(item));
-              if (row.value < min || row.value > max) {
-                icon = 'red'; // If the value is outside the range, use red
+
+              if (parseFloat(row.value) < min || parseFloat(row.value) > max) {
+                icon = 'red'; // Out of range
               }
             } else if (row.standard.includes('Hari')) {
               const [min, max] = row.standard
@@ -288,14 +320,6 @@ const StatsKarper = () => {
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
                 icon = 'red'; // If the value is outside the range, use red
-              }
-            }
-            if (row.standard.includes('-')) {
-              const [min, max] = row.standard
-                .split('-')
-                .map(item => parseFloat(item));
-              if (row.value < min || row.value > max) {
-                icon = 'red'; // Set ke merah jika di luar rentang
               }
             } else if (
               row.standard.includes('Kali') ||
@@ -311,13 +335,15 @@ const StatsKarper = () => {
               <View key={index} style={styles.row}>
                 <Text style={styles.rowLabel}>{row.label}</Text>
                 <Text style={styles.rowStandard}>{row.standard}</Text>
-                <Text style={styles.rowValue}>{row.value}</Text>
+                <Text style={[styles.rowValue, {color: icon === 'red' ? 'red' : 'green'}]}>
+                  {row.value}{row.symbol}
+                </Text>
                 <Image
                   style={styles.rowIcon}
                   source={
                     icon === 'red'
-                      ? require('../../../../assets/red.png') // Path ke ikon merah
-                      : require('../../../../assets/green.png') // Path ke ikon hijau
+                      ? require('../../../../assets/red.png') // Path to red icon
+                      : require('../../../../assets/green.png') // Path to green icon
                   }
                 />
               </View>
@@ -326,14 +352,14 @@ const StatsKarper = () => {
           <View style={styles.legendContainer}>
             <View style={styles.legendItem}>
               <Image
-                source={require('../../../../assets/green.png')} // Ikon hijau
+                source={require('../../../../assets/green.png')} // Green icon
                 style={styles.legendIcon}
               />
               <Text style={styles.legendText}>Memenuhi standar</Text>
             </View>
             <View style={styles.legendItem}>
               <Image
-                source={require('../../../../assets/red.png')} // Ikon merah
+                source={require('../../../../assets/red.png')} // Red icon
                 style={styles.legendIcon}
               />
               <Text style={styles.legendText}>Tidak memenuhi standar</Text>

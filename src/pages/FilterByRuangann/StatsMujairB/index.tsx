@@ -244,15 +244,13 @@ const StatsMujairB = () => {
         Alert.alert('Berhasil', `Data untuk bulan ${month} berhasil dimuat.`);
       } else {
         Alert.alert(
-          'Tidak ada data',
-          `Tidak ditemukan data untuk bulan ${month}.`,
+          'Error',
+          'Failed to fetch data. Please check your network connection.',
         );
+      } finally {
+        setLoading(false); // Jangan lupa set loading false setelah request selesai
       }
-    } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Kesalahan', 'Gagal memuat data. Silakan coba lagi.');
-    }
-  };
+    };
 
   return (
     <View style={styles.screenGuest}>
@@ -383,6 +381,7 @@ const StatsMujairB = () => {
             let icon = 'green';
             if (row.standard.includes('%')) {
               const [min, max] = row.standard
+                .replace(/[^\d\-\.]/g, '') // Remove non-numeric text
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
@@ -416,7 +415,9 @@ const StatsMujairB = () => {
               <View key={index} style={styles.row}>
                 <Text style={styles.rowLabel}>{row.label}</Text>
                 <Text style={styles.rowStandard}>{row.standard}</Text>
-                <Text style={styles.rowValue}>{row.value}</Text>
+                <Text style={[styles.rowValue, {color: icon === 'red' ? 'red' : 'green'}]}>
+                  {row.value}{row.symbol}
+                </Text>
                 <Image
                   style={styles.rowIcon}
                   source={

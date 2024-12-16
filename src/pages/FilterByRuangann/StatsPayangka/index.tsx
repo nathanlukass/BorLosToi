@@ -255,8 +255,13 @@ const StatsPayangka = () => {
         );
       }
     } catch (error) {
-      console.error('Error:', error);
-      Alert.alert('Kesalahan', 'Gagal memuat data. Silakan coba lagi.');
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false); // Jangan lupa set loading false setelah request selesai
     }
   };
 
@@ -354,21 +359,53 @@ const StatsPayangka = () => {
         {/* Main Table */}
         <View style={styles.tableContainer}>
           {[
-            {label: 'BOR :', value: bor, standard: '60-85%', icon: 'green'},
+            {
+              label: 'BOR :',
+              value: bor,
+              standard: '60-85%',
+              icon: 'green',
+              symbol: '%',
+            },
             {
               label: 'AVLOS :',
               value: avlos,
               standard: '6-9 Hari',
               icon: 'green',
+              symbol: ' Hari',
             },
-            {label: 'TOI :', value: toi, standard: '1-3 Hari', icon: 'red'},
-            {label: 'BTO :', value: bto, standard: '40-50 Kali', icon: 'green'},
-            {label: 'GDR :', value: gdr, standard: '< 20 ‰', icon: 'red'},
-            {label: 'NDR :', value: ndr, standard: '< 45 ‰', icon: 'red'},
+            {
+              label: 'TOI :',
+              value: toi,
+              standard: '1-3 Hari',
+              icon: 'red',
+              symbol: ' Hari',
+            },
+            {
+              label: 'BTO :',
+              value: bto,
+              standard: '40-50 Kali',
+              icon: 'green',
+              symbol: ' Kali',
+            },
+            {
+              label: 'GDR :',
+              value: gdr,
+              standard: '< 20 ‰',
+              icon: 'red',
+              symbol: ' ‰',
+            },
+            {
+              label: 'NDR :',
+              value: ndr,
+              standard: '< 45 ‰',
+              icon: 'red',
+              symbol: ' ‰',
+            },
           ].map((row, index) => {
             let icon = 'green';
             if (row.standard.includes('%')) {
               const [min, max] = row.standard
+                .replace(/[^\d\-\.]/g, '') // Remove non-numeric text
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
@@ -402,7 +439,14 @@ const StatsPayangka = () => {
               <View key={index} style={styles.row}>
                 <Text style={styles.rowLabel}>{row.label}</Text>
                 <Text style={styles.rowStandard}>{row.standard}</Text>
-                <Text style={styles.rowValue}>{row.value}</Text>
+                <Text
+                  style={[
+                    styles.rowValue,
+                    {color: icon === 'red' ? 'red' : 'green'},
+                  ]}>
+                  {row.value}
+                  {row.symbol}
+                </Text>
                 <Image
                   style={styles.rowIcon}
                   source={
