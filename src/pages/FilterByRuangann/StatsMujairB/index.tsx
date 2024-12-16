@@ -15,6 +15,7 @@ import {Gap} from '../../../../src/components';
 import moment from 'moment';
 import {Alert} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+import {useEffect} from 'react';
 
 const StatsMujairB = () => {
   const [isFilterChecked, setIsFilterChecked] = useState(false);
@@ -28,16 +29,28 @@ const StatsMujairB = () => {
   const [ndr, setNilaiNdr] = useState('');
   const [bto, setNilaiBto] = useState('');
 
+  useEffect(() => {
+    console.log('State updated:', {bor, avlos, toi, gdr, bto, ndr});
+  }, [bor, avlos, toi, gdr, bto, ndr]);
+
   const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
+
+  // State untuk tanggal mulai dan tanggal akhir
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const datePickerStyle1 = {
     top: '47%',
   };
 
   const datePickerStyle2 = {
-    top: '2%',
+    top: '25%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
+  // const datePickerStyle3 = {
+  //   top: '-17%',
+  //   display: isFilterChecked ? 'flex' : 'none',
+  // };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
@@ -46,6 +59,24 @@ const StatsMujairB = () => {
     setSelectedDate(formattedDate);
     console.log('Selected Date: ', formattedDate);
     fetchStatsData(formattedDate);
+  };
+
+  const handleStartDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setStartDate(formattedDate);
+    console.log('Start Date: ', formattedDate);
+    if (endDate) {
+      fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
+    }
+  };
+
+  const handleEndDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setEndDate(formattedDate);
+    console.log('End Date: ', formattedDate);
+    if (startDate) {
+      fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
+    }
   };
 
   const fetchStatsData = async date => {
@@ -78,7 +109,6 @@ const StatsMujairB = () => {
       const responseText = await response.text();
       console.log('Response dari server:', responseText);
 
-      // Jika respons adalah HTML, mungkin ada kesalahan pada server
       if (responseText.startsWith('<')) {
         console.error('Response mengandung HTML, ada masalah di server.');
         Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
@@ -90,7 +120,6 @@ const StatsMujairB = () => {
         result = JSON.parse(responseText);
         console.log('Parsed JSON:', result);
 
-        // Jika tidak ada data atau status bukan 'success', set semua nilai menjadi 0
         if (result.status === 'success' && result.data) {
           const data = result.data;
           setNilaiBor(data.BOR || '0');
@@ -100,7 +129,6 @@ const StatsMujairB = () => {
           setNilaiBto(data.BTO || '0');
           setNilaiNdr(data.NDR || '0');
         } else {
-          // Jika tidak ada data atau gagal, set nilai default 0
           setNilaiBor('0');
           setNilaiAvlos('0');
           setNilaiToi('0');
@@ -120,9 +148,70 @@ const StatsMujairB = () => {
         'Failed to fetch data. Please check your network connection.',
       );
     } finally {
-      setLoading(false); // Jangan lupa set loading false setelah request selesai
+      setLoading(false);
     }
   };
+
+  const fetchStatsDataByRange = async (startDate, endDate) => {
+    if (!startDate || !endDate) {
+      Alert.alert('Error', 'Tanggal mulai dan akhir harus dipilih.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_ruangan_range',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            start_date: startDate,
+            end_date: endDate,
+            ruangan: 'Mujair B',
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Raw Response:', responseText);
+
+      const jsonParts = responseText
+        .split('}')
+        .filter(part => part.trim() !== '')
+        .map(part => `${part}}`);
+
+      for (const jsonPart of jsonParts) {
+        const result = JSON.parse(jsonPart);
+        console.log('Parsed JSON:', result);
+
+        if (result.status === 'success' && result.data) {
+          const data = result.data;
+          setStatsData(data); // Simpan data ke state
+          setNilaiBor(data.BOR || '0');
+          setNilaiAvlos(data.AVLOS || '0');
+          setNilaiToi(data.TOI || '0');
+          setNilaiGdr(data.GDR || '0');
+          setNilaiBto(data.BTO || '0');
+          setNilaiNdr(data.NDR || '0');
+        }
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log('State nilai:', {bor, avlos, toi, bto, gdr, ndr});
+  }, [bor, avlos, toi, bto, gdr, ndr]);
 
   const handleMonthChange = value => {
     if (value) {
@@ -135,13 +224,16 @@ const StatsMujairB = () => {
   const fetchStatsDataByMonth = async month => {
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_data',
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_monthly',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-          body: `bulan=${month}&ruangan=Mujair B`,
+          body: new URLSearchParams({
+            month: month,
+            ruangan: 'Mujair B',
+          }).toString(),
         },
       );
 
@@ -166,7 +258,8 @@ const StatsMujairB = () => {
     <View style={styles.screenGuest}>
       {/* First DatePicker */}
       <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
-
+      <DatePickerr onDateChange={handleStartDateChange} />
+      <DatePickerr onDateChange={handleEndDateChange} style={styles.datePickerStyle2} />
       {/* Filter Checkbox */}
       <View style={styles.groupParent}>
         <FilterCheckBox
@@ -175,21 +268,17 @@ const StatsMujairB = () => {
         />
       </View>
 
-      {/* Lihat Button */}
-      {/* <Pressable
-        style={[styles.okButton, styles.filterShadowBox]}
-        onPress={() => console.log('OK Button Pressed')}>
-        <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
-      </Pressable> */}
-
-      <Image
-        style={[styles.vectorIcon, styles.vectorIconPosition]}
-        resizeMode="cover"
-        source={require('../../../../assets/vector.png')}
-      />
-
       {/* Conditionally render second DatePicker based on checkbox */}
-      <DatePickerr style={datePickerStyle2} onDateChange={handleDateChange} />
+      <DatePickerr
+        style={datePickerStyle2}
+        onDateChange={handleStartDateChange}
+        placeholder="Pilih Tanggal Mulai"
+      />
+      <DatePickerr
+        style={datePickerStyle3}
+        onDateChange={handleEndDateChange}
+        placeholder="Pilih Tanggal Akhir"
+      />
 
       {/* Navigation Bar */}
       <View style={[styles.barAtas, styles.filterShadowBox]}>
@@ -259,43 +348,59 @@ const StatsMujairB = () => {
 
         {/* Main Table */}
         <View style={styles.tableContainer}>
-          {/* Rows */}
           {[
-            {label: 'BOR :', value: bor, standard: '60-85%', icon: 'green'},
+            {
+              label: 'BOR :',
+              value: bor || 'Data tidak tersedia',
+              standard: '60-85%',
+            },
             {
               label: 'AVLOS :',
-              value: avlos,
+              value: avlos || 'Data tidak tersedia',
               standard: '6-9 Hari',
-              icon: 'green',
             },
-            {label: 'TOI :', value: toi, standard: '1-3 Hari', icon: 'red'},
-            {label: 'BTO :', value: bto, standard: '40-50 Kali', icon: 'green'},
-            {label: 'GDR :', value: gdr, standard: '< 20 ‰', icon: 'red'},
-            {label: 'NDR :', value: ndr, standard: '< 45 ‰', icon: 'red'},
+            {
+              label: 'TOI :',
+              value: toi || 'Data tidak tersedia',
+              standard: '1-3 Hari',
+            },
+            {
+              label: 'BTO :',
+              value: bto || 'Data tidak tersedia',
+              standard: '40-50 Kali',
+            },
+            {
+              label: 'GDR :',
+              value: gdr || 'Data tidak tersedia',
+              standard: '< 20 ‰',
+            },
+            {
+              label: 'NDR :',
+              value: ndr || 'Data tidak tersedia',
+              standard: '< 45 ‰',
+            },
           ].map((row, index) => {
-            // Logic to check if the value is within the standard range
-            let icon = 'green'; // Default to green
+            let icon = 'green';
             if (row.standard.includes('%')) {
               const [min, max] = row.standard
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
-                icon = 'red'; // If the value is outside the range, use red
+                icon = 'red';
               }
             } else if (row.standard.includes('Hari')) {
               const [min, max] = row.standard
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
-                icon = 'red'; // If the value is outside the range, use red
+                icon = 'red';
               }
-            }
-            if (row.standard.includes('-')) {
+            } else if (row.standard.includes('-')) {
               const [min, max] = row.standard
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
-                icon = 'red'; // Set ke merah jika di luar rentang
+                icon = 'red';
               }
             } else if (
               row.standard.includes('Kali') ||
@@ -303,7 +408,7 @@ const StatsMujairB = () => {
             ) {
               const max = parseFloat(row.standard.split(' ')[1]);
               if (row.value > max) {
-                icon = 'red'; // If the value exceeds the max standard, use red
+                icon = 'red';
               }
             }
 
@@ -316,29 +421,13 @@ const StatsMujairB = () => {
                   style={styles.rowIcon}
                   source={
                     icon === 'red'
-                      ? require('../../../../assets/red.png') // Path ke ikon merah
-                      : require('../../../../assets/green.png') // Path ke ikon hijau
+                      ? require('../../../../assets/red.png')
+                      : require('../../../../assets/green.png')
                   }
                 />
               </View>
             );
           })}
-          <View style={styles.legendContainer}>
-            <View style={styles.legendItem}>
-              <Image
-                source={require('../../../../assets/green.png')} // Ikon hijau
-                style={styles.legendIcon}
-              />
-              <Text style={styles.legendText}>Memenuhi standar</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <Image
-                source={require('../../../../assets/red.png')} // Ikon merah
-                style={styles.legendIcon}
-              />
-              <Text style={styles.legendText}>Tidak memenuhi standar</Text>
-            </View>
-          </View>
         </View>
       </View>
     </View>

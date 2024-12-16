@@ -30,13 +30,21 @@ const StatsPayangka = () => {
 
   const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
 
+  // State untuk tanggal mulai dan tanggal akhir
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
   const datePickerStyle1 = {
     top: '47%',
   };
 
   const datePickerStyle2 = {
-    top: '2%',
+    top: '25%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+  };
+  const datePickerStyle3 = {
+    top: '-17%',
+    display: isFilterChecked ? 'flex' : 'none',
   };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -46,6 +54,24 @@ const StatsPayangka = () => {
     setSelectedDate(formattedDate);
     console.log('Selected Date: ', formattedDate);
     fetchStatsData(formattedDate);
+  };
+
+  const handleStartDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setStartDate(formattedDate);
+    console.log('Start Date: ', formattedDate);
+    if (endDate) {
+      fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
+    }
+  };
+
+  const handleEndDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setEndDate(formattedDate);
+    console.log('End Date: ', formattedDate);
+    if (startDate) {
+      fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
+    }
   };
 
   const fetchStatsData = async date => {
@@ -78,7 +104,6 @@ const StatsPayangka = () => {
       const responseText = await response.text();
       console.log('Response dari server:', responseText);
 
-      // Jika respons adalah HTML, mungkin ada kesalahan pada server
       if (responseText.startsWith('<')) {
         console.error('Response mengandung HTML, ada masalah di server.');
         Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
@@ -90,7 +115,6 @@ const StatsPayangka = () => {
         result = JSON.parse(responseText);
         console.log('Parsed JSON:', result);
 
-        // Jika tidak ada data atau status bukan 'success', set semua nilai menjadi 0
         if (result.status === 'success' && result.data) {
           const data = result.data;
           setNilaiBor(data.BOR || '0');
@@ -100,7 +124,6 @@ const StatsPayangka = () => {
           setNilaiBto(data.BTO || '0');
           setNilaiNdr(data.NDR || '0');
         } else {
-          // Jika tidak ada data atau gagal, set nilai default 0
           setNilaiBor('0');
           setNilaiAvlos('0');
           setNilaiToi('0');
@@ -120,7 +143,79 @@ const StatsPayangka = () => {
         'Failed to fetch data. Please check your network connection.',
       );
     } finally {
-      setLoading(false); // Jangan lupa set loading false setelah request selesai
+      setLoading(false);
+    }
+  };
+
+  const fetchStatsDataByRange = async (startDate, endDate) => {
+    if (!startDate || !endDate) {
+      console.error('Tanggal mulai atau tanggal akhir belum dipilih');
+      Alert.alert('Error', 'Tanggal mulai dan akhir harus dipilih.');
+      return;
+    }
+
+    setLoading(true);
+    console.log('Mengirim request dengan rentang tanggal:', {
+      start_date: startDate,
+      end_date: endDate,
+      ruangan: 'Payangka',
+    });
+
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_ruangan_range',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            start_date: startDate,
+            end_date: endDate,
+            ruangan: 'Payangka',
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text(); // Ambil respons mentah
+      console.log('Raw Response:', responseText);
+
+      // Cek apakah respons berbentuk JSON
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        if (result.status === 'success' && result.data) {
+          const data = result.data;
+          setNilaiBor(data.BOR || '0');
+          setNilaiAvlos(data.AVLOS || '0');
+          setNilaiToi(data.TOI || '0');
+          setNilaiGdr(data.GDR || '0');
+          setNilaiBto(data.BTO || '0');
+          setNilaiNdr(data.NDR || '0');
+          Alert.alert('Success', 'Data berhasil dimuat untuk rentang tanggal.');
+        } else {
+          setNilaiBor('0');
+          setNilaiAvlos('0');
+          setNilaiToi('0');
+          setNilaiGdr('0');
+          setNilaiBto('0');
+          setNilaiNdr('0');
+          Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid JSON response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -142,9 +237,9 @@ const StatsPayangka = () => {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
-            month: month, // Parameter bulan
-            ruangan: 'Payangka', // Parameter ruangan
-          }).toString(), // Mengonversi ke format key=value
+            month: month,
+            ruangan: 'Payangka',
+          }).toString(),
         },
       );
 
@@ -178,21 +273,17 @@ const StatsPayangka = () => {
         />
       </View>
 
-      {/* Lihat Button */}
-      {/* <Pressable
-        style={[styles.okButton, styles.filterShadowBox]}
-        onPress={() => console.log('OK Button Pressed')}>
-        <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
-      </Pressable> */}
-
-      <Image
-        style={[styles.vectorIcon, styles.vectorIconPosition]}
-        resizeMode="cover"
-        source={require('../../../../assets/vector.png')}
-      />
-
       {/* Conditionally render second DatePicker based on checkbox */}
-      <DatePickerr style={datePickerStyle2} onDateChange={handleDateChange} />
+      <DatePickerr
+        style={datePickerStyle2}
+        onDateChange={handleStartDateChange}
+        placeholder="Pilih Tanggal Mulai"
+      />
+      <DatePickerr
+        style={datePickerStyle3}
+        onDateChange={handleEndDateChange}
+        placeholder="Pilih Tanggal Akhir"
+      />
 
       {/* Navigation Bar */}
       <View style={[styles.barAtas, styles.filterShadowBox]}>
@@ -262,7 +353,6 @@ const StatsPayangka = () => {
 
         {/* Main Table */}
         <View style={styles.tableContainer}>
-          {/* Rows */}
           {[
             {label: 'BOR :', value: bor, standard: '60-85%', icon: 'green'},
             {
@@ -276,28 +366,27 @@ const StatsPayangka = () => {
             {label: 'GDR :', value: gdr, standard: '< 20 ‰', icon: 'red'},
             {label: 'NDR :', value: ndr, standard: '< 45 ‰', icon: 'red'},
           ].map((row, index) => {
-            // Logic to check if the value is within the standard range
-            let icon = 'green'; // Default to green
+            let icon = 'green';
             if (row.standard.includes('%')) {
               const [min, max] = row.standard
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
-                icon = 'red'; // If the value is outside the range, use red
+                icon = 'red';
               }
             } else if (row.standard.includes('Hari')) {
               const [min, max] = row.standard
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
-                icon = 'red'; // If the value is outside the range, use red
+                icon = 'red';
               }
             } else if (row.standard.includes('-')) {
               const [min, max] = row.standard
                 .split('-')
                 .map(item => parseFloat(item));
               if (row.value < min || row.value > max) {
-                icon = 'red'; // Set ke merah jika di luar rentang
+                icon = 'red';
               }
             } else if (
               row.standard.includes('Kali') ||
@@ -305,7 +394,7 @@ const StatsPayangka = () => {
             ) {
               const max = parseFloat(row.standard.split(' ')[1]);
               if (row.value > max) {
-                icon = 'red'; // If the value exceeds the max standard, use red
+                icon = 'red';
               }
             }
 
@@ -318,8 +407,8 @@ const StatsPayangka = () => {
                   style={styles.rowIcon}
                   source={
                     icon === 'red'
-                      ? require('../../../../assets/red.png') // Path ke ikon merah
-                      : require('../../../../assets/green.png') // Path ke ikon hijau
+                      ? require('../../../../assets/red.png')
+                      : require('../../../../assets/green.png')
                   }
                 />
               </View>
@@ -328,14 +417,14 @@ const StatsPayangka = () => {
           <View style={styles.legendContainer}>
             <View style={styles.legendItem}>
               <Image
-                source={require('../../../../assets/green.png')} // Ikon hijau
+                source={require('../../../../assets/green.png')}
                 style={styles.legendIcon}
               />
               <Text style={styles.legendText}>Memenuhi standar</Text>
             </View>
             <View style={styles.legendItem}>
               <Image
-                source={require('../../../../assets/red.png')} // Ikon merah
+                source={require('../../../../assets/red.png')}
                 style={styles.legendIcon}
               />
               <Text style={styles.legendText}>Tidak memenuhi standar</Text>

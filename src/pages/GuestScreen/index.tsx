@@ -30,11 +30,16 @@ const ScreenGuest = () => {
   const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
 
   const datePickerStyle1 = {
-    top: '60%',
+    top: '85%',
   };
 
   const datePickerStyle2 = {
-    top: '-450%',
+    top: '-820%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+  };
+
+  const datePickerStyle3 = {
+    top: '100%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
 
@@ -190,17 +195,203 @@ const ScreenGuest = () => {
     } finally {
       setLoading(false); // Jangan lupa set loading false setelah request selesai
     }
+
+    const handleStartDateChange = date => {
+      const formattedDate = moment(date).format('YYYY-MM-DD');
+      setStartDate(formattedDate);
+      console.log('Start Date: ', formattedDate);
+      if (endDate) {
+        fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
+      }
+    };
+
+    const handleEndDateChange = date => {
+      const formattedDate = moment(date).format('YYYY-MM-DD');
+      setEndDate(formattedDate);
+      console.log('End Date: ', formattedDate);
+      if (startDate) {
+        fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
+      }
+    };
+
+    const fetchStatsDataByRange = async (startDate, endDate) => {
+      if (!startDate || !endDate) {
+        console.error('Tanggal awal dan akhir belum dipilih');
+        Alert.alert('Error', 'Tanggal awal dan akhir harus dipilih.');
+        return;
+      }
+
+      setLoading(true);
+      console.log('Mengirim request dengan data:', {
+        start_date: startDate,
+        end_date: endDate,
+      });
+
+      try {
+        const response = await fetch(
+          'https://samratindikator.online/borlostoi/public/insert/get_stats_rs_range',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              start_date: startDate,
+              end_date: endDate,
+            }).toString(),
+          },
+        );
+
+        const responseText = await response.text();
+        console.log('Response dari server:', responseText);
+
+        // Jika respons adalah HTML, mungkin ada kesalahan pada server
+        if (responseText.startsWith('<')) {
+          console.error('Response mengandung HTML, ada masalah di server.');
+          Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+          return;
+        }
+
+        let result;
+        try {
+          result = JSON.parse(responseText);
+          console.log('Parsed JSON:', result);
+
+          // Jika status sukses dan ada data, tampilkan data
+          if (result.status === 'success' && result.data) {
+            const data = result.data; // Data range
+            setNilaiBor(data.BOR || '0');
+            setNilaiAvlos(data.AVLOS || '0');
+            setNilaiToi(data.TOI || '0');
+            setNilaiGdr(data.GDR || '0');
+            setNilaiBto(data.BTO || '0');
+            setNilaiNdr(data.NDR || '0');
+          } else {
+            // Jika tidak ada data, set nilai default 0
+            setNilaiBor('0');
+            setNilaiAvlos('0');
+            setNilaiToi('0');
+            setNilaiGdr('0');
+            setNilaiBto('0');
+            setNilaiNdr('0');
+            Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
+          }
+        } catch (jsonError) {
+          console.error('JSON Parse Error:', jsonError.message);
+          Alert.alert('Error', 'Invalid response from server.');
+        }
+      } catch (error) {
+        console.error('Fetch Error:', error.message);
+        Alert.alert(
+          'Error',
+          'Failed to fetch data. Please check your network connection.',
+        );
+      } finally {
+        setLoading(false); // Jangan lupa set loading false setelah request selesai
+      }
+    };
+  };
+
+  const handleStartDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setStartDate(formattedDate);
+    console.log('Start Date: ', formattedDate);
+
+    if (endDate) {
+      fetchStatsDataByRange(formattedDate, endDate);
+    }
+  };
+
+  const handleEndDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setEndDate(formattedDate);
+    console.log('End Date: ', formattedDate);
+
+    if (startDate) {
+      fetchStatsDataByRange(startDate, formattedDate);
+    }
+  };
+
+  const fetchStatsDataByRange = async (startDate, endDate) => {
+    if (!startDate || !endDate) {
+      console.error('Tanggal awal dan akhir belum dipilih');
+      Alert.alert('Error', 'Tanggal awal dan akhir harus dipilih.');
+      return;
+    }
+
+    setLoading(true);
+    console.log('Mengirim request dengan data:', {
+      start_date: startDate,
+      end_date: endDate,
+    });
+
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_rs_range',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            start_date: startDate,
+            end_date: endDate,
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
+
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
+      }
+
+      const result = JSON.parse(responseText);
+      console.log('Parsed JSON:', result);
+
+      if (result.status === 'success' && result.data) {
+        const data = result.data;
+        setNilaiBor(data.BOR || '0');
+        setNilaiAvlos(data.AVLOS || '0');
+        setNilaiToi(data.TOI || '0');
+        setNilaiGdr(data.GDR || '0');
+        setNilaiBto(data.BTO || '0');
+        setNilaiNdr(data.NDR || '0');
+      } else {
+        console.log('No data found for the range.');
+        Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert('Error', 'Gagal mengambil data rentang tanggal.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View style={styles.screenGuest}>
       <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
+
       <View style={styles.groupParent}>
         <FilterCheckBox
           isChecked={isFilterChecked}
           onChange={() => setIsFilterChecked(!isFilterChecked)}
         />
       </View>
+      <DatePickerr
+        style={datePickerStyle2}
+        onDateChange={handleStartDateChange}
+        placeholder="Pilih Tanggal Mulai"
+      />
+      <DatePickerr
+        style={datePickerStyle3}
+        onDateChange={handleEndDateChange}
+        placeholder="Pilih Tanggal Akhir"
+      />
       <View style={styles.container1}>
         <Text style={styles.label}>Pilih Bulan : </Text>
         <RNPickerSelect
@@ -634,7 +825,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 106,
     backgroundColor: 'white',
-    top: 125,
+    top: 85,
   },
   label: {
     fontSize: 21,
