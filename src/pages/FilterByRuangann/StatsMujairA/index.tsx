@@ -338,14 +338,14 @@ const StatsMujairA = () => {
                 <Text style={[styles.rowValue, {color: icon === 'red' ? 'red' : 'green'}]}>
                   {row.value}{row.symbol}
                 </Text>
-                <Image
+                {/* <Image
                   style={styles.rowIcon}
                   source={
                     icon === 'red'
                       ? require('../../../../assets/red.png') // Path to red icon
                       : require('../../../../assets/green.png') // Path to green icon
                   }
-                />
+                /> */}
               </View>
             );
           })}
