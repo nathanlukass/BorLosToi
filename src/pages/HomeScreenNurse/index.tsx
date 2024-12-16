@@ -61,7 +61,7 @@ const HomeScreenNurse = ({route}) => {
           source={require('../../../assets/logo-app-4.png')}
         />
         <DashbordIsianHariIni />
-        <View style={[styles.lihatBorlostoi, styles.lihatLayout]}>
+        {/* <View style={[styles.lihatBorlostoi, styles.lihatLayout]}>
           <View
             style={[
               styles.lihatBorlostoiChild,
@@ -69,32 +69,6 @@ const HomeScreenNurse = ({route}) => {
             ]}
           />
           <View style={styles.container1}>
-            {/* Year and Month Picker */}
-            <View style={styles.pickerContainer}>
-              <Text style={styles.label}>Pilih Tahun</Text>
-              <Picker
-                selectedValue={selectedYear}
-                onValueChange={itemValue => setSelectedYear(itemValue)}
-                style={styles.picker}>
-                {yearOptions.map(year => (
-                  <Picker.Item key={year} label={`${year}`} value={year} />
-                ))}
-              </Picker>
-            </View>
-
-            <View style={styles.pickerContainer}>
-              <Text style={styles.label}>Pilih Bulan</Text>
-              <Picker
-                selectedValue={selectedMonth}
-                onValueChange={itemValue => setSelectedMonth(itemValue)}
-                style={styles.picker}>
-                {monthOptions.map(month => (
-                  <Picker.Item key={month} label={`${month}`} value={month} />
-                ))}
-              </Picker>
-            </View>
-
-            {/* Pressable Button */}
             <Pressable
               style={styles.lihatBorLosContainer}
               onPress={openLihatBORLOS}>
@@ -113,7 +87,7 @@ const HomeScreenNurse = ({route}) => {
               </Text>
             </Pressable>
           </View>
-        </View>
+        </View> */}
         <View
           style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
           <View style={[styles.homeParent, styles.parentFlexBox]}>
@@ -330,7 +304,7 @@ const styles = StyleSheet.create({
     left: '50%',
     height: 166,
   },
-  container1: {
+container1: {
     flex: 1,
     padding: 20,
     backgroundColor: '#fff',

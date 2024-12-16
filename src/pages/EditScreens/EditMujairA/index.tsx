@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -29,7 +29,7 @@ const EditMujairA = ({route}) => {
   const {ruangan} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const titleRuangan = 'Mujair A';
-  const [jumlahTempatTidur, setJumlahTempatTidur] = useState('22');
+  const [jumlahTempatTidur, setJumlahTempatTidur] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [pasienAwal, setPasienAwal] = useState('0');
   const [pasienMasuk, setPasienMasuk] = useState('0');
@@ -206,6 +206,75 @@ const EditMujairA = ({route}) => {
     </View>
   );
 
+  const fetchJumlahBed = async () => {
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_bed_quantity',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({
+            ruangan: titleRuangan,
+          }).toString(),
+        }
+      );
+  
+      const rawText = await response.text(); 
+      console.log('Response raw text:', rawText);
+  
+      const result = JSON.parse(rawText);
+  
+      // Akses langsung key "jumlah bed Mujair A"
+      if (result.status === 'success' && result['jumlah bed Mujair A'] !== undefined) {
+        setJumlahTempatTidur(result['jumlah bed Mujair A'].toString());
+      } else {
+        Alert.alert('Error', 'Data jumlah tempat tidur tidak ditemukan.');
+      }
+    } catch (error) {
+      console.error('Fetch error:', error.message);
+      Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
+    }
+  };
+  
+
+  const updateJumlahBed = async () => {
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/update_bed_count',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            ruangan: titleRuangan,
+            jumlah_bed: jumlahTempatTidur,
+          }).toString(),
+        }
+      );
+      const rawText = await response.text();
+      console.log('Response raw text:', rawText); 
+  
+      if (response.headers.get('content-type')?.includes('application/json')) {
+        const result = JSON.parse(rawText); // Parse jika JSON
+        if (result.status === 'success') {
+          Alert.alert('Sukses', 'Jumlah tempat tidur berhasil diperbarui.');
+        } 
+      } else {
+        throw new Error('Response is not JSON');
+      }
+    } catch (error) {
+      console.error('Update error:', error.message);
+      Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchJumlahBed();
+    updateJumlahBed();
+  }, []);
+  
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -243,11 +312,20 @@ const EditMujairA = ({route}) => {
           onDateChange={handleDateChange}
         />
 
-        {/* Fields with increment/decrement buttons */}
-        <View style={styles.sectionJumlahBed}>
-          <Text style={styles.label}>Jumlah tempat tidur:</Text>
-          <Text style={styles.jumlahBed}>{jumlahTempatTidur}</Text>
-        </View>
+      <View style={styles.sectionJumlahBed}>
+        <Text style={styles.label}>Jumlah tempat tidur:</Text>
+        <TextInput
+          style={styles.jumlahBedInput}
+          value={jumlahTempatTidur}
+          keyboardType="numeric"
+          editable={true}
+          onChangeText={text => setJumlahTempatTidur(text.replace(/[^0-9]/g, ''))}
+        />
+        <TouchableOpacity style={styles.updateButton} onPress={updateJumlahBed}>
+          <Text style={styles.updateButtonText}>Update</Text>
+        </TouchableOpacity>
+      </View>
+
 
         {/* Existing sections */}
         <View style={styles.section}>
@@ -337,6 +415,33 @@ const EditMujairA = ({route}) => {
 };
 
 const styles = StyleSheet.create({
+  updateButton: {
+    marginLeft: 10,
+    backgroundColor: '#007AFF',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    elevation: 2,
+  },
+  updateButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsBold,
+    textAlign: 'center',
+  },  
+  jumlahBedInput: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
+    marginLeft: 20,
+    borderWidth: 1,
+    borderColor: '#CCCCCC',
+    borderRadius: 5,
+    padding: 5,
+    width: 70,
+    textAlign: 'center',
+  },  
   container: {
     flex: 1,
     backgroundColor: '#FFFFFFF',
