@@ -34,6 +34,7 @@ const NurseInputPage = ({route}) => {
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
   const [jumlah_PKH, setJumlahPKH] = useState('0');
+  const [selectedDate, setSelectedDate] = useState(null); // atau new Date() jika ingin nilai default
 
   // New state variables for additional fields
   const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
@@ -65,12 +66,25 @@ const NurseInputPage = ({route}) => {
 
     const formattedDate = moment(date).format('YYYY-MM-DD'); // Format tanggal
     const normalizedRuangan = ruangan.replace(/\u00A0/g, ' ').trim();
-    // Bersihkan spasi tambahan
 
+    // Debugging tambahan untuk memeriksa nilai asli dan normalisasi ruangan
+    console.log('Original Ruangan:', ruangan);
+    console.log('Normalized Ruangan (after trim):', normalizedRuangan);
     console.log('Formatted Date:', formattedDate);
-    console.log('Normalized Ruangan:', normalizedRuangan); // Debugging
 
-    if (normalizedRuangan !== 'Mujair A' && normalizedRuangan !== 'Mujair B') {
+    // Validasi ruangan dengan fallback
+    const validRooms = [
+      'mujair a',
+      'mujair b',
+      'mujair c',
+      'nike',
+      'payangka',
+      'neonati',
+      'bomboya',
+      'karper',
+      'icu',
+    ];
+    if (!validRooms.includes(normalizedRuangan.toLowerCase())) {
       Alert.alert('Error', 'Invalid room selected.');
       return;
     }
@@ -90,41 +104,68 @@ const NurseInputPage = ({route}) => {
         },
       );
 
-      const rawResponse = await response.text();
-      console.log('Raw Response:', rawResponse);
-
-      let result;
-      try {
-        result = JSON.parse(rawResponse);
-        console.log('Parsed JSON:', result);
-
-        if (result.status === 'success' && result.data) {
-          const data = result.data;
-          // Update state dengan data dari server
-          setPasienAwal(data.pasien_awal || '0');
-          setPasienMasuk(data.pasien_masuk || '0');
-          setPasienPindahan(data.pasien_pindahan || '0');
-          setPasienDipindahkan(data.pasien_dipindahkan || '0');
-          setPasienHidup(data.pasien_hidup || '0');
-          setPasienRujuk(data.pasien_rujuk || '0');
-          setPasienAps(data.pasien_aps || '0');
-          setPasienLainLain(data.pasien_lain_lain || '0');
-          setPasienKurangDari48Jam(data.pasien_kurang_dari_48jam || '0');
-          setPasienLebihDari48Jam(data.pasien_lebih_dari_48jam || '0');
-          setPasienMasihDirawat(data.pasien_masih_dirawat || '0');
-          setPasienLamaDirawat(data.pasien_lama_dirawat || '0');
-          setBanyakPasien(data.banyak_pasien || '0');
-          setJumlahHari(data.jumlah_hari_perawatan || '0');
-          setKelas1(data.kelas_1 || '0');
-          setKelas2(data.kelas_2 || '0');
-          setKelas3(data.kelas_3 || '0');
-        } else {
-          Alert.alert('Error', result.message || 'No data found.');
-        }
-      } catch (jsonError) {
-        console.error('JSON Parse Error:', jsonError.message);
-        Alert.alert('Error', 'Invalid response from server.');
+      // Cek apakah respons berhasil dan statusnya oke
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+
+      const rawResponse = await response.text(); // Ambil respons sebagai teks mentah
+      console.log('Raw Response:', rawResponse); // Log respons mentah untuk debugging
+
+      // Cek apakah respons berisi HTML atau data lainnya yang tidak bisa diparsing sebagai JSON
+      if (rawResponse.startsWith('<')) {
+        console.error('Response contains HTML:', rawResponse);
+        Alert.alert(
+          'Error',
+          'Received HTML instead of JSON. Please check the server.',
+        );
+        return;
+      }
+
+      // Perbaiki jika ada beberapa objek JSON yang digabungkan tanpa pemisah yang benar
+      const responseParts = rawResponse.split('}{');
+      if (responseParts.length > 1) {
+        // Gabungkan objek yang terpisah dengan benar
+        responseParts[0] = responseParts[0] + '}'; // Menambahkan penutup kurung
+        responseParts[responseParts.length - 1] =
+          '{' + responseParts[responseParts.length - 1]; // Menambahkan pembuka kurung
+      }
+
+      // Coba parse setiap bagian JSON yang terpisah
+      responseParts.forEach(part => {
+        let result;
+        try {
+          result = JSON.parse(part);
+          console.log('Parsed JSON:', result);
+
+          if (result.status === 'success' && result.data) {
+            const data = result.data;
+            // Update state dengan data dari server
+            setPasienAwal(data.pasien_awal || '0');
+            setPasienMasuk(data.pasien_masuk || '0');
+            setPasienPindahan(data.pasien_pindahan || '0');
+            setPasienDipindahkan(data.pasien_dipindahkan || '0');
+            setPasienHidup(data.pasien_hidup || '0');
+            setPasienRujuk(data.pasien_rujuk || '0');
+            setPasienAps(data.pasien_aps || '0');
+            setPasienLainLain(data.pasien_lain_lain || '0');
+            setPasienKurangDari48Jam(data.pasien_kurang_dari_48jam || '0');
+            setPasienLebihDari48Jam(data.pasien_lebih_dari_48jam || '0');
+            setPasienMasihDirawat(data.pasien_masih_dirawat || '0');
+            setPasienLamaDirawat(data.pasien_lama_dirawat || '0');
+            setBanyakPasien(data.banyak_pasien || '0');
+            setJumlahHari(data.jumlah_hari_perawatan || '0');
+            setKelas1(data.kelas_1 || '0');
+            setKelas2(data.kelas_2 || '0');
+            setKelas3(data.kelas_3 || '0');
+          } else {
+            Alert.alert('Error', result.message || 'No data found.');
+          }
+        } catch (jsonError) {
+          console.error('JSON Parse Error:', jsonError.message);
+          Alert.alert('Error', 'Invalid response from server.');
+        }
+      });
     } catch (error) {
       console.error('Fetch Error:', error.message);
       Alert.alert(
@@ -135,23 +176,39 @@ const NurseInputPage = ({route}) => {
   };
 
   const handleSubmitButton2 = async () => {
-    try {
-      const normalizedRuangan = ruangan.replace(/\u00A0/g, '').trim(); // Bersihkan spasi tambahan
-      const formattedDate = moment(selectedDate).format('YYYY-MM-DD'); // Format tanggal
+    if (!selectedDate) {
+      Alert.alert('Error', 'Please select a date!');
+      return;
+    }
 
-      if (
-        normalizedRuangan !== 'Mujair A' &&
-        normalizedRuangan !== 'Mujair B'
-      ) {
-        console.error('Invalid room:', normalizedRuangan);
+    console.log('Selected Date:', selectedDate); // Cek nilai selectedDate saat tombol ditekan
+    const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
+    console.log('Formatted Date:', formattedDate);
+
+    try {
+      const normalizedRuangan = ruangan
+        .replace(/\u00A0/g, ' ')
+        .trim()
+        .toLowerCase(); // Pastikan ruangan dalam huruf kecil
+      const validRooms = [
+        'mujair a',
+        'mujair b',
+        'mujair c',
+        'nike',
+        'payangka',
+        'neonati',
+        'bomboya',
+        'karper',
+        'icu',
+      ];
+      if (!validRooms.includes(normalizedRuangan)) {
         Alert.alert('Error', 'Invalid room selected.');
         return;
       }
 
-      console.log('Request Body:', {
-        tanggal: formattedDate,
-        ruangan: normalizedRuangan,
-      });
+      // Debugging untuk memastikan tanggal dan ruangan
+      console.log('Formatted Date:', formattedDate);
+      console.log('Selected Room:', normalizedRuangan);
 
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/insert_nurse',
@@ -161,8 +218,8 @@ const NurseInputPage = ({route}) => {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
-            tanggal: formattedDate,
             ruangan: normalizedRuangan,
+            tanggal: formattedDate, // Gunakan tanggal yang sudah diformat
             pasien_awal: pasienAwal,
             pasien_masuk: pasienMasuk,
             pasien_pindahan: pasienPindahan,
@@ -183,22 +240,59 @@ const NurseInputPage = ({route}) => {
       );
 
       const rawResponse = await response.text();
-      console.log('Raw Response:', rawResponse);
+      console.log('Raw Response:', rawResponse); // Log respons dari server sebelum parsing
 
-      let result;
-      try {
-        result = JSON.parse(rawResponse);
-        console.log('Parsed JSON:', result);
+      // Menghapus HTML jika ada dalam respons
+      const cleanResponse = rawResponse.replace(/<[^>]*>/g, ''); // Menghapus tag HTML
 
-        if (result.status === 'success') {
-          Alert.alert('Sukses', 'Data berhasil diinput.');
-        } else {
-          Alert.alert('Error', result.message || 'Data gagal diinput.');
+      // Memisahkan respons yang berisi beberapa objek JSON
+      const responseParts = cleanResponse
+        .split('}{')
+        .map((part, index, array) => {
+          if (index === 0) {
+            return part + '}';
+          } else if (index === array.length - 1) {
+            return '{' + part;
+          }
+          return '{' + part + '}';
+        });
+
+      // Coba parsing setiap bagian JSON
+      responseParts.forEach(part => {
+        let result;
+        try {
+          result = JSON.parse(part);
+          console.log('Parsed JSON:', result);
+
+          // Jika ada error, tampilkan alert dan hentikan eksekusi lebih lanjut
+          if (result.status === 'error') {
+            Alert.alert('Error', result.message || 'Unknown error occurred');
+            return;
+          }
+
+          // Handling the success response
+          if (result.status === 'success') {
+            if (Array.isArray(result.messages)) {
+              result.messages.forEach(message => {
+                Alert.alert('Sukses', message);
+              });
+            } else {
+              Alert.alert(
+                'Sukses',
+                result.messages || 'Data inserted successfully',
+              );
+            }
+
+            if (result.stats_message) {
+              console.log('Stats Message:', result.stats_message);
+              Alert.alert('Warning', result.stats_message);
+            }
+          }
+        } catch (jsonError) {
+          console.error('JSON Parse Error:', jsonError.message);
+          Alert.alert('Error', 'Invalid response from server.');
         }
-      } catch (jsonError) {
-        console.error('JSON Parse Error:', jsonError.message);
-        Alert.alert('Error', 'Invalid response from server.');
-      }
+      });
     } catch (error) {
       console.error('Fetch Error:', error.message);
       Alert.alert(
@@ -221,7 +315,10 @@ const NurseInputPage = ({route}) => {
           style={styles.input}
           value={String(value)}
           keyboardType="numeric"
-          onChangeText={text => setValue(text.replace(/[^0-9]/g, ''))}
+          onChangeText={text => {
+            const numericValue = text.replace(/[^0-9]/g, '');
+            setValue(numericValue);
+          }}
         />
         <TouchableOpacity
           style={[styles.button, styles.incrementButton]}
@@ -254,10 +351,25 @@ const NurseInputPage = ({route}) => {
         <View style={styles.timeInfoContainer}>
           <RealTimeClock />
         </View>
+        {/* <DateTimePicker
+  value={selectedDate || new Date()} // Pastikan ada nilai default
+  mode="date"
+  display="default"
+  onChange={(event, date) => {
+    if (date) {
+      setSelectedDate(date);
+      console.log('Selected Date:', date);
+    }
+  }}
+/> */}
 
         <DatePickerr
-          style={{top: -7, width: 350, alignSelf: 'center'}}
-          onDateChange={handleDateChange}
+          style={{top: -8, width: 370, alignSelf: 'center'}}
+          onDateChange={date => {
+            console.log('Selected Date from DatePickerr:', date);
+            setSelectedDate(date); // Update selectedDate dengan nilai date yang dipilih
+            handleDateChange(date); // Panggil fungsi handleDateChange jika perlu
+          }}
         />
 
         {/* Fields with increment/decrement buttons */}
