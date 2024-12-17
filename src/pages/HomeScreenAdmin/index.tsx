@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, View, Text, Image, Pressable, Modal} from 'react-native';
+import {StyleSheet, View, Text, Image, Pressable, Modal, TouchableOpacity} from 'react-native';
 import FrameComponent from '../../../components/FrameComponent';
 import {useState, useEffect, useCallback} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -54,14 +54,14 @@ const HomeScreenAdmin = ({route}) => {
           </Text>
         </Pressable>
       </View>
-      <Pressable onPress={() => navigation.navigate('PrintOutScreen')}>
+      <TouchableOpacity onPress={() => navigation.navigate('PrintOutScreen')}>
         <View style={[styles.printOutBox, styles.lihatLayout]}>
           <View style={[styles.lihatBorlostoiChild, styles.lihatLayout]} />
           <Text style={[styles.printOutHasil, styles.printOutHasilFlexBox]}>
             {'Print out hasil '}
           </Text>
         </View>
-      </Pressable>
+      </TouchableOpacity>
       <View style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
         <View style={[styles.homeParent, styles.parentFlexBox]}>
           <Image

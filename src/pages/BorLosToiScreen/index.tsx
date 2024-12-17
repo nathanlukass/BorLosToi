@@ -33,109 +33,50 @@ const BorlostoiScreen = () => {
               source={require('../../../assets/-icon-arrow-back.png')}
             />
           </Pressable>
-          <Text style={styles.headerTitle}>Filter by Ruangan</Text>
+          <Text style={styles.headerTitle}>Filter by Indicator</Text>
         </View>
 
         <View style={styles.buttonGrid}>
           {/* Tombol MUJAIR A */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('StatsMujairA')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/mujairA.jpg')}
-            />
+            onPress={() => navigation.navigate('BOR')}>
+            <Text style={styles.button}>BOR</Text>
           </Pressable>
 
           {/* Tombol MUJAIR B */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('StatsMujairB')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/mujairB.jpg')}
-            />
+            onPress={() => navigation.navigate('AVLOS')}>
+            <Text style={styles.button}>AVLOS</Text>
           </Pressable>
 
           {/* Tombol MUJAIR C */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('StatsMujairC')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/mujairC.jpg')}
-            />
+            onPress={() => navigation.navigate('TOI')}>
+            <Text style={styles.button}>TOI</Text>
           </Pressable>
 
           {/* Tombol NIKE */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('StatsNike')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/nike.jpg')}
-            />
+            onPress={() => navigation.navigate('BTO')}>
+            <Text style={styles.button}>BTO</Text>
           </Pressable>
 
           {/* Tombol PAYANGKA */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('StatsPayangka')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/payangka.jpg')}
-            />
+            onPress={() => navigation.navigate('GDR')}>
+            <Text style={styles.button}>GDR</Text>
           </Pressable>
 
           {/* Tombol NEONATI */}
           <Pressable
             style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('StatsNeonati')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/neonati.jpg')}
-            />
-          </Pressable>
-
-          {/* Tombol BOMBOYA */}
-          <Pressable
-            style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('StatsBomboya')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/bomboya.jpg')}
-            />
-          </Pressable>
-
-          {/* Tombol KARPER */}
-          <Pressable
-            style={[styles.roomButton, styles.shadowBox]}
-            onPress={() => navigation.navigate('StatsKarper')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/karper.jpg')}
-            />
-          </Pressable>
-        </View>
-
-        {/* ICU button centered */}
-        <View style={styles.centeredButtonContainer}>
-          <Pressable
-            style={[styles.roomButton, styles.shadowBox, styles.centeredButton]} // Added centeredButton style
-            onPress={() => navigation.navigate('StatsICU')}>
-            <Image
-              style={styles.roomIcon}
-              resizeMode="cover"
-              source={require('../../../assets/icu.jpg')}
-            />
+            onPress={() => navigation.navigate('NDR')}>
+            <Text style={styles.button}>NDR</Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -144,6 +85,16 @@ const BorlostoiScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  button: {
+    fontSize: 20, // Ukuran font lebih besar
+    fontWeight: 'bold', // Membuat teks lebih tebal
+    fontFamily: 'Poppins-Regular', // Gunakan font Poppins
+    color: Color.notSoBlack, // Warna teks
+    textAlign: 'center', // Teks rata tengah
+    lineHeight: 35, // Vertikal rata tengah, sesuaikan dengan font size
+    letterSpacing: 1, // Spasi antar huruf agar lebih estetis
+    marginVertical: 10, // Jarak vertikal atas dan bawah teks
+  },  
   container: {
     flex: 1,
   },
@@ -154,6 +105,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 20,
     marginBottom: 20,
   },
   backButton: {
@@ -175,6 +127,7 @@ const styles = StyleSheet.create({
     left: 39,
   },
   buttonGrid: {
+    marginTop: 20,
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
