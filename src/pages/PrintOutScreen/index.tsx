@@ -1,9 +1,19 @@
-import * as React from "react";
-import { StyleSheet, View, Text, Pressable, Modal, FlatList, TouchableOpacity, Image, Alert } from "react-native";
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
+import * as React from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Modal,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native';
+// import * as FileSystem from 'expo-file-system'; // Untuk mengunduh file
+import { Border, Color, FontFamily, FontSize } from '../../../GlobalStyles';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/core';
-
 const PrintOutScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [selectedRoom, setSelectedRoom] = React.useState('Pilih Ruangan');
@@ -14,45 +24,43 @@ const PrintOutScreen = () => {
   const rooms = ['Mujair A', 'Mujair B', 'Mujair C', 'Nike', 'Payangka', 'Neonati', 'Bomboya', 'Karper', 'ICU'];
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-  const FILE_URL = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"; // URL file untuk diunduh
-  const FILE_NAME = "laporan.pdf"; // Nama file saat diunduh
+  const BASE_URL = 'http://localhost:3000/download-report'; // URL API backend Anda
 
-  const renderItem = ({ item, onSelect }) => (
-    <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>
-      <Text>{item}</Text>
-    </TouchableOpacity>
-  );
-
+  // Fetch API untuk mengunduh file
   const handleDownload = async () => {
     if (selectedRoom === 'Pilih Ruangan' || selectedMonth === 'Pilih Bulan') {
-      Alert.alert("Error", "Silakan pilih ruangan dan bulan terlebih dahulu.");
+      Alert.alert('Error', 'Silakan pilih ruangan dan bulan terlebih dahulu.');
       return;
     }
 
     try {
+      const fileUrl = `${BASE_URL}?room=${encodeURIComponent(selectedRoom)}&month=${encodeURIComponent(selectedMonth)}`;
+      const fileName = `report_${selectedRoom}_${selectedMonth}.pdf`;
       const downloadResumable = FileSystem.createDownloadResumable(
-        FILE_URL,
-        FileSystem.documentDirectory + FILE_NAME,
+        fileUrl,
+        FileSystem.documentDirectory + fileName
       );
 
       const { uri } = await downloadResumable.downloadAsync();
-      Alert.alert("Sukses", `File berhasil diunduh!\nLokasi: ${uri}`);
+      Alert.alert('Sukses', `File berhasil diunduh!\nLokasi: ${uri}`);
     } catch (error) {
       console.error(error);
-      Alert.alert("Gagal", "Gagal mengunduh file. Silakan coba lagi.");
+      Alert.alert('Gagal', 'Gagal mengunduh file. Silakan coba lagi.');
     }
   };
+
+  const renderItem = ({ item, onSelect }) => (
+    <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>
+      <Text style={styles.dropdownText}>{item}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Pressable style={styles.backButton} onPress={() => navigation.navigate('HomeScreenAdmin')}>
-          <Image
-            style={styles.icon}
-            resizeMode="cover"
-            source={require('../../../assets/-icon-arrow-back.png')}
-          />
+        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Image resizeMode="cover" source={require('../../../assets/-icon-arrow-back.png')} />
         </Pressable>
         <Text style={styles.headerTitle}>Menu Print Out</Text>
       </View>
@@ -74,7 +82,15 @@ const PrintOutScreen = () => {
             <FlatList
               data={months}
               keyExtractor={(item) => item}
-              renderItem={({ item }) => renderItem({ item, onSelect: (value) => { setSelectedMonth(value); setMonthModalVisible(false); } })}
+              renderItem={({ item }) =>
+                renderItem({
+                  item,
+                  onSelect: (value) => {
+                    setSelectedMonth(value);
+                    setMonthModalVisible(false);
+                  },
+                })
+              }
             />
           </View>
         </TouchableOpacity>
@@ -87,13 +103,21 @@ const PrintOutScreen = () => {
             <FlatList
               data={rooms}
               keyExtractor={(item) => item}
-              renderItem={({ item }) => renderItem({ item, onSelect: (value) => { setSelectedRoom(value); setRoomModalVisible(false); } })}
+              renderItem={({ item }) =>
+                renderItem({
+                  item,
+                  onSelect: (value) => {
+                    setSelectedRoom(value);
+                    setRoomModalVisible(false);
+                  },
+                })
+              }
             />
           </View>
         </TouchableOpacity>
       </Modal>
 
-      {/* Tombol Print */}
+      {/* Tombol Download */}
       <Pressable style={styles.downloadButton} onPress={handleDownload}>
         <Text style={styles.downloadButtonText}>Unduh Laporan</Text>
       </Pressable>
@@ -110,23 +134,19 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    justifyContent: 'center',
+    paddingVertical: 10,
+    marginBottom: 50,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  icon: {
-    width: 24,
-    height: 24,
+    position: 'absolute',
+    left: 1,
   },
   headerTitle: {
-    fontSize: FontSize.m3BodyLarge_size,
+    fontSize: FontSize.size_xl,
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
-    marginLeft: 10,
+    textAlign: 'center',
   },
   dropdown: {
     height: 50,
