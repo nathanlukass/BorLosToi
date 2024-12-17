@@ -4,7 +4,6 @@ import {Overlay} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import TrailingIcon from '../../../../components/TrailingIcon';
-// import {StackNavigationProp} from '@react-navigation/stack';
 
 export interface IProps {
   date?: string;
@@ -25,6 +24,7 @@ class DatePickerr extends React.Component<IProps, IState> {
     date: this.props.date ? new Date(this.props.date) : new Date(),
     show: false,
   };
+
   onChange = (event: any, selectedDate: any) => {
     if (selectedDate) {
       this.setState({
@@ -39,6 +39,7 @@ class DatePickerr extends React.Component<IProps, IState> {
       this.setState({show: false});
     }
   };
+
   showOverlay = () => {
     this.setState({show: true});
   };
@@ -48,6 +49,9 @@ class DatePickerr extends React.Component<IProps, IState> {
   };
 
   render() {
+    // Get the current date to set the maximum selectable date
+    const currentDate = new Date();
+
     return (
       <View style={{flex: 1, borderRadius: 100}}>
         <TouchableOpacity
@@ -62,6 +66,7 @@ class DatePickerr extends React.Component<IProps, IState> {
           )}
           <TrailingIcon icon={require('../../../../assets/icon.png')} />
         </TouchableOpacity>
+
         {Platform.OS === 'ios' ? (
           <Overlay
             isVisible={this.state.show}
@@ -83,6 +88,7 @@ class DatePickerr extends React.Component<IProps, IState> {
               is24Hour={true}
               display="default"
               onChange={this.onChange}
+              maximumDate={currentDate} // Limit the date selection to today or earlier
               style={{backgroundColor: 'white'}}
             />
           </Overlay>
@@ -94,6 +100,7 @@ class DatePickerr extends React.Component<IProps, IState> {
               is24Hour={true}
               display="default"
               onChange={this.onChange}
+              maximumDate={currentDate} // Limit the date selection to today or earlier
               style={{backgroundColor: 'white'}}
             />
           )

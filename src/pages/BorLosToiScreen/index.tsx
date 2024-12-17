@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     lineHeight: 35, // Vertikal rata tengah, sesuaikan dengan font size
     letterSpacing: 1, // Spasi antar huruf agar lebih estetis
     marginVertical: 10, // Jarak vertikal atas dan bawah teks
-  },  
+  },
   container: {
     flex: 1,
   },

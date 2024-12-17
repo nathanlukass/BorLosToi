@@ -361,7 +361,7 @@ const StatsMujairA = () => {
           />
         </Pressable>
         <Text style={[styles.backToLogin, styles.vectorIconPosition]}>
-          MujairA
+          Mujair A
         </Text>
       </View>
       <View style={styles.container1}>
