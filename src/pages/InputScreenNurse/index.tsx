@@ -696,8 +696,11 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsBold,
   },
   iconArrowBack: {
-    width: 42,
-    height: 25,
+    position: 'absolute', // Tetapkan di kiri
+    left: 10, // Jarak dari kiri
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
   },
 });
 

@@ -1,378 +1,243 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
-import {Image, StyleSheet, Text, View, Pressable, TouchableOpacity, TouchableHighlight} from 'react-native';
+import { Image, StyleSheet, Text, View, Pressable, TouchableOpacity } from 'react-native';
 import {
   FontFamily,
   FontSize,
   Border,
   Color,
-  Padding,
-  Alert,
 } from '../../../GlobalStyles';
-import { TouchableRipple } from 'react-native-paper';
-import { useState } from 'react';
 
-const ProfileScreenNurse = ({route, navigation}) => {
-  const {user} = route.params; // Access user details from route parameters
-  const {username, role, ruangan, id_user, nama} = user; // Destructure user object
+const ProfileScreenNurse = ({ route, navigation }) => {
+  const { user } = route.params; // Access user details from route parameters
+  const { nama } = user; // Destructure user object
 
   const handleLogoutPress = () => {
     if (route.params && route.params.resetLoginFields) {
       route.params.resetLoginFields();
     }
-
     navigation.reset({
       index: 0,
-      routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
+      routes: [{ name: 'LoginScreen', params: { loggedOut: true } }],
     });
-
     alert("You've been logged out");
   };
-  // const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
   const pilihfoto = () => {
     ImagePicker.openPicker({
       width: 300,
       height: 400,
-      cropping: true
+      cropping: true,
     }).then(image => {
       console.log(image);
     });
-  }
+  };
 
   return (
     <View style={styles.profileScreenNurse}>
-      <Pressable
-        style={styles.bottomNavigation}
-        onPress={() => navigation.navigate('InputScreenNurse')}>
-        <Pressable
-          style={[styles.homeParent, styles.parentFlexBox]}
-          onPress={() => navigation.navigate('HomeScreenNurse', {user})}>
+      {/* Latar Belakang Tosca */}
+      <View style={styles.headerBackground}>
+        <TouchableOpacity onPress={pilihfoto}>
           <Image
-            style={[styles.homeIcon, styles.iconLayout]}
+            style={styles.memojiIcon}
+            resizeMode="cover"
+            source={require('../../../assets/memoji.png')}
+          />
+        </TouchableOpacity>
+        <Text style={styles.profileText}>Profile</Text>
+        <Text style={styles.nameText}>{nama}</Text>
+        <Text style={styles.roleText}>Nurse</Text>
+      </View>
+
+      {/* Centered Buttons */}
+      <View style={styles.centeredContainer}>
+        {/* Change Password */}
+        <Pressable onPress={() => navigation.navigate('ChangePassword', { source: 'nurse' })}>
+          <View style={styles.optionBox}>
+            <Image
+              style={styles.icon}
+              resizeMode="cover"
+              source={require('../../../assets/settings1.png')}
+            />
+            <Text style={styles.optionText}>Change Password</Text>
+          </View>
+        </Pressable>
+
+        {/* About App */}
+        <Pressable onPress={() => navigation.navigate('AboutApp', { source: 'nurse' })}>
+          <View style={styles.optionBox}>
+            <Image
+              style={styles.abouticon}
+              resizeMode="cover"
+              source={require('../../../assets/-icon-info-empty.png')}
+            />
+            <Text style={styles.optionText}>About App</Text>
+          </View>
+        </Pressable>
+      </View>
+
+      {/* Logout Button */}
+      <View style={styles.logoutContainer}>
+        <Pressable style={styles.logoutButton} onPress={handleLogoutPress}>
+          <Text style={styles.logoutText}>Log Out</Text>
+        </Pressable>
+      </View>
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNavigation}>
+        <Pressable
+          style={styles.navItem}
+          onPress={() => navigation.navigate('HomeScreenNurse', { user })}>
+          <Image
+            style={styles.navIcon}
             resizeMode="cover"
             source={require('../../../assets/home.png')}
           />
-          <Text style={[styles.home, styles.homeTypo]}>Home</Text>
+          <Text style={styles.navText}>Home</Text>
         </Pressable>
         <Pressable
-          style={styles.parentFlexBox}
-          onPress={() => navigation.navigate('NurseInputPage', {user})}>
+          style={styles.navItem}
+          onPress={() => navigation.navigate('NurseInputPage', { user })}>
           <Image
-            style={[styles.homeIcon, styles.iconLayout]}
+            style={styles.navIcon}
             resizeMode="cover"
             source={require('../../../assets/assignment.png')}
           />
-          <Text style={[styles.riwayat, styles.homeTypo]}>input</Text>
+          <Text style={styles.navText}>Input</Text>
         </Pressable>
-        <View style={styles.parentFlexBox}>
+        <View style={styles.navItem}>
           <Image
-            style={[styles.homeIcon, styles.iconLayout]}
+            style={styles.navIcon}
             resizeMode="cover"
             source={require('../../../assets/account-circle.png')}
           />
-          <Text style={[styles.profil, styles.homeTypo]}>Profil</Text>
+          <Text style={styles.navTextActive}>Profile</Text>
         </View>
-      </Pressable>
-      <View style={[styles.logoutButton, styles.aboutAppLayout]}>
-        <Pressable
-          style={[styles.logoutButtonChild, styles.childShadowBox]}
-          onPress={handleLogoutPress}>
-          <Text style={styles.logOut}>Log Out</Text>
-        </Pressable>
       </View>
-      <Pressable
-        onPress={() => navigation.navigate('AboutApp', {source: 'nurse'})}>
-        <View style={[styles.aboutApp, styles.aboutAppLayout]}>
-          <View
-            style={[styles.aboutAppChild, styles.standbydonorChildLayout]}
-          />
-          <Text style={[styles.aboutApp1, styles.aboutApp1Typo]}>
-            About App
-          </Text>
-          <Image
-            style={styles.iconInfoEmpty}
-            resizeMode="cover"
-            source={require('../../../assets/-icon-info-empty.png')}
-          />
-        </View>
-      </Pressable>
-      <Pressable
-        onPress={() =>
-          navigation.navigate('ChangePassword', {source: 'nurse'})
-        }>
-        <View style={[styles.standbydonor, styles.standbydonorChildLayout]}>
-          <View
-            style={[styles.standbydonorChild, styles.standbydonorChildLayout]}
-          />
-          <Text style={[styles.changePassword, styles.aboutApp1Typo]}>
-            Change Password
-          </Text>
-          <Image
-            style={[styles.settingsIcon, styles.iconLayout]}
-            resizeMode="cover"
-            source={require('../../../assets/settings1.png')}
-          />
-        </View>
-      </Pressable>
-      <View style={styles.profileScreenNurseChild}>
-        <TouchableOpacity onPress={pilihfoto}>
-        <Image
-        style={[styles.memojiIcon, styles.profilePosition]} 
-        resizeMode="cover"
-        source={require('../../../assets/memoji.png')}
-      />
-        </TouchableOpacity>
-      
-      </View>
-
-      <Text style={[styles.joshuaTengker, styles.adminLayout]}>{nama}</Text>
-      <Text style={[styles.admin, styles.adminLayout]}>Nurse</Text>
-      <Text style={[styles.profile, styles.profilePosition]}>Profile</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  parentFlexBox: {
-    justifyContent: 'center',
-    width: 44,
+  profileScreenNurse: {
+    flex: 1,
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 20,
   },
-  iconLayout: {
-    height: 24,
-    width: 24,
-  },
-  homeTypo: {
-    textAlign: 'center',
-    fontFamily: FontFamily.iconText,
-    fontWeight: '500',
-    lineHeight: 20,
-    fontSize: FontSize.iconText_size,
-  },
-  aboutAppLayout: {
-    height: 42,
-    position: 'absolute',
-  },
-  childShadowBox: {
-    borderRadius: Border.br_xs,
-    elevation: 9,
-    shadowRadius: 9,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    top: 0,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    backgroundColor: Color.schemesOnPrimary,
-  },
-  standbydonorChildLayout: {
-    width: 324,
-    height: 42,
-    position: 'absolute',
-  },
-  aboutApp1Typo: {
-    color: Color.notSoBlack,
-    top: 6,
-    textAlign: 'left',
-    height: 31,
-    display: 'flex',
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    alignItems: 'center',
-    position: 'absolute',
-  },
-  profilePosition: {
-    left: '50%',
-    position: 'absolute',
-  },
-  adminLayout: {
-    width: 181,
-    left: '50%',
-    color: Color.notSoBlack,
-    height: 31,
-    textAlign: 'center',
-    position: 'absolute',
-  },
-  homeIcon: {
-    overflow: 'hidden',
-  },
-  home: {
-    color: Color.colorSilver_200,
-  },
-  homeParent: {
-    backgroundColor: Color.schemesOnPrimary,
-  },
-  riwayat: {
-    color: Color.colorSilver_100,
-  },
-  profil: {
-    color: Color.colorMediumaquamarine,
-  },
-  bottomNavigation: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    shadowColor: 'rgba(67, 67, 67, 0.3)',
-    shadowRadius: 8,
-    elevation: 8,
-    height: 56,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 70, // Adjusted padding
-    paddingVertical: 8, // Adjusted padding
-    backgroundColor: '#ffffff',
-    zIndex: 1000,
-  },
-  logoutButtonChild: {
-    width: 325,
-    left: 14,
-    elevation: 9,
-    shadowRadius: 9,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    top: 0,
-    height: 42,
-    position: 'absolute',
-  },
-  logOut: {
-    top: 13,
-    color: Color.colorIndianred_100,
-    width: 302,
-    opacity: 0.7,
-    height: 301,
-    display: 'flex',
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    left: 14,
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-  },
-  logoutButton: {
-    top: 649,
-    left: 17,
-    alignSelf: 'center',
-    width: 329,
-    height: 300,
-  },
-  aboutAppChild: {
-    borderRadius: Border.br_xs,
-    elevation: 9,
-    shadowRadius: 9,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    top: 0,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    backgroundColor: Color.schemesOnPrimary,
-    width: 324,
-    left: 0,
-  },
-  aboutApp1: {
-    left: 46,
-    width: 278,
-    marginTop: 7,
-    textAlign: 'left',
-  },
-  iconInfoEmpty: {
-    height: '42.86%',
-    width: '5.22%',
-    top: '28.57%',
-    right: '90.99%',
-    bottom: '28.57%',
-    left: '4.79%',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    position: 'absolute',
-    overflow: 'hidden',
-  },
-  aboutApp: {
-    top: 577,
-    width: 322,
-    left: 32,
-    alignSelf: 'center',
-  },
-  standbydonorChild: {
-    borderRadius: Border.br_xs,
-    elevation: 9,
-    shadowRadius: 9,
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    top: 0,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    backgroundColor: Color.schemesOnPrimary,
-    width: 324,
-    left: 0,
-  },
-  changePassword: {
-    left: 47,
-    marginTop: 6,
-    width: 306,
-    textAlign: 'left',
-  },
-  settingsIcon: {
-    top: 9,
-    left: 12,
-    position: 'absolute',
-  },
-  standbydonor: {
-    top: 524,
-    left: 32,
-  },
-  profileScreenNurseChild: {
-    top: -2,
+  headerBackground: {
     backgroundColor: Color.colorMediumaquamarine,
-    width: 364,
-    height: 190,
-    alignSelf: 'center',
+    width: '80%',
+    height: 275,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomLeftRadius: 75,
+    borderBottomRightRadius: 75,
+    elevation: 4,
   },
   memojiIcon: {
-    marginLeft: -73,
-    top: 93,
-    borderRadius: Border.br_980xl,
-    width: 148,
-    height: 156,
-    overflow: 'hidden',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginTop: 10,
+    backgroundColor: Color.colorMediumaquamarine,
   },
-  joshuaTengker: {
-    marginLeft: -89,
-    top: 260,
-    fontSize: FontSize.m3BodyLarge_size,
-    fontFamily: FontFamily.interBold,
-    fontWeight: '700',
-  },
-  admin: {
-    marginLeft: -90,
-    top: 285,
-    fontSize: FontSize.m3LabelLarge_size,
-    width: 181,
-    fontFamily: FontFamily.iconText,
-    fontWeight: '500',
-  },
-  profile: {
-    marginLeft: -33,
-    top: 45,
+  profileText: {
     fontSize: FontSize.size_xl,
     fontFamily: FontFamily.poppinsBold,
     color: Color.schemesOnPrimary,
-    fontWeight: '700',
-    textAlign: 'left',
+    marginTop: 10,
   },
-  profileScreenNurse: {
-    // borderRadius: Border.br_xl,
+  nameText: {
+    fontSize: FontSize.m3BodyLarge_size,
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.schemesOnPrimary,
+    marginTop: 5,
+  },
+  roleText: {
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.schemesOnPrimary,
+  },
+  centeredContainer: {
     flex: 1,
-    // width: '100%',
-    height: 800,
-    // overflow: 'hidden',
-    // backgroundColor: Color.schemesOnPrimary,
-    // alignSelf: 'center',
+    justifyContent: 'center',
+    width: '90%',
+  },
+  optionBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F3F3F3',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: Border.br_xs,
+    marginVertical: 10,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+  },
+  abouticon: {
+    marginRight: 15,
+  },
+  icon: {
+    marginRight: 15,
+  },
+  optionText: {
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
+  },
+  logoutContainer: {
+    marginBottom: 100,
+    alignItems: 'center',
+  },
+  logoutButton: {
+    backgroundColor: '#FF5A5F',
+    paddingVertical: 12,
+    paddingHorizontal: 50,
+    borderRadius: Border.br_xs,
+    elevation: 4,
+  },
+  logoutText: {
+    color: '#FFF',
+    fontSize: FontSize.m3LabelLarge_size,
+    fontFamily: FontFamily.poppinsBold,
+    textAlign: 'center',
+  },
+  bottomNavigation: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 50,
+    paddingVertical: 10,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    elevation: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#EDEDED',
+  },
+  navItem: {
+    alignItems: 'center',
+  },
+  navIcon: {
+    width: 24,
+    height: 24,
+  },
+  navText: {
+    marginTop: 5,
+    fontSize: FontSize.iconText_size,
+    color: Color.colorSilver_100,
+    fontFamily: FontFamily.iconText,
+  },
+  navTextActive: {
+    marginTop: 5,
+    fontSize: FontSize.iconText_size,
+    color: Color.colorMediumaquamarine,
+    fontFamily: FontFamily.iconText,
+    fontWeight: '600',
   },
 });
 

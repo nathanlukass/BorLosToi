@@ -32,6 +32,7 @@
     "react-native-element-dropdown": "^2.12.1",
     "react-native-elements": "^3.4.3",
     "react-native-flash-message": "^0.4.2",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.18.1",
     "react-native-image-crop-picker": "^0.41.4",
     "react-native-paper": "^5.12.5",

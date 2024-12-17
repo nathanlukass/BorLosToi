@@ -1,6 +1,5 @@
 import * as React from "react";
 import { StyleSheet, View, Text, Pressable, Modal, FlatList, TouchableOpacity, Image, Alert } from "react-native";
-import * as FileSystem from 'expo-file-system'; // Untuk mengunduh file
 import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/core';

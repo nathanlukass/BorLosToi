@@ -235,8 +235,6 @@ const EditMujairA = ({route}) => {
       Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
     }
   };
-  
-
   const updateJumlahBed = async () => {
     try {
       const response = await fetch(
@@ -268,7 +266,6 @@ const EditMujairA = ({route}) => {
       Alert.alert('Error', 'Terjadi kesalahan: ' + error.message);
     }
   };
-
   useEffect(() => {
     fetchJumlahBed();
     updateJumlahBed();
