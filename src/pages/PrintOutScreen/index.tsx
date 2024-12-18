@@ -10,12 +10,12 @@ import {
   Image,
   Alert,
 } from 'react-native';
-// import * as FileSystem from 'expo-file-system'; // Untuk mengunduh file
 import {Border, Color, FontFamily, FontSize} from '../../../GlobalStyles';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {ParamListBase} from '@react-navigation/core';
 import {useNavigation} from '@react-navigation/native';
-import * as FileSystem from 'expo-file-system';
+import RNFS from 'react-native-fs';
+import {Buffer} from 'buffer';
 
 const PrintOutScreen = () => {
   const navigation = useNavigation();
@@ -92,59 +92,43 @@ const PrintOutScreen = () => {
 
   // Fungsi untuk menangani unduhan
   const handleDownload = async () => {
-    if (selectedRoom === 'Pilih Ruangan' || selectedMonth === 'Pilih Bulan') {
-      Alert.alert('Error', 'Silakan pilih ruangan dan bulan terlebih dahulu.');
-      return;
-    }
-
-    // Mapping month names to numbers
-    const monthMap = {
-      Januari: 1,
-      Februari: 2,
-      Maret: 3,
-      April: 4,
-      Mei: 5,
-      Juni: 6,
-      Juli: 7,
-      Agustus: 8,
-      September: 9,
-      Oktober: 10,
-      November: 11,
-      Desember: 12,
-    };
-
-    const monthNumber = monthMap[selectedMonth];
-
     try {
-      // Prepare API parameters
+      if (selectedRoom === 'Pilih Ruangan' || selectedMonth === 'Pilih Bulan') {
+        Alert.alert(
+          'Error',
+          'Silakan pilih ruangan dan bulan terlebih dahulu.',
+        );
+        return;
+      }
+
+      // Fetch file PDF dari server
       const formData = new URLSearchParams();
       formData.append('ruangan', selectedRoom);
-      formData.append('month', monthNumber.toString());
+      formData.append('month', selectedMonth);
 
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: formData.toString(),
       });
 
       if (!response.ok) {
-        throw new Error('Gagal mengambil data dari server.');
+        throw new Error('Gagal mengambil file dari server.');
       }
 
-      // Get text data and save as HTML file
-      const responseText = await response.text();
-      const fileName = `report_${selectedRoom}_${selectedMonth}.html`;
-      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+      // Ambil data dalam format binary (ArrayBuffer)
+      const arrayBuffer = await response.arrayBuffer();
+      const pdfData = Buffer.from(arrayBuffer).toString('base64'); // Konversi ke base64
 
-      // Write file to local storage
-      await FileSystem.writeAsStringAsync(fileUri, responseText, {
-        encoding: FileSystem.EncodingType.UTF8,
-      });
+      // Tentukan lokasi penyimpanan file
+      const filePath = `${RNFS.DownloadDirectoryPath}/report_${selectedRoom}_${selectedMonth}.pdf`;
 
-      Alert.alert('Sukses', `File berhasil diunduh!\nLokasi: ${fileUri}`);
+      // Simpan file PDF
+      await RNFS.writeFile(filePath, pdfData, 'base64');
+
+      Alert.alert('Sukses', `File PDF berhasil disimpan di: ${filePath}`);
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Gagal mengunduh file. Silakan coba lagi.');
+      Alert.alert('Error', error.message || 'Gagal menyimpan PDF.');
     }
   };
   // const renderItem = ({item, onSelect}) => (
