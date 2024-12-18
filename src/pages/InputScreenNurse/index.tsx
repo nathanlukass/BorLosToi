@@ -65,29 +65,49 @@ const NurseInputPage = ({route}) => {
     }
 
     const formattedDate = moment(date).format('YYYY-MM-DD');
+    const previousDay = moment(date).subtract(1, 'days').format('YYYY-MM-DD');
     const normalizedRuangan = ruangan.replace(/\u00A0/g, ' ').trim();
 
-    console.log('Normalized Ruangan:', normalizedRuangan);
-    console.log('Formatted Date:', formattedDate);
-
-    // Validasi ruangan
-    const validRooms = [
-      'mujair a',
-      'mujair b',
-      'mujair c',
-      'nike',
-      'payangka',
-      'neonati',
-      'bomboya',
-      'karper',
-      'icu',
-    ];
-    if (!validRooms.includes(normalizedRuangan.toLowerCase())) {
-      Alert.alert('Error', 'Invalid room selected.');
-      return;
-    }
+    console.log('Tanggal yang dipilih:', formattedDate);
+    console.log('Tanggal sebelumnya:', previousDay);
+    console.log('Ruangan:', normalizedRuangan);
 
     try {
+      // Fetch data untuk tanggal sebelumnya
+      const previousDayResponse = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_pasien_masih_dirawat',
+        {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({
+            ruangan: normalizedRuangan,
+            tanggal: previousDay,
+          }).toString(),
+        },
+      );
+
+      const previousDayRawResponse = await previousDayResponse.text();
+      console.log('Raw Response (Previous Day):', previousDayRawResponse);
+
+      const jsonMatchesPrevious =
+        previousDayRawResponse.match(/(\{.*?\})(?=\{|\[|$)/g);
+      const previousDayFirstJSON = jsonMatchesPrevious
+        ? jsonMatchesPrevious[0]
+        : '{}';
+      const previousDayResult = JSON.parse(previousDayFirstJSON);
+
+      let pasienAwalValue = '0';
+      if (
+        previousDayResult.status === 'success' &&
+        previousDayResult.data?.pasien_masih_dirawat !== undefined
+      ) {
+        pasienAwalValue =
+          previousDayResult.data.pasien_masih_dirawat.toString();
+      }
+
+      console.log('Pasien Awal (Dari Hari Sebelumnya):', pasienAwalValue);
+
+      // Fetch data untuk tanggal yang dipilih
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_input_data',
         {
@@ -100,63 +120,62 @@ const NurseInputPage = ({route}) => {
         },
       );
 
-      let responseText = await response.text();
-      console.log('Raw Response:', responseText);
+      const rawResponse = await response.text();
+      console.log('Raw Response (Selected Date):', rawResponse);
 
-      try {
-        const result = JSON.parse(responseText);
-        console.log('Parsed Response:', result);
+      const jsonMatches = rawResponse.match(/(\{.*?\})(?=\{|\[|$)/g);
+      const firstJSON = jsonMatches ? jsonMatches[0] : '{}';
+      const result = JSON.parse(firstJSON);
 
-        if (result.status === 'success' && result.data) {
-          // Jika data ditemukan, set pasien awal dan field lainnya
-          setPasienAwal(result.data.pasien_awal?.toString() || '0');
-          setPasienMasuk(result.data.pasien_masuk?.toString() || '0');
-          setPasienPindahan(result.data.pasien_pindahan?.toString() || '0');
-          setPasienDipindahkan(
-            result.data.pasien_dipindahkan?.toString() || '0',
-          );
-          setPasienHidup(result.data.pasien_hidup?.toString() || '0');
-          setPasienRujuk(result.data.pasien_rujuk?.toString() || '0');
-          setPasienAps(result.data.pasien_aps?.toString() || '0');
-          setPasienLainLain(result.data.pasien_lain_lain?.toString() || '0');
-          setPasienKurangDari48Jam(
-            result.data.pasien_kurang_dari_48jam?.toString() || '0',
-          );
-          setPasienLebihDari48Jam(
-            result.data.pasien_lebih_dari_48jam?.toString() || '0',
-          );
-          setPasienLamaDirawat(
-            result.data.pasien_lama_dirawat?.toString() || '0',
-          );
-          setBanyakPasien(result.data.banyak_pasien?.toString() || '0');
-          setKelas1(result.data.kelas_1?.toString() || '0');
-          setKelas2(result.data.kelas_2?.toString() || '0');
-          setKelas3(result.data.kelas_3?.toString() || '0');
-        } else {
-          await fetchPasienAwalHariIni(); // Fallback khusus untuk pasien awal
-          // Reset field lainnya ke 0
-          setPasienMasuk('0');
-          setPasienPindahan('0');
-          setPasienDipindahkan('0');
-          setPasienHidup('0');
-          setPasienRujuk('0');
-          setPasienAps('0');
-          setPasienLainLain('0');
-          setPasienKurangDari48Jam('0');
-          setPasienLebihDari48Jam('0');
-          setPasienLamaDirawat('0');
-          setBanyakPasien('0');
-          setKelas1('0');
-          setKelas2('0');
-          setKelas3('0');
-        }
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        Alert.alert('Error', 'Invalid server response format.');
+      if (result.status === 'success' && result.data) {
+        // Set data jika ada inputan
+        setPasienAwal(result.data.pasien_awal?.toString() || pasienAwalValue);
+        setPasienMasuk(result.data.pasien_masuk?.toString() || '0');
+        setPasienPindahan(result.data.pasien_pindahan?.toString() || '0');
+        setPasienDipindahkan(result.data.pasien_dipindahkan?.toString() || '0');
+        setPasienHidup(result.data.pasien_hidup?.toString() || '0');
+        setPasienRujuk(result.data.pasien_rujuk?.toString() || '0');
+        setPasienAps(result.data.pasien_aps?.toString() || '0');
+        setPasienLainLain(result.data.pasien_lain_lain?.toString() || '0');
+        setPasienKurangDari48Jam(
+          result.data.pasien_kurang_dari_48jam?.toString() || '0',
+        );
+        setPasienLebihDari48Jam(
+          result.data.pasien_lebih_dari_48jam?.toString() || '0',
+        );
+        setPasienLamaDirawat(
+          result.data.pasien_lama_dirawat?.toString() || '0',
+        );
+        setBanyakPasien(result.data.banyak_pasien?.toString() || '0');
+        setKelas1(result.data.kelas_1?.toString() || '0');
+        setKelas2(result.data.kelas_2?.toString() || '0');
+        setKelas3(result.data.kelas_3?.toString() || '0');
+      } else {
+        // Jika tidak ada inputan pada tanggal yang dipilih
+        Alert.alert(
+          'Informasi',
+          `Pasien awal diambil dari hari sebelumnya (${previousDay}).`,
+        );
+
+        setPasienAwal(pasienAwalValue);
+        setPasienMasuk('0');
+        setPasienPindahan('0');
+        setPasienDipindahkan('0');
+        setPasienHidup('0');
+        setPasienRujuk('0');
+        setPasienAps('0');
+        setPasienLainLain('0');
+        setPasienKurangDari48Jam('0');
+        setPasienLebihDari48Jam('0');
+        setPasienLamaDirawat('0');
+        setBanyakPasien('0');
+        setKelas1('0');
+        setKelas2('0');
+        setKelas3('0');
       }
     } catch (error) {
-      console.error('Fetch Error:', error.message);
-      Alert.alert('Error', 'Failed to fetch data for today.');
+      console.error('Error:', error.message);
+      Alert.alert('Error', 'Terjadi kesalahan saat mengambil data.');
     }
   };
 
@@ -226,9 +245,7 @@ const NurseInputPage = ({route}) => {
         'https://samratindikator.online/borlostoi/public/insert/insert_nurse',
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           body: new URLSearchParams({
             ruangan: normalizedRuangan,
             tanggal: formattedDate,
@@ -254,14 +271,19 @@ const NurseInputPage = ({route}) => {
       const rawResponse = await response.text();
       console.log('Raw Response:', rawResponse);
 
-      // Check if the response is valid JSON
-      if (!rawResponse.startsWith('{') && !rawResponse.startsWith('[')) {
-        throw new Error('Invalid server response');
+      // Pisahkan objek JSON pertama dari respons bertumpuk
+      const jsonMatches = rawResponse.match(/(\{.*?\})(?=\{|\[|$)/g);
+      if (!jsonMatches || jsonMatches.length === 0) {
+        throw new Error('Invalid JSON response');
       }
 
-      const result = JSON.parse(rawResponse); // Parse the response as JSON
-      console.log('Insert Response:', result);
+      const firstJSON = jsonMatches[0]; // Ambil objek JSON pertama
+      console.log('First JSON:', firstJSON);
 
+      const result = JSON.parse(firstJSON);
+      console.log('Parsed Response:', result);
+
+      // Cek status respons
       if (result.status === 'success') {
         Alert.alert('Sukses', 'Data berhasil diinput.');
       } else {
@@ -269,10 +291,7 @@ const NurseInputPage = ({route}) => {
       }
     } catch (error) {
       console.error('Fetch Error:', error.message);
-      Alert.alert(
-        'Error',
-        'Failed to fetch data. Please check your network connection.',
-      );
+      Alert.alert('Error', 'Terjadi kesalahan. Silakan coba lagi.');
     }
   };
 
@@ -334,15 +353,14 @@ const NurseInputPage = ({route}) => {
       const result = JSON.parse(rawText);
       console.log('Parsed Response:', result);
 
-
       const key = `jumlah bed ${normalizedRuangan}`; // Key sesuai dengan format database
       if (result.status === 'success' && result[key] !== undefined) {
         setJumlahTempatTidur(result[key].toString());
       } else {
         Alert.alert(
           'Error',
-          `Data jumlah tempat tidur untuk ${normalizedRuangan} tidak ditemukan.`
-        );        
+          `Data jumlah tempat tidur untuk ${normalizedRuangan} tidak ditemukan.`,
+        );
       }
     } catch (error) {
       console.error('Fetch error:', error.message);
@@ -353,24 +371,30 @@ const NurseInputPage = ({route}) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const fetchPasienAwalHariIni = async () => {
-    // Menggunakan state untuk mencegah fetch berganda
     if (isFetching) {
       return;
-    } // Jika sudah fetching, hentikan fungsi
+    }
 
-    setIsFetching(true); // Menandakan bahwa fetch sedang berlangsung
+    setIsFetching(true);
 
+    // Tentukan tanggal sekarang dan hari sebelumnya
     const currentDate = selectedDate
       ? moment(selectedDate).startOf('day')
       : moment().startOf('day');
-    const previousDay = currentDate.subtract(1, 'days').format('YYYY-MM-DD');
+    const previousDay = moment(currentDate)
+      .subtract(1, 'days')
+      .format('YYYY-MM-DD');
 
-    console.log('Fetching pasien untuk tanggal:', previousDay);
+    console.log('Tanggal yang dipilih:', currentDate.format('YYYY-MM-DD'));
+    console.log(
+      'Tanggal yang dikirim ke server (hari sebelumnya):',
+      previousDay,
+    );
 
     try {
       const normalizedRuangan = ruangan.replace(/\u00A0/g, ' ').trim();
+      console.log('Ruangan dikirim ke server:', normalizedRuangan);
 
-      // Memastikan hanya 1 pemanggilan fetch
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_pasien_masih_dirawat',
         {
@@ -378,33 +402,42 @@ const NurseInputPage = ({route}) => {
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           body: new URLSearchParams({
             ruangan: normalizedRuangan,
-            tanggal: previousDay,
+            tanggal: previousDay, // Hari sebelumnya
           }).toString(),
         },
       );
 
-      const result = await response.json();
-      console.log('Parsed Response:', result);
+      const rawResponse = await response.text();
+      console.log('Raw Response dari server:', rawResponse);
 
-      // Memproses hasil fetch
+      // Pisahkan JSON jika bertumpuk
+      const jsonMatches = rawResponse.match(/(\{.*?\})(?=\{|\[|$)/g);
+      const firstJSON = jsonMatches ? jsonMatches[0] : '{}';
+      const result = JSON.parse(firstJSON);
+
+      console.log('Parsed Response dari server:', result);
+
+      // Cek properti data
       if (
         result.status === 'success' &&
         result.data?.pasien_masih_dirawat !== undefined
       ) {
-        setPasienAwal(result.data.pasien_masih_dirawat.toString());
+        const pasienAwal = result.data.pasien_masih_dirawat.toString();
+        setPasienAwal(pasienAwal);
         console.log(
-          `Pasien awal diambil dari tanggal ${previousDay}: ${result.data.pasien_masih_dirawat}`,
+          `Pasien awal dari hari sebelumnya (${previousDay}):`,
+          pasienAwal,
         );
       } else {
         setPasienAwal('0');
-        console.warn(`Tidak ada data pasien untuk tanggal ${previousDay}`);
+        console.warn(`Tidak ada data pasien untuk tanggal ${previousDay}.`);
       }
     } catch (error) {
       console.error('Fetch Error:', error.message);
       setPasienAwal('0');
-      Alert.alert('Error', 'Gagal mengambil data pasien.');
+      Alert.alert('Error', 'Gagal mengambil data pasien awal.');
     } finally {
-      setIsFetching(false); // Menandakan bahwa fetching telah selesai
+      setIsFetching(false);
     }
   };
 
@@ -445,19 +478,17 @@ const NurseInputPage = ({route}) => {
           <RealTimeClock />
         </View>
         <DatePickerr
-  style={{top: -8, width: 370, alignSelf: 'center'}}
-  onDateChange={date => {
-    console.log('Selected Date from DatePickerr:', date);
-    
-    // Langsung update data menggunakan tanggal baru
-    handleDateChange(date);
+          style={{top: -8, width: 370, alignSelf: 'center'}}
+          onDateChange={date => {
+            console.log('Selected Date from DatePickerr:', date);
 
-    // Perbarui state selectedDate
-    setSelectedDate(date);
-  }}
-/>
+            // Langsung update data menggunakan tanggal baru
+            handleDateChange(date);
 
-
+            // Perbarui state selectedDate
+            setSelectedDate(date);
+          }}
+        />
 
         {/* Fields with increment/decrement buttons */}
         <View style={styles.sectionJumlahBed}>

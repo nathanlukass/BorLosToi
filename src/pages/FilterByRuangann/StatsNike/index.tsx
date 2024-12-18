@@ -122,7 +122,14 @@ const StatsNike = () => {
 
       let result;
       try {
-        result = JSON.parse(responseText);
+        // Cari posisi JSON dalam respons
+        const jsonStart = responseText.indexOf('{');
+        const jsonEnd = responseText.lastIndexOf('}');
+
+        // Ekstrak hanya bagian JSON
+        const jsonString = responseText.substring(jsonStart, jsonEnd + 1);
+        result = JSON.parse(jsonString);
+
         console.log('Parsed JSON:', result);
 
         if (result.status === 'success' && result.data) {
