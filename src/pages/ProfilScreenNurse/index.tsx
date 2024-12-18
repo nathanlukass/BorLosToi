@@ -1,24 +1,26 @@
 import * as React from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
-import { Image, StyleSheet, Text, View, Pressable, TouchableOpacity } from 'react-native';
 import {
-  FontFamily,
-  FontSize,
-  Border,
-  Color,
-} from '../../../GlobalStyles';
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  TouchableOpacity,
+} from 'react-native';
+import {FontFamily, FontSize, Border, Color} from '../../../GlobalStyles';
 
-const ProfileScreenNurse = ({ route, navigation }) => {
-  const { user } = route.params; // Access user details from route parameters
-  const { nama } = user; // Destructure user object
+const ProfileScreenNurse = ({route, navigation}) => {
+  const {user} = route.params || {}; // Pastikan user tidak undefined
+  const {nama} = user || {nama: 'Guest'}; // Default value jika nama tidak ada
 
   const handleLogoutPress = () => {
-    if (route.params && route.params.resetLoginFields) {
+    if (route.params?.resetLoginFields) {
       route.params.resetLoginFields();
     }
     navigation.reset({
       index: 0,
-      routes: [{ name: 'LoginScreen', params: { loggedOut: true } }],
+      routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
     });
     alert("You've been logged out");
   };
@@ -51,8 +53,15 @@ const ProfileScreenNurse = ({ route, navigation }) => {
 
       {/* Centered Buttons */}
       <View style={styles.centeredContainer}>
-        {/* Change Password */}
-        <Pressable onPress={() => navigation.navigate('ChangePassword', { source: 'nurse' })}>
+        <Pressable
+          onPress={() => {
+            const {user = {}} = route.params || {}; // Tambahkan nilai default {} untuk user
+            const source = user?.role === 'Admin' ? 'admin' : 'nurse'; // Tentukan source berdasarkan role
+            navigation.navigate('ChangePassword', {
+              user,
+              source, // Kirim source dinamis
+            });
+          }}>
           <View style={styles.optionBox}>
             <Image
               style={styles.icon}
@@ -63,8 +72,15 @@ const ProfileScreenNurse = ({ route, navigation }) => {
           </View>
         </Pressable>
 
-        {/* About App */}
-        <Pressable onPress={() => navigation.navigate('AboutApp', { source: 'nurse' })}>
+        <Pressable
+          onPress={() => {
+            const {user = {}} = route.params || {}; // Tambahkan nilai default {} untuk user
+            const source = user?.role === 'Admin' ? 'admin' : 'nurse';
+            navigation.navigate('AboutApp', {
+              user,
+              source, // Kirim source dinamis
+            });
+          }}>
           <View style={styles.optionBox}>
             <Image
               style={styles.abouticon}
@@ -87,7 +103,7 @@ const ProfileScreenNurse = ({ route, navigation }) => {
       <View style={styles.bottomNavigation}>
         <Pressable
           style={styles.navItem}
-          onPress={() => navigation.navigate('HomeScreenNurse', { user })}>
+          onPress={() => navigation.navigate('HomeScreenNurse', {user})}>
           <Image
             style={styles.navIcon}
             resizeMode="cover"
@@ -97,7 +113,7 @@ const ProfileScreenNurse = ({ route, navigation }) => {
         </Pressable>
         <Pressable
           style={styles.navItem}
-          onPress={() => navigation.navigate('NurseInputPage', { user })}>
+          onPress={() => navigation.navigate('NurseInputPage', {user})}>
           <Image
             style={styles.navIcon}
             resizeMode="cover"
@@ -174,7 +190,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 5,
   },

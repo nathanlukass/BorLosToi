@@ -2,11 +2,12 @@ import React, {useState, useCallback} from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
-  TouchableOpacity,
   Pressable,
+  TextInput,
+  TouchableOpacity,
   Image,
+  Alert,
   BackHandler,
 } from 'react-native';
 import {
@@ -16,43 +17,38 @@ import {
   FontFamily,
   FontSize,
 } from '../../../GlobalStyles';
-
-import Icon from 'react-native-vector-icons/Ionicons'; // Assuming Ionicons is installed
-import {Button} from 'react-native-elements'; // Assuming react-native-elements is installed
-import {useRoute, RouteProp, useFocusEffect} from '@react-navigation/native';
-
-type ChangePasswordRouteProp = RouteProp<{params: {source: string}}, 'params'>;
+import {Button} from 'react-native-elements';
+import {useRoute, useFocusEffect} from '@react-navigation/native';
 
 const ChangePassword = ({navigation}) => {
+  const route = useRoute();
+  const {user} = route.params;
+  const {username, role, ruangan, id_user, nama} = user;
+  console.log('Route Params:', route.params); // Debugging
+  console.log('User:', user);
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [securePassword, setSecurePassword] = useState(true);
   const [secureConfirmPassword, setSecureConfirmPassword] = useState(true);
 
-  const togglePasswordVisibility = () => {
-    setSecurePassword(!securePassword);
-  };
+  const API_URL =
+    'https://samratindikator.online/borlostoi/public/insert/change_password';
 
-  const toggleConfirmPasswordVisibility = () => {
+  const togglePasswordVisibility = () => setSecurePassword(!securePassword);
+  const toggleConfirmPasswordVisibility = () =>
     setSecureConfirmPassword(!secureConfirmPassword);
-  };
-
-  const goBack = () => {
-    navigation.goBack();
-  };
-
-  // Use the defined type for route
-  const route = useRoute<ChangePasswordRouteProp>();
-  const sourceScreen = route.params?.source;
 
   const handleBackPress = useCallback(() => {
-    if (sourceScreen === 'nurse') {
-      navigation.navigate('ProfilScreenNurse'); // Navigate to nurse home screen
-    } else if (sourceScreen === 'admin') {
-      navigation.navigate('ProfileScreenAdmin'); // Navigate to admin home screen
+    if (user === 'nurse') {
+      navigation.navigate('ProfilScreenNurse');
+    } else if (user === 'admin') {
+      navigation.navigate('ProfileScreenAdmin');
+    } else {
+      navigation.goBack(); // Fallback jika source tidak valid
     }
     return true;
-  }, [navigation, sourceScreen]);
+  }, [navigation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -61,6 +57,44 @@ const ChangePassword = ({navigation}) => {
         BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
     }, [handleBackPress]),
   );
+
+  const handleChangePassword = async () => {
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `username=${username}&role=${role}&ruangan=${ruangan}&new_password=${password}`,
+      });
+
+      const rawResponse = await response.text();
+      console.log('Raw Response from Server:', rawResponse);
+
+      // Ambil hanya JSON pertama yang valid dari respons
+      const firstJSON = rawResponse.split('}{').join('}||{').split('||')[0]; // Memisahkan dua JSON yang bertabrakan
+      let result;
+
+      try {
+        result = JSON.parse(firstJSON);
+      } catch (err) {
+        console.error('JSON Parse Error:', err.message);
+        Alert.alert('Error', 'Respons server tidak valid.');
+        return;
+      }
+
+      console.log('Server Response:', result);
+
+      if (result.status === 'success') {
+        Alert.alert('Sukses', 'Password berhasil diubah!', [
+          {text: 'OK', onPress: () => navigation.navigate('ProfilScreenNurse')},
+        ]);
+      } else {
+        Alert.alert('Error', result.message || 'Gagal mengubah password.');
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
+      Alert.alert('Error', 'Terjadi kesalahan. Coba lagi nanti.');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -128,10 +162,7 @@ const ChangePassword = ({navigation}) => {
       <Button
         title="Confirm"
         buttonStyle={styles.button}
-        onPress={() => {
-          // Handle password update
-          console.log('Password Updated');
-        }}
+        onPress={handleChangePassword}
       />
     </View>
   );

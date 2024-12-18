@@ -90,7 +90,21 @@ const PrintOutScreen = () => {
     </Modal>
   );
 
-  // Fungsi untuk menangani unduhan
+  const monthMap = {
+    Januari: '01',
+    Februari: '02',
+    Maret: '03',
+    April: '04',
+    Mei: '05',
+    Juni: '06',
+    Juli: '07',
+    Agustus: '08',
+    September: '09',
+    Oktober: '10',
+    November: '11',
+    Desember: '12',
+  };
+
   const handleDownload = async () => {
     try {
       if (selectedRoom === 'Pilih Ruangan' || selectedMonth === 'Pilih Bulan') {
@@ -101,36 +115,47 @@ const PrintOutScreen = () => {
         return;
       }
 
-      // Fetch file PDF dari server
+      const monthNumber = monthMap[selectedMonth]; // Ubah ke format MM
+      if (!monthNumber) {
+        throw new Error('Bulan tidak valid. Silakan periksa kembali.');
+      }
+
       const formData = new URLSearchParams();
       formData.append('ruangan', selectedRoom);
-      formData.append('month', selectedMonth);
+      formData.append('month', monthNumber);
 
+      // Fetch data dari server
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: formData.toString(),
       });
 
-      if (!response.ok) {
-        throw new Error('Gagal mengambil file dari server.');
+      console.log('Response Status:', response.status);
+      console.log('Content-Type:', response.headers.get('Content-Type'));
+
+      // Validasi jika respons bukan PDF
+      if (response.headers.get('Content-Type') !== 'application/pdf') {
+        const responseText = await response.text();
+        console.log('Response Text:', responseText);
+        throw new Error(
+          'Server tidak mengembalikan file PDF. Cek parameter request.',
+        );
       }
 
-      // Ambil data dalam format binary (ArrayBuffer)
+      // Ambil file PDF
       const arrayBuffer = await response.arrayBuffer();
-      const pdfData = Buffer.from(arrayBuffer).toString('base64'); // Konversi ke base64
-
-      // Tentukan lokasi penyimpanan file
+      const base64Data = Buffer.from(arrayBuffer).toString('base64');
       const filePath = `${RNFS.DownloadDirectoryPath}/report_${selectedRoom}_${selectedMonth}.pdf`;
 
-      // Simpan file PDF
-      await RNFS.writeFile(filePath, pdfData, 'base64');
-
-      Alert.alert('Sukses', `File PDF berhasil disimpan di: ${filePath}`);
+      await RNFS.writeFile(filePath, base64Data, 'base64');
+      Alert.alert('Sukses', `File berhasil disimpan di:\n${filePath}`);
     } catch (error) {
-      console.error(error);
-      Alert.alert('Error', error.message || 'Gagal menyimpan PDF.');
+      console.error('Error:', error.message);
+      Alert.alert('Error', error.message || 'Terjadi kesalahan.');
     }
   };
+
   // const renderItem = ({item, onSelect}) => (
   //   <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>
   //     <Text style={styles.dropdownText}>{item}</Text>
