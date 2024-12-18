@@ -54,14 +54,14 @@ const HomeScreenAdmin = ({route}) => {
           </Text>
         </Pressable>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('PrintOutScreen')}>
-        <View style={[styles.printOutBox, styles.lihatLayout]}>
+      <Pressable onPress={() => navigation.navigate('PrintOutScreen')}>
+        <View>
           <View style={[styles.lihatBorlostoiChild, styles.lihatLayout]} />
           <Text style={[styles.printOutHasil, styles.printOutHasilFlexBox]}>
             {'Print out hasil '}
           </Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
       <View style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
         <View style={[styles.homeParent, styles.parentFlexBox]}>
           <Image

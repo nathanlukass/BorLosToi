@@ -10,10 +10,11 @@ import {
   Image,
   Alert,
 } from 'react-native';
-// import * as FileSystem from 'expo-file-system'; // Untuk mengunduh file
+import * as FileSystem from 'expo-file-system'; // For file handling
 import { Border, Color, FontFamily, FontSize } from '../../../GlobalStyles';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation, ParamListBase } from '@react-navigation/core';
+
 const PrintOutScreen = () => {
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [selectedRoom, setSelectedRoom] = React.useState('Pilih Ruangan');
@@ -24,30 +25,55 @@ const PrintOutScreen = () => {
   const rooms = ['Mujair A', 'Mujair B', 'Mujair C', 'Nike', 'Payangka', 'Neonati', 'Bomboya', 'Karper', 'ICU'];
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-  const BASE_URL = 'http://localhost:3000/download-report'; // URL API backend Anda
+  const API_URL = 'https://samratindikator.online/borlostoi/public/insert/export_table';
 
-  // Fetch API untuk mengunduh file
   const handleDownload = async () => {
     if (selectedRoom === 'Pilih Ruangan' || selectedMonth === 'Pilih Bulan') {
       Alert.alert('Error', 'Silakan pilih ruangan dan bulan terlebih dahulu.');
       return;
     }
-
+  
+    // Mapping month names to numbers
+    const monthMap = {
+      Januari: 1, Februari: 2, Maret: 3, April: 4,
+      Mei: 5, Juni: 6, Juli: 7, Agustus: 8,
+      September: 9, Oktober: 10, November: 11, Desember: 12,
+    };
+  
+    const monthNumber = monthMap[selectedMonth];
+  
     try {
-      const fileUrl = `${BASE_URL}?room=${encodeURIComponent(selectedRoom)}&month=${encodeURIComponent(selectedMonth)}`;
-      const fileName = `report_${selectedRoom}_${selectedMonth}.pdf`;
-      const downloadResumable = FileSystem.createDownloadResumable(
-        fileUrl,
-        FileSystem.documentDirectory + fileName
-      );
-
-      const { uri } = await downloadResumable.downloadAsync();
-      Alert.alert('Sukses', `File berhasil diunduh!\nLokasi: ${uri}`);
+      // Prepare API parameters
+      const formData = new URLSearchParams();
+      formData.append('ruangan', selectedRoom);
+      formData.append('month', monthNumber.toString());
+  
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formData.toString(),
+      });
+  
+      if (!response.ok) throw new Error('Gagal mengambil data dari server.');
+  
+      // Get text data and save as HTML file
+      const responseText = await response.text();
+      const fileName = `report_${selectedRoom}_${selectedMonth}.html`;
+      const fileUri = `${FileSystem.documentDirectory}${fileName}`;
+  
+      // Write file to local storage
+      await FileSystem.writeAsStringAsync(fileUri, responseText, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+  
+      Alert.alert('Sukses', `File berhasil diunduh!\nLokasi: ${fileUri}`);
     } catch (error) {
       console.error(error);
-      Alert.alert('Gagal', 'Gagal mengunduh file. Silakan coba lagi.');
+      Alert.alert('Error', 'Gagal mengunduh file. Silakan coba lagi.');
     }
   };
+  
+  
 
   const renderItem = ({ item, onSelect }) => (
     <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>

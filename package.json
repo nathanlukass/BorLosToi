@@ -26,6 +26,8 @@
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "expo-file-system": "^18.0.6",
+    "expo-modules-core": "^2.1.2",
+    "expo-splash-screen": "^0.29.18",
     "moment": "^2.30.1",
     "picker": "^0.1.4",
     "react": "18.3.1",
