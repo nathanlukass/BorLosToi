@@ -349,17 +349,27 @@ const NurseInputPage = ({route}) => {
     }
   };
 
+  const [isFetching, setIsFetching] = useState(false);
+
   const fetchPasienAwalHariIni = async () => {
-    // Menentukan tanggal kemarin
+    // Menggunakan state untuk mencegah fetch berganda
+    if (isFetching) {
+      return;
+    } // Jika sudah fetching, hentikan fungsi
+
+    setIsFetching(true); // Menandakan bahwa fetch sedang berlangsung
+
     const currentDate = selectedDate
       ? moment(selectedDate).startOf('day')
       : moment().startOf('day');
     const previousDay = currentDate.subtract(1, 'days').format('YYYY-MM-DD');
 
+    console.log('Fetching pasien untuk tanggal:', previousDay);
+
     try {
       const normalizedRuangan = ruangan.replace(/\u00A0/g, ' ').trim();
-      console.log('Fetching pasien masih dirawat for date:', previousDay);
 
+      // Memastikan hanya 1 pemanggilan fetch
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_pasien_masih_dirawat',
         {
@@ -372,39 +382,43 @@ const NurseInputPage = ({route}) => {
         },
       );
 
-      // Langsung parsing JSON tanpa .text()
       const result = await response.json();
       console.log('Parsed Response:', result);
 
+      // Memproses hasil fetch
       if (
         result.status === 'success' &&
         result.data?.pasien_masih_dirawat !== undefined
       ) {
         setPasienAwal(result.data.pasien_masih_dirawat.toString());
         console.log(
-          `Pasien awal diambil dari hari sebelumnya (${previousDay}): ${result.data.pasien_masih_dirawat}`,
+          `Pasien awal diambil dari tanggal ${previousDay}: ${result.data.pasien_masih_dirawat}`,
         );
       } else {
         setPasienAwal('0');
-        console.warn(
-          `Tidak ada data pasien masih dirawat untuk tanggal ${previousDay}`,
-        );
+        console.warn(`Tidak ada data pasien untuk tanggal ${previousDay}`);
       }
     } catch (error) {
       console.error('Fetch Error:', error.message);
       setPasienAwal('0');
-      Alert.alert('Error', 'Gagal mengambil data pasien awal.');
+      Alert.alert('Error', 'Gagal mengambil data pasien.');
+    } finally {
+      setIsFetching(false); // Menandakan bahwa fetching telah selesai
     }
   };
 
+  const [prevSelectedDate, setPrevSelectedDate] = useState(null);
+
   useEffect(() => {
-    fetchJumlahBed(); // Fetch data saat komponen dimuat
-    fetchPasienAwalHariIni(); // Fetch data pasien yang masih dirawat saat komponen dimuat
-  }, [ruangan]); // Panggil setiap kali ruangan berubah
+    if (selectedDate && selectedDate !== prevSelectedDate) {
+      setPrevSelectedDate(selectedDate);
+      fetchPasienAwalHariIni();
+    }
+  }, [selectedDate, prevSelectedDate]);
 
   useEffect(() => {
     fetchJumlahBed();
-    handleDateChange(new Date()); // Set default ke hari ini saat komponen dimuat
+    // Set default ke hari ini saat komponen dimuat
   }, [ruangan]);
 
   return (
