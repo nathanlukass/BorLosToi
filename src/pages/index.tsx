@@ -44,7 +44,6 @@ import {
 
 export {
   LoginScreen,
-  SplashScreen,
   HomeScreenNurse,
   NurseInputPage,
   ScreenGuest,
@@ -81,4 +80,5 @@ export {
   StatsKarper,
   StatsBomboya,
   StatsICU,
+  SplashScreen,
 };
