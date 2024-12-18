@@ -15,7 +15,6 @@ import {Gap} from '../../../../src/components';
 import moment, {months} from 'moment';
 import {Alert} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import {useEffect} from 'react';
 
 const StatsMujairA = () => {
   const [isFilterChecked, setIsFilterChecked] = useState(false);
@@ -29,33 +28,16 @@ const StatsMujairA = () => {
   const [ndr, setNilaiNdr] = useState('');
   const [bto, setNilaiBto] = useState('');
 
-  useEffect(() => {
-    console.log('State updated:', {bor, avlos, toi, gdr, bto, ndr});
-  }, [bor, avlos, toi, gdr, bto, ndr]);
-
   const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
 
-  // State untuk tanggal mulai dan tanggal akhir
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-
   const datePickerStyle1 = {
-    top: '55%',
+    top: '47%',
   };
 
   const datePickerStyle2 = {
-    top: '35%',
+    top: '2%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
-
-  const datePickerStyle3 = {
-    top: '-10%',
-    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
-  };
-  // const datePickerStyle3 = {
-  //   top: '-17%',
-  //   display: isFilterChecked ? 'flex' : 'none',
-  // };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
@@ -64,110 +46,6 @@ const StatsMujairA = () => {
     setSelectedDate(formattedDate);
     console.log('Selected Date: ', formattedDate);
     fetchStatsData(formattedDate);
-  };
-
-  const handleStartDateChange = date => {
-    const formattedDate = moment(date).format('YYYY-MM-DD');
-    setStartDate(formattedDate);
-    console.log('Start Date: ', formattedDate);
-    if (endDate) {
-      fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
-    }
-  };
-
-  const handleEndDateChange = date => {
-    const formattedDate = moment(date).format('YYYY-MM-DD');
-    setEndDate(formattedDate);
-    console.log('End Date: ', formattedDate);
-    if (startDate) {
-      fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
-    }
-  };
-
-  const fetchStatsDataByRange = async (startDate, endDate) => {
-    if (!startDate || !endDate) {
-      Alert.alert('Error', 'Tanggal mulai dan akhir harus dipilih.');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_ruangan_range',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            start_date: startDate,
-            end_date: endDate,
-            ruangan: 'Mujair A',
-          }).toString(),
-        },
-      );
-
-      const responseText = await response.text();
-      console.log('Raw Response:', responseText);
-
-      const jsonParts = responseText
-        .split('}')
-        .filter(part => part.trim() !== '')
-        .map(part => `${part}}`);
-
-      let dataFound = false; // Flag untuk cek apakah ada data berhasil diparsing
-
-      for (const jsonPart of jsonParts) {
-        try {
-          const result = JSON.parse(jsonPart.trim());
-          console.log('Parsed JSON:', result);
-
-          // Jika data ditemukan
-          if (result.status === 'success') {
-            dataFound = true;
-            setNilaiBor(result.BOR || '0');
-            setNilaiAvlos(result.AVLOS || '0');
-            setNilaiToi(result.TOI || '0');
-            setNilaiGdr(result.GDR || '0');
-            setNilaiBto(result.BTO || '0');
-            setNilaiNdr(result.NDR || '0');
-          } else if (!result.status && result.TotalPatientDays) {
-            dataFound = true;
-            setStatsData(result); // Simpan statistik utama
-          }
-        } catch (error) {
-          console.error('JSON Parsing Error:', error.message);
-        }
-      }
-
-      // Jika tidak ada data ditemukan
-      if (!dataFound) {
-        setNilaiBor('0');
-        setNilaiAvlos('0');
-        setNilaiToi('0');
-        setNilaiGdr('0');
-        setNilaiBto('0');
-        setNilaiNdr('0');
-        Alert.alert(
-          'No Data',
-          'Data tidak tersedia untuk rentang tanggal yang dipilih.',
-        );
-      }
-    } catch (error) {
-      console.error('Fetch Error:', error.message);
-      Alert.alert(
-        'Error',
-        'Failed to fetch data. Please check your network connection.',
-      );
-      setNilaiBor('0');
-      setNilaiAvlos('0');
-      setNilaiToi('0');
-      setNilaiGdr('0');
-      setNilaiBto('0');
-      setNilaiNdr('0');
-    } finally {
-      setLoading(false);
-    }
   };
 
   const fetchStatsData = async date => {
@@ -200,80 +78,6 @@ const StatsMujairA = () => {
       const responseText = await response.text();
       console.log('Response dari server:', responseText);
 
-      if (responseText.startsWith('<')) {
-        console.error('Response mengandung HTML, ada masalah di server.');
-        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
-        return;
-      }
-
-      let result;
-      try {
-        result = JSON.parse(responseText);
-        console.log('Parsed JSON:', result);
-
-        if (result.status === 'success' && result.data) {
-          const data = result.data;
-          setNilaiBor(data.BOR || '0');
-          setNilaiAvlos(data.AVLOS || '0');
-          setNilaiToi(data.TOI || '0');
-          setNilaiGdr(data.GDR || '0');
-          setNilaiBto(data.BTO || '0');
-          setNilaiNdr(data.NDR || '0');
-        } else {
-          setNilaiBor('0');
-          setNilaiAvlos('0');
-          setNilaiToi('0');
-          setNilaiGdr('0');
-          setNilaiBto('0');
-          setNilaiNdr('0');
-          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
-        }
-      } catch (jsonError) {
-        console.error('JSON Parse Error:', jsonError.message);
-        Alert.alert('Error', 'Invalid response from server.');
-      }
-    } catch (error) {
-      console.error('Fetch Error:', error.message);
-      Alert.alert(
-        'Error',
-        'Failed to fetch data. Please check your network connection.',
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    console.log('State nilai:', {bor, avlos, toi, bto, gdr, ndr});
-  }, [bor, avlos, toi, bto, gdr, ndr]);
-
-  const handleMonthChange = value => {
-    if (value) {
-      setSelectedMonth(value);
-      console.log('Bulan yang dipilih: ', value);
-      fetchStatsDataByMonth(value);
-    }
-  };
-
-  const fetchStatsDataByMonth = async month => {
-    try {
-      const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_monthly',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: new URLSearchParams({
-            month: month, // Parameter bulan
-            ruangan: 'Mujair A', // Parameter ruangan
-          }).toString(), // Mengonversi ke format key=value
-        },
-      );
-
-      const responseText = await response.text();
-      console.log('Response dari server:', responseText);
-
       // Jika respons adalah HTML, mungkin ada kesalahan pada server
       if (responseText.startsWith('<')) {
         console.error('Response mengandung HTML, ada masalah di server.');
@@ -286,17 +90,17 @@ const StatsMujairA = () => {
         result = JSON.parse(responseText);
         console.log('Parsed JSON:', result);
 
-        // Jika status sukses dan ada data, tampilkan data
+        // Jika tidak ada data atau status bukan 'success', set semua nilai menjadi 0
         if (result.status === 'success' && result.data) {
-          const data = result.data; // Mengambil data pertama jika ada
-          setNilaiBor(data.bor || '0');
-          setNilaiAvlos(data.avlos || '0');
-          setNilaiToi(data.toi || '0');
-          setNilaiGdr(data.gdr || '0');
-          setNilaiBto(data.bto || '0');
-          setNilaiNdr(data.ndr || '0');
+          const data = result.data;
+          setNilaiBor(data.BOR || '0');
+          setNilaiAvlos(data.AVLOS || '0');
+          setNilaiToi(data.TOI || '0');
+          setNilaiGdr(data.GDR || '0');
+          setNilaiBto(data.BTO || '0');
+          setNilaiNdr(data.NDR || '0');
         } else {
-          // Jika tidak ada data, set nilai default 0
+          // Jika tidak ada data atau gagal, set nilai default 0
           setNilaiBor('0');
           setNilaiAvlos('0');
           setNilaiToi('0');
@@ -320,15 +124,84 @@ const StatsMujairA = () => {
     }
   };
 
+  const handleMonthChange = value => {
+    if (value) {
+      setSelectedMonth(value);
+      console.log('Bulan yang dipilih: ', value);
+      fetchStatsDataByMonth(value);
+    }
+  };
+
+  const fetchStatsDataByMonth = async month => {
+      try {
+        const response = await fetch(
+          'https://samratindikator.online/borlostoi/public/insert/get_stats_data_monthly',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+              month: month, // Parameter bulan
+              ruangan: 'Mujair A', // Parameter ruangan
+            }).toString(), // Mengonversi ke format key=value
+          },
+        );
+  
+        const responseText = await response.text();
+        console.log('Response dari server:', responseText);
+  
+        // Jika respons adalah HTML, mungkin ada kesalahan pada server
+        if (responseText.startsWith('<')) {
+          console.error('Response mengandung HTML, ada masalah di server.');
+          Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+          return;
+        }
+  
+        let result;
+        try {
+          result = JSON.parse(responseText);
+          console.log('Parsed JSON:', result);
+  
+          // Jika status sukses dan ada data, tampilkan data
+          if (result.status === 'success' && result.data) {
+            const data = result.data; // Mengambil data pertama jika ada
+            setNilaiBor(data.bor || '0');
+            setNilaiAvlos(data.avlos || '0');
+            setNilaiToi(data.toi || '0');
+            setNilaiGdr(data.gdr || '0');
+            setNilaiBto(data.bto || '0');
+            setNilaiNdr(data.ndr || '0');
+          } else {
+            // Jika tidak ada data, set nilai default 0
+            setNilaiBor('0');
+            setNilaiAvlos('0');
+            setNilaiToi('0');
+            setNilaiGdr('0');
+            setNilaiBto('0');
+            setNilaiNdr('0');
+            Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+          }
+        } catch (jsonError) {
+          console.error('JSON Parse Error:', jsonError.message);
+          Alert.alert('Error', 'Invalid response from server.');
+        }
+      } catch (error) {
+        console.error('Fetch Error:', error.message);
+        Alert.alert(
+          'Error',
+          'Failed to fetch data. Please check your network connection.',
+        );
+      } finally {
+        setLoading(false); // Jangan lupa set loading false setelah request selesai
+      }
+    };
+
   return (
     <View style={styles.screenGuest}>
       {/* First DatePicker */}
       <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
-      {/* <DatePickerr onDateChange={handleStartDateChange} />
-      <DatePickerr
-        onDateChange={handleEndDateChange}
-        style={styles.datePickerStyle2}
-      /> */}
+
       {/* Filter Checkbox */}
       <View style={styles.groupParent}>
         <FilterCheckBox
@@ -337,17 +210,21 @@ const StatsMujairA = () => {
         />
       </View>
 
+      {/* Lihat Button */}
+      {/* <Pressable
+        style={[styles.okButton, styles.filterShadowBox]}
+        onPress={() => console.log('OK Button Pressed')}>
+        <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
+      </Pressable> */}
+
+      <Image
+        style={[styles.vectorIcon, styles.vectorIconPosition]}
+        resizeMode="cover"
+        source={require('../../../../assets/vector.png')}
+      />
+
       {/* Conditionally render second DatePicker based on checkbox */}
-      <DatePickerr
-        style={datePickerStyle2}
-        onDateChange={handleStartDateChange}
-        placeholder="Pilih Tanggal Mulai"
-      />
-      <DatePickerr
-        style={datePickerStyle3}
-        onDateChange={handleEndDateChange}
-        placeholder="Pilih Tanggal Akhir"
-      />
+      <DatePickerr style={datePickerStyle2} onDateChange={handleDateChange} />
 
       {/* Navigation Bar */}
       <View style={[styles.barAtas, styles.filterShadowBox]}>
@@ -408,7 +285,7 @@ const StatsMujairA = () => {
             <Text style={styles.buttonText}>HASIL</Text>
           </Pressable>
           <Pressable style={styles.buttonStandar}>
-            <Text style={styles.buttonText}>STANDAR</Text>
+            <Text style={styles.buttonText}>STANDAr</Text>
           </Pressable>
           <Pressable style={styles.buttonKet}>
             <Text style={styles.buttonText}>KET</Text>
@@ -419,48 +296,12 @@ const StatsMujairA = () => {
         <View style={styles.tableContainer}>
           {/* Rows */}
           {[
-            {
-              label: 'BOR :',
-              value: bor,
-              standard: '60-85%',
-              icon: 'green',
-              symbol: '%',
-            },
-            {
-              label: 'AVLOS :',
-              value: avlos,
-              standard: '6-9 Hari',
-              icon: 'green',
-              symbol: ' Hari',
-            },
-            {
-              label: 'TOI :',
-              value: toi,
-              standard: '1-3 Hari',
-              icon: 'red',
-              symbol: ' Hari',
-            },
-            {
-              label: 'BTO :',
-              value: bto,
-              standard: '40-50 Kali',
-              icon: 'green',
-              symbol: ' Kali',
-            },
-            {
-              label: 'GDR :',
-              value: gdr,
-              standard: '< 20 ‰',
-              icon: 'red',
-              symbol: ' ‰',
-            },
-            {
-              label: 'NDR :',
-              value: ndr,
-              standard: '< 45 ‰',
-              icon: 'red',
-              symbol: ' ‰',
-            },
+            {label: 'BOR :', value: bor, standard: '60-85%', icon: 'green', symbol: '%'},
+            {label: 'AVLOS :', value: avlos, standard: '6-9 Hari', icon: 'green', symbol: ' Hari'},
+            {label: 'TOI :', value: toi, standard: '1-3 Hari', icon: 'red', symbol: ' Hari'},
+            {label: 'BTO :', value: bto, standard: '40-50 Kali', icon: 'green', symbol: ' Kali'},
+            {label: 'GDR :', value: gdr, standard: '< 20 ‰', icon: 'red', symbol: ' ‰'},
+            {label: 'NDR :', value: ndr, standard: '< 45 ‰', icon: 'red', symbol: ' ‰'},
           ].map((row, index) => {
             // Logic to check if the value is within the standard range
             let icon = 'green'; // Default to green
@@ -494,13 +335,8 @@ const StatsMujairA = () => {
               <View key={index} style={styles.row}>
                 <Text style={styles.rowLabel}>{row.label}</Text>
                 <Text style={styles.rowStandard}>{row.standard}</Text>
-                <Text
-                  style={[
-                    styles.rowValue,
-                    {color: icon === 'red' ? 'red' : 'green'},
-                  ]}>
-                  {row.value}
-                  {row.symbol}
+                <Text style={[styles.rowValue, {color: icon === 'red' ? 'red' : 'green'}]}>
+                  {row.value}{row.symbol}
                 </Text>
                 <Image
                   style={styles.rowIcon}
