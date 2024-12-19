@@ -19,18 +19,17 @@ import {
 } from '../../../GlobalStyles';
 
 const ProfileScreenAdmin = ({navigation, route}) => {
-  const {user} = route.params; // Access user details from route parameters
-  const {username, role, ruangan, id_user, nama} = user; // Destructure user object
+  const {user} = route.params || {}; // Pastikan user tidak undefined
+  const {nama} = user || {nama: 'Guest'}; // Destructure user object
 
   const handleLogoutPress = () => {
-    if (route.params && route.params.resetLoginFields) {
+    if (route.params?.resetLoginFields) {
       route.params.resetLoginFields();
     }
     navigation.reset({
       index: 0,
       routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
     });
-
     alert("You've been logged out");
   };
   // const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -58,7 +57,7 @@ const ProfileScreenAdmin = ({navigation, route}) => {
         </TouchableOpacity>
         <Text style={styles.profileText}>Profile</Text>
         <Text style={styles.nameText}>{nama}</Text>
-        <Text style={styles.roleText}>Nurse</Text>
+        <Text style={styles.roleText}>Admin</Text>
       </View>
 
       {/* Centered Buttons */}

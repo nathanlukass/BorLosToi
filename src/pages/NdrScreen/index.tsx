@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View, Pressable} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  ScrollView,
+} from 'react-native';
 import {DatePickerr, FilterCheckBox} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
@@ -13,6 +20,10 @@ import {
 import moment, {months} from 'moment';
 import {Alert} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const NDR = () => {
   const [isFilterChecked, setIsFilterChecked] = useState(false);
@@ -28,11 +39,23 @@ const NDR = () => {
   const [bomboya, setNilaiBomboya] = useState('');
   const [karper, setNilaiKarper] = useState('');
   const [icu, setNilaiIcu] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
 
   const datePickerStyle1 = {
-    top: '35%',
+    top: '-10%',
+  };
+
+  const datePickerStyle2 = {
+    top: '-90%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+  };
+
+  const datePickerStyle3 = {
+    top: '-90%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -205,28 +228,121 @@ const NDR = () => {
     }
   };
 
+  const fetchStatsDataByRange = async (startDate, endDate) => {
+    if (!startDate || !endDate) {
+      Alert.alert('Error', 'Tanggal mulai dan akhir harus dipilih.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      console.log('Request Params:', {
+        start_date: startDate,
+        end_date: endDate,
+        indicator: 'NDR',
+      });
+
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_indicator_by_range',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            start_date: startDate,
+            end_date: endDate,
+            indicator: 'NDR',
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Raw Response:', responseText);
+
+      // Parse respons JSON
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        if (result.status === 'success') {
+          const data = result.indicator_stats || {};
+
+          // Update state dengan data yang diterima
+          setNilaiMujairA(data.Input_Mujair_A || '0');
+          setNilaiMujairB(data.Input_Mujair_B || '0');
+          setNilaiMujairC(data.Input_Mujair_C || '0');
+          setNilaiNike(data.Input_Nike || '0');
+          setNilaiPayangka(data.Input_Payangka || '0');
+          setNilaiNeonati(data.Input_Neonati || '0');
+          setNilaiBomboya(data.Input_Bomboya || '0');
+          setNilaiKarper(data.Input_Karper || '0');
+          setNilaiIcu(data.Input_Icu || '0');
+        } else {
+          console.log('No data found for the selected range.');
+          resetAllValues(); // Reset jika tidak ada data
+          Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
+        }
+      } catch (error) {
+        console.error('JSON Parsing Error:', error.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStartDateChange = date => {
+    console.log('Start Date:', date);
+
+    if (!date) {
+      console.error('Tanggal tidak valid:', date);
+      return;
+    }
+
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setStartDate(formattedDate);
+
+    if (endDate) {
+      console.log('Memanggil fetchStatsDataByRange dengan:', {
+        startDate: formattedDate,
+        endDate,
+      });
+      fetchStatsDataByRange(formattedDate, endDate);
+    }
+  };
+
+  const handleEndDateChange = date => {
+    console.log('End Date:', date);
+
+    if (!date) {
+      console.error('Tanggal tidak valid:', date);
+      return;
+    }
+
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setEndDate(formattedDate);
+
+    if (startDate) {
+      console.log('Memanggil fetchStatsDataByRange dengan:', {
+        startDate,
+        endDate: formattedDate,
+      });
+      fetchStatsDataByRange(startDate, formattedDate);
+    }
+  };
+
   return (
     <View style={styles.screenGuest}>
-      {/* First DatePicker */}
-      <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
-
-      {/* Filter Checkbox */}
-
-      {/* Lihat Button */}
-      {/* <Pressable
-        style={[styles.okButton, styles.filterShadowBox]}
-        onPress={() => console.log('OK Button Pressed')}>
-        <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
-      </Pressable> */}
-
-      <Image
-        style={[styles.vectorIcon, styles.vectorIconPosition]}
-        resizeMode="cover"
-        source={require('../../../assets/vector.png')}
-      />
-
-      {/* Conditionally render second DatePicker based on checkbox */}
-      {/* Navigation Bar */}
+      {/* Fixed Header */}
       <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
           style={styles.backButton}
@@ -239,493 +355,342 @@ const NDR = () => {
         </Pressable>
         <Text style={[styles.backToLogin, styles.vectorIconPosition]}>NDR</Text>
       </View>
-      <View style={styles.container1}>
-        <Text style={styles.label}>Pilih Bulan : </Text>
-        <RNPickerSelect
-          onValueChange={value => handleMonthChange(value)}
-          items={[
-            {label: 'January', value: '1'},
-            {label: 'February', value: '2'},
-            {label: 'March', value: '3'},
-            {label: 'April', value: '4'},
-            {label: 'May', value: '5'},
-            {label: 'June', value: '6'},
-            {label: 'July', value: '7'},
-            {label: 'August', value: '8'},
-            {label: 'September', value: '9'},
-            {label: 'October', value: '10'},
-            {label: 'November', value: '11'},
-            {label: 'December', value: '12'},
-          ]}
-          style={{
-            inputAndroid: {
-              color: 'white',
-              backgroundColor: '#1E9DEC',
-              top: -80,
-              alignItems: 'center',
-              borderRadius: 8, // Tambahkan border radius di sini
-              paddingVertical: 10, // Untuk memberikan jarak vertikal dalam
-              paddingHorizontal: 12, // Untuk jarak horizontal
-            },
-          }}
-          value={selectedMonth}
-          placeholder={{
-            label: 'Select a month...',
-            value: null,
-            color: 'red',
-          }}
-        />
-      </View>
 
-      <View style={styles.container}>
-        {/* Header Section */}
-        <View style={styles.headerContainer}>
-          <Pressable style={styles.buttonHasil}>
-            <Text style={styles.buttonText}>HASIL</Text>
-          </Pressable>
-          <Pressable style={styles.buttonStandar}>
-            <Text style={styles.buttonText}>STANDAR</Text>
-          </Pressable>
-          <Pressable style={styles.buttonKet}>
-            <Text style={styles.buttonText}>KET</Text>
-          </Pressable>
+      {/* Scrollable Content */}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* First DatePicker */}
+        <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
+
+        {/* Filter Checkbox */}
+        <View style={styles.groupParent}>
+          <FilterCheckBox
+            isChecked={isFilterChecked}
+            onChange={() => setIsFilterChecked(!isFilterChecked)}
+          />
         </View>
 
-        {/* Main Table */}
+        {/* Conditionally render second DatePicker based on checkbox */}
+        <DatePickerr
+          style={datePickerStyle2}
+          mode="date"
+          date={startDate ? new Date(startDate) : new Date()}
+          onDateChange={handleStartDateChange}
+        />
+        <DatePickerr
+          style={datePickerStyle3}
+          mode="date"
+          date={endDate ? new Date(endDate) : new Date()}
+          onDateChange={handleEndDateChange}
+        />
+
+        {/* Pilih Bulan */}
+        <View style={styles.container1}>
+          <Text style={styles.label}>Pilih Bulan :</Text>
+          <RNPickerSelect
+            onValueChange={value => handleMonthChange(value)}
+            items={[
+              {label: 'January', value: '1'},
+              {label: 'February', value: '2'},
+              {label: 'March', value: '3'},
+              {label: 'April', value: '4'},
+              {label: 'May', value: '5'},
+              {label: 'June', value: '6'},
+              {label: 'July', value: '7'},
+              {label: 'August', value: '8'},
+              {label: 'September', value: '9'},
+              {label: 'October', value: '10'},
+              {label: 'November', value: '11'},
+              {label: 'December', value: '12'},
+            ]}
+            style={{
+              inputAndroid: {
+                color: 'white',
+                backgroundColor: '#1E9DEC',
+                top: -80,
+                alignItems: 'center',
+                borderRadius: 8,
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+              },
+            }}
+            value={selectedMonth}
+            placeholder={{
+              label: 'Select a month...',
+              value: null,
+              color: 'red',
+            }}
+          />
+        </View>
+
+        {/* Tabel */}
         <View style={styles.tableContainer}>
-          {/* Rows */}
+          <View style={styles.headerContainer}>
+            <Pressable style={styles.buttonHasil}>
+              <Text style={styles.buttonText}>HASIL</Text>
+            </Pressable>
+            <Pressable style={styles.buttonStandar}>
+              <Text style={styles.buttonText}>STANDAR</Text>
+            </Pressable>
+            <Pressable style={styles.buttonKet}>
+              <Text style={styles.buttonText}>KET</Text>
+            </Pressable>
+          </View>
           {[
             {
               label: 'MUJAIR A :',
               value: mujairA,
-              standard: ' <45‰',
-              icon: 'green',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
             {
               label: 'MUJAIR B :',
               value: mujairB,
-              standard: ' <45‰',
-              icon: 'green',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
             {
               label: 'MUJAIR C :',
               value: mujairC,
-              standard: ' <45‰',
-              icon: 'red',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
             {
               label: 'NIKE :',
               value: nike,
-              standard: ' <45‰',
-              icon: 'green',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
             {
               label: 'PAYANGKA :',
               value: payangka,
-              standard: ' <45‰',
-              icon: 'red',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
             {
               label: 'NEONATI :',
               value: neonati,
-              standard: ' <45‰',
-              icon: 'red',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
             {
               label: 'BOMBOYA :',
               value: bomboya,
-              standard: ' <45‰',
-              icon: 'green',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
             {
               label: 'KARPER :',
               value: karper,
-              standard: ' <45‰',
-              icon: 'red',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
             {
               label: 'ICU :',
               value: icu,
-              standard: ' <45‰',
-              icon: 'red',
-              symbol: '‰',
+              standard: '<20‰',
+              symbol: ' ‰',
             },
-          ].map((row, index) => {
-            // Logic to check if the value is within the standard range (60-85%)
-            let icon = 'green'; // Default to green
-            const min = 60;
-            const max = 85;
-
-            if (parseFloat(row.value) < min || parseFloat(row.value) > max) {
-              icon = 'red'; // Out of range
-            }
-
-            return (
-              <View key={index} style={styles.row}>
-                <Text style={styles.rowLabel}>{row.label}</Text>
-                <Text style={styles.rowStandard}>{row.standard}</Text>
-                <Text
-                  style={[
-                    styles.rowValue,
-                    {color: icon === 'red' ? 'red' : 'green'},
-                  ]}>
-                  {row.value}
-                  {row.symbol}
-                </Text>
-                <Image
-                  style={styles.rowIcon}
-                  source={
-                    icon === 'red'
-                      ? require('../../../assets/red.png') // Path to red icon
-                      : require('../../../assets/green.png') // Path to green icon
-                  }
-                />
-              </View>
-            );
-          })}
-          <View style={styles.legendContainer}>
-            <View style={styles.legendItem}>
+          ].map((row, index) => (
+            <View style={styles.row} key={index}>
+              <Text style={styles.rowLabel}>{row.label}</Text>
+              <Text
+                style={[
+                  styles.rowValue,
+                  {
+                    color: parseFloat(row.value) <= 20 ? 'green' : 'red',
+                  },
+                ]}>
+                {row.value}
+                {row.symbol}
+              </Text>
+              <Text style={styles.rowStandard}>{row.standard}</Text>
               <Image
-                source={require('../../../assets/green.png')} // Green icon
-                style={styles.legendIcon}
+                style={styles.rowIcon}
+                source={
+                  parseFloat(row.value) <= 20
+                    ? require('../../../assets/green.png')
+                    : require('../../../assets/red.png')
+                }
               />
-              <Text style={styles.legendText}>Memenuhi standar</Text>
             </View>
-            <View style={styles.legendItem}>
-              <Image
-                source={require('../../../assets/red.png')} // Red icon
-                style={styles.legendIcon}
-              />
-              <Text style={styles.legendText}>Tidak memenuhi standar</Text>
-            </View>
+          ))}
+        </View>
+        <View style={styles.legendContainer}>
+          <View style={styles.legendItem}>
+            <Image
+              source={require('../../../assets/green.png')} // Green icon
+              style={styles.legendIcon}
+            />
+            <Text style={styles.legendText}>Memenuhi standar</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <Image
+              source={require('../../../assets/red.png')} // Red icon
+              style={styles.legendIcon}
+            />
+            <Text style={styles.legendText}>Tidak memenuhi standar</Text>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  legendContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'right',
-    marginTop: 0, // Jarak dari tabel
-    left: -15,
-  },
-  legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 16, // Jarak antar item
-  },
-  legendIcon: {
-    width: 25,
-    height: 25,
-    resizeMode: 'contain',
-    marginRight: 5, // Jarak ikon ke teks
-  },
-  legendText: {
-    fontSize: 14,
-    color: '#000000',
-    fontWeight: 'bold',
-  },
-  datePickerStyle: {
-    top: 20,
-  },
-  filterTypo: {
-    fontSize: FontSize.m3BodyLarge_size,
-    color: '#ffffff',
-  },
-  filterShadowBox: {
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    alignItems: 'center',
-    flexDirection: 'row',
-    position: 'absolute',
-  },
-  vectorIconPosition: {
-    zIndex: 1,
-    left: '58%',
-    position: 'absolute',
-    alignSelf: 'center',
-  },
-  groupIcon: {
-    width: 20,
-    height: 20,
-  },
-  groupParent: {
-    top: 190,
-    left: 31,
-    alignItems: 'center',
-    flexDirection: 'row',
-    position: 'absolute',
-  },
-  filter1: {
-    top: 8,
-    left: 20,
-    fontWeight: '500',
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.schemesOnPrimary,
-    zIndex: 1000,
-    position: 'absolute',
-  },
-  filter1Ruangan: {
-    top: 8,
-    left: 22,
-    fontWeight: '500',
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.schemesOnPrimary,
-    zIndex: 1000,
-    position: 'absolute',
-  },
-  vectorIcon: {
-    marginLeft: 19.5,
-    top: 10,
-    width: 15,
-    height: 15,
-  },
-  filter: {
-    top: 620,
-    left: 207,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowRadius: 7,
-    elevation: 7,
-    borderRadius: 20,
-    backgroundColor: Color.colorMediumaquamarine,
-    width: 180,
-    height: 40,
-    justifyContent: 'flex-end',
-    paddingLeft: Padding.p_xl,
-    paddingTop: Padding.p_3xs,
-    paddingRight: Padding.p_3xs,
-    paddingBottom: Padding.p_3xs,
-  },
-  filterRuangan: {
-    top: 670,
-    left: 207,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowRadius: 7,
-    elevation: 7,
-    borderRadius: 20,
-    backgroundColor: Color.colorMediumaquamarine,
-    width: 180,
-    height: 40,
-    justifyContent: 'flex-end',
-    paddingLeft: Padding.p_xl,
-    paddingTop: Padding.p_3xs,
-    paddingRight: Padding.p_3xs,
-    paddingBottom: Padding.p_3xs,
-  },
-
-  // New OK button styles
-  okButton: {
-    top: 250, // Position it above the other buttons
-    left: 282,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowRadius: 7,
-    elevation: 7,
-    borderRadius: 20,
-    backgroundColor: Color.colorMediumaquamarine,
-    width: 100,
-    height: 40,
-    justifyContent: 'flex-end',
-    paddingLeft: Padding.p_xl,
-    paddingTop: Padding.p_3xs,
-    paddingRight: Padding.p_3xs,
-    paddingBottom: Padding.p_3xs,
-  },
-  okButtonText: {
-    top: 8,
-    left: 30,
-    fontWeight: '500',
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.schemesOnPrimary,
-    zIndex: 1000,
-    position: 'absolute',
-  },
-
-  icon: {
-    height: '100%',
-    width: '100%',
-  },
-  backButton: {
-    width: 42,
-    height: 25,
-    zIndex: 0,
-  },
-  backToLogin: {
-    marginTop: -11.5,
-    marginLeft: -72,
-    top: '50%',
-    fontFamily: FontFamily.poppinsBold,
-    color: Color.notSoBlack,
-    textAlign: 'center',
-    fontSize: 16,
-    zIndex: 1,
-    left: '70%',
-    alignSelf: 'center',
-  },
-  barAtas: {
-    shadowRadius: 4,
-    elevation: 4,
-    borderRadius: Border.br_8xs,
-    width: 410,
-    height: 60,
-    justifyContent: 'space-between',
-    backgroundColor: Color.schemesOnPrimary,
-    alignSelf: 'center',
-  },
   screenGuest: {
     flex: 1,
-    height: 900,
-    backgroundColor: Color.schemesOnPrimary,
+    backgroundColor: '#FFFFFF',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    padding: wp('4%'), // Padding 4% dari lebar layar
   },
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    bottom: 350,
+    padding: wp('4%'),
   },
-  // Header Section
+  barAtas: {
+    height: hp('8%'), // 8% dari tinggi layar
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp('4%'),
+    backgroundColor: '#FFFFFF',
+    elevation: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  backButton: {
+    width: wp('10%'), // 10% dari lebar layar
+    height: hp('5%'), // 5% dari tinggi layar
+  },
+  icon: {
+    width: '110%',
+    height: '60%',
+    left: hp('-1%'),
+    top: hp('1.1'),
+  },
+  backToLogin: {
+    fontSize: wp('6%'), // Ukuran font 4% dari lebar layar
+    fontWeight: 'bold',
+    color: '#000000',
+    textAlign: 'center',
+    flex: 1,
+    left: hp('-2.1%'),
+  },
+  container1: {
+    padding: wp('20%'),
+    backgroundColor: '#FFFFFF',
+    marginBottom: hp('-15%'),
+  },
+  label: {
+    fontSize: wp('5%'), // Ukuran font 5% dari lebar layar
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: hp('10%'),
+    marginTop: hp('-15%'),
+  },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 16,
+    marginBottom: hp('2%'),
+    backgroundColor: '#F5F5F5',
+    padding: wp('2%'),
+    borderRadius: wp('2%'),
   },
   buttonHasil: {
     backgroundColor: '#2E7D32',
-    paddingVertical: 8,
-    paddingHorizontal: 11,
-    borderRadius: 8,
-    left: 93,
+    paddingVertical: hp('1%'),
+    paddingHorizontal: wp('2%'),
+    borderRadius: wp('2%'),
+    left: wp('25%'),
   },
   buttonStandar: {
     backgroundColor: '#2E7D32',
-    paddingVertical: 8,
-    paddingHorizontal: 11,
-    borderRadius: 8,
-    left: 55,
+    paddingVertical: hp('1%'),
+    paddingHorizontal: wp('2%'),
+    borderRadius: wp('2%'),
+    left: wp('16.5%'),
   },
   buttonKet: {
     backgroundColor: '#2E7D32',
-    paddingVertical: 8,
-    paddingHorizontal: 11,
-    borderRadius: 8,
-    left: 15,
+    paddingVertical: hp('1%'),
+    paddingHorizontal: wp('2%'),
+    borderRadius: wp('2%'),
+    left: wp('7%'),
   },
   buttonText: {
     color: '#FFFFFF',
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  // Table Section
   tableContainer: {
-    marginTop: 1,
+    marginTop: hp('-1%'),
+    marginLeft: wp('-4%'),
+  },
+  groupParent: {
+    marginTop: hp('6.5%'),
+    marginLeft: hp('3.7%'),
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
+    justifyContent: 'flex-start', // Align elements to the left
+    paddingVertical: hp('1%'),
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
   },
   rowLabel: {
-    flex: 1,
-    fontSize: 16,
+    flex: 2,
+    fontSize: wp('4%'),
     color: '#000000',
     fontWeight: 'bold',
-    left: 5,
-  },
-  rowStandard: {
-    flex: 1,
-    fontSize: 16,
-    color: '#000000',
-    textAlign: 'center',
-    left: 75,
+    left: wp('5%'),
   },
   rowValue: {
     flex: 1,
-    fontSize: 16,
-    color: 'black', // Warna hijau gelap untuk nilai
-    textAlign: 'center',
+    fontSize: wp('4%'),
     fontWeight: 'bold',
-    left: -139,
+    color: 'black',
+    textAlign: 'right', // Align text to the right within its space
+    right: wp('16%'),
+  },
+  rowStandard: {
+    flex: 1,
+    fontSize: wp('4%'),
+    color: '#000000',
+    textAlign: 'left', // Align text to the left
+    right: wp('5%'),
   },
   rowIcon: {
-    flex: 0.2,
-    width: 20,
-    height: 20,
+    flex: 0.5,
+    width: wp('5%'),
+    height: wp('5%'),
     resizeMode: 'contain',
-    left: -28,
+    right: wp('3%'),
   },
-  container1: {
-    flex: 1,
-    padding: 106,
-    backgroundColor: 'white',
-    top: -60,
+
+  legendContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    marginTop: hp('1%'),
+    paddingHorizontal: wp('4%'),
   },
-  label: {
-    fontSize: 21,
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  legendIcon: {
+    width: wp('5%'),
+    height: wp('5%'),
+    marginRight: wp('2%'),
+  },
+  legendText: {
+    fontSize: wp('3.5%'),
+    color: '#000000',
     fontWeight: 'bold',
-    top: -100,
-    alignSelf: 'center',
   },
-  ketShadowBox: {
-    padding: Padding.p_base,
-    justifyContent: 'center',
-    elevation: 8,
-    shadowRadius: 8,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-  },
-  standarBor: {
-    alignSelf: 'stretch',
-    fontSize: 15,
-    textAlign: 'center',
-    color: Color.notSoBlack,
-    fontFamily: FontFamily.poppinsBold,
-    fontWeight: '700',
-    height: 200,
-    top: 93,
-  },
-  standarbor: {
-    marginLeft: -163,
-    top: -105,
-    borderRadius: Border.br_3xs,
-    width: 326,
-    height: 44,
-    padding: Padding.p_base,
-    justifyContent: 'center',
-    elevation: 8,
-    shadowRadius: 8,
-    left: '50%',
-    backgroundColor: Color.schemesOnPrimary,
-  },
-  // inputAndroid: {
-  //   fontSize: 1,
-  //   paddingVertical: 12,
-  //   paddingHorizontal: 10,
-  //   borderWidth: 1,
-  //   borderColor: 'gray',
-  //   borderRadius: 20,
-  //   color: 'yellow',
-  //   paddingRight: 30, // untuk ikon dropdown
-  // },
 });
 
 export default NDR;
