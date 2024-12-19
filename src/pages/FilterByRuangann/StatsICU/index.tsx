@@ -11,7 +11,6 @@ import {
   Padding,
   Border,
 } from '../../../../GlobalStyles';
-import {Gap} from '../../../../src/components';
 import moment from 'moment';
 import {Alert} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
