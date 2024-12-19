@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {Image, StyleSheet, View, Text, Pressable, Modal} from 'react-native';
+import {Image, StyleSheet, Text, View, Pressable, Modal} from 'react-native';
 import WelcomeBar from '../../../components/WelcomeBar';
 import FrameComponent from '../../../components/FrameComponent';
 import {Gap} from '../../../src/components';
@@ -15,18 +15,30 @@ import {
   Border,
   Padding,
 } from '../../../GlobalStyles';
+import {Picker} from '@react-native-picker/picker'; // Correct import
 
 const HomeScreenNurse = ({route}) => {
   const {user} = route.params;
   const {username, role, ruangan, id_user, nama} = user; // Access all relevant fields
   console.log('Route params:', route.params);
 
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+
+  const currentYear = new Date().getFullYear();
+  const yearOptions = [currentYear, currentYear - 1, currentYear - 2];
+  const monthOptions = Array.from({length: 12}, (_, index) => index + 1);
+
+  const openLihatBORLOS = () => {
+    console.log('Navigating to Lihat BOR LOS with', {
+      selectedYear,
+      selectedMonth,
+    });
+    // Implement the logic to navigate or open the relevant screen
+  };
+
   const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
-
-  const openLihatBORLOS = useCallback(() => {
-    setLihatBORLOSVisible(true);
-  }, []);
 
   const closeLihatBORLOS = useCallback(() => {
     setLihatBORLOSVisible(false);
@@ -49,39 +61,33 @@ const HomeScreenNurse = ({route}) => {
           source={require('../../../assets/logo-app-4.png')}
         />
         <DashbordIsianHariIni />
-        <View style={[styles.lihatBorlostoi, styles.lihatLayout]}>
-        <View
+        {/* <View style={[styles.lihatBorlostoi, styles.lihatLayout]}>
+          <View
             style={[
               styles.lihatBorlostoiChild,
               styles.bottomNavigationShadowBox,
             ]}
-          /> 
-          <Pressable
-            style={styles.lihatBorLosContainer}
-            onPress={openLihatBORLOS}>
-            <Text style={styles.text}>
-              <Text style={styles.lihatBorLosContainer1}>
-                <Text style={styles.lihat}>
-                  <Text style={styles.lihat1}>Lihat</Text>
-                </Text>
-                <Text style={styles.borLosToiBtoGdrNdr}>
-                  <Text style={styles.lihat}>{'  '}</Text>
-                  <Text style={styles.borLosToi}>
-                    {'BOR LOS TOI BTO GDR & NDR'}
+          />
+          <View style={styles.container1}>
+            <Pressable
+              style={styles.lihatBorLosContainer}
+              onPress={openLihatBORLOS}>
+              <Text style={styles.text}>
+                <Text style={styles.lihatBorLosContainer1}>
+                  <Text style={styles.lihat}>
+                    <Text style={styles.lihat1}>Lihat</Text>
+                  </Text>
+                  <Text style={styles.borLosToiBtoGdrNdr}>
+                    <Text style={styles.lihat}>{'  '}</Text>
+                    <Text style={styles.borLosToi}>
+                      {'BOR LOS TOI BTO GDR & NDR'}
+                    </Text>
                   </Text>
                 </Text>
               </Text>
-            </Text>
-          </Pressable>
-        </View>
-        {/* <AndroidStatusBar
-          battery={require('../../../assets/battery1.png')}
-          androidStatusBarPosition="absolute"
-          androidStatusBarWidth="unset"
-          androidStatusBarTop={0}
-          androidStatusBarRight={0}
-          androidStatusBarLeft={0}
-        /> */}
+            </Pressable>
+          </View>
+        </View> */}
         <View
           style={[styles.bottomNavigation, styles.bottomNavigationShadowBox]}>
           <View style={[styles.homeParent, styles.parentFlexBox]}>
@@ -297,6 +303,61 @@ const styles = StyleSheet.create({
     top: 44,
     left: '50%',
     height: 166,
+  },
+container1: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  pickerContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#333',
+  },
+  picker: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingLeft: 10,
+  },
+  lihatBorLosContainer: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  text: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  lihatBorLosContainer1: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  lihat: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  borLosToiBtoGdrNdr: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  borLosToi: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  lihat1: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

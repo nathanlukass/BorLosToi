@@ -1,189 +1,293 @@
-import * as React from "react";
-import { StyleSheet, View, Text, Pressable, Modal, FlatList, TouchableOpacity, Image } from "react-native";
-import { Border, Color, FontFamily, FontSize } from "../../../GlobalStyles";
-import { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/core';
+import * as React from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Modal,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native';
+import {Border, Color, FontFamily, FontSize} from '../../../GlobalStyles';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {ParamListBase} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
+import RNFS from 'react-native-fs';
+import {Buffer} from 'buffer';
 
 const PrintOutScreen = () => {
-  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+  const navigation = useNavigation();
   const [selectedRoom, setSelectedRoom] = React.useState('Pilih Ruangan');
   const [selectedMonth, setSelectedMonth] = React.useState('Pilih Bulan');
   const [roomModalVisible, setRoomModalVisible] = React.useState(false);
   const [monthModalVisible, setMonthModalVisible] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const rooms = ['Mujair A', 'Mujair B', 'Mujair C', 'Nike', 'Payangka', 'Neonati', 'Bomboya', 'Karper', 'ICU'];
+  const rooms = [
+    'Mujair A',
+    'Mujair B',
+    'Mujair C',
+    'Nike',
+    'Payangka',
+    'Neonati',
+    'Bomboya',
+    'Karper',
+    'ICU',
+  ];
   const months = [
-    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
-    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
   ];
 
-  const renderItem = ({ item, onSelect }) => (
+  const FILE_NAME = 'laporan.pdf'; // Nama file saat diunduh
+  const API_URL =
+    'https://samratindikator.online/borlostoi/public/insert/export_table';
+
+  // Fungsi untuk merender item dalam modal
+  const renderItem = ({item, onSelect}) => (
     <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>
-      <Text>{item}</Text>
+      <Text style={styles.itemText}>{item}</Text>
     </TouchableOpacity>
   );
 
-  const handlePrint = () => {
-    if (selectedRoom !== 'Pilih Ruangan' && selectedMonth !== 'Pilih Bulan') {
-      alert(`Mencetak laporan untuk ${selectedRoom} bulan ${selectedMonth}`);
-    } else {
-      alert('Silakan pilih ruangan dan bulan terlebih dahulu.');
+  // Fungsi untuk merender modal secara dinamis
+  const renderModal = (isVisible, items, onSelect, setVisible) => (
+    <Modal
+      transparent
+      visible={isVisible}
+      onRequestClose={() => setVisible(false)}>
+      <TouchableOpacity
+        style={styles.modalBackground}
+        onPressOut={() => setVisible(false)}>
+        <View style={styles.modalContent}>
+          <FlatList
+            data={items}
+            keyExtractor={item => item}
+            renderItem={({item}) =>
+              renderItem({
+                item,
+                onSelect: value => {
+                  onSelect(value);
+                  setVisible(false);
+                },
+              })
+            }
+          />
+        </View>
+      </TouchableOpacity>
+    </Modal>
+  );
+
+  const monthMap = {
+    Januari: '01',
+    Februari: '02',
+    Maret: '03',
+    April: '04',
+    Mei: '05',
+    Juni: '06',
+    Juli: '07',
+    Agustus: '08',
+    September: '09',
+    Oktober: '10',
+    November: '11',
+    Desember: '12',
+  };
+
+  const handleDownload = async () => {
+    try {
+      if (selectedRoom === 'Pilih Ruangan' || selectedMonth === 'Pilih Bulan') {
+        Alert.alert(
+          'Error',
+          'Silakan pilih ruangan dan bulan terlebih dahulu.',
+        );
+        return;
+      }
+
+      const monthNumber = monthMap[selectedMonth]; // Ubah ke format MM
+      if (!monthNumber) {
+        throw new Error('Bulan tidak valid. Silakan periksa kembali.');
+      }
+
+      const formData = new URLSearchParams();
+      formData.append('ruangan', selectedRoom);
+      formData.append('month', monthNumber);
+
+      // Fetch data dari server
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: formData.toString(),
+      });
+
+      console.log('Response Status:', response.status);
+      console.log('Content-Type:', response.headers.get('Content-Type'));
+
+      // Validasi jika respons bukan PDF
+      if (response.headers.get('Content-Type') !== 'application/pdf') {
+        const responseText = await response.text();
+        console.log('Response Text:', responseText);
+        throw new Error(
+          'Server tidak mengembalikan file PDF. Cek parameter request.',
+        );
+      }
+
+      // Ambil file PDF
+      const arrayBuffer = await response.arrayBuffer();
+      const base64Data = Buffer.from(arrayBuffer).toString('base64');
+      const filePath = `${RNFS.DownloadDirectoryPath}/report_${selectedRoom}_${selectedMonth}.pdf`;
+
+      await RNFS.writeFile(filePath, base64Data, 'base64');
+      Alert.alert('Sukses', `File berhasil disimpan di:\n${filePath}`);
+    } catch (error) {
+      console.error('Error:', error.message);
+      Alert.alert('Error', error.message || 'Terjadi kesalahan.');
     }
   };
 
+  // const renderItem = ({item, onSelect}) => (
+  //   <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>
+  //     <Text style={styles.dropdownText}>{item}</Text>
+  //   </TouchableOpacity>
+  // );
+
   return (
-    <View style={styles.homeScreenAdmin}>
-      <View style={[styles.barAtas, styles.barAtasPosition]}>
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
         <Pressable
-          style={styles.iconArrowBack}
-          onPress={() => navigation.navigate('HomeScreenAdmin')}
-        >
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
           <Image
-            style={styles.icon}
             resizeMode="cover"
             source={require('../../../assets/-icon-arrow-back.png')}
           />
         </Pressable>
-        <Text style={[styles.inputHarian, styles.inputTypo]}>
-          Menu Print Out
-        </Text>
+        <Text style={styles.headerTitle}>Menu Print Out</Text>
       </View>
 
       {/* Dropdown Pilih Bulan */}
-      <Pressable style={styles.dropdownn} onPress={() => setMonthModalVisible(true)}>
-        <Text style={styles.poppinsText}>{selectedMonth}</Text>
+      <Pressable
+        style={styles.dropdown}
+        onPress={() => setMonthModalVisible(true)}>
+        <Text style={styles.dropdownText}>{selectedMonth}</Text>
       </Pressable>
 
       {/* Dropdown Pilih Ruangan */}
-      <Pressable style={styles.dropdown} onPress={() => setRoomModalVisible(true)}>
-        <Text style={styles.poppinsText}>{selectedRoom}</Text>
+      <Pressable
+        style={styles.dropdown}
+        onPress={() => setRoomModalVisible(true)}>
+        <Text style={styles.dropdownText}>{selectedRoom}</Text>
       </Pressable>
-
-      {/* Modal Pilih Bulan */}
-      <Modal
-        transparent={true}
-        visible={monthModalVisible}
-        onRequestClose={() => setMonthModalVisible(false)}
-      >
-        <TouchableOpacity
-          style={styles.modalBackground}
-          activeOpacity={1}
-          onPressOut={() => setMonthModalVisible(false)}
-        >
-          <View style={styles.modalContent}>
-            <FlatList
-              data={months}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => renderItem({ item, onSelect: (value) => {
-                setSelectedMonth(value);
-                setMonthModalVisible(false);
-              } })}
-            />
-          </View>
-        </TouchableOpacity>
-      </Modal>
+      {renderModal(
+        monthModalVisible,
+        months,
+        setSelectedMonth,
+        setMonthModalVisible,
+      )}
 
       {/* Modal Pilih Ruangan */}
-      <Modal
-        transparent={true}
-        visible={roomModalVisible}
-        onRequestClose={() => setRoomModalVisible(false)}
-      >
-        <TouchableOpacity
-          style={styles.modalBackground}
-          activeOpacity={1}
-          onPressOut={() => setRoomModalVisible(false)}
-        >
-          <View style={styles.modalContent}>
-            <FlatList
-              data={rooms}
-              keyExtractor={(item) => item}
-              renderItem={({ item }) => renderItem({ item, onSelect: (value) => {
-                setSelectedRoom(value);
-                setRoomModalVisible(false);
-              } })}
-            />
-          </View>
-        </TouchableOpacity>
-      </Modal>
+      {renderModal(
+        roomModalVisible,
+        rooms,
+        setSelectedRoom,
+        setRoomModalVisible,
+      )}
 
       {/* Tombol Print */}
-      <Pressable style={styles.printButton} onPress={handlePrint}>
-      <Text style={styles.printButtonText}>Print</Text>       
+      <Pressable
+        style={[styles.downloadButton, isLoading && styles.disabledButton]}
+        onPress={isLoading ? null : handleDownload}>
+        <Text style={styles.downloadButtonText}>
+          {isLoading ? 'Mengunduh...' : 'Unduh Laporan'}
+        </Text>
       </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  iconArrowBack: {
-    width: 42,
-    height: 25,
-    zIndex: 0,
-    marginStart: -15,
+  // container: {flex: 1, padding: 16, backgroundColor: '#fff'},
+  // header: {flexDirection: 'row', alignItems: 'center', marginBottom: 16},
+  // backButton: {marginRight: 16},
+  // icon: {width: 24, height: 24},
+  // headerTitle: {fontSize: 20, fontWeight: 'bold'},
+  // dropdown: {
+  //   padding: 12,
+  //   borderWidth: 1,
+  //   borderColor: '#ccc',
+  //   marginBottom: 16,
+  //   borderRadius: 8,
+  // },
+  // dropdownText: {fontSize: 16},
+  // modalBackground: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   backgroundColor: 'rgba(0,0,0,0.5)',
+  // },
+  // modalContent: {
+  //   backgroundColor: '#fff',
+  //   margin: 16,
+  //   borderRadius: 8,
+  //   padding: 16,
+  // },
+  // item: {padding: 12, borderBottomWidth: 1, borderBottomColor: '#ccc'},
+  // itemText: {fontSize: 16},
+  // downloadButton: {
+  //   padding: 16,
+  //   backgroundColor: '#007BFF',
+  //   borderRadius: 8,
+  //   alignItems: 'center',
+  // },
+  // disabledButton: {backgroundColor: '#aaa'},
+  // downloadButtonText: {color: '#fff', fontSize: 16, fontWeight: 'bold'},
+  container: {
+    flex: 1,
+    backgroundColor: Color.schemesOnPrimary,
+    padding: 20,
   },
-  icon: {
-    height: '100%',
-    width: '100%',
-  },
-  poppinsText: {
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: 14,
-    color: Color.notSoBlack,
-  },
-  inputTypo: {
-    fontFamily: FontFamily.poppinsBold,
-    fontWeight: '600',
-  },
-  inputHarian: {
-    marginTop: -11.5,
-    marginLeft: -56,
-    fontSize: FontSize.m3BodyLarge_size,
-    zIndex: 1,
-    position: 'absolute',
-    textAlign: 'left',
-    top: '50%',
-    left: '50%',
-    color: Color.notSoBlack,
-    fontFamily: FontFamily.poppinsBold, // Menggunakan Poppins Bold untuk header
-  },
-  barAtasPosition: {
-    borderRadius: Border.br_8xs,
-    alignSelf: 'center',
-    position: 'absolute',
-  },
-  barAtas: {
-    top: 24,
-    width: 360,
-    height: 45,
-    justifyContent: 'space-between',
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Color.schemesOnPrimary,
+    justifyContent: 'center',
+    paddingVertical: 10,
+    marginBottom: 50,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 1,
+  },
+  headerTitle: {
+    fontSize: FontSize.size_xl,
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    textAlign: 'center',
   },
   dropdown: {
-    height: 40,
-    marginTop: 3,
-    marginHorizontal: 30,
-    marginVertical: 15,
-    paddingHorizontal: 10,
+    height: 50,
     justifyContent: 'center',
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderColor: Color.notSoBlack,
     borderRadius: 8,
-    backgroundColor: Color.schemesOnPrimary,
+    marginBottom: 20,
+    paddingHorizontal: 15,
+    backgroundColor: '#FFF',
   },
-  dropdownn: {
-    height: 40,
-    marginTop: 100,
-    marginHorizontal: 30,
-    marginVertical: 15,
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: Color.notSoBlack,
-    borderRadius: 8,
-    backgroundColor: Color.schemesOnPrimary,
+  dropdownText: {
+    fontSize: FontSize.m3BodyLarge_size,
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
   },
   modalBackground: {
     flex: 1,
@@ -193,32 +297,26 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: 300,
-    maxHeight: 400,
-    backgroundColor: Color.schemesOnPrimary,
+    backgroundColor: '#fff',
+    borderRadius: 8,
     padding: 20,
-    borderRadius: 10,
   },
   item: {
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
-  homeScreenAdmin: {
-    flex: 1,
-    backgroundColor: Color.schemesOnPrimary,
-  },
-  printButton: {
-    marginTop: 20,
-    alignSelf: 'center',
+  downloadButton: {
     backgroundColor: Color.colorMediumaquamarine,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
   },
-  printButtonText: {
-    fontFamily: FontFamily.poppinsRegular,
+  downloadButtonText: {
     fontSize: FontSize.m3BodyLarge_size,
-    color: 'white', // Ubah warna teks menjadi putih
+    fontFamily: FontFamily.poppinsBold,
+    color: '#fff',
   },
 });
 

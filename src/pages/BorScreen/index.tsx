@@ -1,22 +1,353 @@
-import * as React from 'react';
-import {StyleSheet, View, Image, Text, Pressable,TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  ScrollView,
+} from 'react-native';
+import {DatePickerr, FilterCheckBox} from '../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {
+  FontSize,
   FontFamily,
   Color,
-  FontSize,
   Padding,
   Border,
-  Gap,
 } from '../../../GlobalStyles';
+import moment, {months} from 'moment';
+import {Alert} from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+import {useEffect} from 'react';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const BOR = () => {
+  const [isFilterChecked, setIsFilterChecked] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [statsData, setStatsData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [mujairA, setNilaiMujairA] = useState('');
+  const [mujairB, setNilaiMujairB] = useState('');
+  const [mujairC, setNilaiMujairC] = useState('');
+  const [nike, setNilaiNike] = useState('');
+  const [payangka, setNilaiPayangka] = useState('');
+  const [neonati, setNilaiNeonati] = useState('');
+  const [bomboya, setNilaiBomboya] = useState('');
+  const [karper, setNilaiKarper] = useState('');
+  const [icu, setNilaiIcu] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
+
+  const datePickerStyle1 = {
+    top: '-10%',
+  };
+
+  const datePickerStyle2 = {
+    top: '-90%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+  };
+
+  const datePickerStyle3 = {
+    top: '-90%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+  };
+
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
+  const handleDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
+    console.log('Selected Date: ', formattedDate);
+    fetchStatsData(formattedDate);
+  };
+
+  const fetchStatsData = async date => {
+    if (!date) {
+      console.error('Tanggal belum dipilih');
+      return;
+    }
+
+    // setLoading(true);
+    // console.log('Mengirim request dengan data:', {
+    //   date: date,
+    //   ruangan: 'Mujair A',
+    // });
+
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_by_indicator',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            tanggal: date,
+            indicator: 'AVLOS',
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
+
+      // Jika respons adalah HTML, mungkin ada kesalahan pada server
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
+      }
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        // Jika tidak ada data atau status bukan 'success', set semua nilai menjadi 0
+        if (result.status === 'success' && result.data) {
+          const data = result.data;
+          setNilaiMujairA(data.Stats_Mujair_A || '0');
+          setNilaiMujairB(data.Stats_Mujair_B || '0');
+          setNilaiMujairC(data.Stats_Mujair_C || '0');
+          setNilaiNike(data.Stats_Nike || '0');
+          setNilaiPayangka(data.Stats_Payangka || '0');
+          setNilaiNeonati(data.Stats_Neonati || '0');
+          setNilaiBomboya(data.Stats_Bomboya || '0');
+          setNilaiKarper(data.Stats_Karper || '0');
+          setNilaiIcu(data.Stats_Icu || '0');
+        } else {
+          // Jika tidak ada data, set nilai default 0
+          setNilaiMujairA('0');
+          setNilaiMujairB('0');
+          setNilaiMujairC('0');
+          setNilaiNike('0');
+          setNilaiPayangka('0');
+          setNilaiNeonati('0');
+          setNilaiBomboya('0');
+          setNilaiKarper('0');
+          setNilaiIcu('0');
+          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false); // Jangan lupa set loading false setelah request selesai
+    }
+  };
+
+  const handleMonthChange = value => {
+    if (value) {
+      setSelectedMonth(value);
+      console.log('Bulan yang dipilih: ', value);
+      fetchStatsDataByMonth(value);
+    }
+  };
+
+  const fetchStatsDataByMonth = async month => {
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_monthly_stats_by_indicator',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            month: month, // Parameter bulan
+            indicator: 'BOR', // Parameter ruangan
+          }).toString(), // Mengonversi ke format key=value
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
+
+      // Jika respons adalah HTML, mungkin ada kesalahan pada server
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
+      }
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        // Jika status sukses dan ada data, tampilkan data
+        if (result.status === 'success' && result.data) {
+          const data = result.data; // Mengambil data pertama jika ada
+          setNilaiMujairA(data.Mujair_A || '0');
+          setNilaiMujairB(data.Mujair_B || '0');
+          setNilaiMujairC(data.Mujair_C || '0');
+          setNilaiNike(data.Nike || '0');
+          setNilaiPayangka(data.Payangka || '0');
+          setNilaiNeonati(data.Neonati || '0');
+          setNilaiBomboya(data.Bomboya || '0');
+          setNilaiKarper(data.Karper || '0');
+          setNilaiIcu(data.Icu || '0');
+        } else {
+          // Jika tidak ada data, set nilai default 0
+          setNilaiMujairA('0');
+          setNilaiMujairB('0');
+          setNilaiMujairC('0');
+          setNilaiNike('0');
+          setNilaiPayangka('0');
+          setNilaiNeonati('0');
+          setNilaiBomboya('0');
+          setNilaiKarper('0');
+          setNilaiIcu('0');
+          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false); // Jangan lupa set loading false setelah request selesai
+    }
+  };
+
+  const fetchStatsDataByRange = async (startDate, endDate) => {
+    if (!startDate || !endDate) {
+      Alert.alert('Error', 'Tanggal mulai dan akhir harus dipilih.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      console.log('Request Params:', {
+        start_date: startDate,
+        end_date: endDate,
+        indicator: 'BOR',
+      });
+
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_indicator_by_range',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            start_date: startDate,
+            end_date: endDate,
+            indicator: 'AVLOS',
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Raw Response:', responseText);
+
+      // Parse respons JSON
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        if (result.status === 'success') {
+          const data = result.indicator_stats || {};
+
+          // Update state dengan data yang diterima
+          setNilaiMujairA(data.Input_Mujair_A || '0');
+          setNilaiMujairB(data.Input_Mujair_B || '0');
+          setNilaiMujairC(data.Input_Mujair_C || '0');
+          setNilaiNike(data.Input_Nike || '0');
+          setNilaiPayangka(data.Input_Payangka || '0');
+          setNilaiNeonati(data.Input_Neonati || '0');
+          setNilaiBomboya(data.Input_Bomboya || '0');
+          setNilaiKarper(data.Input_Karper || '0');
+          setNilaiIcu(data.Input_Icu || '0');
+        } else {
+          console.log('No data found for the selected range.');
+          resetAllValues(); // Reset jika tidak ada data
+          Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
+        }
+      } catch (error) {
+        console.error('JSON Parsing Error:', error.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fungsi Reset Nilai
+
+  // Handler Perubahan Tanggal
+  const handleStartDateChange = date => {
+    console.log('Start Date:', date);
+
+    if (!date) {
+      console.error('Tanggal tidak valid:', date);
+      return;
+    }
+
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setStartDate(formattedDate);
+
+    if (endDate) {
+      console.log('Memanggil fetchStatsDataByRange dengan:', {
+        startDate: formattedDate,
+        endDate,
+      });
+      fetchStatsDataByRange(formattedDate, endDate);
+    }
+  };
+
+  const handleEndDateChange = date => {
+    console.log('End Date:', date);
+
+    if (!date) {
+      console.error('Tanggal tidak valid:', date);
+      return;
+    }
+
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setEndDate(formattedDate);
+
+    if (startDate) {
+      console.log('Memanggil fetchStatsDataByRange dengan:', {
+        startDate,
+        endDate: formattedDate,
+      });
+      fetchStatsDataByRange(startDate, formattedDate);
+    }
+  };
+
   return (
-    <View style={styles.bor}>
-      <View style={styles.barAtas}>
+    <View style={styles.screenGuest}>
+      {/* Fixed Header */}
+      <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
           style={styles.backButton}
           onPress={() => navigation.navigate('BORAVLOSTOIBTONDRGDR')}>
@@ -26,566 +357,345 @@ const BOR = () => {
             source={require('../../../assets/-icon-arrow-back.png')}
           />
         </Pressable>
-        <Text style={styles.bor1}>BOR</Text>
+        <Text style={[styles.backToLogin, styles.vectorIconPosition]}>BOR</Text>
       </View>
-      <View style={[styles.stats, styles.statsPosition]}>
-        <View style={[styles.statsChild, styles.backgroundPosition]} />
-        <Text style={[styles.text1, styles.textTypo3]}>{`0
-0
-0
-0
-0
-0
-0
-0
-0`}</Text>
-        <Text style={[styles.text2, styles.textTypo1]}>{`:
-:
-:
-:
-:
-:
-:
-:
-:`}</Text>
-        
-        <Text style={[styles.mujairAMujair, styles.mujairTypo1]}>{`MUJAIR A
-MUJAIR B
-MUJAIR C
-NIKE
-PAYANGKA
-NEONATI
-BOMBOYA
-KARPER
-ICU`}</Text>
-        <View style={[styles.ket, styles.ketPosition1]}>
-          <Text style={[styles.ket1, styles.ket1Typo]}>KET</Text>
-        </View>
-        <View style={[styles.hasil, styles.hasilPosition]}>
-          <Text style={[styles.hasil1, styles.ket1Typo]}>HASIL</Text>
-        </View>
-        <View style={[styles.upArrow1Parent, styles.arrow1Position]}>
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/down-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
-          />
-          <Image
-            style={styles.upArrow1Icon}
-            resizeMode="cover"
-            source={require('../../../assets/up-arrow11.png')}
+
+      {/* Scrollable Content */}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* First DatePicker */}
+        <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
+
+        {/* Filter Checkbox */}
+        <View style={styles.groupParent}>
+          <FilterCheckBox
+            isChecked={isFilterChecked}
+            onChange={() => setIsFilterChecked(!isFilterChecked)}
           />
         </View>
 
-      </View>
-      <View style={[styles.standarBor, styles.ketShadowBox]}>
-        <Text style={styles.standarbor}>STANDAR BOR : 60 - 85%</Text>
-      </View>
-      <TouchableOpacity
-      style={styles.buttonKet}>
-      <Text style={styles.buttonKetText}>KET</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-      style={styles.buttonHasil}>
-      <Text style={styles.buttonHasilText}>HASIL</Text>
-      </TouchableOpacity>
-    
+        {/* Conditionally render second DatePicker based on checkbox */}
+        <DatePickerr
+          style={datePickerStyle2}
+          mode="date"
+          date={startDate ? new Date(startDate) : new Date()}
+          onDateChange={handleStartDateChange}
+        />
+        <DatePickerr
+          style={datePickerStyle3}
+          mode="date"
+          date={endDate ? new Date(endDate) : new Date()}
+          onDateChange={handleEndDateChange}
+        />
+
+        {/* Pilih Bulan */}
+        <View style={styles.container1}>
+          <Text style={styles.label}>Pilih Bulan :</Text>
+          <RNPickerSelect
+            onValueChange={value => handleMonthChange(value)}
+            items={[
+              {label: 'January', value: '1'},
+              {label: 'February', value: '2'},
+              {label: 'March', value: '3'},
+              {label: 'April', value: '4'},
+              {label: 'May', value: '5'},
+              {label: 'June', value: '6'},
+              {label: 'July', value: '7'},
+              {label: 'August', value: '8'},
+              {label: 'September', value: '9'},
+              {label: 'October', value: '10'},
+              {label: 'November', value: '11'},
+              {label: 'December', value: '12'},
+            ]}
+            style={{
+              inputAndroid: {
+                color: 'white',
+                backgroundColor: '#1E9DEC',
+                top: -80,
+                alignItems: 'center',
+                borderRadius: 8,
+                paddingVertical: 10,
+                paddingHorizontal: 15,
+              },
+            }}
+            value={selectedMonth}
+            placeholder={{
+              label: 'Select a month...',
+              value: null,
+              color: 'gray',
+            }}
+          />
+        </View>
+
+        {/* Tabel */}
+        <View style={styles.tableContainer}>
+          <View style={styles.headerContainer}>
+            <Pressable style={styles.buttonHasil}>
+              <Text style={styles.buttonText}>HASIL</Text>
+            </Pressable>
+            <Pressable style={styles.buttonStandar}>
+              <Text style={styles.buttonText}>STANDAR</Text>
+            </Pressable>
+            <Pressable style={styles.buttonKet}>
+              <Text style={styles.buttonText}>KET</Text>
+            </Pressable>
+          </View>
+          {[
+            {
+              label: 'MUJAIR A :',
+              value: mujairA,
+              standard: '60-85%',
+              symbol: '%',
+            },
+            {
+              label: 'MUJAIR B :',
+              value: mujairB,
+              standard: '60-85%',
+              symbol: '%',
+            },
+            {
+              label: 'MUJAIR C :',
+              value: mujairC,
+              standard: '60-85%',
+              symbol: '%',
+            },
+            {
+              label: 'NIKE :',
+              value: nike,
+              standard: '60-85%',
+              symbol: '%',
+            },
+            {
+              label: 'PAYANGKA :',
+              value: payangka,
+              standard: '60-85%',
+              symbol: '%',
+            },
+            {
+              label: 'NEONATI :',
+              value: neonati,
+              standard: '60-85%',
+              symbol: '%',
+            },
+            {
+              label: 'BOMBOYA :',
+              value: bomboya,
+              standard: '60-85%',
+              symbol: '%',
+            },
+            {
+              label: 'KARPER :',
+              value: karper,
+              standard: '60-85%',
+              symbol: '%',
+            },
+            {
+              label: 'ICU :',
+              value: icu,
+              standard: '60-85%',
+              symbol: '%',
+            },
+          ].map((row, index) => (
+            <View style={styles.row} key={index}>
+              <Text style={styles.rowLabel}>{row.label}</Text>
+              <Text
+                style={[
+                  styles.rowValue,
+                  {
+                    color:
+                      parseFloat(row.value) >= 60 && parseFloat(row.value) <= 85
+                        ? 'green'
+                        : 'red',
+                  },
+                ]}>
+                {row.value}
+                {row.symbol}
+              </Text>
+              <Text style={styles.rowStandard}>{row.standard}</Text>
+              <Image
+                style={styles.rowIcon}
+                source={
+                  parseFloat(row.value) >= 6 && parseFloat(row.value) <= 9
+                    ? require('../../../assets/green.png')
+                    : require('../../../assets/red.png')
+                }
+              />
+            </View>
+          ))}
+        </View>
+        <View style={styles.legendContainer}>
+          <View style={styles.legendItem}>
+            <Image
+              source={require('../../../assets/green.png')} // Green icon
+              style={styles.legendIcon}
+            />
+            <Text style={styles.legendText}>Memenuhi standar</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <Image
+              source={require('../../../assets/red.png')} // Red icon
+              style={styles.legendIcon}
+            />
+            <Text style={styles.legendText}>Tidak memenuhi standar</Text>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  backgroundPosition: {
-    left: '0%',
-    bottom: '0%',
-    position: 'absolute',
+  screenGuest: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
   },
-  buttonKet: {
-    left: 280,
-    top: 180,
-    position: 'absolute',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    width: 60,
-    height: 30,
+  scrollContainer: {
+    flexGrow: 1,
+    padding: wp('4%'), // Padding 4% dari lebar layar
   },
-  buttonKetText:{
-    // left: 15,
-    alignSelf: 'center',
-    top: 7,
-    color: 'white',
-  },
-  buttonStandar: {
-    left: 185,
-    top: 27,
-    position: 'absolute',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    width: 80,
-    height: 30,
-  },
-  buttonStandarText:{
-    // left: 15,
-    alignSelf: 'center',
-    top: 7,
-    color: 'white',
-  },
-  buttonHasil: {
-    left: 190,
-    top: 180,
-    position: 'absolute',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    width: 60,
-    height: 30,
-  },
-  buttonHasilText:{
-    // left: 15,
-    alignSelf: 'center',
-    top: 7,
-    color: 'white',
-  },
-  ketShadowBox: {
-    padding: Padding.p_base,
-    justifyContent: 'center',
-    elevation: 8,
-    shadowRadius: 8,
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-  },
-  standarbor: {
-    alignSelf: 'stretch',
-    fontSize: 15,
-    textAlign: 'center',
-    color: Color.notSoBlack,
-    fontFamily: FontFamily.poppinsBold,
-    fontWeight: '700',
-    height: 200,
-    top: 93,
-  },
-  standarBor: {
-    marginLeft: -163,
-    top: 98,
-    borderRadius: Border.br_3xs,
-    width: 326,
-    height: 44,
-    padding: Padding.p_base,
-    justifyContent: 'center',
-    elevation: 8,
-    shadowRadius: 8,
-    left: '50%',
-    backgroundColor: Color.schemesOnPrimary,
-  },
-  statsPosition: {
-    left: '14.44%',
-    right: '14.42%',
-    top: '19.88%',
-    width: '71.14%',
-    position: 'absolute',
-  },
-  textTypo3: {
-    fontFamily: FontFamily.poppinsRegular,
-    left: '55%',
-    width: '7.81%',
-    textAlign: 'center',
-  },
-  textTypo1: {
-    fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-  },
-  textTypo: {
-    width: '1.95%',
-    fontFamily: FontFamily.poppinsMedium,
-    left: '31.63%',
-    color: Color.colorBlack,
-    textAlign: 'left',
-    fontWeight: '500',
-    fontSize: FontSize.m3LabelLarge_size,
-    position: 'absolute',
-  },
-  mujairTypo1: {
-    fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
-  },
-  // ketPosition1: {
-  //   padding: Padding.p_base,
-  //   justifyContent: 'center',
-  //   backgroundColor: Color.colorMediumaquamarine,
-  //   borderTopRightRadius: Border.br_3xs,
-  //   borderTopLeftRadius: Border.br_3xs,
-  //   elevation: 8,
-  //   shadowRadius: 8,
-  //   bottom: '93.33%',
-  //   width: '20.73%',
-  //   height: '6.67%',
-  //   alignItems: 'center',
-  //   shadowOpacity: 1,
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 4,
-  //   },
-  //   shadowColor: 'rgba(0, 0, 0, 0.25)',
-  //   flexDirection: 'row',
-  //   top: '0%',
-  //   position: 'absolute',
-  // },
-  ket1Typo: {
-    color: Color.schemesOnPrimary,
-    fontSize: FontSize.m3BodySmall_size,
-    textAlign: 'left',
-  },
-  hasilPosition: {
-    left: '38.66%',
-    right: '40.61%',
-  },
-  arrow1Position: {
-    gap: Gap.gap_xl,
-    left: 224,
-    width: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    lineHeight: 30,
-    
-  },
-  textPosition: {
-    top: '9.43%',
-    height: '57.57%',
-    fontSize: FontSize.m3LabelLarge_size,
-    position: 'absolute',
-  },
-  mujairTypo: {
-    top: '9.4%',
-    height: '90.6%',
-    fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
-    width: '30.85%',
-    textAlign: 'left',
-    fontSize: FontSize.m3LabelLarge_size,
-    left: '0%',
-    position: 'absolute',
-  },
-  ketPosition: {
-    bottom: '92.87%',
-    height: '7.13%',
-    padding: Padding.p_base,
-    justifyContent: 'center',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    elevation: 8,
-    shadowRadius: 8,
-    width: '20.73%',
-    alignItems: 'center',
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    flexDirection: 'row',
-    top: '0%',
-    position: 'absolute',
-  },
-  ket6Position: {
-    backgroundColor: Color.colorMediumseagreen,
-    bottom: '92.87%',
-    height: '7.13%',
-    padding: Padding.p_base,
-    justifyContent: 'center',
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    elevation: 8,
-    shadowRadius: 8,
-    width: '20.73%',
-    alignItems: 'center',
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    flexDirection: 'row',
-    top: '0%',
-    position: 'absolute',
-  },
-  background: {
-    backgroundColor: Color.colorsBackgroundsLight,
-    right: '0%',
-    top: '0%',
-    left: '0%',
-    bottom: '0%',
-    height: '100%',
-    width: '100%',
-  },
-  cellularIcon: {
-    width: 18,
-    height: 12,
-  },
-  wifiIcon: {
-    width: 16,
-    height: 12,
-  },
-  batteryIcon: {
-    width: 24,
-    height: 12,
-  },
-  icons: {
-    height: '50%',
-    width: '19.44%',
-    top: '25%',
-    right: '3.33%',
-    bottom: '25%',
-    left: '77.22%',
-    gap: Gap.gap_3xs,
-    flexDirection: 'row',
-    position: 'absolute',
-  },
-  text: {
-    top: '16.67%',
-    left: '3.33%',
-    fontFamily: FontFamily.m3LabelLarge,
-    color: Color.wireframesColorsTextLegibilityHighEmphasis,
-    textAlign: 'left',
-    fontWeight: '500',
-    fontSize: FontSize.m3LabelLarge_size,
-    position: 'absolute',
-  },
-  androidStatusBar: {
-    top: 0,
-    right: 0,
-    height: 24,
-    left: 0,
-    position: 'absolute',
-  },
-  icon: {
-    height: '100%',
-    width: '100%',
-  },
-  backButton: {
-    width: 42,
-    height: 25,
-    zIndex: 0,
-  },
-  bor1: {
-    marginTop: -11.5,
-    marginLeft: -17,
-    top: '50%',
-    left: '50%',
-    fontSize: FontSize.m3BodyLarge_size,
-    fontWeight: '700',
-    fontFamily: FontFamily.poppinsBold,
-    zIndex: 1,
-    textAlign: 'center',
-    color: Color.notSoBlack,
-    position: 'absolute',
+  container: {
+    flex: 1,
+    padding: wp('4%'),
   },
   barAtas: {
-    top: 24,
-    shadowRadius: 4,
-    elevation: 4,
-    borderRadius: Border.br_8xs,
-    width: 360,
-    height: 45,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    shadowOpacity: 1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    flexDirection: 'row',
-    left: 0,
-    position: 'absolute',
-    backgroundColor: Color.schemesOnPrimary,
-  },
-  statsChild: {
-    height: '97.31%',
-    width: '92.54%',
-    top: '2.69%',
-    right: '7.46%',
-    borderRadius: Border.br_3xs,
-    left: '0%',
-    bottom: '0%',
-    backgroundColor: Color.schemesOnPrimary,
-  },
-  text1: {
-    color: Color.colorBlack,
-    top: '10.5%',
-    height: '300%',
-    fontSize: FontSize.m3LabelLarge_size,
-    position: 'absolute',
-    lineHeight: 64,
-  },
-  text2: {
-    left: '31.63%',
-    width: '1.8%',
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.colorBlack,
-    textAlign: 'left',
-    top: '10.5%',
-    height: '300%',
-    fontSize: FontSize.m3LabelLarge_size,
-    position: 'absolute',
-    lineHeight: 64,
-  },
-  text3: {
-    height: '24.69%',
-    top: '68.61%',
-  },
-  mujairAMujair: {
-    height: '300%',
-    top: '11%',
-    width: '30.85%',
-    fontWeight: '600',
-    color: Color.colorBlack,
-    textAlign: 'left',
-    fontSize: FontSize.m3LabelLarge_size,
-    left: '0%',
-    position: 'absolute',
-    lineHeight: 64,
-  },
-  ket1: {
-    fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-  },
-  ket: {
-    left: '79.27%',
-    right: '0%',
-  },
-  hasil1: {
-    fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
-  },
-  upArrow1Icon: {
-    height: 20,
-    width: 20,
-    top: 20,
-    marginBottom: 10,
-    left: 20
-  },
-  upArrow1Parent: {
-    top: 40,
-    lineHeight: 30,
-    
-  },
-  upArrow1Group: {
-    top: 281,
-    lineHeight: 30,
-  },
-  stats: {
-    height: '51.13%',
-    bottom: '29%',
-  },
-  text4: {
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    left: '45.29%',
-    width: '7.81%',
-    textAlign: 'center',
-  },
-  text5: {
-    fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-    left: '31.63%',
-    width: '1.8%',
-    color: Color.colorBlack,
-    textAlign: 'left',
-  },
-  text6: {
-    height: '26.37%',
-    top: '73.26%',
-  },
-  mujairAMujair1: {
-    color: Color.colorBlack,
-  },
-  ket2: {
-    left: '79.27%',
-    right: '0%',
-  },
-  hasil2: {
-    left: '38.66%',
-    right: '40.61%',
-  },
-  stats1: {
-    height: '47.88%',
-    bottom: '32.25%',
-  },
-  ket4: {
-    left: '79.27%',
-    right: '0%',
-  },
-  hasil4: {
-    left: '38.66%',
-    right: '40.61%',
-  },
-  text10: {
-    fontFamily: FontFamily.poppinsRegular,
-    left: '45.29%',
-    width: '7.81%',
-    textAlign: 'center',
-    color: Color.notSoBlack,
-  },
-  mujairAMujair3: {
-    color: Color.notSoBlack,
-  },
-  ket6: {
-    left: '79.27%',
-    right: '0%',
-  },
-  hasil6: {
-    left: '38.66%',
-    right: '40.61%',
-  },
-  bor: {
-    borderRadius: Border.br_xl,
-    flex: 1,
-    height: 800,
-    overflow: 'hidden',
+    height: hp('8%'), // 8% dari tinggi layar
     width: '100%',
-    backgroundColor: Color.schemesOnPrimary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp('4%'),
+    backgroundColor: '#FFFFFF',
+    elevation: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  backButton: {
+    width: wp('10%'), // 10% dari lebar layar
+    height: hp('5%'), // 5% dari tinggi layar
+  },
+  icon: {
+    width: '110%',
+    height: '60%',
+    left: hp('-1%'),
+    top: hp('1.1'),
+  },
+  backToLogin: {
+    fontSize: wp('6%'), // Ukuran font 4% dari lebar layar
+    fontWeight: 'bold',
+    color: '#000000',
+    textAlign: 'center',
+    flex: 1,
+    left: hp('-2.1%'),
+  },
+  container1: {
+    padding: wp('20%'),
+    backgroundColor: '#FFFFFF',
+    marginBottom: hp('-15%'),
+  },
+  label: {
+    fontSize: wp('5%'), // Ukuran font 5% dari lebar layar
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: hp('10%'),
+    marginTop: hp('-15%'),
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: hp('2%'),
+    backgroundColor: '#F5F5F5',
+    padding: wp('2%'),
+    borderRadius: wp('2%'),
+  },
+  buttonHasil: {
+    backgroundColor: '#2E7D32',
+    paddingVertical: hp('1%'),
+    paddingHorizontal: wp('2%'),
+    borderRadius: wp('2%'),
+    left: wp('25%'),
+  },
+  buttonStandar: {
+    backgroundColor: '#2E7D32',
+    paddingVertical: hp('1%'),
+    paddingHorizontal: wp('2%'),
+    borderRadius: wp('2%'),
+    left: wp('16.5%'),
+  },
+  buttonKet: {
+    backgroundColor: '#2E7D32',
+    paddingVertical: hp('1%'),
+    paddingHorizontal: wp('2%'),
+    borderRadius: wp('2%'),
+    left: wp('7%'),
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  tableContainer: {
+    marginTop: hp('-1%'),
+    marginLeft: wp('-4%'),
+  },
+  groupParent: {
+    marginTop: hp('6.5%'),
+    marginLeft: hp('3.7%'),
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start', // Align elements to the left
+    paddingVertical: hp('1%'),
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  rowLabel: {
+    flex: 2,
+    fontSize: wp('4%'),
+    color: '#000000',
+    fontWeight: 'bold',
+    left: wp('5%'),
+  },
+  rowValue: {
+    flex: 1,
+    fontSize: wp('4%'),
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'right', // Align text to the right within its space
+    right: wp('16%'),
+  },
+  rowStandard: {
+    flex: 1,
+    fontSize: wp('4%'),
+    color: '#000000',
+    textAlign: 'left', // Align text to the left
+    right: wp('5%'),
+  },
+  rowIcon: {
+    flex: 0.5,
+    width: wp('5%'),
+    height: wp('5%'),
+    resizeMode: 'contain',
+    right: wp('3%'),
+  },
+
+  legendContainer: {
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    marginTop: hp('1%'),
+    paddingHorizontal: wp('4%'),
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  legendIcon: {
+    width: wp('5%'),
+    height: wp('5%'),
+    marginRight: wp('2%'),
+  },
+  legendText: {
+    fontSize: wp('3.5%'),
+    color: '#000000',
+    fontWeight: 'bold',
   },
 });
 

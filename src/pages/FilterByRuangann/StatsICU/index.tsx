@@ -11,42 +11,351 @@ import {
   Padding,
   Border,
 } from '../../../../GlobalStyles';
-import {Gap} from '../../../../src/components';
+import moment from 'moment';
+import {Alert} from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+import {useEffect} from 'react';
 
-const StatsICU = () => {
-  const [isFilterChecked, setIsFilterChecked] = useState(false); // State to track checkbox status
+const StatsIcu = () => {
+  const [isFilterChecked, setIsFilterChecked] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [statsData, setStatsData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [bor, setNilaiBor] = useState('');
+  const [avlos, setNilaiAvlos] = useState('');
+  const [toi, setNilaiToi] = useState('');
+  const [gdr, setNilaiGdr] = useState('');
+  const [ndr, setNilaiNdr] = useState('');
+  const [bto, setNilaiBto] = useState('');
+
+  useEffect(() => {
+    console.log('State updated:', {bor, avlos, toi, gdr, bto, ndr});
+  }, [bor, avlos, toi, gdr, bto, ndr]);
+
+  const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
+
+  // State untuk tanggal mulai dan tanggal akhir
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const datePickerStyle1 = {
-    top: '27%',
+    top: '55%',
   };
 
   const datePickerStyle2 = {
-    top: '-35%',
+    top: '35%',
     display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
   };
 
+  const datePickerStyle3 = {
+    top: '-10%',
+    display: isFilterChecked ? 'flex' : 'none', // Show or hide based on checkbox state
+  };
+  // const datePickerStyle3 = {
+  //   top: '-17%',
+  //   display: isFilterChecked ? 'flex' : 'none',
+  // };
+
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
+
+  const handleDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
+    console.log('Selected Date: ', formattedDate);
+    fetchStatsData(formattedDate);
+  };
+
+  const handleStartDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setStartDate(formattedDate);
+    console.log('Start Date: ', formattedDate);
+    if (endDate) {
+      fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
+    }
+  };
+
+  const handleEndDateChange = date => {
+    const formattedDate = moment(date).format('YYYY-MM-DD');
+    setEndDate(formattedDate);
+    console.log('End Date: ', formattedDate);
+    if (startDate) {
+      fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
+    }
+  };
+
+  const fetchStatsDataByRange = async (startDate, endDate) => {
+    if (!startDate || !endDate) {
+      Alert.alert('Error', 'Tanggal mulai dan akhir harus dipilih.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_ruangan_range',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            start_date: startDate,
+            end_date: endDate,
+            ruangan: 'Icu',
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Raw Response:', responseText);
+
+      const jsonParts = responseText
+        .split('}')
+        .filter(part => part.trim() !== '')
+        .map(part => `${part}}`);
+
+      let dataFound = false; // Flag untuk cek apakah ada data berhasil diparsing
+
+      for (const jsonPart of jsonParts) {
+        try {
+          const result = JSON.parse(jsonPart.trim());
+          console.log('Parsed JSON:', result);
+
+          // Jika data ditemukan
+          if (result.status === 'success') {
+            dataFound = true;
+            setNilaiBor(result.BOR || '0');
+            setNilaiAvlos(result.AVLOS || '0');
+            setNilaiToi(result.TOI || '0');
+            setNilaiGdr(result.GDR || '0');
+            setNilaiBto(result.BTO || '0');
+            setNilaiNdr(result.NDR || '0');
+          } else if (!result.status && result.TotalPatientDays) {
+            dataFound = true;
+            setStatsData(result); // Simpan statistik utama
+          }
+        } catch (error) {
+          console.error('JSON Parsing Error:', error.message);
+        }
+      }
+
+      // Jika tidak ada data ditemukan
+      if (!dataFound) {
+        setNilaiBor('0');
+        setNilaiAvlos('0');
+        setNilaiToi('0');
+        setNilaiGdr('0');
+        setNilaiBto('0');
+        setNilaiNdr('0');
+        Alert.alert(
+          'No Data',
+          'Data tidak tersedia untuk rentang tanggal yang dipilih.',
+        );
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+      setNilaiBor('0');
+      setNilaiAvlos('0');
+      setNilaiToi('0');
+      setNilaiGdr('0');
+      setNilaiBto('0');
+      setNilaiNdr('0');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchStatsData = async date => {
+    if (!date) {
+      console.error('Tanggal belum dipilih');
+      return;
+    }
+
+    setLoading(true);
+    console.log('Mengirim request dengan data:', {
+      date: date,
+      ruangan: 'Icu',
+    });
+
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            tanggal: date,
+            ruangan: 'Icu',
+          }).toString(),
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
+
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
+      }
+
+      let result;
+      try {
+        // Cari posisi JSON dalam respons
+        const jsonStart = responseText.indexOf('{');
+        const jsonEnd = responseText.lastIndexOf('}');
+
+        // Ekstrak hanya bagian JSON
+        const jsonString = responseText.substring(jsonStart, jsonEnd + 1);
+        result = JSON.parse(jsonString);
+
+        console.log('Parsed JSON:', result);
+
+        if (result.status === 'success' && result.data) {
+          const data = result.data;
+          setNilaiBor(data.BOR || '0');
+          setNilaiAvlos(data.AVLOS || '0');
+          setNilaiToi(data.TOI || '0');
+          setNilaiGdr(data.GDR || '0');
+          setNilaiBto(data.BTO || '0');
+          setNilaiNdr(data.NDR || '0');
+        } else {
+          setNilaiBor('0');
+          setNilaiAvlos('0');
+          setNilaiToi('0');
+          setNilaiGdr('0');
+          setNilaiBto('0');
+          setNilaiNdr('0');
+          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log('State nilai:', {bor, avlos, toi, bto, gdr, ndr});
+  }, [bor, avlos, toi, bto, gdr, ndr]);
+
+  const handleMonthChange = value => {
+    if (value) {
+      setSelectedMonth(value);
+      console.log('Bulan yang dipilih: ', value);
+      fetchStatsDataByMonth(value);
+    }
+  };
+
+  const fetchStatsDataByMonth = async month => {
+    try {
+      const response = await fetch(
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_monthly',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            month: month, // Parameter bulan
+            ruangan: 'Icu', // Parameter ruangan
+          }).toString(), // Mengonversi ke format key=value
+        },
+      );
+
+      const responseText = await response.text();
+      console.log('Response dari server:', responseText);
+
+      // Jika respons adalah HTML, mungkin ada kesalahan pada server
+      if (responseText.startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
+        return;
+      }
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+        console.log('Parsed JSON:', result);
+
+        // Jika status sukses dan ada data, tampilkan data
+        if (result.status === 'success' && result.data) {
+          const data = result.data; // Mengambil data pertama jika ada
+          setNilaiBor(data.bor || '0');
+          setNilaiAvlos(data.avlos || '0');
+          setNilaiToi(data.toi || '0');
+          setNilaiGdr(data.gdr || '0');
+          setNilaiBto(data.bto || '0');
+          setNilaiNdr(data.ndr || '0');
+        } else {
+          // Jika tidak ada data, set nilai default 0
+          setNilaiBor('0');
+          setNilaiAvlos('0');
+          setNilaiToi('0');
+          setNilaiGdr('0');
+          setNilaiBto('0');
+          setNilaiNdr('0');
+          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+        }
+      } catch (jsonError) {
+        console.error('JSON Parse Error:', jsonError.message);
+        Alert.alert('Error', 'Invalid response from server.');
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error.message);
+      Alert.alert(
+        'Error',
+        'Failed to fetch data. Please check your network connection.',
+      );
+    } finally {
+      setLoading(false); // Jangan lupa set loading false setelah request selesai
+    }
+  };
+
   return (
     <View style={styles.screenGuest}>
-      <DatePickerr style={datePickerStyle1} />
+      {/* First DatePicker */}
+      <DatePickerr style={datePickerStyle1} onDateChange={handleDateChange} />
+      {/* <DatePickerr onDateChange={handleStartDateChange} />
+      <DatePickerr
+        onDateChange={handleEndDateChange}
+        style={styles.datePickerStyle2}
+      /> */}
+      {/* Filter Checkbox */}
       <View style={styles.groupParent}>
         <FilterCheckBox
           isChecked={isFilterChecked}
           onChange={() => setIsFilterChecked(!isFilterChecked)}
         />
       </View>
-      <Pressable
-        style={[styles.okButton, styles.filterShadowBox]}
-        onPress={() => console.log('OK Button Pressed')}>
-        <Text style={[styles.okButtonText, styles.filterTypo]}>Lihat</Text>
-      </Pressable>
-      <Image
-        style={[styles.vectorIcon, styles.vectorIconPosition]}
-        resizeMode="cover"
-        source={require('../../../../assets/vector.png')}
+
+      {/* Conditionally render second DatePicker based on checkbox */}
+      <DatePickerr
+        style={datePickerStyle2}
+        onDateChange={handleStartDateChange}
+        placeholder="Pilih Tanggal Mulai"
       />
-      {/* Conditionally render the second DatePickerr based on checkbox state */}
-      <DatePickerr style={datePickerStyle2} />
+      <DatePickerr
+        style={datePickerStyle3}
+        onDateChange={handleEndDateChange}
+        placeholder="Pilih Tanggal Akhir"
+      />
+
+      {/* Navigation Bar */}
       <View style={[styles.barAtas, styles.filterShadowBox]}>
         <Pressable
           style={styles.backButton}
@@ -57,76 +366,173 @@ const StatsICU = () => {
             source={require('../../../../assets/-icon-arrow-back.png')}
           />
         </Pressable>
-
         <Text style={[styles.backToLogin, styles.vectorIconPosition]}>ICU</Text>
       </View>
-      <View style={styles.stats}>
-        <View style={styles.statsChild} />
-        <Text style={[styles.hari13Hari]}>60-85%</Text>
-        <Text style={[styles.hari13Hari2]}>6-9 Hari</Text>
-        <Text style={[styles.hari13Hari3]}>1-3 Hari</Text>
-        <Text style={[styles.hari13Hari4]}>40-50 Kali</Text>
-        <Text style={[styles.hari13Hari5]}>{'< 20 ‰'}</Text>
-        <Text style={[styles.hari13Hari6]}>{'< 45 ‰'}</Text>
-        <Text style={[styles.text]}>0</Text>
-        <Text style={[styles.text2]}>0</Text>
-        <Text style={[styles.text3]}>0</Text>
-        <Text style={[styles.text4]}>0</Text>
-        <Text style={[styles.text5]}>0</Text>
-        <Text style={[styles.text6]}>0</Text>
-        <View style={styles.BorAvlosToiContainer}>
-          <Text style={[styles.hasil1Typo]}>BOR :</Text>
-          <Gap height={22} />
-          <Text style={[styles.hasil1Typo]}>AVLOS :</Text>
-          <Gap height={23} />
-          <Text style={[styles.hasil1Typo]}>TOI :</Text>
-          <Gap height={19} />
-          <Text style={[styles.hasil1Typo]}>BTO :</Text>
-          <Gap height={21} />
-          <Text style={[styles.hasil1Typo]}>GDR :</Text>
-          <Gap height={23} />
-          <Text style={[styles.hasil1Typo]}>NDR :</Text>
+      <View style={styles.container1}>
+        <Text style={styles.label}>Pilih Bulan : </Text>
+        <RNPickerSelect
+          onValueChange={value => handleMonthChange(value)}
+          items={[
+            {label: 'January', value: '1'},
+            {label: 'February', value: '2'},
+            {label: 'March', value: '3'},
+            {label: 'April', value: '4'},
+            {label: 'May', value: '5'},
+            {label: 'June', value: '6'},
+            {label: 'July', value: '7'},
+            {label: 'August', value: '8'},
+            {label: 'September', value: '9'},
+            {label: 'October', value: '10'},
+            {label: 'November', value: '11'},
+            {label: 'December', value: '12'},
+          ]}
+          style={{
+            inputAndroid: {
+              color: 'white',
+              backgroundColor: '#1E9DEC',
+              top: -80,
+              alignItems: 'center',
+              borderRadius: 8, // Tambahkan border radius di sini
+              paddingVertical: 10, // Untuk memberikan jarak vertikal dalam
+              paddingHorizontal: 12, // Untuk jarak horizontal
+            },
+          }}
+          value={selectedMonth}
+          placeholder={{
+            label: 'Select a month...',
+            value: null,
+            color: 'red',
+          }}
+        />
+      </View>
+      <View style={styles.container}>
+        {/* Header Section */}
+        <View style={styles.headerContainer}>
+          <Pressable style={styles.buttonHasil}>
+            <Text style={styles.buttonText}>HASIL</Text>
+          </Pressable>
+          <Pressable style={styles.buttonStandar}>
+            <Text style={styles.buttonText}>STANDAR</Text>
+          </Pressable>
+          <Pressable style={styles.buttonKet}>
+            <Text style={styles.buttonText}>KET</Text>
+          </Pressable>
         </View>
-        <Pressable style={styles.buttonKet}>
-          <Text style={styles.buttonKetText}>KET</Text>
-        </Pressable>
-        <Pressable style={styles.buttonStandar}>
-          <Text style={styles.buttonStandarText}>STANDAR</Text>
-        </Pressable>
-        <Pressable style={styles.buttonHasil}>
-          <Text style={styles.buttonHasilText}>HASIL</Text>
-        </Pressable>
-        <View style={styles.upArrow1Parent}>
-          <Image
-            style={styles.arrow1IconLayout}
-            resizeMode="cover"
-            source={require('../../../../assets/red.png')}
-          />
-          <Image
-            style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
-            resizeMode="cover"
-            source={require('../../../../assets/green.png')}
-          />
-          <Image
-            style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
-            resizeMode="cover"
-            source={require('../../../../assets/red.png')}
-          />
-          <Image
-            style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
-            resizeMode="cover"
-            source={require('../../../../assets/green.png')}
-          />
-          <Image
-            style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
-            resizeMode="cover"
-            source={require('../../../../assets/red.png')}
-          />
-          <Image
-            style={[styles.downArrow1Icon, styles.arrow1IconLayout]}
-            resizeMode="cover"
-            source={require('../../../../assets/red.png')}
-          />
+
+        {/* Main Table */}
+        <View style={styles.tableContainer}>
+          {/* Rows */}
+          {[
+            {
+              label: 'BOR :',
+              value: bor,
+              standard: '60-85%',
+              icon: 'green',
+              symbol: '%',
+            },
+            {
+              label: 'AVLOS :',
+              value: avlos,
+              standard: '6-9 Hari',
+              icon: 'green',
+              symbol: ' Hari',
+            },
+            {
+              label: 'TOI :',
+              value: toi,
+              standard: '1-3 Hari',
+              icon: 'red',
+              symbol: ' Hari',
+            },
+            {
+              label: 'BTO :',
+              value: bto,
+              standard: '40-50 Kali',
+              icon: 'green',
+              symbol: ' Kali',
+            },
+            {
+              label: 'GDR :',
+              value: gdr,
+              standard: '< 20 ‰',
+              icon: 'red',
+              symbol: ' ‰',
+            },
+            {
+              label: 'NDR :',
+              value: ndr,
+              standard: '< 45 ‰',
+              icon: 'red',
+              symbol: ' ‰',
+            },
+          ].map((row, index) => {
+            // Logic to check if the value is within the standard range
+            let icon = 'green'; // Default to green
+            if (row.standard.includes('-')) {
+              const [min, max] = row.standard
+                .replace(/[^\d\-\.]/g, '') // Remove non-numeric text
+                .split('-')
+                .map(item => parseFloat(item));
+
+              if (parseFloat(row.value) < min || parseFloat(row.value) > max) {
+                icon = 'red'; // Out of range
+              }
+            } else if (row.standard.includes('Hari')) {
+              const [min, max] = row.standard
+                .split('-')
+                .map(item => parseFloat(item));
+              if (row.value < min || row.value > max) {
+                icon = 'red'; // If the value is outside the range, use red
+              }
+            } else if (
+              row.standard.includes('Kali') ||
+              row.standard.includes('‰')
+            ) {
+              const max = parseFloat(row.standard.split(' ')[1]);
+              if (row.value > max) {
+                icon = 'red'; // If the value exceeds the max standard, use red
+              }
+            }
+
+            return (
+              <View key={index} style={styles.row}>
+                <Text style={styles.rowLabel}>{row.label}</Text>
+                <Text style={styles.rowStandard}>{row.standard}</Text>
+                <Text
+                  style={[
+                    styles.rowValue,
+                    {color: icon === 'red' ? 'red' : 'green'},
+                  ]}>
+                  {row.value}
+                  {row.symbol}
+                </Text>
+                <Image
+                  style={styles.rowIcon}
+                  source={
+                    icon === 'red'
+                      ? require('../../../../assets/red.png') // Path to red icon
+                      : require('../../../../assets/green.png') // Path to green icon
+                  }
+                />
+              </View>
+            );
+          })}
+          <View style={styles.legendContainer}>
+            <View style={styles.legendItem}>
+              <Image
+                source={require('../../../../assets/green.png')} // Green icon
+                style={styles.legendIcon}
+              />
+              <Text style={styles.legendText}>Memenuhi standar</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <Image
+                source={require('../../../../assets/red.png')} // Red icon
+                style={styles.legendIcon}
+              />
+              <Text style={styles.legendText}>Tidak memenuhi standar</Text>
+            </View>
+          </View>
         </View>
       </View>
     </View>
@@ -134,6 +540,28 @@ const StatsICU = () => {
 };
 
 const styles = StyleSheet.create({
+  legendContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'right',
+    marginTop: 20, // Jarak dari tabel
+  },
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16, // Jarak antar item
+  },
+  legendIcon: {
+    width: 25,
+    height: 25,
+    resizeMode: 'contain',
+    marginRight: 5, // Jarak ikon ke teks
+  },
+  legendText: {
+    fontSize: 14,
+    color: '#000000',
+    fontWeight: 'bold',
+  },
   datePickerStyle: {
     top: 20,
   },
@@ -288,337 +716,107 @@ const styles = StyleSheet.create({
     height: 900,
     backgroundColor: Color.schemesOnPrimary,
   },
-  buttonKet: {
-    left: 277,
-    top: 27,
-    position: 'absolute',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    width: 60,
-    height: 30,
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    bottom: 300,
   },
-  buttonKetText: {
-    // left: 15,
-    alignSelf: 'center',
-    top: 7,
-    color: 'white',
-  },
-  buttonStandar: {
-    left: 185,
-    top: 27,
-    position: 'absolute',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    width: 80,
-    height: 30,
-  },
-  buttonStandarText: {
-    // left: 15,
-    alignSelf: 'center',
-    top: 7,
-    color: 'white',
+  // Header Section
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16,
   },
   buttonHasil: {
-    left: 113,
-    top: 27,
-    position: 'absolute',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    width: 60,
-    height: 30,
+    backgroundColor: '#2E7D32',
+    paddingVertical: 8,
+    paddingHorizontal: 11,
+    borderRadius: 8,
+    left: 70,
   },
-  buttonHasilText: {
-    // left: 15,
-    alignSelf: 'center',
-    top: 7,
-    color: 'white',
+  buttonStandar: {
+    backgroundColor: '#2E7D32',
+    paddingVertical: 8,
+    paddingHorizontal: 11,
+    borderRadius: 8,
+    left: 40,
   },
-  BorAvlosToiContainer: {
-    flexDirection: 'column',
-    // alignItems: 'center',
-    marginTop: '17%',
-    marginLeft: '8%',
+  buttonKet: {
+    backgroundColor: '#2E7D32',
+    paddingVertical: 8,
+    paddingHorizontal: 11,
+    borderRadius: 8,
+    left: 10,
   },
-  text1Typo: {
-    textAlign: 'left',
-    color: Color.colorBlack,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '19.7%',
-    height: '70.63%',
-    position: 'absolute',
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
-  hasil1Typo: {
-    fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
-    color: 'black',
-    marginBottom: -4,
+  // Table Section
+  tableContainer: {
+    marginTop: 1,
   },
-  ketPosition: {
-    padding: Padding.p_base,
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    shadowOpacity: 1,
-    elevation: 8,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    bottom: '83.13%',
-    top: '8.13%',
-    height: '8.75%',
-    justifyContent: 'center',
-    alignItems: 'center',
+  row: {
     flexDirection: 'row',
-    position: 'absolute',
-  },
-  ket1Typo: {
-    color: Color.schemesOnPrimary,
-    fontSize: FontSize.m3BodySmall_size,
-    textAlign: 'left',
-  },
-  arrow1IconLayout: {
-    height: 20,
-    width: 20,
-  },
-  statsChild: {
-    height: '100%',
-    width: '100%',
-    top: '0%',
-    right: '0%',
-    bottom: '0%',
-    left: '0%',
-    borderRadius: Border.br_3xs,
-    backgroundColor: Color.schemesOnPrimary,
-    position: 'absolute',
-  },
-  hari13Hari: {
-    width: '27.5%',
-    left: '47.5%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '19.69%',
-    position: 'absolute',
-  },
-  hari13Hari2: {
-    width: '27.5%',
-    left: '47.5%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '32.5%',
-    position: 'absolute',
-  },
-  hari13Hari3: {
-    width: '27.5%',
-    left: '47.5%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '45%',
-    position: 'absolute',
-  },
-  hari13Hari4: {
-    width: '27.5%',
-    left: '47.5%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '58%',
-    position: 'absolute',
-  },
-  hari13Hari5: {
-    width: '27.5%',
-    left: '47.5%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '70.5%',
-    position: 'absolute',
-  },
-  hari13Hari6: {
-    width: '27.5%',
-    left: '47.5%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '84%',
-    position: 'absolute',
-  },
-  text: {
-    left: '36.94%',
-    width: '5.56%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '19.69%',
-    position: 'absolute',
-  },
-  text2: {
-    left: '36.94%',
-    width: '5.56%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '32.5%',
-    position: 'absolute',
-  },
-  text3: {
-    left: '36.94%',
-    width: '5.56%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '45%',
-    position: 'absolute',
-  },
-  text4: {
-    left: '36.94%',
-    width: '5.56%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '58%',
-    position: 'absolute',
-  },
-  text5: {
-    left: '36.94%',
-    width: '5.56%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '70.5%',
-    position: 'absolute',
-  },
-  text6: {
-    left: '36.94%',
-    width: '5.56%',
-    textAlign: 'center',
-    color: Color.colorBlack,
-    fontFamily: FontFamily.poppinsRegular,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '84%',
-    position: 'absolute',
-  },
-  text1: {
-    width: '1.28%',
-    left: '27.22%',
-    fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-  },
-  borAvlosToi: {
-    width: '63.53%',
-    left: '9.17%',
-    textAlign: 'left',
-    color: Color.colorBlack,
-    fontSize: FontSize.m3LabelLarge_size,
-    top: '19.69%',
-    position: 'absolute',
-  },
-  ket1: {
-    fontFamily: FontFamily.poppinsMedium,
-    fontWeight: '500',
-  },
-  ket: {
-    right: '7.25%',
-    left: '78%',
-    width: '14.75%',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    shadowOpacity: 1,
-    elevation: 8,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    bottom: '83.13%',
-    top: '8.13%',
-    height: '8.75%',
-  },
-  standar: {
-    width: '22.14%',
-    right: '26.44%',
-    left: '51.42%',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    shadowOpacity: 1,
-    elevation: 8,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    bottom: '83.13%',
-    top: '8.13%',
-    height: '8.75%',
-  },
-  hasil1: {
-    fontFamily: FontFamily.poppinsSemiBold,
-    fontWeight: '600',
-  },
-  hasil: {
-    right: '53.03%',
-    left: '32.22%',
-    width: '14.75%',
-    backgroundColor: Color.colorMediumaquamarine,
-    borderTopRightRadius: Border.br_3xs,
-    borderTopLeftRadius: Border.br_3xs,
-    shadowOpacity: 1,
-    elevation: 8,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowColor: 'rgba(0, 0, 0, 0.25)',
-    bottom: '83.13%',
-    top: '8.13%',
-    height: '8.75%',
-  },
-  downArrow1Icon: {
-    marginTop: 21,
-  },
-  upArrow1Parent: {
-    height: '70.31%',
-    right: '11.67%',
-    bottom: '10%',
-    left: '82.78%',
-    justifyContent: 'center',
     alignItems: 'center',
-    width: '5.56%',
-    top: '19.69%',
-    position: 'absolute',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
   },
-  stats: {
-    width: 360,
-    height: 320,
-    top: -200,
-    margin: 'auto',
-    maxWidth: '100%',
-    maxHeight: '100%',
+  rowLabel: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000000',
+    fontWeight: 'bold',
+    left: 20,
   },
+  rowStandard: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000000',
+    textAlign: 'center',
+    left: 60,
+  },
+  rowValue: {
+    flex: 1,
+    fontSize: 16,
+    color: 'black', // Warna hijau gelap untuk nilai
+    textAlign: 'center',
+    fontWeight: 'bold',
+    left: -160,
+  },
+  rowIcon: {
+    flex: 0.2,
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+    left: -30,
+  },
+  container1: {
+    flex: 1,
+    padding: 106,
+    backgroundColor: 'white',
+    top: -70,
+  },
+  label: {
+    fontSize: 21,
+    fontWeight: 'bold',
+    top: -100,
+    alignSelf: 'center',
+  },
+  // inputAndroid: {
+  //   fontSize: 1,
+  //   paddingVertical: 12,
+  //   paddingHorizontal: 10,
+  //   borderWidth: 1,
+  //   borderColor: 'gray',
+  //   borderRadius: 20,
+  //   color: 'yellow',
+  //   paddingRight: 30, // untuk ikon dropdown
+  // },
 });
 
-export default StatsICU;
+export default StatsIcu;

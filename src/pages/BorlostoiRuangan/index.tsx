@@ -44,7 +44,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/mujairA.png')}
+              source={require('../../../assets/mujairA.jpg')}
             />
           </Pressable>
 
@@ -55,7 +55,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/mujairB.png')}
+              source={require('../../../assets/mujairB.jpg')}
             />
           </Pressable>
 
@@ -66,7 +66,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/mujairC.png')}
+              source={require('../../../assets/mujairC.jpg')}
             />
           </Pressable>
 
@@ -77,7 +77,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/nike.png')}
+              source={require('../../../assets/nike.jpg')}
             />
           </Pressable>
 
@@ -88,7 +88,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/payangka.png')}
+              source={require('../../../assets/payangka.jpg')}
             />
           </Pressable>
 
@@ -99,7 +99,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/neonatii.png')}
+              source={require('../../../assets/neonati.jpg')}
             />
           </Pressable>
 
@@ -110,7 +110,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/bomboya.png')}
+              source={require('../../../assets/bomboya.jpg')}
             />
           </Pressable>
 
@@ -121,7 +121,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/karperr.png')}
+              source={require('../../../assets/karper.jpg')}
             />
           </Pressable>
         </View>
@@ -134,7 +134,7 @@ const BorlostoiRuangan = () => {
             <Image
               style={styles.roomIcon}
               resizeMode="cover"
-              source={require('../../../assets/icu.png')}
+              source={require('../../../assets/icu.jpg')}
             />
           </Pressable>
         </View>
@@ -182,26 +182,27 @@ const styles = StyleSheet.create({
   },
   roomButton: {
     width: '45%',
-    height: 120,
+    height: 140,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: Border.br_3xs,
-    backgroundColor: Color.schemesOnPrimary,
+    borderRadius: 8,
+    backgroundColor: '#fffaf6',
     marginBottom: 20,
-    top: 10,
+    top: 20,
   },
   roomIcon: {
-    width: 130,
-    height: 100,
-    marginBottom: 0,
+    width: 135,
+    height: 125,
+    alignItems: 'center',
+    borderRadius: 30,
   },
-  roomText: {
-    top: 8,
-    fontSize: FontSize.m3BodySmall_size,
-    fontFamily: FontFamily.poppinsMedium,
-    color: Color.notSoBlack,
-    textAlign: 'center',
-  },
+  // roomText: {
+  //   top: 8,
+  //   fontSize: FontSize.m3BodySmall_size,
+  //   fontFamily: FontFamily.poppinsMedium,
+  //   color: Color.notSoBlack,
+  //   textAlign: 'center',
+  // },
   shadowBox: {
     shadowColor: 'rgba(0, 0, 0, 0.5)',
     shadowOffset: {width: 0, height: 4},
