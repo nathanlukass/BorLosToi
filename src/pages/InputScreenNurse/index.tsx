@@ -715,8 +715,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FontFamily.poppinsRegular,
     color: Color.notSoBlack,
-    marginLeft: 155,
-  },
+    textAlign: 'right',
+    flex: 1,
+    marginRight: 10,
+  },  
   sectionTitle: {
     fontSize: 16,
     fontFamily: FontFamily.poppinsBold,
@@ -783,7 +785,7 @@ const styles = StyleSheet.create({
   iconArrowBack: {
     width: 42,
     height: 25,
-    left: -140,
+    left: -120,
   },
 });
 

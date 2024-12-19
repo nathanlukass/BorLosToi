@@ -414,14 +414,14 @@ const BOR = () => {
                 alignItems: 'center',
                 borderRadius: 8,
                 paddingVertical: 10,
-                paddingHorizontal: 12,
+                paddingHorizontal: 15,
               },
             }}
             value={selectedMonth}
             placeholder={{
               label: 'Select a month...',
               value: null,
-              color: 'red',
+              color: 'gray',
             }}
           />
         </View>
