@@ -410,8 +410,6 @@ const AVLOS = () => {
             ]}
             style={{
               inputAndroid: {
-                color: 'white',
-                backgroundColor: '#1E9DEC',
                 top: -80,
                 alignItems: 'center',
                 borderRadius: 8,
@@ -423,7 +421,7 @@ const AVLOS = () => {
             placeholder={{
               label: 'Select a month...',
               value: null,
-              color: 'red',
+              color: 'gray',
             }}
           />
         </View>

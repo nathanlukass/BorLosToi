@@ -476,38 +476,40 @@ const ScreenGuest = () => {
             <Text style={styles.headerText}>KET</Text>
           </View>
           {[ 
-            {label: 'BOR :', value: bor, standard: '60-85%', symbol: '%'},
-            {label: 'AVLOS :', value: avlos, standard: '6-9 Hari', symbol: ' Hari'},
-            {label: 'TOI :', value: toi, standard: '1-3 Hari', symbol: ' Hari'},
-            {label: 'BTO :', value: bto, standard: '40-50 Kali', symbol: ' Kali'},
-            {label: 'GDR :', value: gdr, standard: '< 20 ‰', symbol: ' ‰'},
-            {label: 'NDR :', value: ndr, standard: '< 45 ‰', symbol: ' ‰'},
-          ].map((row, index) => {
-            const icon = row.value >= 60 ? 'green' : 'red'; // Example logic
-            return (
-              <View key={index} style={styles.row}>
-                <Text style={styles.rowLabel}>{row.label}</Text>
-                <Text style={styles.rowStandard}>{row.standard}</Text>
-                <Text
-                  style={[
-                    styles.rowValue,
-                    {color: icon === 'red' ? 'red' : 'green'},
-                  ]}>
-                  {row.value}
-                  {row.symbol}
-                </Text>
-                <Image
-                  style={styles.rowIcon}
-                  source={
-                    icon === 'red'
-                      ? require('../../../assets/red.png')
-                      : require('../../../assets/green.png')
-                  }
-                />
-              </View>
-              
-            );
-          })}
+  {label: 'BOR :', value: bor, standard: '60-85%', symbol: '%'},
+  {label: 'AVLOS :', value: avlos, standard: '6-9 Hari', symbol: ' Hari'},
+  {label: 'TOI :', value: toi, standard: '1-3 Hari', symbol: ' Hari'},
+  {label: 'BTO :', value: bto, standard: '40-50 Kali', symbol: ' Kali'},
+  {label: 'GDR :', value: gdr, standard: '< 20 ‰', symbol: ' ‰'},
+  {label: 'NDR :', value: ndr, standard: '< 45 ‰', symbol: ' ‰'},
+].map((row, index) => {
+  const isWithinStandard = row.value >= 60; // Example logic
+  const icon = isWithinStandard ? 'green' : 'red';
+  const statusText = isWithinStandard ? 'Memenuhi' : 'Tidak Memenuhi';
+
+  return (
+    <View key={index} style={styles.row}>
+      <View style={styles.rowLabelContainer}>
+        <Text style={styles.rowLabel}>{row.label}</Text>
+        <Text style={[styles.rowValue, {color: icon === 'red' ? 'red' : 'green'}]}>
+          {row.value}
+          {row.symbol}
+        </Text>
+      </View>
+      <Text style={styles.rowStandard}>{row.standard}</Text>
+      <Text style={styles.rowKet}>{statusText}</Text>
+      <Image
+        style={styles.rowIcon}
+        source={
+          icon === 'red'
+            ? require('../../../assets/red.png')
+            : require('../../../assets/green.png')
+        }
+      />
+    </View>
+  );
+})}
+
           {/* Buttons */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -528,6 +530,18 @@ const ScreenGuest = () => {
 };
 
 const styles = StyleSheet.create({
+  rowLabelContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  rowValueContainer: {
+  },
+  rowKet: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 12,
+    color: '#333',
+  },
   buttonContainer: {
     marginTop: 20,
     flexDirection: 'row',
@@ -589,8 +603,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
+    paddingVertical: 10,
+    borderBottomWidth: 2,
     borderBottomColor: '#e0e0e0',
   },
   rowLabel: {
@@ -602,12 +616,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   rowValue: {
-    flex: 1,
+    marginLeft: 8,
+    fontWeight: 'bold',
   },
   rowIcon: {
     width: 20,
     height: 20,
-    marginLeft: 8,
+    marginLeft: 5,
   },
   backButton: {
     position: 'absolute',

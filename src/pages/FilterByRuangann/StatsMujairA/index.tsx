@@ -390,8 +390,6 @@ const StatsMujairA = () => {
           ]}
           style={{
             inputAndroid: {
-              color: 'white',
-              backgroundColor: '#1E9DEC',
               top: -80,
               alignItems: 'center',
               borderRadius: 8, // Tambahkan border radius di sini
@@ -403,7 +401,7 @@ const StatsMujairA = () => {
           placeholder={{
             label: 'Select a month...',
             value: null,
-            color: 'red',
+            color: 'gray',
           }}
         />
       </View>
