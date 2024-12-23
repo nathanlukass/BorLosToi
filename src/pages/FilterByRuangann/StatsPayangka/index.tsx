@@ -390,8 +390,6 @@ const StatsPayangka = () => {
           ]}
           style={{
             inputAndroid: {
-              color: 'white',
-              backgroundColor: '#1E9DEC',
               top: -80,
               alignItems: 'center',
               borderRadius: 8, // Tambahkan border radius di sini
@@ -403,7 +401,7 @@ const StatsPayangka = () => {
           placeholder={{
             label: 'Select a month...',
             value: null,
-            color: 'red',
+            color: 'gray',
           }}
         />
       </View>
@@ -456,14 +454,14 @@ const StatsPayangka = () => {
             {
               label: 'GDR :',
               value: gdr,
-              standard: '< 20 ‰',
+              standard: '< 45 ‰',
               icon: 'red',
               symbol: ' ‰',
             },
             {
               label: 'NDR :',
               value: ndr,
-              standard: '< 45 ‰',
+              standard: '< 20 ‰',
               icon: 'red',
               symbol: ' ‰',
             },

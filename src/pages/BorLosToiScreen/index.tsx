@@ -23,18 +23,18 @@ const BorlostoiScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.headerContainer}>
-          <Pressable
-            style={styles.backButton}
-            onPress={() => navigation.navigate('ScreenGuest')}>
-            <Image
-              style={styles.icon}
-              resizeMode="cover"
-              source={require('../../../assets/-icon-arrow-back.png')}
-            />
-          </Pressable>
-          <Text style={styles.headerTitle}>Filter by Indicator</Text>
-        </View>
+        {/* Bar Atas */}
+              <View style={[styles.barAtas]}>
+                <Pressable
+                  style={styles.backButton}
+                  onPress={() => navigation.navigate('ScreenGuest')}>
+                  <Image
+                    resizeMode="cover"
+                    source={require('../../../assets/-icon-arrow-back.png')}
+                  />
+                </Pressable>
+                <Text style={styles.backToLogin}>Filter by Indicator</Text>
+              </View>
 
         <View style={styles.buttonGrid}>
           {/* Tombol MUJAIR A */}
@@ -85,6 +85,32 @@ const BorlostoiScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  barAtas: {
+    elevation: 3,
+    width: '100%',
+    height: 60,
+    backgroundColor: Color.schemesOnPrimary,
+    alignSelf: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  backButton: {
+    position: 'absolute',
+    left: -1,
+    top: '50%',
+    transform: [{translateY: -12.5}],
+  },
+  backToLogin: {
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    textAlign: 'center',
+    fontSize: 18,
+    position: 'absolute',
+    top: '40%',
+    transform: [{translateY: -8}],
+    zIndex: 1,
+  },
   button: {
     fontSize: 20, // Ukuran font lebih besar
     fontWeight: 'bold', // Membuat teks lebih tebal
@@ -99,32 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContainer: {
-    paddingVertical: 20,
-    paddingHorizontal: 42,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  backButton: {
-    width: 42,
-    height: 25,
-    marginRight: 20,
-  },
-  icon: {
-    width: '100%',
-    height: '100%',
-    marginLeft: -40,
-    marginTop: -3,
-  },
-  headerTitle: {
-    fontSize: FontSize.m3BodyLarge_size,
-    fontFamily: FontFamily.poppinsBold,
-    color: Color.notSoBlack,
-    textAlign: 'center',
-    left: 39,
+
   },
   buttonGrid: {
     marginTop: 20,
@@ -134,12 +135,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   roomButton: {
-    width: '45%',
+    width: '40%',
     height: 140,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    backgroundColor: '#fffaf6',
+    backgroundColor: '#fff',
+    marginRight: 20,
+    marginLeft: 20,
     marginBottom: 20,
     top: 20,
   },

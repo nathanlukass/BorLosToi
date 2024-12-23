@@ -408,13 +408,11 @@ const BOR = () => {
             ]}
             style={{
               inputAndroid: {
-                color: 'white',
-                backgroundColor: '#1E9DEC',
                 top: -80,
                 alignItems: 'center',
                 borderRadius: 8,
                 paddingVertical: 10,
-                paddingHorizontal: 15,
+                paddingHorizontal: 12,
               },
             }}
             value={selectedMonth}
@@ -514,7 +512,7 @@ const BOR = () => {
               <Image
                 style={styles.rowIcon}
                 source={
-                  parseFloat(row.value) >= 6 && parseFloat(row.value) <= 9
+                  parseFloat(row.value) >= 60 && parseFloat(row.value) <= 85
                     ? require('../../../assets/green.png')
                     : require('../../../assets/red.png')
                 }
