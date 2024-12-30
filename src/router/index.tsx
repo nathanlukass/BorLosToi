@@ -1,15 +1,16 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
 import {
   SplashScreen,
   LoginScreen,
   HomeScreenNurse,
   NurseInputPage,
   ScreenGuest,
-  ProfileScreenNurse,
+  //ProfileScreenNurse,
   HomeScreenAdmin,
-  ProfileScreenAdmin,
-  EditScreenAdmin,
+  //ProfileScreenAdmin,
+  //EditScreenAdmin,
   PrintOutScreen,
   EditMujairA,
   EditMujairB,
@@ -20,7 +21,7 @@ import {
   EditKarper,
   EditBomboya,
   EditIcu,
-  BORAVLOSTOIBTONDRGDR,
+ // BORAVLOSTOIBTONDRGDR,
   BOR,
   AVLOS,
   TOI,
@@ -29,7 +30,7 @@ import {
   GDR,
   AboutApp,
   ChangePassword,
-  BorlostoiRuangan,
+  //BorlostoiRuangan,
   StatsMujairA,
   StatsMujairB,
   StatsMujairC,
@@ -40,6 +41,9 @@ import {
   StatsKarper,
   StatsICU,
 } from '../pages';
+
+import DatePickerr from '../components/atoms/DatePickerr'
+import HistoryPage from '../../components/HistoryPage';
 
 const Stack = createNativeStackNavigator();
 const index = () => {
@@ -65,11 +69,11 @@ const index = () => {
         component={NurseInputPage}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="ProfilScreenNurse"
         component={ProfileScreenNurse}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="ScreenGuest"
         component={ScreenGuest}
@@ -80,16 +84,16 @@ const index = () => {
         component={HomeScreenAdmin}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="ProfileScreenAdmin"
         component={ProfileScreenAdmin}
         options={{headerShown: false}}
-      />
-      <Stack.Screen
+      /> */}
+      {/* <Stack.Screen
         name="EditScreenAdmin"
         component={EditScreenAdmin}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="PrintOutScreen"
         component={PrintOutScreen}
@@ -140,11 +144,11 @@ const index = () => {
         component={EditIcu}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="BORAVLOSTOIBTONDRGDR"
         component={BORAVLOSTOIBTONDRGDR}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen name="BOR" component={BOR} options={{headerShown: false}} />
       <Stack.Screen
         name="AVLOS"
@@ -166,11 +170,11 @@ const index = () => {
         component={ChangePassword}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="BorlostoiRuangan"
         component={BorlostoiRuangan}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="StatsMujairA"
         component={StatsMujairA}
@@ -215,6 +219,21 @@ const index = () => {
         name="StatsICU"
         component={StatsICU}
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="InputScreenNurse"
+        component={DatePickerr}
+        options={{headerShown: false}}
+      />
+      {/* <Stack.Screen
+        name="PrintOutScreen"
+        component={PrintOutScreen}
+        options={{headerShown: false}}
+      /> */}
+      <Stack.Screen 
+      name="HistoryPage" 
+      component={HistoryPage}
+      initialParams={{ ruangan: 'Default Ruangan' }}
       />
     </Stack.Navigator>
   );

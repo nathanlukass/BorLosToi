@@ -1,24 +1,24 @@
 /* eslint-disable prettier/prettier */
-import LoginScreen from './LoginScreen';
-import SplashScreen from './SplashScreen';
-import HomeScreenNurse from './HomeScreenNurse';
-import ScreenGuest from './GuestScreen';
-import NurseInputPage from './InputScreenNurse';
-import ProfileScreenNurse from './ProfilScreenNurse';
-import HomeScreenAdmin from './HomeScreenAdmin';
-import ProfileScreenAdmin from './ProfileScreenAdmin';
-import EditScreenAdmin from './EditScreenAdmin';
-import PrintOutScreen from './PrintOutScreen';
-import BORAVLOSTOIBTONDRGDR from './BorLosToiScreen';
-import BOR from './BorScreen';
-import AVLOS from './AvlosScreen';
-import TOI from './ToiScreen';
-import BTO from './BtoScreen';
-import NDR from './NdrScreen';
-import GDR from './GdrScreen';
-import AboutApp from './AboutApp';
-import ChangePassword from './ChangePassword';
-import BorlostoiRuangan from './BorlostoiRuangan';
+import LoginScreen from './Auth/LoginScreen';
+import SplashScreen from './Auth/SplashScreen';
+import HomeScreenNurse from './NursePage/HomeScreen';
+import ScreenGuest from './GuestPage/GuestScreen';
+import NurseInputPage from './NursePage/InputScreen';
+//import ProfileScreenNurse from './ProfilScreenNurse';
+import HomeScreenAdmin from './AdminPage/HomeScreen';
+//import ProfileScreenAdmin from './ProfileScreenAdmin';
+//import EditScreenAdmin from './EditScreenAdmin';
+import PrintOutScreen from './AdminPage/PrintOutScreen';
+//import BORAVLOSTOIBTONDRGDR from './BorLosToiScreen';
+import BOR from './GuestPage/Filter_Indikator/BorScreen';
+import AVLOS from './GuestPage/Filter_Indikator/AvlosScreen';
+import TOI from './GuestPage/Filter_Indikator/ToiScreen';
+import BTO from './GuestPage/Filter_Indikator/BtoScreen';
+import NDR from './GuestPage/Filter_Indikator/NdrScreen';
+import GDR from './GuestPage/Filter_Indikator/GdrScreen';
+import AboutApp from './shared/AboutApp';
+import ChangePassword from './shared/ChangePassword';
+//import BorlostoiRuangan from './BorlostoiRuangan';
 import {
   EditMujairA,
   EditMujairB,
@@ -29,7 +29,7 @@ import {
   EditKarper,
   EditBomboya,
   EditIcu,
-} from './EditScreens';
+} from '../../src/pages/AdminPage/EditScreens';
 import {
   StatsMujairA,
   StatsMujairB,
@@ -40,17 +40,17 @@ import {
   StatsKarper,
   StatsBomboya,
   StatsICU,
-} from './FilterByRuangann';
+} from './GuestPage/FilterByRuangann';
 
 export {
   LoginScreen,
   HomeScreenNurse,
   NurseInputPage,
   ScreenGuest,
-  ProfileScreenNurse,
+  //ProfileScreenNurse,
   HomeScreenAdmin,
-  ProfileScreenAdmin,
-  EditScreenAdmin,
+  //ProfileScreenAdmin,
+ // EditScreenAdmin,
   PrintOutScreen,
   EditMujairA,
   EditMujairB,
@@ -61,7 +61,7 @@ export {
   EditKarper,
   EditBomboya,
   EditIcu,
-  BORAVLOSTOIBTONDRGDR,
+  //BORAVLOSTOIBTONDRGDR,
   BOR,
   AVLOS,
   TOI,
@@ -70,7 +70,7 @@ export {
   GDR,
   AboutApp,
   ChangePassword,
-  BorlostoiRuangan,
+  //BorlostoiRuangan,
   StatsMujairA,
   StatsMujairB,
   StatsMujairC,

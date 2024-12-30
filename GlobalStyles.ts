@@ -7,6 +7,7 @@ export const FontFamily = {
   poppinsSemiBold: 'Poppins-SemiBold',
   poppinsRegular: 'Poppins-Regular',
   poppinsMedium: 'Poppins-Medium',
+  poppinsItalic:'Poppins-Italic',
   interBold: 'Inter-Bold',
   robotoItalic: 'Roboto-Italic',
 };

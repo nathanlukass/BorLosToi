@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Text} from 'react-native';
+import {Text, Dimensions} from 'react-native';
 import {
   FontFamily,
   FontSize,
   Color,
 } from '../../../../GlobalStyles';
 
+const { width, height } = Dimensions.get('window');
+const dynamicFontSize = (size) => (width / 375) * size; // 375 adalah lebar referensi
+const dynamicPadding = (padding) => (height / 667) * padding; // 667 adalah tinggi referensi
 
 // Komponen RealTimeClock
 const RealTimeClock = () => {
@@ -35,7 +38,7 @@ const RealTimeClock = () => {
   return <Text style = {
     { fontFamily: FontFamily.poppinsBold,
       color:'white',
-      fontSize: 16,
+      fontSize: dynamicFontSize(16),
   }
 }> Waktu input harian {currentTime} </Text>;
 };
