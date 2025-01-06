@@ -14,21 +14,24 @@ import {
   Dimensions,
   BackHandler,
 } from 'react-native';
-import { StackNavigationProp,  createStackNavigator } from '@react-navigation/stack';
-import { useNavigation, ParamListBase } from '@react-navigation/core';
-import { FontFamily, Color } from '../../../../GlobalStyles';
-import { DatePickerr } from '../../../components';
+import {
+  StackNavigationProp,
+  createStackNavigator,
+} from '@react-navigation/stack';
+import {useNavigation, ParamListBase} from '@react-navigation/core';
+import {FontFamily, Color} from '../../../../GlobalStyles';
+import {DatePickerr} from '../../../components';
 import RealTimeClock from '../../../components/atoms/Time';
 import moment from 'moment';
 import LottieView from 'lottie-react-native';
 
-const { width, height } = Dimensions.get('window');
-const dynamicFontSize = (size) => (width / 375) * size; // 375 adalah lebar referensi
-const dynamicPadding = (padding) => (height / 667) * padding; // 667 adalah tinggi referensi
+const {width, height} = Dimensions.get('window');
+const dynamicFontSize = size => (width / 375) * size; // 375 adalah lebar referensi
+const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi referensi
 
-const NurseInputPage = ({ route }) => {
-  const { user } = route.params;
-  const { username, role, ruangan, id_user, nama } = user;
+const NurseInputPage = ({route}) => {
+  const {user} = route.params;
+  const {username, role, ruangan, id_user, nama} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState('');
@@ -42,8 +45,8 @@ const NurseInputPage = ({ route }) => {
   const [pasienAps, setPasienAps] = useState('0');
   const [pasienLainLain, setPasienLainLain] = useState('0');
   const [jumlah_PKH, setJumlahPKH] = useState('0');
-  const [selectedDate, setSelectedDate] = useState(null); 
-  const [isModalVisible, setIsModalVisible] = useState(false); 
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [pasienKurangDari48Jam, setPasienKurangDari48Jam] = useState('0');
   const [pasienLebihDari48Jam, setPasienLebihDari48Jam] = useState('0');
   const [pasienMasihDirawat, setPasienMasihDirawat] = useState('0');
@@ -54,38 +57,14 @@ const NurseInputPage = ({ route }) => {
   const [kelas2, setKelas2] = useState('0');
   const [kelas3, setKelas3] = useState('0');
   const [namaruangan, setRuangan] = useState(ruangan);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const Stack = createStackNavigator();
   const [isInput, setIsInput] = useState(false);
 
   useEffect(() => {
-      setIsInput(true);
-    }, [pasienAwal, pasienMasuk]);
-  
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    setIsInput(true);
+  }, [pasienAwal, pasienMasuk]);
 
-    return () => backHandler.remove();
-  }, [isInput]);
-
-  const handleBackPress = () => {
-    if (isInput) {
-      Alert.alert(
-        'Peringatan!',
-        'Jika anda kembali maka semua perubahan akan dihapus',
-        [
-          { text: 'Batal', onPress: () => null, style: 'cancel' },
-          {
-            text: "OK",
-            onPress: () => navigation.navigate('HomeScreenNurse', { user }),
-          },
-        ],
-        { cancelable: false }
-      );
-      return true; 
-    }
-    return false; 
-  };
   const increment = setter => () =>
     setter(prev => (parseInt(prev, 10) + 1).toString());
   const decrement = setter => () =>
@@ -126,15 +105,14 @@ const NurseInputPage = ({ route }) => {
     }
   };
 
-  const handleDateChange = async (date) => {
-   
+  const handleDateChange = async date => {
     if (!date || !ruangan) {
       Alert.alert('Error', 'Both date and room must be selected.');
       return;
     }
 
     setSelectedDate(date);
-    
+
     const formattedDate = moment(date).format('YYYY-MM-DD');
     const previousDay = moment(date).subtract(1, 'days').format('YYYY-MM-DD');
     const normalizedRuangan = ruangan.replace(/\u00A0/g, ' ').trim();
@@ -221,7 +199,6 @@ const NurseInputPage = ({ route }) => {
         setKelas1(result.data.kelas_1?.toString() || '0');
         setKelas2(result.data.kelas_2?.toString() || '0');
         setKelas3(result.data.kelas_3?.toString() || '0');
-
       } else {
         // Jika tidak ada inputan pada tanggal yang dipilih
         Alert.alert(
@@ -289,12 +266,12 @@ const NurseInputPage = ({ route }) => {
         'Error',
         'Failed to check data existence or invalid response format.',
       );
-      return true; 
+      return true;
     }
   };
 
   const handleSubmit = async () => {
-    setIsModalVisible(true); 
+    setIsModalVisible(true);
   };
 
   const handleConfirmSubmit = async () => {
@@ -311,8 +288,7 @@ const NurseInputPage = ({ route }) => {
 
     const dataExists = await checkDataExist(formattedDate, normalizedRuangan);
     if (dataExists) {
-
-      return; 
+      return;
     }
 
     try {
@@ -359,9 +335,9 @@ const NurseInputPage = ({ route }) => {
       console.log('Parsed Response:', result);
 
       // Cek status respons
-      if (result.status === "success") {
-        Alert.alert("Sukses", "Data berhasil disimpan");
-         navigation.navigate("HomeScreenNurse",{user});
+      if (result.status === 'success') {
+        Alert.alert('Sukses', 'Data berhasil disimpan');
+        navigation.navigate('HomeScreenNurse', {user});
       } else {
         Alert.alert('Error', result.message || 'Gagal menginput data.');
       }
@@ -372,10 +348,8 @@ const NurseInputPage = ({ route }) => {
   };
 
   const handleModalCancel = () => {
-    setIsModalVisible(false); 
+    setIsModalVisible(false);
   };
-
-
 
   const renderInputField = (label, value, setValue) => (
     <View style={styles.fieldContainer}>
@@ -539,28 +513,27 @@ const NurseInputPage = ({ route }) => {
 
   return (
     <View style={styles.container}>
-       {/* Toolbar */}
-       <View style={styles.barAtas}>
+      {/* Toolbar */}
+      <View style={styles.barAtas}>
         <Pressable
-           style={styles.backButton}
-           onPress={() => {
-             Alert.alert(
-               "Peringatan",
-               "Jika Anda kembali maka semua perubahan akan dihapus",
-               [
-                 {
-                   text: "Batal",
-                   onPress: () => {},
-                   style: "cancel",
-                 },
-                 {
-                   text: "OK",
-                   onPress: () => navigation.navigate('HomeScreenNurse', { user }),
-                 },
-               ]
-             );
-           }}
-         >
+          style={styles.backButton}
+          onPress={() => {
+            Alert.alert(
+              'Peringatan',
+              'Jika Anda kembali maka semua perubahan akan dihapus',
+              [
+                {
+                  text: 'Batal',
+                  onPress: () => {},
+                  style: 'cancel',
+                },
+                {
+                  text: 'OK',
+                  onPress: () => navigation.navigate('HomeScreenNurse', {user}),
+                },
+              ],
+            );
+          }}>
           <Image
             style={styles.icon}
             resizeMode="cover"
@@ -573,20 +546,19 @@ const NurseInputPage = ({ route }) => {
       </View>
       {/* Scrollable Content */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-
         {/* Subtitle Text */}
         <View style={styles.timeInfoContainer}>
           <RealTimeClock />
         </View>
-         <View style={{ marginVertical:4, marginBottom:20 }}>
-            <DatePickerr
-              style={{ flex: 1, height: 50 }}
-              onDateChange={handleDateChange}
-              checkDataExist={checkDataExist} 
-              ruangan={ruangan}
-              navigation={navigation}
-            />
-          </View>
+        <View style={{marginVertical: 4, marginBottom: 20}}>
+          <DatePickerr
+            style={{flex: 1, height: 50}}
+            onDateChange={handleDateChange}
+            checkDataExist={checkDataExist}
+            ruangan={ruangan}
+            navigation={navigation}
+          />
+        </View>
         {/* Fields with increment/decrement buttons */}
         <View style={styles.sectionJumlahBed}>
           <Text style={styles.label}>Jumlah tempat tidur:</Text>
@@ -676,51 +648,50 @@ const NurseInputPage = ({ route }) => {
         </View>
 
         {/* Submit Button */}
-        <TouchableOpacity
-          style={styles.submitButton}
-          onPress={handleSubmit}>
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitText}>Submit</Text>
         </TouchableOpacity>
 
-            {/* Modal */}
+        {/* Modal */}
         <Modal
           transparent={true}
           animationType="fade"
           visible={isModalVisible}
           onRequestClose={() => setIsModalVisible(false)}>
           <View style={styles.popupOverlay}>
-          <View style={styles.popup}>
-            {/* Lottie Animation */}
-            <LottieView
-              source={require('../../../../assets/raw/alert.json')}
-              autoPlay
-              loop={false}
-              style={styles.lottieAnimation}
-              onAnimationFinish={() => console.log('Animation Completed')}
-            />
+            <View style={styles.popup}>
+              {/* Lottie Animation */}
+              <LottieView
+                source={require('../../../../assets/raw/alert.json')}
+                autoPlay
+                loop={false}
+                style={styles.lottieAnimation}
+                onAnimationFinish={() => console.log('Animation Completed')}
+              />
 
-            {/* "Silahkan" Text */}
-            <Text style={styles.title}>Konfirmasi</Text>
-            <Text style={styles.text1}>Pastikan semua data sudah benar sebelum anda melanjutkan</Text>
+              {/* "Silahkan" Text */}
+              <Text style={styles.title}>Konfirmasi</Text>
+              <Text style={styles.text1}>
+                Pastikan semua data sudah benar sebelum anda melanjutkan
+              </Text>
 
-            {/* Buttons for Yes and No */}
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={styles.noButton}
-                onPress={handleModalCancel}>
-                <Text style={styles.buttonText}>Periksa</Text>
-              </TouchableOpacity>
+              {/* Buttons for Yes and No */}
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.noButton}
+                  onPress={handleModalCancel}>
+                  <Text style={styles.buttonText}>Periksa</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.yesButton}
-                onPress={handleConfirmSubmit}>
-                <Text style={styles.buttonText}>Submit</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.yesButton}
+                  onPress={handleConfirmSubmit}>
+                  <Text style={styles.buttonText}>Submit</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
-        </View>
         </Modal>
-          
       </ScrollView>
     </View>
   );
@@ -854,7 +825,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     flex: 1,
     marginRight: 10,
-  },  
+  },
   sectionTitle: {
     fontSize: dynamicFontSize(16),
     fontFamily: FontFamily.poppinsBold,
@@ -879,7 +850,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
-   
   },
   decrementButton: {
     backgroundColor: '#D3D3D3',
@@ -921,133 +891,130 @@ const styles = StyleSheet.create({
     height: 45,
     justifyContent: 'center',
     zIndex: 20,
-},
-modalOverlay: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContainer: {
-      backgroundColor: 'white',
-      padding: 20,
-      borderRadius: 10,
-      width: 300,
-      alignItems: 'center',
-    },
-    modalButtonYes: {
-      backgroundColor: '#4CAF50',  // Green color for Yes button
-      padding: 10,
-      margin: 5,
-      borderRadius: 5,
-    },
-    modalButtonNo: {
-      backgroundColor: '#F44336',  // Red color for No button
-      padding: 10,
-      margin: 5,
-      borderRadius: 5,
-    },
-    modalButtonText: {
-      color: 'white',
-      fontSize: 16,
-    },
-    modalButtons: {
-      flexDirection: 'row',
-    },
-    popupOverlay: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    popup: {
-      backgroundColor: 'white',
-      padding: 20,
-      borderRadius: 10,
-      alignItems: 'center',
-      width: 300,
-    },
-    lottieAnimation: {
-      width: 150,
-      height: 150,
-      marginBottom:0
-    },
-    buttonContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: '80%',
-      marginBottom:20,
-      marginTop:20
-    },
-    yesButton: {
-      backgroundColor: '#21B557',
-      padding: 10,
-      borderRadius: 8,
-      width: '48%', 
-      fontFamily: FontFamily.poppinsBold,
-
-    },
-    noButton: {
-      backgroundColor: '#1E9DEC',
-      padding: 10,
-      borderRadius: 8,
-      width: '48%', 
-      marginRight: 10,
-      fontFamily: FontFamily.poppinsBold,
-    },
-    buttonText: {
-      color: 'white',
-      fontSize: 14,
-      textAlign: 'center',
-      fontFamily: FontFamily.poppinsSemiBold,
-    },
-    title: {
-      fontSize: 20,
-      fontFamily: FontFamily.poppinsBold,
-      textAlign: 'center',
-      marginBottom: 10,
-      color: Color.notSoBlack,
-    },
-    text1: {
-      fontFamily: FontFamily.poppinsRegular,
-      color: Color.notSoBlack,
-      fontSize: dynamicFontSize(14),
-      textAlign:'center'
-    
-    },
-    barAtas: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: 60,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: 16,
-      backgroundColor: '#ffffff', 
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 5,
-      zIndex: 10,
-    },
-    textContainer: {
-      flex:1,
-      right: 'auto',
-      top: '25%',  
-      transform: [{ translateY: -12 }],  
-      justifyContent: 'center',
-      alignItems:'center'
-    },
-    text: {
-      fontFamily: FontFamily.poppinsBold,
-      color: Color.notSoBlack,
-      fontSize: dynamicFontSize(18),
-      textAlign:'center'
-    },
-    
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: 300,
+    alignItems: 'center',
+  },
+  modalButtonYes: {
+    backgroundColor: '#4CAF50', // Green color for Yes button
+    padding: 10,
+    margin: 5,
+    borderRadius: 5,
+  },
+  modalButtonNo: {
+    backgroundColor: '#F44336', // Red color for No button
+    padding: 10,
+    margin: 5,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+  },
+  popupOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  popup: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    width: 300,
+  },
+  lottieAnimation: {
+    width: 150,
+    height: 150,
+    marginBottom: 0,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '80%',
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  yesButton: {
+    backgroundColor: '#21B557',
+    padding: 10,
+    borderRadius: 8,
+    width: '48%',
+    fontFamily: FontFamily.poppinsBold,
+  },
+  noButton: {
+    backgroundColor: '#1E9DEC',
+    padding: 10,
+    borderRadius: 8,
+    width: '48%',
+    marginRight: 10,
+    fontFamily: FontFamily.poppinsBold,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 14,
+    textAlign: 'center',
+    fontFamily: FontFamily.poppinsSemiBold,
+  },
+  title: {
+    fontSize: 20,
+    fontFamily: FontFamily.poppinsBold,
+    textAlign: 'center',
+    marginBottom: 10,
+    color: Color.notSoBlack,
+  },
+  text1: {
+    fontFamily: FontFamily.poppinsRegular,
+    color: Color.notSoBlack,
+    fontSize: dynamicFontSize(14),
+    textAlign: 'center',
+  },
+  barAtas: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 10,
+  },
+  textContainer: {
+    flex: 1,
+    right: 'auto',
+    top: '25%',
+    transform: [{translateY: -12}],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    fontSize: dynamicFontSize(18),
+    textAlign: 'center',
+  },
 });
 
 export default NurseInputPage;

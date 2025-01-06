@@ -1,4 +1,4 @@
-import React, {useMemo, useState, useRef, useEffect, Component, useCallback} from 'react';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
 import {
   Text,
   StyleSheet,
@@ -13,7 +13,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
-  Modal
+  Modal,
+  BackHandler,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -32,8 +33,8 @@ import {
   FontSize,
 } from '../../../../GlobalStyles';
 import LottieView from 'lottie-react-native';
-// import SuccessPopup from '../../../components/SuccesPopup';
 
+// import SuccessPopup from '../../../components/SuccesPopup';
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 const scaleFactor = screenWidth / 375;
@@ -55,11 +56,10 @@ const LoginScreen = ({route}) => {
   const [hoveredOption, setHoveredOption] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-
   const openModal = useCallback(() => {
-    setShowModal(true)
+    setShowModal(true);
   }, []);
-  
+
   const closeModal = useCallback(() => {
     setShowModal(false);
   }, []);
@@ -146,11 +146,11 @@ const LoginScreen = ({route}) => {
       if (response.ok && jsonResponse.user) {
         const userRole = jsonResponse.user.role.toLowerCase();
         if (userRole === selectedRole.toLowerCase()) {
-           //Alert.alert('Login Successful!');
+          //Alert.alert('Login Successful!');
           openModal();
 
           setTimeout(() => {
-            closeModal(); 
+            closeModal();
             navigation.navigate(
               userRole === 'nurse' ? 'HomeScreenNurse' : 'HomeScreenAdmin',
               {
@@ -158,7 +158,7 @@ const LoginScreen = ({route}) => {
                 resetLoginFields,
               },
             );
-          },3000); 
+          }, 3000);
         } else {
           showMessage({
             message: 'Role, Username, or Password mismatch!',
@@ -174,34 +174,59 @@ const LoginScreen = ({route}) => {
     } catch (error) {
       console.error(error);
       showMessage({
-        message: 'An error occurred. Please try again later.',
+        message: 'Incorrect Username or Password',
         type: 'danger',
       });
     }
   };
 
- 
-  
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert(
+        'Konfirmasi',
+        'Apakah Anda yakin ingin keluar dari aplikasi?',
+        [
+          {
+            text: 'Batal',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          {
+            text: 'Keluar',
+            onPress: () => BackHandler.exitApp(),
+          },
+        ],
+      );
+      return true; // Mencegah perilaku default tombol back
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove(); // Hapus listener ketika komponen unmount
+  }, []);
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'android' ? 'padding' : 'height'}
       keyboardVerticalOffset={scaleHeight(60)}>
-
       <Modal animationType="fade" transparent visible={showModal}>
-            <View style={styles.popupContainer}>
-              <View style={styles.popup}>
-              <LottieView
-                  source={require('../../../../assets/raw/success.json')}
-                  autoPlay
-                  loop={false}
-                  style={styles.lottieAnimation}
-                  resizeMode="contain"
-                  onAnimationFinish={() => console.log('Animation Completed')}
-                />
-              </View>
-            </View>
-          </Modal>  
+        <View style={styles.popupContainer}>
+          <View style={styles.popup}>
+            <LottieView
+              source={require('../../../../assets/raw/success.json')}
+              autoPlay
+              loop={false}
+              style={styles.lottieAnimation}
+              resizeMode="contain"
+              onAnimationFinish={() => console.log('Animation Completed')}
+            />
+          </View>
+        </View>
+      </Modal>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.BackgroundScreen}>
           <FlashMessage position="top" />
@@ -333,13 +358,13 @@ const LoginScreen = ({route}) => {
                 />
                 <TouchableOpacity
                   onPress={() => setSecurePassword(!securePassword)}>
-                   <Image
-                      source={
+                  <Image
+                    source={
                       securePassword
-                      ? require('../../../../assets/icons8-invisible-48.png')
-                      : require('../../../../assets/icons8-eye-48.png')
-                      }
-                      style={styles.icon2}
+                        ? require('../../../../assets/icons8-invisible-48.png')
+                        : require('../../../../assets/icons8-eye-48.png')
+                    }
+                    style={styles.icon2}
                   />
                 </TouchableOpacity>
               </View>
@@ -536,8 +561,7 @@ const styles = StyleSheet.create({
     width: '160%',
     position: 'absolute',
   },
-  hoveredOption: {
-  },
+  hoveredOption: {},
   arrowDownIcon: {
     width: 25,
     height: 25,
@@ -569,8 +593,8 @@ const styles = StyleSheet.create({
   lottieAnimation: {
     width: 180,
     height: 150,
-    justifyContent:'center',
-    transform: [{ scale: 1.1 }],
+    justifyContent: 'center',
+    transform: [{scale: 1.1}],
   },
   successText: {
     marginTop: 15,
@@ -578,10 +602,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'green',
   },
-  icon2:{
-    right:8,
-    width:22,
-    height:22
+  icon2: {
+    right: 8,
+    width: 22,
+    height: 22,
   },
 });
 export default LoginScreen;
