@@ -23,8 +23,8 @@ import {DatePickerr, RealTimeClock} from '../../../../components';
 import moment from 'moment';
 
 const { width, height } = Dimensions.get('window');
-const dynamicFontSize = (size) => (width / 375) * size; // 375 adalah lebar referensi
-const dynamicPadding = (padding) => (height / 667) * padding; // 667 adalah tinggi referensi
+const dynamicFontSize = (size) => (width / 375) * size; 
+const dynamicPadding = (padding) => (height / 667) * padding; 
 
 const EditBomboya= ({route}) => {
   const {user} = route.params;

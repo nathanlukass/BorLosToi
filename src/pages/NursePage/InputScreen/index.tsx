@@ -30,7 +30,7 @@ const dynamicFontSize = size => (width / 375) * size; // 375 adalah lebar refere
 const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi referensi
 
 const NurseInputPage = ({route}) => {
-  const {user} = route.params;
+  const {user} = route.params || {};
   const {username, role, ruangan, id_user, nama} = user;
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 

@@ -15,7 +15,7 @@ import {useEffect} from 'react';
 const { width, height } = Dimensions.get('window');
 const dynamicFontSize = (size) => (width / 375) * size; 
 const dynamicPadding = (padding) => (height / 667) * padding; 
-const StatsMujairC = () => {
+const StatsMujairC= () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [statsData, setStatsData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -25,6 +25,8 @@ const StatsMujairC = () => {
   const [gdr, setNilaiGdr] = useState('');
   const [ndr, setNilaiNdr] = useState('');
   const [bto, setNilaiBto] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedFilterDetail, setSelectedFilterDetail] = useState('');
 
   useEffect(() => {
     console.log('State updated:', {bor, avlos, toi, gdr, bto, ndr});
@@ -42,6 +44,8 @@ const StatsMujairC = () => {
     setSelectedDate(formattedDate);
     console.log('Selected Date: ', formattedDate);
     fetchStatsData(formattedDate);
+    setSelectedFilter('Filter Harian');
+    //setSelectedFilterDetail(`Tanggal ${moment(date).format('YYYY-MM-DD')}`);
   };
   const fetchStatsData = async date => {
     if (!date) {
@@ -126,9 +130,11 @@ const StatsMujairC = () => {
   const handleStartDateChange = date => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setStartDate(formattedDate);
+    setSelectedFilter('Filter Range Tanggal');
+    //setSelectedFilterDetail(`Periode tanggal ${moment(date).format('YYYY-MM-DD')} sampai ${moment(endDate).format('YYYY-MM-DD')}`);
     console.log('Start Date: ', formattedDate);
     if (endDate) {
-      fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
+      fetchStatsDataByRange(formattedDate, endDate); 
     }
   };
 
@@ -136,8 +142,10 @@ const StatsMujairC = () => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setEndDate(formattedDate);
     console.log('End Date: ', formattedDate);
+    setSelectedFilter('Filter Rentang Tanggal');
+    //setSelectedFilterDetail(` Periode tanggal ${moment(startDate).format('YYYY-MM-DD')} sampai ${moment(date).format('YYYY-MM-DD')}`);
     if (startDate) {
-      fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
+      fetchStatsDataByRange(startDate, formattedDate); 
     }
   };
 
@@ -236,6 +244,15 @@ const StatsMujairC = () => {
       setSelectedMonth(value);
       console.log('Bulan yang dipilih: ', value);
       fetchStatsDataByMonth(value);
+      const formattedMonth = value.toString().padStart(2, '0');
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      const monthName = monthNames[parseInt(value, 10) - 1];
+      setSelectedFilter('Filter Bulanan');
+      //setSelectedFilterDetail(`Bulan ${monthName}`);
+      fetchStatsDataByMonth(formattedMonth);
     }
   };
 
@@ -284,7 +301,7 @@ const StatsMujairC = () => {
           setNilaiGdr('0');
           setNilaiBto('0');
           setNilaiNdr('0');
-          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+          Alert.alert('No Data', 'Tidak ada data untuk bulan ini.');
         }
       } catch (jsonError) {
         console.error('JSON Parse Error:', jsonError.message);
@@ -341,8 +358,10 @@ const StatsMujairC = () => {
   {/* Kolom untuk Dari Tanggal */}
   <View style={{ flex: 1, marginRight:dynamicPadding(8) }}>
     <Text style={{ fontSize: 12, color: Color.notSoBlack, fontFamily:FontFamily.poppinsRegular }}>Dari Tanggal</Text>
-    <View style={{ marginVertical: dynamicPadding(8) }}>
-      <DatePickerr onDateChange={handleStartDateChange} />
+    <View style={{ marginVertical: dynamicPadding(8), }}>
+      <DatePickerr
+      style={{flex: 1, height: 70}} 
+      onDateChange={handleStartDateChange} />
     </View>
   </View>
 
@@ -350,7 +369,9 @@ const StatsMujairC = () => {
   <View style={{ flex: 1, marginLeft:dynamicPadding(8) }}>
     <Text style={{ fontSize: 12, color: Color.notSoBlack, fontFamily:FontFamily.poppinsRegular}}>Sampai Tanggal</Text>
     <View style={{ marginVertical:dynamicPadding(8) }}>
-      <DatePickerr onDateChange={handleEndDateChange} />
+      <DatePickerr 
+      style={{flex: 1, height: 70}} 
+      onDateChange={handleEndDateChange} />
     </View>
   </View>
 </View>
@@ -401,6 +422,17 @@ const StatsMujairC = () => {
   />
 </View>
 <View style={styles.container2}>
+  <View style={{ padding: 10, alignItems: 'center', backgroundColor: 'rgba(192, 242, 225, 0.5)', borderRadius: 8, marginVertical: 8,flex:1 }}>
+      <Text style={{ fontSize: dynamicFontSize(14), fontFamily: FontFamily.poppinsMedium, color: '#21B557' }}>
+        {selectedFilter || ' '}
+      </Text>
+      {selectedFilterDetail && (
+        <Text style={{ fontSize: dynamicFontSize(12), fontFamily:FontFamily.poppinsRegular, color: '#21B557', marginTop: 0, textAlign:'center' }}>
+          {selectedFilterDetail}
+        </Text>
+      )}
+  </View>
+
   <View style={styles.headerContainer}>
     <View style={styles.buttonHasil}>
       <Text style={styles.buttonText}>HASIL</Text>
@@ -499,7 +531,7 @@ const StatsMujairC = () => {
                   style={styles.rowIcon}
                   source={
                     icon === '#ED1F33'
-                      ? require('../../../../../assets/tdk-memenuhi.png') 
+                      ? require('../../../../../assets/tdk-memenuhi.png')
                       : require('../../../../../assets/memenuhi.png') 
                   }
                 />
@@ -584,6 +616,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 16,
+    marginTop:dynamicPadding(16)
   },
   buttonHasil: {
     backgroundColor: '#21B557',
@@ -630,21 +663,23 @@ const styles = StyleSheet.create({
   },
   rowValue: {
     borderRadius: 5,
-    marginRight:dynamicPadding(14),
+    marginRight:dynamicPadding(18),
     fontFamily: FontFamily.poppinsRegular,
     textAlign:'center',
     fontSize: dynamicFontSize(13),
+    minWidth: 50, // Tetapkan ukuran minimum
   },
   rowStandard: {
     flex:1,
+    marginRight:dynamicPadding(20),
     fontSize: dynamicFontSize(14),
     color: Color.notSoBlack,
     textAlign:'center',
     fontFamily: FontFamily.poppinsRegular,
   },
   rowIcon: {
-    width: 55,
-    height: 26, 
+    width: 56,
+    height: 25, 
   },
   textContainer: {
     flex:1,

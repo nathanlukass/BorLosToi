@@ -11,7 +11,7 @@ import {
 import {DatePickerr} from '../../../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
-import {FontFamily, Color} from '../../..../../../../../GlobalStyles';
+import {FontFamily, Color} from '../../../../../GlobalStyles';
 import moment, {months} from 'moment';
 import {Alert} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
@@ -35,7 +35,7 @@ const AVLOS = () => {
   const [icu, setNilaiIcu] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-
+  const [selectedFilter, setSelectedFilter] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
@@ -43,8 +43,9 @@ const AVLOS = () => {
   const handleDateChange = date => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setSelectedDate(formattedDate);
-    console.log('Selected Date: ', formattedDate);
+    //console.log('Selected Date: ', formattedDate);
     fetchStatsData(formattedDate);
+    setSelectedFilter('Filter Harian');
   };
 
   const fetchStatsData = async date => {
@@ -127,6 +128,7 @@ const AVLOS = () => {
       setSelectedMonth(value);
       console.log('Bulan yang dipilih: ', value);
       fetchStatsDataByMonth(value);
+      setSelectedFilter('Filter Bulanan');
     }
   };
 
@@ -253,7 +255,6 @@ const AVLOS = () => {
           setNilaiIcu(data.Input_Icu || '0');
         } else {
           console.log('No data found for the selected range.');
-          resetAllValues(); // Reset jika tidak ada data
           Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
         }
       } catch (error) {
@@ -272,8 +273,8 @@ const AVLOS = () => {
   };
   // Handler Perubahan Tanggal
   const handleStartDateChange = date => {
-    console.log('Start Date:', date);
-
+    //console.log('Start Date:', date);
+    setSelectedFilter('Filter Rentang Tanggal');
     if (!date) {
       console.error('Tanggal tidak valid:', date);
       return;
@@ -293,7 +294,7 @@ const AVLOS = () => {
 
   const handleEndDateChange = date => {
     console.log('End Date:', date);
-
+    setSelectedFilter('Filter Rentang Tanggal');
     if (!date) {
       console.error('Tanggal tidak valid:', date);
       return;
@@ -368,7 +369,9 @@ const AVLOS = () => {
               Dari Tanggal
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
-              <DatePickerr onDateChange={handleStartDateChange} />
+              <DatePickerr 
+              style={{flex: 1, height: 70}} 
+              onDateChange={handleStartDateChange} />
             </View>
           </View>
 
@@ -383,7 +386,9 @@ const AVLOS = () => {
               Sampai Tanggal
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
-              <DatePickerr onDateChange={handleEndDateChange} />
+              <DatePickerr 
+               style={{flex: 1, height: 70}} 
+              onDateChange={handleEndDateChange} />
             </View>
           </View>
         </View>
@@ -438,6 +443,11 @@ const AVLOS = () => {
         </View>
 
         <View style={styles.container2}>
+        <View style={{ padding: 10, alignItems: 'center', backgroundColor: 'rgba(192, 242, 225, 0.5)', borderRadius: 8, marginVertical: 8,flex:1 }}>
+      <Text style={{ fontSize: dynamicFontSize(14), fontFamily: FontFamily.poppinsMedium, color: '#21B557' }}>
+        {selectedFilter || ' '}
+      </Text>
+      </View>
           <View style={styles.headerContainer}>
             <View style={styles.buttonHasil}>
               <Text style={styles.buttonText}>HASIL</Text>
@@ -453,84 +463,87 @@ const AVLOS = () => {
             {
               label: 'Mujair A :',
               value: mujairA,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
             {
               label: 'Mujair B :',
               value: mujairB,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
             {
               label: 'Mujair C:',
               value: mujairC,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
             {
               label: 'Nike:',
               value: nike,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
             {
               label: 'Payangka :',
               value: payangka,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
             {
               label: 'Neonati:',
               value: neonati,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
             {
               label: 'Bomboya :',
               value: bomboya,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
             {
               label: 'Karper :',
               value: karper,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
             {
-              label: 'Icu :',
+              label: 'ICU :',
               value: icu,
-              standard: '40-50 Kali',
-              symbol: ' Kali',
+              standard: '6-9 Hari',
+              symbol: ' Hari',
             },
-          ].map((row, index) => (
-            <View style={styles.row} key={index}>
-              <Text style={styles.rowLabel}>{row.label}</Text>
-              <Text
-                style={[
-                  styles.rowValue,
-                  {
-                    color:
-                      parseFloat(row.value) >= 40 && parseFloat(row.value) <= 50
-                        ? '#21B557'
-                        : '#ED1F33',
-                  },
-                ]}>
-                {row.value}
-                {row.symbol}
-              </Text>
-              <Text style={styles.rowStandard}>{row.standard}</Text>
-              <Image
-                style={styles.rowIcon}
-                source={
-                  parseFloat(row.value) >= 40 && parseFloat(row.value) <= 50
-                    ? require('../../../../../assets/memenuhi.png')
-                    : require('../../../../../assets/tdk-memenuhi.png')
-                }
-              />
-            </View>
-          ))}
+          ].map((row, index) => {
+            const isInRange =
+              row.value &&
+              !isNaN(parseFloat(row.value)) &&
+              parseFloat(row.value) >= 6 &&
+              parseFloat(row.value) <= 9;
+
+            return (
+              <View style={styles.row} key={index}>
+                <Text style={styles.rowLabel}>{row.label}</Text>
+                <Text
+                  style={[
+                    styles.rowValue,
+                    { color: isInRange ? '#21B557' : '#ED1F33' },
+                  ]}
+                >
+                  {row.value === 'Tidak ada data' ? 'Tidak ada data' : `${row.value}${row.symbol}`}
+                </Text>
+                <Text style={styles.rowStandard}>{row.standard}</Text>
+                <Image
+                  style={styles.rowIcon}
+                  source={
+                    isInRange
+                      ? require('../../../../../assets/memenuhi.png')
+                      : require('../../../../../assets/tdk-memenuhi.png')
+                  }
+                />
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </View>
@@ -620,13 +633,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 16,
+    marginTop:dynamicPadding(16)
   },
   buttonHasil: {
     backgroundColor: '#21B557',
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 62,
+    left: 75,
     fontFamily: FontFamily.poppinsBold,
   },
   buttonStandar: {
@@ -634,7 +648,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 42,
+    left: 50,
   },
   Ket: {
     backgroundColor: '#21B557',
@@ -652,10 +666,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
+    
   },
   rowLabel: {
     flex: 1,
@@ -664,23 +679,28 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsMedium,
   },
   rowValue: {
-    borderRadius: 5,
-    marginRight: dynamicPadding(14),
-    fontFamily: FontFamily.poppinsRegular,
-    textAlign: 'center',
-    fontSize: dynamicFontSize(13),
-  },
-  rowStandard: {
-    flex: 1,
-    fontSize: dynamicFontSize(13),
-    color: Color.notSoBlack,
-    textAlign: 'center',
-    fontFamily: FontFamily.poppinsRegular,
-  },
-  rowIcon: {
-    width: 55,
-    height: 26,
-  },
+     borderRadius: 5,
+     marginRight:dynamicPadding(5),
+     fontFamily: FontFamily.poppinsRegular,
+     textAlign:'center',
+     fontSize: dynamicFontSize(13),
+     minWidth: 50, 
+     maxWidth: 70,
+     flex: 2, 
+     lineHeight: 16,
+   },
+   rowStandard: {
+     flex:1,
+     marginRight:dynamicPadding(14),
+     fontSize: dynamicFontSize(14),
+     color: Color.notSoBlack,
+     textAlign:'center',
+     fontFamily: FontFamily.poppinsRegular,
+   },
+   rowIcon: {
+     width: 56,
+     height: 26, 
+   },
 });
 
 export default AVLOS;
