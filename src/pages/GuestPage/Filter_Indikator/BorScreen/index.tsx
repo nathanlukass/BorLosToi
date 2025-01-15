@@ -64,6 +64,7 @@ const BOR = () => {
           body: new URLSearchParams({
             tanggal: date,
             indicator: 'BOR',
+            indicator: 'BOR',
           }).toString(),
         },
       );
@@ -145,6 +146,9 @@ const BOR = () => {
             month: month,
             indicator: 'BOR',
           }).toString(),
+            month: month,
+            indicator: 'BOR',
+          }).toString(),
         },
       );
 
@@ -161,7 +165,6 @@ const BOR = () => {
         result = JSON.parse(responseText);
         console.log('Parsed JSON:', result);
 
-        // Jika status sukses dan ada data, tampilkan data
         if (result.status === 'success' && result.data) {
           const data = result.data; // Mengambil data pertama jika ada
           setNilaiMujairA(data['Mujair A'] || '0');
@@ -174,17 +177,9 @@ const BOR = () => {
           setNilaiKarper(data.Karper || '0');
           setNilaiIcu(data.Icu || '0');
         } else {
-          // Jika tidak ada data, set nilai default 0
-          setNilaiMujairA('0');
-          setNilaiMujairB('0');
-          setNilaiMujairC('0');
-          setNilaiNike('0');
-          setNilaiPayangka('0');
-          setNilaiNeonati('0');
-          setNilaiBomboya('0');
-          setNilaiKarper('0');
-          setNilaiIcu('0');
-          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+          console.log('Tidak ada data valid dari server.');
+          resetStateToNoData();
+          Alert.alert('No Data', 'Tidak ada data untuk bulan ini.');
         }
       } catch (jsonError) {
         console.error('JSON Parse Error:', jsonError.message);
@@ -217,7 +212,7 @@ const BOR = () => {
       });
 
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_indicator_by_range',
+        'https://samratindikator.online/borlostoi/public/insert/get_stats_indicator_by_range ',
         {
           method: 'POST',
           headers: {
@@ -226,6 +221,7 @@ const BOR = () => {
           body: new URLSearchParams({
             start_date: startDate,
             end_date: endDate,
+            indicator: 'BOR',
             indicator: 'BOR',
           }).toString(),
         },
