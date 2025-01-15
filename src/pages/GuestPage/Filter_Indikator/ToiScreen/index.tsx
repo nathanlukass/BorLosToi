@@ -371,7 +371,7 @@ const TOI = () => {
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
               <DatePickerr 
-              style={{flex: 1, height: 70}} 
+              style={{flex: 1, height: 60}} 
               onDateChange={handleStartDateChange} />
             </View>
           </View>
@@ -388,7 +388,7 @@ const TOI = () => {
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
               <DatePickerr 
-               style={{flex: 1, height: 70}} 
+               style={{flex: 1, height: 60}} 
               onDateChange={handleEndDateChange} />
             </View>
           </View>
@@ -531,7 +531,7 @@ const TOI = () => {
             { color: isInRange ? '#21B557' : '#ED1F33' },
           ]}
         >
-          {row.value === '-' ? '-' : `${row.value}${row.symbol}`}
+          {row.value === 'Tidak ada data' ? 'Tidak ada data' : `${row.value}${row.symbol}`}
         </Text>
         <Text style={styles.rowStandard}>{row.standard}</Text>
         <Image
@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 75,
+    left: dynamicPadding(58),
     fontFamily: FontFamily.poppinsBold,
   },
   buttonStandar: {
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 50,
+    left: dynamicPadding(38),
   },
   Ket: {
     backgroundColor: '#21B557',

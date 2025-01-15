@@ -370,7 +370,7 @@ const NDR = () => {
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
               <DatePickerr 
-              style={{flex: 1, height: 70}} 
+              style={{flex: 1, height: 60}} 
               onDateChange={handleStartDateChange} />
             </View>
           </View>
@@ -387,7 +387,7 @@ const NDR = () => {
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
               <DatePickerr 
-               style={{flex: 1, height: 70}} 
+               style={{flex: 1, height: 60}} 
               onDateChange={handleEndDateChange} />
             </View>
           </View>
@@ -649,7 +649,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 75,
+    left: dynamicPadding(58),
     fontFamily: FontFamily.poppinsBold,
   },
   buttonStandar: {
@@ -657,7 +657,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 50,
+    left: dynamicPadding(38),
   },
   Ket: {
     backgroundColor: '#21B557',

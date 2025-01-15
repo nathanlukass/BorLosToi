@@ -82,13 +82,12 @@ class DatePickerr extends React.Component<IProps, IState> {
   hideOverlay = () => {
     this.setState({ show: false });
   };
-  hideModal = () => {
-    console.log("Hiding modal");
+ hideModal = () => {
+    const { navigation, ruangan } = this.props;
+
     this.setState({ isModalVisible: false }, () => {
-      if (this.props.navigation) {
-        this.props.navigation.navigate('HomeScreenNurse', );
-      } else {
-  
+      if (navigation) {
+        navigation.navigate('HomeScreenNurse', { ruangan });
       }
     });
   };

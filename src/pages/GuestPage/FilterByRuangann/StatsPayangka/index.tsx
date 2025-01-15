@@ -360,7 +360,7 @@ const StatsPayangka= () => {
     <Text style={{ fontSize: 12, color: Color.notSoBlack, fontFamily:FontFamily.poppinsRegular }}>Dari Tanggal</Text>
     <View style={{ marginVertical: dynamicPadding(8), }}>
       <DatePickerr
-      style={{flex: 1, height: 70}} 
+      style={{flex: 1, height: 60}} 
       onDateChange={handleStartDateChange} />
     </View>
   </View>
@@ -370,7 +370,7 @@ const StatsPayangka= () => {
     <Text style={{ fontSize: 12, color: Color.notSoBlack, fontFamily:FontFamily.poppinsRegular}}>Sampai Tanggal</Text>
     <View style={{ marginVertical:dynamicPadding(8) }}>
       <DatePickerr 
-      style={{flex: 1, height: 70}} 
+      style={{flex: 1, height: 60}} 
       onDateChange={handleEndDateChange} />
     </View>
   </View>

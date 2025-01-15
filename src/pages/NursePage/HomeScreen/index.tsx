@@ -140,19 +140,19 @@ const HomeScreenNurse = ({ route }) => {
         style={styles.headerBackground}
         resizeMode="cover"
       >
-        <View style={[styles.textContent, { justifyContent: 'flex-start', marginTop: -200 }]}>
+        <View style={[styles.textContent, { justifyContent: 'flex-start', marginTop: -180 }]}>
           <Text style={styles.greetingText}>Selamat Datang di</Text>
           <Text style={styles.welcomeText}>Sensus Harian Pasien</Text>
           <Text style={styles.welcomeText}>Ruangan {ruangan}</Text>
         </View>
 
-        <View style={styles.imageContainer}>
+        {/* <View style={styles.imageContainer}>
           <Image
             source={require('../../../../assets/fotoRuangan.png')}
             style={styles.fotoRuangan}
             resizeMode="cover"
           />
-        </View>
+        </View> */}
         <View style={styles.menuButtonContainer}>
         <TouchableOpacity onPress={() => resizeBox(1)}>
           <Image source={require('../../../../assets/menu.png')} resizeMode="cover" />
@@ -194,8 +194,7 @@ const HomeScreenNurse = ({ route }) => {
             style={{
               flexDirection: 'row',
               justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginHorizontal:dynamicPadding(-8)
+              marginHorizontal:dynamicPadding(-8),
             }}
           >
             <TouchableOpacity style={styles.menuItem} onPress={openLihatBORLOS}>
@@ -291,14 +290,13 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     flexDirection:'row',
-    justifyContent:'space-between',
+    //justifyContent:'space-between',
     alignItems:'center',
     backgroundColor: Color.schemesOnPrimary,
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     elevation: 4,
-    marginTop: dynamicPadding(-180),
-    paddingVertical: 20,
+    marginTop: -250,
     paddingHorizontal: 16,
     flex:1,
   },
@@ -333,6 +331,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width:90,
     marginHorizontal: 8, 
+    zIndex:1,
+    marginTop:dynamicPadding(0)
   },
   lihatBorlostoiChild: {
     top: 0,

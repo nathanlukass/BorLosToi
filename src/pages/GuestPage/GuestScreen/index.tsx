@@ -497,7 +497,7 @@ const ScreenGuest = () => {
     <Text style={{ fontSize: 12, color: Color.notSoBlack, fontFamily:FontFamily.poppinsRegular }}>Dari Tanggal</Text>
     <View style={{ marginVertical: dynamicPadding(8) }}>
       <DatePickerr 
-       style={{flex: 1, height: 70}} 
+       style={{flex: 1, height: 60}} 
        onDateChange={handleStartDateChange} />
     </View>
   </View>
@@ -507,7 +507,7 @@ const ScreenGuest = () => {
     <Text style={{ fontSize: 12, color: Color.notSoBlack, fontFamily:FontFamily.poppinsRegular}}>Sampai Tanggal</Text>
     <View style={{ marginVertical:dynamicPadding(8) }}>
       <DatePickerr 
-       style={{flex: 1, height: 70}} 
+       style={{flex: 1, height: 60}} 
       onDateChange={handleEndDateChange} />
     </View>
   </View>
@@ -781,7 +781,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 62,
+    left: dynamicPadding(46),
     fontFamily: FontFamily.poppinsBold,
   },
   buttonStandar: {
@@ -789,7 +789,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left:44,
+    left: dynamicPadding(33),
   },
   headerContainer: {
     flexDirection: 'row',

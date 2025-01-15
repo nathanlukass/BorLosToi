@@ -370,7 +370,7 @@ const GDR = () => {
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
               <DatePickerr 
-              style={{flex: 1, height: 70}} 
+              style={{flex: 1, height: 60}} 
               onDateChange={handleStartDateChange} />
             </View>
           </View>
@@ -387,7 +387,7 @@ const GDR = () => {
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
               <DatePickerr 
-               style={{flex: 1, height: 70}} 
+               style={{flex: 1, height: 60}} 
               onDateChange={handleEndDateChange} />
             </View>
           </View>
@@ -533,10 +533,10 @@ const GDR = () => {
             { 
               color:
               row.value === 'Tidak ada data'
-                ? '#ED1F33' // Merah untuk "Tidak ada data"
+                ? '#ED1F33' 
                 : isValidValue
-                ? (isBelowThreshold ? '#21B557' : '#ED1F33') // Hijau jika <20, Merah jika >=20
-                : '#21B557', // Default hijau untuk nilai invalid
+                ? (isBelowThreshold ? '#21B557' : '#ED1F33') 
+                : '#21B557', 
             },
           ]}
         >
@@ -650,7 +650,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 75,
+    left: dynamicPadding(58),
     fontFamily: FontFamily.poppinsBold,
   },
   buttonStandar: {
@@ -658,7 +658,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: 50,
+    left: dynamicPadding(38),
   },
   Ket: {
     backgroundColor: '#21B557',
