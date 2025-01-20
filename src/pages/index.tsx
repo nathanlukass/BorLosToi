@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import LoginScreen from './Auth/LoginScreen';
 import SplashScreen from './Auth/SplashScreen';
 import HomeScreenNurse from './NursePage/HomeScreen';
@@ -14,8 +13,8 @@ import BOR from './GuestPage/Filter_Indikator/BorScreen';
 import AVLOS from './GuestPage/Filter_Indikator/AvlosScreen';
 import TOI from './GuestPage/Filter_Indikator/ToiScreen';
 import BTO from './GuestPage/Filter_Indikator/BtoScreen';
-import NDR from './GuestPage/Filter_Indikator/NdrScreen';
 import GDR from './GuestPage/Filter_Indikator/GdrScreen';
+import NDR from './GuestPage/Filter_Indikator/NdrScreen';
 import AboutApp from './shared/AboutApp';
 import ChangePassword from './shared/ChangePassword';
 //import BorlostoiRuangan from './BorlostoiRuangan';
@@ -50,7 +49,7 @@ export {
   //ProfileScreenNurse,
   HomeScreenAdmin,
   //ProfileScreenAdmin,
- // EditScreenAdmin,
+  // EditScreenAdmin,
   PrintOutScreen,
   EditMujairA,
   EditMujairB,

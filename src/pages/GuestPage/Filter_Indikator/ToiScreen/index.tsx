@@ -36,14 +36,16 @@ const TOI = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedFilterDetail, setSelectedFilterDetail] = useState('');
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const handleDateChange = date => {
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setSelectedDate(formattedDate);
-    console.log('Selected Date: ', formattedDate);
+    //console.log('Selected Date: ', formattedDate);
     fetchStatsData(formattedDate);
     setSelectedFilter('Filter Harian');
   };
@@ -127,12 +129,47 @@ const TOI = () => {
     if (value) {
       setSelectedMonth(value);
       console.log('Bulan yang dipilih: ', value);
-      fetchStatsDataByMonth(value);
+      fetchStatsDataByMonthAndYear(value);
+      const formattedMonth = value.toString().padStart(2, '0');
+      const monthNames = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      const monthName = monthNames[parseInt(value, 10) - 1];
       setSelectedFilter('Filter Bulanan');
+      //setSelectedFilterDetail(`Bulan ${monthName}`);
+      fetchStatsDataByMonthAndYear(formattedMonth);
     }
   };
 
-  const fetchStatsDataByMonth = async month => {
+  const handleYearChange = value => {
+    if (value) {
+      setSelectedYear(value);
+      console.log('Tahun yang dipilih: ', value);
+
+      if (!selectedMonth) {
+        Alert.alert('Pilih Bulan', 'Silakan pilih bulan terlebih dahulu.');
+        return;
+      }
+
+      fetchStatsDataByMonthAndYear(selectedMonth, value);
+    }
+  };
+
+  const fetchStatsDataByMonthAndYear = async (month, year) => {
+    setLoading(true);
+    console.log('Mengirim request dengan bulan dan tahun:', {month, year});
+
     try {
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_monthly_stats_by_indicator',
@@ -143,9 +180,7 @@ const TOI = () => {
           },
           body: new URLSearchParams({
             month: month,
-            indicator: 'TOI',
-          }).toString(),
-            month: month,
+            year: year,
             indicator: 'TOI',
           }).toString(),
         },
@@ -159,26 +194,58 @@ const TOI = () => {
         Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
         return;
       }
+
       let result;
       try {
         result = JSON.parse(responseText);
         console.log('Parsed JSON:', result);
 
         if (result.status === 'success' && result.data) {
-          const data = result.data; // Mengambil data pertama jika ada
-          setNilaiMujairA(data['Mujair A'] || '0');
-          setNilaiMujairB(data['Mujair B'] || '0');
-          setNilaiMujairC(data['Mujair C'] || '0');
-          setNilaiNike(data.Nike || '0');
-          setNilaiPayangka(data.Payangka || '0');
-          setNilaiNeonati(data.Neonati || '0');
-          setNilaiBomboya(data.Bomboya || '0');
-          setNilaiKarper(data.Karper || '0');
-          setNilaiIcu(data.Icu || '0');
+          const data = result.data;
+
+          // Mengatur nilai dengan validasi
+          setNilaiMujairA(
+            data['Mujair A'] === 'Tidak ada data'
+              ? 'Tidak ada data'
+              : data['Mujair A'],
+          );
+          setNilaiMujairB(
+            data['Mujair B'] === 'Tidak ada data'
+              ? 'Tidak ada data'
+              : data['Mujair B'],
+          );
+          setNilaiMujairC(
+            data['Mujair C'] === 'Tidak ada data'
+              ? 'Tidak ada data'
+              : data['Mujair C'],
+          );
+          setNilaiNike(
+            data.Nike === 'Tidak ada data' ? 'Tidak ada data' : data.Nike,
+          );
+          setNilaiPayangka(
+            data.Payangka === 'Tidak ada data'
+              ? 'Tidak ada data'
+              : data.Payangka,
+          );
+          setNilaiNeonati(
+            data.Neonati === 'Tidak ada data' ? 'Tidak ada data' : data.Neonati,
+          );
+          setNilaiBomboya(
+            data.Bomboya === 'Tidak ada data' ? 'Tidak ada data' : data.Bomboya,
+          );
+          setNilaiKarper(
+            data.Karper === 'Tidak ada data' ? 'Tidak ada data' : data.Karper,
+          );
+          setNilaiIcu(
+            data.Icu === 'Tidak ada data' ? 'Tidak ada data' : data.Icu,
+          );
+
+          // Log untuk memeriksa data yang diterima
+          console.log('Nilai Mujair A:', data['Mujair A']);
         } else {
           console.log('Tidak ada data valid dari server.');
           resetStateToNoData();
-          Alert.alert('No Data', 'Tidak ada data untuk bulan ini.');
+          Alert.alert('No Data', 'Tidak ada data untuk bulan dan tahun ini.');
         }
       } catch (jsonError) {
         console.error('JSON Parse Error:', jsonError.message);
@@ -193,6 +260,30 @@ const TOI = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const resetStateToNoData = () => {
+    setNilaiMujairA('Tidak ada data');
+    setNilaiMujairB('Tidak ada data');
+    setNilaiMujairC('Tidak ada data');
+    setNilaiNike('Tidak ada data');
+    setNilaiPayangka('Tidak ada data');
+    setNilaiNeonati('Tidak ada data');
+    setNilaiBomboya('Tidak ada data');
+    setNilaiKarper('Tidak ada data');
+    setNilaiIcu('Tidak ada data');
+  };
+
+  const resetStateToDefault = () => {
+    setNilaiMujairA('0');
+    setNilaiMujairB('0');
+    setNilaiMujairC('0');
+    setNilaiNike('0');
+    setNilaiPayangka('0');
+    setNilaiNeonati('0');
+    setNilaiBomboya('0');
+    setNilaiKarper('0');
+    setNilaiIcu('0');
   };
 
   const fetchStatsDataByRange = async (startDate, endDate) => {
@@ -267,9 +358,8 @@ const TOI = () => {
   };
   // Handler Perubahan Tanggal
   const handleStartDateChange = date => {
-    console.log('Start Date:', date);
+    //console.log('Start Date:', date);
     setSelectedFilter('Filter Rentang Tanggal');
-
     if (!date) {
       console.error('Tanggal tidak valid:', date);
       return;
@@ -364,9 +454,10 @@ const TOI = () => {
               Dari Tanggal
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
-              <DatePickerr 
-              style={{flex: 1, height: 60}} 
-              onDateChange={handleStartDateChange} />
+              <DatePickerr
+                style={{flex: 1, height: 60}}
+                onDateChange={handleStartDateChange}
+              />
             </View>
           </View>
 
@@ -381,9 +472,10 @@ const TOI = () => {
               Sampai Tanggal
             </Text>
             <View style={{marginVertical: dynamicPadding(8)}}>
-              <DatePickerr 
-               style={{flex: 1, height: 60}} 
-              onDateChange={handleEndDateChange} />
+              <DatePickerr
+                style={{flex: 1, height: 60}}
+                onDateChange={handleEndDateChange}
+              />
             </View>
           </View>
         </View>
@@ -417,134 +509,182 @@ const TOI = () => {
                 {label: 'November', value: '11'},
                 {label: 'December', value: '12'},
               ]}
-              style={{
-                inputAndroid: {
-                  alignItems: 'center',
-                  color: Color.notSoBlack,
-                },
-                inputIOS: {
-                  alignItems: 'center',
-                  color: 'white',
-                },
-              }}
               value={selectedMonth}
               placeholder={{
-                label: 'Select a month...',
+                label: 'Pilih Bulan...',
                 value: null,
-                color: Color.notSoBlack,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputAndroid: {color: 'black'},
+                inputIOS: {color: 'black'},
+              }}
+            />
+
+            <RNPickerSelect
+              onValueChange={value => handleYearChange(value)}
+              items={[
+                {
+                  label: `${new Date().getFullYear() - 1}`,
+                  value: new Date().getFullYear() - 1,
+                },
+                {
+                  label: `${new Date().getFullYear()}`,
+                  value: new Date().getFullYear(),
+                },
+                {
+                  label: `${new Date().getFullYear() + 1}`,
+                  value: new Date().getFullYear() + 1,
+                },
+              ]}
+              value={selectedYear}
+              placeholder={{
+                label: 'Pilih Tahun...',
+                value: null,
+                color: '#9EA0A4',
+              }}
+              style={{
+                inputAndroid: {color: 'black'},
+                inputIOS: {color: 'black'},
               }}
             />
           </View>
         </View>
 
         <View style={styles.container2}>
-        <View style={{ padding: 10, alignItems: 'center', backgroundColor: 'rgba(192, 242, 225, 0.5)', borderRadius: 8, marginVertical: 8,flex:1 }}>
-      <Text style={{ fontSize: dynamicFontSize(14), fontFamily: FontFamily.poppinsMedium, color: '#21B557' }}>
-        {selectedFilter || ' '}
-      </Text>
-  </View>
-  <View style={styles.headerContainer}>
-    <View style={styles.buttonHasil}>
-      <Text style={styles.buttonText}>HASIL</Text>
-    </View>
-    <View style={styles.buttonStandar}>
-      <Text style={styles.buttonText}>STANDAR</Text>
-    </View>
-    <View style={styles.Ket}>
-      <Text style={styles.buttonText}>KET</Text>
-    </View>
-  </View>
-  {[
-    {
-      label: 'Mujair A :',
-      value: mujairA,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-    {
-      label: 'Mujair B :',
-      value: mujairB,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-    {
-      label: 'Mujair C:',
-      value: mujairC,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-    {
-      label: 'Nike:',
-      value: nike,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-    {
-      label: 'Payangka :',
-      value: payangka,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-    {
-      label: 'Neonati:',
-      value: neonati,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-    {
-      label: 'Bomboya :',
-      value: bomboya,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-    {
-      label: 'Karper :',
-      value: karper,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-    {
-      label: 'ICU :',
-      value: icu,
-      standard: '1-3 Hari',
-      symbol: ' Hari',
-    },
-  ].map((row, index) => {
-    const isInRange =
-      row.value &&
-      !isNaN(parseFloat(row.value)) &&
-      parseFloat(row.value) >= 1 &&
-      parseFloat(row.value) <= 3;
+          <View
+            style={{
+              padding: 10,
+              alignItems: 'center',
+              backgroundColor: 'rgba(192, 242, 225, 0.5)',
+              borderRadius: 8,
+              marginVertical: 8,
+              flex: 1,
+            }}>
+            <Text
+              style={{
+                fontSize: dynamicFontSize(14),
+                fontFamily: FontFamily.poppinsMedium,
+                color: '#21B557',
+              }}>
+              {selectedFilter || ' '}
+            </Text>
+            {selectedFilterDetail && (
+              <Text
+                style={{
+                  fontSize: dynamicFontSize(12),
+                  fontFamily: FontFamily.poppinsRegular,
+                  color: '#21B557',
+                  marginTop: 0,
+                  textAlign: 'center',
+                }}>
+                {selectedFilterDetail}
+              </Text>
+            )}
+          </View>
+          <View style={styles.headerContainer}>
+            <View style={styles.buttonHasil}>
+              <Text style={styles.buttonText}>HASIL</Text>
+            </View>
+            <View style={styles.buttonStandar}>
+              <Text style={styles.buttonText}>STANDAR</Text>
+            </View>
+            <View style={styles.Ket}>
+              <Text style={styles.buttonText}>KET</Text>
+            </View>
+          </View>
+          {[
+            {
+              label: 'Mujair A :',
+              value: mujairA,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+            {
+              label: 'Mujair B :',
+              value: mujairB,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+            {
+              label: 'Mujair C:',
+              value: mujairC,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+            {
+              label: 'Nike:',
+              value: nike,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+            {
+              label: 'Payangka :',
+              value: payangka,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+            {
+              label: 'Neonati:',
+              value: neonati,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+            {
+              label: 'Bomboya :',
+              value: bomboya,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+            {
+              label: 'Karper :',
+              value: karper,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+            {
+              label: 'ICU :',
+              value: icu,
+              standard: '1-3 Hari',
+              symbol: ' Hari',
+            },
+          ].map((row, index) => {
+            const isInRange =
+              row.value &&
+              !isNaN(parseFloat(row.value)) &&
+              parseFloat(row.value) >= 1 &&
+              parseFloat(row.value) <= 3;
 
-    return (
-      <View style={styles.row} key={index}>
-        <Text style={styles.rowLabel}>{row.label}</Text>
-        <Text
-          style={[
-            styles.rowValue,
-            { color: isInRange ? '#21B557' : '#ED1F33' },
-          ]}
-        >
-          {row.value === 'Tidak ada data' ? 'Tidak ada data' : `${row.value}${row.symbol}`}
-        </Text>
-        <Text style={styles.rowStandard}>{row.standard}</Text>
-        <Image
-          style={styles.rowIcon}
-          source={
-            isInRange
-              ? require('../../../../../assets/memenuhi.png')
-              : require('../../../../../assets/tdk-memenuhi.png')
-          }
-        />
-      </View>
-    );
-  })}
-</View>
-
+            return (
+              <View style={styles.row} key={index}>
+                <Text style={styles.rowLabel}>{row.label}</Text>
+                <Text
+                  style={[
+                    styles.rowValue,
+                    {color: isInRange ? '#21B557' : '#ED1F33'},
+                  ]}>
+                  {row.value === 'Tidak ada data'
+                    ? 'Tidak ada data'
+                    : `${row.value}${row.symbol}`}
+                </Text>
+                <Text style={styles.rowStandard}>{row.standard}</Text>
+                <Image
+                  style={styles.rowIcon}
+                  source={
+                    isInRange
+                      ? require('../../../../../assets/memenuhi.png')
+                      : require('../../../../../assets/tdk-memenuhi.png')
+                  }
+                />
+              </View>
+            );
+          })}
+        </View>
       </ScrollView>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -629,7 +769,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 16,
-    marginTop:dynamicPadding(16)
+    marginTop: dynamicPadding(16),
   },
   buttonHasil: {
     backgroundColor: '#21B557',
@@ -644,7 +784,7 @@ const styles = StyleSheet.create({
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(8),
     borderRadius: 5,
-    left: dynamicPadding(38),
+    left: dynamicPadding(40),
   },
   Ket: {
     backgroundColor: '#21B557',
@@ -666,7 +806,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: '#E0E0E0',
-    
   },
   rowLabel: {
     flex: 1,
@@ -675,28 +814,28 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsMedium,
   },
   rowValue: {
-     borderRadius: 5,
-     marginRight:dynamicPadding(5),
-     fontFamily: FontFamily.poppinsRegular,
-     textAlign:'center',
-     fontSize: dynamicFontSize(13),
-     minWidth: 50, 
-     maxWidth: 70,
-     flex: 2, 
-     lineHeight: 16,
-   },
-   rowStandard: {
-     flex:1,
-     marginRight:dynamicPadding(14),
-     fontSize: dynamicFontSize(14),
-     color: Color.notSoBlack,
-     textAlign:'center',
-     fontFamily: FontFamily.poppinsRegular,
-   },
-   rowIcon: {
-     width: 56,
-     height: 26, 
-   },
+    borderRadius: 5,
+    marginRight: dynamicPadding(5),
+    fontFamily: FontFamily.poppinsRegular,
+    textAlign: 'center',
+    fontSize: dynamicFontSize(13),
+    minWidth: 50,
+    maxWidth: 70,
+    flex: 2,
+    lineHeight: 16,
+  },
+  rowStandard: {
+    flex: 1,
+    marginRight: dynamicPadding(14),
+    fontSize: dynamicFontSize(14),
+    color: Color.notSoBlack,
+    textAlign: 'center',
+    fontFamily: FontFamily.poppinsRegular,
+  },
+  rowIcon: {
+    width: 56,
+    height: 26,
+  },
 });
 
 export default TOI;

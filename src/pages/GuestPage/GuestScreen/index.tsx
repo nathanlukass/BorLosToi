@@ -1,21 +1,29 @@
 import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, ImageBackground, BackHandler } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  ImageBackground,
+  BackHandler,
+  Pressable,
+} from 'react-native';
 import {DatePickerr} from '../../../components';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
-import {
-  FontFamily,
-  Color,
-} from '../../../../GlobalStyles';
+import {FontFamily, Color} from '../../../../GlobalStyles';
 import moment from 'moment';
 import {Alert} from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import BottomSheetRuangan from '../../../../components/BottomSheetRuangan';
 import BottomSheetIndikator from '../../../../components/BottomSheetIndikator';
 
-const { width, height } = Dimensions.get('window');
-const dynamicFontSize = (size) => (width / 375) * size; // 375 adalah lebar referensi
-const dynamicPadding = (padding) => (height / 667) * padding; // 667 adalah tinggi referensi
+const {width, height} = Dimensions.get('window');
+const dynamicFontSize = size => (width / 375) * size; // 375 adalah lebar referensi
+const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi referensi
 
 const ScreenGuest = () => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -28,10 +36,12 @@ const ScreenGuest = () => {
   const [ndr, setNilaiNdr] = useState('');
   const [bto, setNilaiBto] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
-  
+
   const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
-  const [isBottomSheetRuanganVisible, setIsBottomSheetRuanganVisible] = useState(false);
-  const [isBottomSheetIndikatorVisible, setIsBottomSheetIndikatorVisible] = useState(false);
+  const [isBottomSheetRuanganVisible, setIsBottomSheetRuanganVisible] =
+    useState(false);
+  const [isBottomSheetIndikatorVisible, setIsBottomSheetIndikatorVisible] =
+    useState(false);
 
   const toggleBottomSheetRuangan = () => {
     setIsBottomSheetRuanganVisible(!isBottomSheetRuanganVisible);
@@ -48,18 +58,20 @@ const ScreenGuest = () => {
     const backAction = () => {
       if (isBottomSheetRuanganVisible) {
         setIsBottomSheetRuanganVisible(false);
-        return true; 
+        return true;
       }
       if (isBottomSheetIndikatorVisible) {
         setIsBottomSheetIndikatorVisible(false);
-        return true; 
+        return true;
       }
-      return false; 
+      return false;
     };
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
     return () => backHandler.remove();
   }, [isBottomSheetRuanganVisible, isBottomSheetIndikatorVisible]);
-
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
@@ -150,13 +162,22 @@ const ScreenGuest = () => {
     if (value) {
       const formattedMonth = value.toString().padStart(2, '0'); // Format jadi dua digit
       setSelectedMonth(formattedMonth);
-     
+
       const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
       ];
       const monthName = monthNames[parseInt(value, 10) - 1]; // Ambil nama bulan dari array
-
 
       //console.log('Bulan yang dipilih:', formattedMonth);
       setSelectedFilter('Filter Bulanan');
@@ -331,7 +352,7 @@ const ScreenGuest = () => {
     if (endDate) {
       //setHeaderText(`Filter range tanggal ${moment(formattedDate).format('DD MMM YYYY')} sampai ${moment(endDate).format('DD MMM YYYY')}`);
       fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
-    } 
+    }
   };
 
   const handleEndDateChange = date => {
@@ -341,9 +362,9 @@ const ScreenGuest = () => {
     setSelectedFilter('Filter Rentang Tanggal');
     //setSelectedFilterDetail(` Periode tanggal ${moment(startDate).format('YYYY-MM-DD')} sampai ${moment(date).format('YYYY-MM-DD')}`);
     if (startDate) {
-     // setHeaderText(`Filter range tanggal ${moment(startDate).format('DD MMM YYYY')} sampai ${moment(formattedDate).format('DD MMM YYYY')}`);
+      // setHeaderText(`Filter range tanggal ${moment(startDate).format('DD MMM YYYY')} sampai ${moment(formattedDate).format('DD MMM YYYY')}`);
       fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
-    } 
+    }
   };
 
   const fetchStatsDataByRange = async (startDate, endDate) => {
@@ -426,258 +447,340 @@ const ScreenGuest = () => {
   //const [showDatePickers, setShowDatePickers] = useState(false);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
+      <View style={styles.barAtas}>
+        <Pressable
+          style={styles.backButton}
+          onPress={() => navigation.navigate('LoginScreen')}>
+          <Image
+            style={styles.icon2}
+            resizeMode="cover"
+            source={require('../../../../assets/-icon-arrow-back.png')}
+          />
+        </Pressable>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>Back to login</Text>
+        </View>
+      </View>
       <ImageBackground
         source={require('../../../../assets/rs-picture1.jpg')}
         style={styles.bg}
-        resizeMode="cover"
-      >
+        resizeMode="cover">
         {/* Kontainer utama */}
         <View style={styles.overlay}>
           <Text style={styles.title}>Selamat Datang</Text>
-          <Text style={{fontFamily:FontFamily.poppinsRegular, 
-            color:'white',
-            fontSize:dynamicFontSize(12),
-            paddingHorizontal:dynamicPadding(10),
-            marginBottom:dynamicPadding(16),
-            textAlign:'center'
-          }}>Dapatkan informasi terkini tentang Indikator Rumah Sakit</Text>
+          <Text
+            style={{
+              fontFamily: FontFamily.poppinsRegular,
+              color: 'white',
+              fontSize: dynamicFontSize(12),
+              paddingHorizontal: dynamicPadding(10),
+              marginBottom: dynamicPadding(16),
+              textAlign: 'center',
+            }}>
+            Dapatkan informasi terkini tentang Indikator Rumah Sakit
+          </Text>
         </View>
       </ImageBackground>
-<View style={styles.cardContainer}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}
-      scrollEnabled={!isBottomSheetRuanganVisible && !isBottomSheetIndikatorVisible} 
-      >
-        
-        {/* Konten scrollable */}
-        <Text style={[styles.text1,{marginTop:dynamicPadding(8)}]}>Filter Kategori</Text>
-        <View style={[styles.buttonGrid, {marginBottom:dynamicPadding(40)}]}>
-          <TouchableOpacity
-              style={[styles.cardBtn,{marginBottom:8}]}
+      <View style={styles.cardContainer}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          scrollEnabled={
+            !isBottomSheetRuanganVisible && !isBottomSheetIndikatorVisible
+          }>
+          {/* Konten scrollable */}
+          <Text style={[styles.text1, {marginTop: dynamicPadding(8)}]}>
+            Filter Kategori
+          </Text>
+          <View style={[styles.buttonGrid, {marginBottom: dynamicPadding(40)}]}>
+            <TouchableOpacity
+              style={[styles.cardBtn, {marginBottom: 8}]}
               onPress={toggleBottomSheetRuangan}>
-                <Image
-                  source={require('../../../../assets/room.png')} 
-                  style={styles.icon}
-                />
-                  <Text style={[styles.text2, {marginTop:dynamicPadding(4)},{textAlign:'center'}]}>Filter Ruangan</Text>
+              <Image
+                source={require('../../../../assets/room.png')}
+                style={styles.icon}
+              />
+              <Text
+                style={[
+                  styles.text2,
+                  {marginTop: dynamicPadding(4)},
+                  {textAlign: 'center'},
+                ]}>
+                Filter Ruangan
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-            style={[styles.cardBtn]}
-            onPress={toggleBottomSheetIndikator}>
+              style={[styles.cardBtn]}
+              onPress={toggleBottomSheetIndikator}>
               <Image
                 source={require('../../../../assets/indicator.png')} // Pastikan path ke ikon benar
                 style={styles.icon}
               />
-               <Text style={[styles.text2, {marginTop:dynamicPadding(4)},{textAlign:'center'}]}>Filter Indikator</Text>
-              
+              <Text
+                style={[
+                  styles.text2,
+                  {marginTop: dynamicPadding(4)},
+                  {textAlign: 'center'},
+                ]}>
+                Filter Indikator
+              </Text>
             </TouchableOpacity>
 
-          {/* <Text style={styles.text}>Konten lainnya di sini</Text> */}
-        </View>
-        <View>
-         <Text style={[styles.text1, {marginTop:dynamicPadding(-30)}]}>Indikator Rumah Sakit </Text>
-         <Text style={[styles.text2, {marginTop:dynamicPadding(-12)}]}>Pilih tanggal </Text>
+            {/* <Text style={styles.text}>Konten lainnya di sini</Text> */}
+          </View>
+          <View>
+            <Text style={[styles.text1, {marginTop: dynamicPadding(-30)}]}>
+              Indikator Rumah Sakit{' '}
+            </Text>
+            <Text style={[styles.text2, {marginTop: dynamicPadding(-12)}]}>
+              Pilih tanggal{' '}
+            </Text>
+          </View>
+          <View style={{marginVertical: 8, marginBottom: 8}}>
+            <DatePickerr onDateChange={handleDateChange} />
+          </View>
+          <View>
+            <Text style={styles.text2}>Pilih tanggal sendiri </Text>
+            <Text
+              style={{
+                fontFamily: FontFamily.poppinsRegular,
+                fontSize: dynamicFontSize(11),
+                color: '#1A75AE',
+              }}>
+              Tentukan periode waktu untuk menampilkan Indikator Rumah Sakit{' '}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              marginTop: dynamicPadding(4),
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginVertical: dynamicPadding(8),
+            }}>
+            {/* Kolom untuk Dari Tanggal */}
+            <View style={{flex: 1, marginRight: dynamicPadding(8)}}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: Color.notSoBlack,
+                  fontFamily: FontFamily.poppinsRegular,
+                }}>
+                Dari Tanggal
+              </Text>
+              <View style={{marginVertical: dynamicPadding(8)}}>
+                <DatePickerr
+                  style={{flex: 1, height: 60}}
+                  onDateChange={handleStartDateChange}
+                />
+              </View>
+            </View>
+
+            {/* Kolom untuk Sampai Tanggal */}
+            <View style={{flex: 1, marginLeft: dynamicPadding(8)}}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: Color.notSoBlack,
+                  fontFamily: FontFamily.poppinsRegular,
+                }}>
+                Sampai Tanggal
+              </Text>
+              <View style={{marginVertical: dynamicPadding(8)}}>
+                <DatePickerr
+                  style={{flex: 1, height: 60}}
+                  onDateChange={handleEndDateChange}
+                />
+              </View>
+            </View>
+          </View>
+
+          {/* PILIH BULAN */}
+          <Text style={[styles.text2, {marginTop: dynamicPadding(-8)}]}>
+            Pilih bulan
+          </Text>
+          <View>
+            <View
+              style={{
+                alignItems: 'center',
+                marginVertical: dynamicPadding(8),
+                borderWidth: 1,
+                borderRadius: 8,
+                paddingHorizontal: dynamicPadding(8),
+                marginBottom: dynamicPadding(16),
+              }}>
+              <RNPickerSelect
+                onValueChange={value => handleMonthChange(value)}
+                items={[
+                  {label: 'January', value: '1'},
+                  {label: 'February', value: '2'},
+                  {label: 'March', value: '3'},
+                  {label: 'April', value: '4'},
+                  {label: 'May', value: '5'},
+                  {label: 'June', value: '6'},
+                  {label: 'July', value: '7'},
+                  {label: 'August', value: '8'},
+                  {label: 'September', value: '9'},
+                  {label: 'October', value: '10'},
+                  {label: 'November', value: '11'},
+                  {label: 'December', value: '12'},
+                ]}
+                style={{
+                  inputAndroid: {
+                    alignItems: 'center',
+                    color: Color.notSoBlack,
+                  },
+                  inputIOS: {
+                    alignItems: 'center',
+                    color: 'white',
+                  },
+                }}
+                value={selectedMonth}
+                placeholder={{
+                  label: 'Select a month...',
+                  value: null,
+                  color: Color.notSoBlack,
+                }}
+              />
+            </View>
+          </View>
+
+          <View style={styles.container2}>
+            <View
+              style={{
+                padding: 10,
+                alignItems: 'center',
+                backgroundColor: 'rgba(192, 242, 225, 0.5)',
+                borderRadius: 8,
+                marginVertical: 8,
+                flex: 1,
+              }}>
+              <Text
+                style={{
+                  fontSize: dynamicFontSize(14),
+                  fontFamily: FontFamily.poppinsMedium,
+                  color: '#21B557',
+                }}>
+                {selectedFilter || ' '}
+              </Text>
+            </View>
+
+            <View style={styles.headerContainer}>
+              <View style={styles.buttonHasil}>
+                <Text style={styles.buttonText}>HASIL</Text>
+              </View>
+              <View style={styles.buttonStandar}>
+                <Text style={styles.buttonText}>STANDAR</Text>
+              </View>
+              <View style={styles.Ket}>
+                <Text style={styles.buttonText}>KET</Text>
+              </View>
+            </View>
+            <View>
+              {[
+                {
+                  label: 'BOR :',
+                  value: bor,
+                  standard: '60-85%',
+                  icon: 'green',
+                  symbol: '%',
+                },
+                {
+                  label: 'AVLOS :',
+                  value: avlos,
+                  standard: '6-9 Hari',
+                  icon: 'green',
+                  symbol: ' Hari',
+                },
+                {
+                  label: 'TOI :',
+                  value: toi,
+                  standard: '1-3 Hari',
+                  icon: 'red',
+                  symbol: ' Hari',
+                },
+                {
+                  label: 'BTO :',
+                  value: bto,
+                  standard: '40-50 Kali',
+                  icon: 'green',
+                  symbol: ' Kali',
+                },
+                {
+                  label: 'GDR :',
+                  value: gdr,
+                  standard: '< 20 ‰',
+                  icon: 'red',
+                  symbol: ' ‰',
+                },
+                {
+                  label: 'NDR :',
+                  value: ndr,
+                  standard: '< 45 ‰',
+                  icon: 'red',
+                  symbol: ' ‰',
+                },
+              ].map((row, index) => {
+                let icon = '#21B557';
+                if (row.standard.includes('-')) {
+                  const [min, max] = row.standard
+                    .replace(/[^\d\-\.]/g, '')
+                    .split('-')
+                    .map(item => parseFloat(item));
+
+                  if (
+                    parseFloat(row.value) < min ||
+                    parseFloat(row.value) > max
+                  ) {
+                    icon = '#ED1F33';
+                  }
+                } else if (row.standard.includes('Hari')) {
+                  const [min, max] = row.standard
+                    .split('-')
+                    .map(item => parseFloat(item));
+                  if (row.value < min || row.value > max) {
+                    icon = '#ED1F33';
+                  }
+                } else if (
+                  row.standard.includes('Kali') ||
+                  row.standard.includes('‰')
+                ) {
+                  const max = parseFloat(row.standard.split(' ')[1]);
+                  if (row.value > max) {
+                    icon = '#ED1F33';
+                  }
+                }
+
+                return (
+                  <View key={index} style={styles.row}>
+                    <Text style={styles.rowLabel}>{row.label}</Text>
+                    <Text
+                      style={[
+                        styles.rowValue,
+                        {color: icon === '#ED1F33' ? '#ED1F33' : '#21B557'},
+                      ]}>
+                      {row.value}
+                      {row.symbol}
+                    </Text>
+                    <Text style={styles.rowStandard}>{row.standard}</Text>
+                    <Image
+                      style={styles.rowIcon}
+                      source={
+                        icon === '#ED1F33'
+                          ? require('../../../../assets/tdk-memenuhi.png') // Path to red icon
+                          : require('../../../../assets/memenuhi.png') // Path to green icon
+                      }
+                    />
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        </ScrollView>
       </View>
-    <View style={{ marginVertical:8, marginBottom:8 }}>
-      <DatePickerr
-        onDateChange={handleDateChange} />
-    </View>
-    <View>
-      <Text style={styles.text2}>Pilih tanggal sendiri </Text>
-      <Text style={{fontFamily: FontFamily.poppinsRegular,
-                    fontSize: dynamicFontSize(11),
-                    color:'#1A75AE'
-       }}>Tentukan periode waktu untuk menampilkan Indikator Rumah Sakit </Text>
-    </View>
-
-    <View style={{ marginTop:dynamicPadding(4), flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginVertical: dynamicPadding(8) }}>
-  {/* Kolom untuk Dari Tanggal */}
-  <View style={{ flex: 1, marginRight:dynamicPadding(8) }}>
-    <Text style={{ fontSize: 12, color: Color.notSoBlack, fontFamily:FontFamily.poppinsRegular }}>Dari Tanggal</Text>
-    <View style={{ marginVertical: dynamicPadding(8) }}>
-      <DatePickerr 
-       style={{flex: 1, height: 60}} 
-       onDateChange={handleStartDateChange} />
-    </View>
-  </View>
-
-  {/* Kolom untuk Sampai Tanggal */}
-  <View style={{ flex: 1, marginLeft:dynamicPadding(8) }}>
-    <Text style={{ fontSize: 12, color: Color.notSoBlack, fontFamily:FontFamily.poppinsRegular}}>Sampai Tanggal</Text>
-    <View style={{ marginVertical:dynamicPadding(8) }}>
-      <DatePickerr 
-       style={{flex: 1, height: 60}} 
-      onDateChange={handleEndDateChange} />
-    </View>
-  </View>
-</View>
-
-{/* PILIH BULAN */}
-<Text style={[styles.text2, { marginTop: dynamicPadding(-8) }]}>Pilih bulan</Text>
-<View>
-<View style={{
-  alignItems: 'center',
-  marginVertical: dynamicPadding(8),
-  borderWidth: 1, 
-  borderRadius: 8, 
-  paddingHorizontal: dynamicPadding(8),
-  marginBottom:dynamicPadding(16)
-}}>
-  <RNPickerSelect
-    onValueChange={value => handleMonthChange(value)}
-    items={[
-      { label: 'January', value: '1' },
-      { label: 'February', value: '2' },
-      { label: 'March', value: '3' },
-      { label: 'April', value: '4' },
-      { label: 'May', value: '5' },
-      { label: 'June', value: '6' },
-      { label: 'July', value: '7' },
-      { label: 'August', value: '8' },
-      { label: 'September', value: '9' },
-      { label: 'October', value: '10' },
-      { label: 'November', value: '11' },
-      { label: 'December', value: '12' },
-    ]}
-    style={{
-      inputAndroid: {
-        alignItems: 'center',
-        color: Color.notSoBlack,
-      },
-      inputIOS: {
-        alignItems: 'center',
-        color: 'white',
-      }
-    }}
-    value={selectedMonth}
-    placeholder={{
-      label: 'Select a month...',
-      value: null,
-      color: Color.notSoBlack,
-    }}
-  />
-</View>
-</View>
-        
- <View style={styles.container2}>
-    <View style={{ padding: 10, alignItems: 'center', backgroundColor: 'rgba(192, 242, 225, 0.5)', borderRadius: 8, marginVertical: 8,flex:1 }}>
-      <Text style={{ fontSize: dynamicFontSize(14), fontFamily: FontFamily.poppinsMedium, color: '#21B557' }}>
-        {selectedFilter || ' '}
-      </Text>
-  </View>
-
-   <View style={styles.headerContainer}>
-     <View style={styles.buttonHasil}>
-       <Text style={styles.buttonText}>HASIL</Text>
-     </View>
-     <View style={styles.buttonStandar}>
-       <Text style={styles.buttonText}>STANDAR</Text>
-     </View>
-     <View style={styles.Ket}>
-       <Text style={styles.buttonText}>KET</Text>
-     </View>
-   </View>
-   <View >
-       {[
-         {
-           label: 'BOR :',
-           value: bor,
-           standard: '60-85%',
-           icon: 'green',
-           symbol: '%',
-         },
-         {
-           label: 'AVLOS :',
-           value: avlos,
-           standard: '6-9 Hari',
-           icon: 'green',
-           symbol: ' Hari',
-         },
-         {
-           label: 'TOI :',
-           value: toi,
-           standard: '1-3 Hari',
-           icon: 'red',
-           symbol: ' Hari',
-         },
-         {
-           label: 'BTO :',
-           value: bto,
-           standard: '40-50 Kali',
-           icon: 'green',
-           symbol: ' Kali',
-         },
-         {
-           label: 'GDR :',
-           value: gdr,
-           standard: '< 20 ‰',
-           icon: 'red',
-           symbol: ' ‰',
-         },
-         {
-           label: 'NDR :',
-           value: ndr,
-           standard: '< 45 ‰',
-           icon: 'red',
-           symbol: ' ‰',
-         },
-       ].map((row, index) => {
-         let icon = '#21B557';
-         if (row.standard.includes('-')) {
-           const [min, max] = row.standard
-             .replace(/[^\d\-\.]/g, '')
-             .split('-')
-             .map(item => parseFloat(item));
- 
-           if (parseFloat(row.value) < min || parseFloat(row.value) > max) {
-             icon = '#ED1F33';
-           }
-         } else if (row.standard.includes('Hari')) {
-           const [min, max] = row.standard
-             .split('-')
-             .map(item => parseFloat(item));
-           if (row.value < min || row.value > max) {
-             icon = '#ED1F33';
-           }
-         } else if (
-           row.standard.includes('Kali') ||
-           row.standard.includes('‰')
-         ) {
-           const max = parseFloat(row.standard.split(' ')[1]);
-           if (row.value > max) {
-             icon = '#ED1F33';
-           }
-         }
- 
-             return (
-               <View key={index} style={styles.row}>
-                 <Text style={styles.rowLabel}>{row.label}</Text>
-                 <Text
-                   style={[
-                     styles.rowValue,
-                     {color: icon === '#ED1F33' ? '#ED1F33' : '#21B557'},
-                   ]}>
-                   {row.value}
-                   {row.symbol}</Text>
-                   <Text style={styles.rowStandard}>{row.standard}</Text>
-                 <Image
-                   style={styles.rowIcon}
-                   source={
-                     icon === '#ED1F33'
-                       ? require('../../../../assets/tdk-memenuhi.png') // Path to red icon
-                       : require('../../../../assets/memenuhi.png') // Path to green icon
-                   }
-                 />
-               </View>
-             );
-           })}
-         </View> 
-       </View> 
-       
-      </ScrollView>
-     </View>
-     <BottomSheetRuangan
+      <BottomSheetRuangan
         isVisible={isBottomSheetRuanganVisible}
         onClose={() => setIsBottomSheetRuanganVisible(false)}
       />
@@ -685,25 +788,25 @@ const ScreenGuest = () => {
         isVisible={isBottomSheetIndikatorVisible}
         onClose={() => setIsBottomSheetIndikatorVisible(false)}
       />
-     </View>
-   );
- };    
+    </View>
+  );
+};
 const styles = StyleSheet.create({
   bg: {
     flex: 1,
     justifyContent: 'center',
-    height:'80%'
+    height: '55%',
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     fontSize: dynamicFontSize(24),
     color: 'white',
-    marginTop:dynamicPadding(-110),
+    marginTop: dynamicPadding(-210),
     fontFamily: FontFamily.poppinsMedium,
   },
   scrollContainer: {
@@ -713,36 +816,36 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
   },
   cardContainer: {
-    flexDirection:'row',
-    justifyContent:'space-between',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     backgroundColor: Color.schemesOnPrimary,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     elevation: 4,
-    marginTop: dynamicPadding(-170),
-    flex:1,
+    marginTop: dynamicPadding(-240),
+    flex: 1,
   },
   buttonGrid: {
     flexDirection: 'row',
     flexWrap: 'nowrap',
     justifyContent: 'space-evenly',
     width: '90%',
-    alignSelf:'center',
+    alignSelf: 'center',
     gap: dynamicPadding(24),
   },
   cardBtn: {
-   padding: dynamicPadding(12),
-   backgroundColor: Color.schemesOnPrimary,
-   shadowColor: '#000', 
-   shadowOffset: { width: 0, height: -2 }, 
-   shadowOpacity: 0.1,
-   shadowRadius: 4,
-   elevation: 4, 
-   zIndex: 1, 
-   borderRadius: dynamicPadding(4),
-   overflow: 'visible',
-   width: '45%', 
-   height: dynamicPadding(100), 
+    padding: dynamicPadding(12),
+    backgroundColor: Color.schemesOnPrimary,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: -2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
+    zIndex: 1,
+    borderRadius: dynamicPadding(4),
+    overflow: 'visible',
+    width: '45%',
+    height: dynamicPadding(100),
   },
   text2: {
     fontSize: dynamicFontSize(14),
@@ -753,8 +856,8 @@ const styles = StyleSheet.create({
     fontSize: dynamicFontSize(16),
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsMedium,
-    marginBottom:dynamicPadding(16),
-    marginTop:dynamicPadding(16)
+    marginBottom: dynamicPadding(16),
+    marginTop: dynamicPadding(16),
   },
   filterButton: {
     backgroundColor: Color.colorMediumaquamarine,
@@ -767,13 +870,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#21B557',
     paddingVertical: dynamicPadding(5),
     paddingHorizontal: dynamicPadding(16),
-    left:dynamicPadding(18),
+    left: dynamicPadding(18),
     borderRadius: 5,
   },
   buttonText: {
     color: '#FFFFFF',
     textAlign: 'center',
-    fontSize:dynamicFontSize(12),
+    fontSize: dynamicFontSize(12),
     fontFamily: FontFamily.poppinsMedium,
   },
   buttonHasil: {
@@ -795,70 +898,69 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 16,
-    marginTop:dynamicPadding(16)
+    marginTop: dynamicPadding(16),
   },
   container2: {
     padding: dynamicPadding(16),
     backgroundColor: Color.schemesOnPrimary,
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: -2 }, 
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: -2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 4, 
-    zIndex: 1, 
+    elevation: 4,
+    zIndex: 1,
     marginHorizontal: dynamicPadding(-1),
     borderRadius: dynamicPadding(8),
     overflow: 'visible',
   },
-   row: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      paddingVertical: 8,
-      borderBottomWidth: 1,
-      borderBottomColor: '#E0E0E0',
-      
-    },
-    rowLabel: {
-      flex: 1,
-      fontSize: dynamicFontSize(13),
-      color: Color.notSoBlack,
-      fontFamily: FontFamily.poppinsMedium,
-    },
-    rowValue: {
-       borderRadius: 5,
-       marginRight:dynamicPadding(20),
-       fontFamily: FontFamily.poppinsRegular,
-       textAlign:'center',
-       fontSize: dynamicFontSize(13),
-       minWidth: 50, 
-       maxWidth: 60,
-       flex: 2, 
-       lineHeight: 16,
-     },
-     rowStandard: {
-       flex:1,
-       marginRight:dynamicPadding(20),
-       fontSize: dynamicFontSize(14),
-       color: Color.notSoBlack,
-       textAlign:'center',
-       fontFamily: FontFamily.poppinsRegular,
-     },
-     rowIcon: {
-       width: 56,
-       height: 26, 
-     },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  rowLabel: {
+    flex: 1,
+    fontSize: dynamicFontSize(13),
+    color: Color.notSoBlack,
+    fontFamily: FontFamily.poppinsMedium,
+  },
+  rowValue: {
+    borderRadius: 5,
+    marginRight: dynamicPadding(20),
+    fontFamily: FontFamily.poppinsRegular,
+    textAlign: 'center',
+    fontSize: dynamicFontSize(13),
+    minWidth: 50,
+    maxWidth: 60,
+    flex: 2,
+    lineHeight: 16,
+  },
+  rowStandard: {
+    flex: 1,
+    marginRight: dynamicPadding(20),
+    fontSize: dynamicFontSize(14),
+    color: Color.notSoBlack,
+    textAlign: 'center',
+    fontFamily: FontFamily.poppinsRegular,
+  },
+  rowIcon: {
+    width: 56,
+    height: 26,
+  },
   text: {
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     fontSize: dynamicFontSize(16),
-    textAlign:'center'
+    textAlign: 'center',
   },
   icon: {
     width: 35,
     height: 35,
-    marginVertical:dynamicPadding(8),
-    alignSelf: 'center', 
+    marginVertical: dynamicPadding(8),
+    alignSelf: 'center',
   },
   headerText: {
     fontSize: 16, // Ukuran teks
@@ -866,6 +968,44 @@ const styles = StyleSheet.create({
     color: '#000', // Warna teks
     textAlign: 'center', // Posisi teks
     marginBottom: 10, // Jarak dari elemen berikutnya
+  },
+  icon2: {
+    width: 45,
+    height: 25,
+  },
+  backButton: {
+    position: 'absolute',
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    zIndex: 10,
+  },
+  barAtas: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    backgroundColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 10,
+    marginBottom: -100,
+  },
+  textContainer: {
+    flex: 1,
+    right: 'auto',
+    top: '25%',
+    transform: [{translateY: -12}],
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

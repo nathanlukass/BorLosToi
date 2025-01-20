@@ -1,39 +1,36 @@
 import React, {useState, useCallback, useRef, useEffect} from 'react';
 import {
   Image,
-  StyleSheet, 
-  View, Text, 
-  Pressable, 
-  Modal, 
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Modal,
   ScrollView,
-  TouchableOpacity, 
+  TouchableOpacity,
   ImageBackground,
   Dimensions,
   SafeAreaView,
   Animated,
   Easing,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
-import {
-  Color,
-  FontFamily,
-  Border,
-} from '../../../../GlobalStyles';
+import {Color, FontFamily, Border} from '../../../../GlobalStyles';
 import PopupMenuNurse from '../../../../components/PopupMenu';
 import HistoryPage from '../../../../components/HistoryPage';
 
 // NEW CODE
-import 'react-native-gesture-handler' ;
-const { width, height } = Dimensions.get("window");
+import 'react-native-gesture-handler';
+const {width, height} = Dimensions.get('window');
 
-const dynamicFontSize = (size) => (width / 375) * size; 
-const dynamicPadding = (padding) => (height / 667) * padding;
+const dynamicFontSize = size => (width / 375) * size;
+const dynamicPadding = padding => (height / 667) * padding;
 
-const HomeScreenNurse = ({ route }) => {
-  const { user } = route.params || {};
-  const { username, role, ruangan, id_user, nama } =  user || {};
+const HomeScreenNurse = ({route}) => {
+  const {user} = route.params || {};
+  const {username, role, ruangan, id_user, nama} = user || {};
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState(null);
   const [lihatBORLOSVisible, setLihatBORLOSVisible] = useState(false);
@@ -49,8 +46,10 @@ const HomeScreenNurse = ({ route }) => {
     setLihatBORLOSVisible(false);
   }, []);
 
-  const resizeBox = (to) => {
-    if (to === 1) setMenuVisible(true);
+  const resizeBox = to => {
+    if (to === 1) {
+      setMenuVisible(true);
+    }
     Animated.timing(scale, {
       toValue: to,
       useNativeDriver: true,
@@ -104,20 +103,19 @@ const HomeScreenNurse = ({ route }) => {
     }
   };
 
-
   const menuOptions = [
     {
       title: 'About App',
       action: () => {
         setMenuVisible(false);
-        navigation.navigate('AboutApp', { user });
+        navigation.navigate('AboutApp', {user});
       },
     },
     {
       title: 'Change Password',
       action: () => {
         setMenuVisible(false);
-        navigation.navigate('ChangePassword', { user });
+        navigation.navigate('ChangePassword', {user});
       },
     },
     {
@@ -126,7 +124,7 @@ const HomeScreenNurse = ({ route }) => {
         setMenuVisible(false);
         navigation.reset({
           index: 0,
-          routes: [{ name: 'LoginScreen', params: { loggedOut: true } }],
+          routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
         });
         alert("You've been logged out");
       },
@@ -138,9 +136,12 @@ const HomeScreenNurse = ({ route }) => {
       <ImageBackground
         source={require('../../../../assets/background.png')}
         style={styles.headerBackground}
-        resizeMode="cover"
-      >
-        <View style={[styles.textContent, { justifyContent: 'flex-start', marginTop: -180 }]}>
+        resizeMode="cover">
+        <View
+          style={[
+            styles.textContent,
+            {justifyContent: 'flex-start', marginTop: -180},
+          ]}>
           <Text style={styles.greetingText}>Selamat Datang di</Text>
           <Text style={styles.welcomeText}>Sensus Harian Pasien</Text>
           <Text style={styles.welcomeText}>Ruangan {ruangan}</Text>
@@ -154,51 +155,57 @@ const HomeScreenNurse = ({ route }) => {
           />
         </View> */}
         <View style={styles.menuButtonContainer}>
-        <TouchableOpacity onPress={() => resizeBox(1)}>
-          <Image source={require('../../../../assets/menu.png')} resizeMode="cover" />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={() => resizeBox(1)}>
+            <Image
+              source={require('../../../../assets/menu.png')}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
 
       <View style={styles.cardContainer}>
-      <ScrollView
-        contentContainerStyle={{ paddingBottom: 10}}
-      >
-     
-      <Modal transparent visible={menuVisible}>
-        <SafeAreaView style={{ flex: 1 }} pointerEvents="box-none">
-          <View style={{ flex: 1 }} onTouchStart={() => setMenuVisible(false)} />
-          <Animated.View
-            style={[
-              styles.popup,
-              {
-                opacity: scale.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }),
-                transform: [{ scale }],
-              },
-            ]}
-          >
-            {menuOptions.map((op, i) => (
-              <TouchableOpacity
-                style={styles.option}
-                key={i}
-                onPress={op.action}
-              >
-                <Text style={styles.optionText}>{op.title}</Text>
-              </TouchableOpacity>
-            ))}
-          </Animated.View>
-        </SafeAreaView>
-      </Modal>
+        <ScrollView contentContainerStyle={{paddingBottom: 10}}>
+          <Modal transparent visible={menuVisible}>
+            <SafeAreaView style={{flex: 1}} pointerEvents="box-none">
+              <View
+                style={{flex: 1}}
+                onTouchStart={() => setMenuVisible(false)}
+              />
+              <Animated.View
+                style={[
+                  styles.popup,
+                  {
+                    opacity: scale.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0, 1],
+                    }),
+                    transform: [{scale}],
+                  },
+                ]}>
+                {menuOptions.map((op, i) => (
+                  <TouchableOpacity
+                    style={styles.option}
+                    key={i}
+                    onPress={op.action}>
+                    <Text style={styles.optionText}>{op.title}</Text>
+                  </TouchableOpacity>
+                ))}
+              </Animated.View>
+            </SafeAreaView>
+          </Modal>
 
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'flex-start',
-              marginHorizontal:dynamicPadding(-8),
-            }}
-          >
+              marginHorizontal: dynamicPadding(-8),
+            }}>
             <TouchableOpacity style={styles.menuItem} onPress={openLihatBORLOS}>
-              <Modal animationType="fade" transparent visible={lihatBORLOSVisible}>
+              <Modal
+                animationType="fade"
+                transparent
+                visible={lihatBORLOSVisible}>
                 <View style={styles.lihatBORLOSOverlay}>
                   <Pressable
                     style={styles.lihatBORLOSBg}
@@ -206,9 +213,21 @@ const HomeScreenNurse = ({ route }) => {
                   />
                   <View style={styles.modalContent}>
                     {jumlahTempatTidur ? (
-                      <Text style={{fontSize:dynamicFontSize(16), textAlign:'center',justifyContent:'center', fontFamily:FontFamily.poppinsRegular, color:Color.notSoBlack}}>
+                      <Text
+                        style={{
+                          fontSize: dynamicFontSize(16),
+                          textAlign: 'center',
+                          justifyContent: 'center',
+                          fontFamily: FontFamily.poppinsRegular,
+                          color: Color.notSoBlack,
+                        }}>
                         Jumlah Bed:{'\n\n'}
-                        <Text style={{ fontSize: dynamicFontSize(30), fontFamily: FontFamily.poppinsBold, justifyContent:'center'}}>
+                        <Text
+                          style={{
+                            fontSize: dynamicFontSize(30),
+                            fontFamily: FontFamily.poppinsBold,
+                            justifyContent: 'center',
+                          }}>
                           {jumlahTempatTidur}
                         </Text>
                       </Text>
@@ -227,8 +246,7 @@ const HomeScreenNurse = ({ route }) => {
 
             <TouchableOpacity
               style={styles.menuItem}
-              onPress={() => navigation.navigate('NurseInputPage', { user })}
-            >
+              onPress={() => navigation.navigate('NurseInputPage', {user})}>
               <Image
                 source={require('../../../../assets/input-icon.png')}
                 style={styles.icon}
@@ -237,44 +255,32 @@ const HomeScreenNurse = ({ route }) => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.row}>
-            <Image
-             source={require('../../../../assets/history.png')}
-            style={styles.icon2}/>
-          <Text style={styles.Title2}>Riwayat input</Text>
-          </View>
-
-          <HistoryPage 
-          ruangan={ruangan || null} 
-        />
+          <HistoryPage ruangan={ruangan || null} />
         </ScrollView>
       </View>
-      </View>
+    </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   textContent: {
     paddingLeft: 24,
     paddingTop: 40,
-   
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft:dynamicPadding(8),
-    marginTop:dynamicPadding(16),
-    marginBottom:dynamicPadding(8)
-
+    marginLeft: dynamicPadding(8),
+    marginTop: dynamicPadding(16),
+    marginBottom: dynamicPadding(8),
   },
-  icon2:{
-    right:8,
-    width:22,
-    height:22
+  icon2: {
+    right: 8,
+    width: 22,
+    height: 22,
   },
   welcomeText: {
-    marginBottom:-6,
+    marginBottom: -6,
     fontSize: 24,
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsSemiBold,
@@ -284,35 +290,34 @@ const styles = StyleSheet.create({
     color: Color.notSoBlack,
     fontFamily: FontFamily.poppinsRegular,
   },
-  container :{
+  container: {
     flex: 1,
-    
   },
   cardContainer: {
-    flexDirection:'row',
+    flexDirection: 'row',
     //justifyContent:'space-between',
-    alignItems:'center',
+    alignItems: 'center',
     backgroundColor: Color.schemesOnPrimary,
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     elevation: 4,
     marginTop: -250,
     paddingHorizontal: 16,
-    flex:1,
+    flex: 1,
   },
   headerBackground: {
     width: '105%',
-    height: '75%', 
-    justifyContent:'center',
-    position: 'relative', 
+    height: '75%',
+    justifyContent: 'center',
+    position: 'relative',
   },
   Title: {
     fontSize: 16,
     marginBottom: 16,
-    marginTop:60,
+    marginTop: 60,
     fontFamily: FontFamily.poppinsMedium,
   },
-  Title2:{
+  Title2: {
     fontSize: dynamicFontSize(14),
     fontFamily: FontFamily.poppinsMedium,
   },
@@ -329,10 +334,10 @@ const styles = StyleSheet.create({
   },
   menuItem: {
     alignItems: 'center',
-    width:90,
-    marginHorizontal: 8, 
-    zIndex:1,
-    marginTop:dynamicPadding(0)
+    width: 90,
+    marginHorizontal: 8,
+    zIndex: 1,
+    marginTop: dynamicPadding(0),
   },
   lihatBorlostoiChild: {
     top: 0,
@@ -358,11 +363,11 @@ const styles = StyleSheet.create({
   },
   menuButtonContainer: {
     position: 'absolute',
-    top: 30,  
+    top: 30,
     right: dynamicPadding(30),
-    zIndex: 3,  
+    zIndex: 3,
   },
-  fotoRuangan :{
+  fotoRuangan: {
     width: '100%',
     height: '100%',
   },
@@ -371,9 +376,9 @@ const styles = StyleSheet.create({
     marginEnd: 38,
     marginTop: 16,
     borderRadius: 15,
-    overflow: 'hidden', 
-    height: 160, 
-    justifyContent:'center',
+    overflow: 'hidden',
+    height: 160,
+    justifyContent: 'center',
   },
   option: {
     flexDirection: 'row',
@@ -397,7 +402,7 @@ const styles = StyleSheet.create({
     right: 20,
     width: '48%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
@@ -411,19 +416,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    paddingBottom:dynamicPadding(16),
-    paddingTop:dynamicPadding(24)
+    paddingBottom: dynamicPadding(16),
+    paddingTop: dynamicPadding(24),
   },
   modalText: {
-    fontSize:dynamicFontSize(14),
-    
+    fontSize: dynamicFontSize(14),
+
     color: '#333',
     textAlign: 'center',
   },
 });
 
-export default HomeScreenNurse
+export default HomeScreenNurse;
