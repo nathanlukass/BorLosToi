@@ -11,18 +11,15 @@ import {
   Easing,
   Dimensions,
 } from 'react-native';
+import LottieView from 'lottie-react-native'; // Pastikan Anda menginstal lottie-react-native
 
 const {width, height} = Dimensions.get('window');
 const dynamicFontSize = size => (width / 375) * size; // 375 adalah lebar referensi
 const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi referensi
 
-const [modalVisible, setModalVisible] = useState(false);
-const openModal = () => setModalVisible(true);
-const closeModal = () => setModalVisible(false);
-const [menuVisible, setMenuVisible] = useState(false);
-
-const PopupMenu = ({navigation, user}) => {
+const PopupMenu = ({navigation, user = {role: 'nurse'}}) => {
   const [visible, setVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const scale = useRef(new Animated.Value(0)).current;
 
   const nurseOptions = [
@@ -43,50 +40,21 @@ const PopupMenu = ({navigation, user}) => {
     {
       title: 'Logout',
       action: () => {
-        setMenuVisible(false);
-        openModal(); // Tampilkan modal
-
+        setVisible(false);
+        setModalVisible(true); // Tampilkan modal dengan animasi
         setTimeout(() => {
-          closeModal(); // Tutup modal setelah 3 detik
+          setModalVisible(false); // Tutup modal setelah 3 detik
           navigation.reset({
             index: 0,
             routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
           });
-        }, 3000); // Durasi modal ditampilkan
+        }, 3000);
       },
     },
   ];
 
   const adminOptions = [
-    {
-      title: 'About App',
-      action: () => {
-        console.log('Navigating to About App');
-        navigation.navigate('AboutApp', {user});
-      },
-    },
-    {
-      title: 'Change Password',
-      action: () => {
-        console.log('Navigating to Change Password');
-        navigation.navigate('ChangePassword', {user});
-      },
-    },
-    {
-      title: 'Logout',
-      action: () => {
-        setMenuVisible(false);
-        openModal(); // Tampilkan modal
-
-        setTimeout(() => {
-          closeModal(); // Tutup modal setelah 3 detik
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
-          });
-        }, 3000); // Durasi modal ditampilkan
-      },
-    },
+    ...nurseOptions, // Gunakan opsi yang sama untuk admin
   ];
 
   const options = user.role === 'admin' ? adminOptions : nurseOptions;
@@ -136,6 +104,23 @@ const PopupMenu = ({navigation, user}) => {
           </Animated.View>
         </SafeAreaView>
       </Modal>
+
+      {/* Modal untuk animasi logout */}
+      <Modal transparent visible={modalVisible}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <LottieView
+              source={require('../assets/raw/success.json')}
+              autoPlay
+              loop={false}
+              style={styles.lottieAnimation}
+              resizeMode="contain"
+              onAnimationFinish={() => console.log('Animation Completed')}
+            />
+            <Text style={styles.successText}>Logging Out...</Text>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 };
@@ -170,6 +155,29 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     fontSize: 14,
     color: '#212121',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  lottieAnimation: {
+    width: 180,
+    height: 150,
+  },
+  successText: {
+    marginTop: 15,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'green',
   },
 });
 

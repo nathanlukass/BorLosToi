@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import {Border, Color, FontFamily, FontSize} from '../../../../GlobalStyles';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -18,19 +18,20 @@ import {useNavigation} from '@react-navigation/native';
 import RNFS from 'react-native-fs';
 import {Buffer} from 'buffer';
 
-const { width, height } = Dimensions.get('window');
-const dynamicFontSize = (size) => (width / 375) * size; // 375 adalah lebar referensi
-const dynamicPadding = (padding) => (height / 667) * padding; // 667 adalah tinggi referensi
+const {width, height} = Dimensions.get('window');
+const dynamicFontSize = size => (width / 375) * size; // 375 adalah lebar referensi
+const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi referensi
 
-const PrintOutScreen = ({ route }) => {
-  const { user } = route.params;
-  const { username, role, ruangan, id_user, nama } = user;
-  const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
- // const navigation = useNavigation();
+const PrintOutScreen = ({route}) => {
+  const {user} = route.params;
+  const {username, role, ruangan, id_user, nama} = user;
+  const navigation = useNavigation();
   const [selectedRoom, setSelectedRoom] = React.useState('Pilih Ruangan');
   const [selectedMonth, setSelectedMonth] = React.useState('Pilih Bulan');
+  const [selectedYear, setSelectedYear] = React.useState('Pilih Tahun');
   const [roomModalVisible, setRoomModalVisible] = React.useState(false);
   const [monthModalVisible, setMonthModalVisible] = React.useState(false);
+  const [yearModalVisible, setYearModalVisible] = React.useState(false); // New modal for year
   const [isLoading, setIsLoading] = React.useState(false);
 
   const rooms = [
@@ -44,6 +45,7 @@ const PrintOutScreen = ({ route }) => {
     'Karper',
     'ICU',
   ];
+
   const months = [
     'Januari',
     'Februari',
@@ -59,11 +61,14 @@ const PrintOutScreen = ({ route }) => {
     'Desember',
   ];
 
+  // Get current year and calculate previous and next year
+  const currentYear = new Date().getFullYear();
+  const years = [currentYear - 1, currentYear, currentYear + 1];
+
   const FILE_NAME = 'laporan.pdf'; // Nama file saat diunduh
   const API_URL =
     'https://samratindikator.online/borlostoi/public/insert/export_table';
 
-  // Fungsi untuk merender item dalam modal
   const renderItem = ({item, onSelect}) => (
     <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>
       <Text style={styles.itemText}>{item}</Text>
@@ -82,7 +87,7 @@ const PrintOutScreen = ({ route }) => {
         <View style={styles.modalContent}>
           <FlatList
             data={items}
-            keyExtractor={item => item}
+            keyExtractor={item => item.toString()}
             renderItem={({item}) =>
               renderItem({
                 item,
@@ -115,10 +120,14 @@ const PrintOutScreen = ({ route }) => {
 
   const handleDownload = async () => {
     try {
-      if (selectedRoom === 'Pilih Ruangan' || selectedMonth === 'Pilih Bulan') {
+      if (
+        selectedRoom === 'Pilih Ruangan' ||
+        selectedMonth === 'Pilih Bulan' ||
+        selectedYear === 'Pilih Tahun'
+      ) {
         Alert.alert(
           'Error',
-          'Silakan pilih ruangan dan bulan terlebih dahulu.',
+          'Silakan pilih ruangan, bulan, dan tahun terlebih dahulu.',
         );
         return;
       }
@@ -131,6 +140,7 @@ const PrintOutScreen = ({ route }) => {
       const formData = new URLSearchParams();
       formData.append('ruangan', selectedRoom);
       formData.append('month', monthNumber);
+      formData.append('year', selectedYear); // Include selected year
 
       // Fetch data dari server
       const response = await fetch(API_URL, {
@@ -146,15 +156,13 @@ const PrintOutScreen = ({ route }) => {
       if (response.headers.get('Content-Type') !== 'application/pdf') {
         const responseText = await response.text();
         console.log('Response Text:', responseText);
-        throw new Error(
-          'Server tidak mengembalikan file PDF. Cek parameter request.',
-        );
+        throw new Error('Tidak ada data pada bulan dan tahun yang dipilih.');
       }
 
       // Ambil file PDF
       const arrayBuffer = await response.arrayBuffer();
       const base64Data = Buffer.from(arrayBuffer).toString('base64');
-      const filePath = `${RNFS.DownloadDirectoryPath}/report_${selectedRoom}_${selectedMonth}.pdf`;
+      const filePath = `${RNFS.DownloadDirectoryPath}/report_${selectedRoom}_${selectedMonth}_${selectedYear}.pdf`;
 
       await RNFS.writeFile(filePath, base64Data, 'base64');
       Alert.alert('Sukses', `File berhasil disimpan di:\n${filePath}`);
@@ -166,20 +174,20 @@ const PrintOutScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-            <View style={[styles.barAtas]}>
-             <Pressable
-               style={styles.backButton}
-               onPress={() => navigation.navigate('HomeScreenAdmin', { user })}>
-               <Image
-                 style={styles.icon}
-                 resizeMode="cover"
-                 source={require('../../../../assets/-icon-arrow-back.png')}
-               />
-             </Pressable>
-             <View style={styles.textContainer}>
-               <Text style={styles.text}>Print out</Text>
-             </View>
-             </View>
+      <View style={[styles.barAtas]}>
+        <Pressable
+          style={styles.backButton}
+          onPress={() => navigation.navigate('HomeScreenAdmin', {user})}>
+          <Image
+            style={styles.icon}
+            resizeMode="cover"
+            source={require('../../../../assets/-icon-arrow-back.png')}
+          />
+        </Pressable>
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>Print out</Text>
+        </View>
+      </View>
 
       {/* Dropdown Pilih Bulan */}
       <Pressable
@@ -187,7 +195,13 @@ const PrintOutScreen = ({ route }) => {
         onPress={() => setMonthModalVisible(true)}>
         <Text style={styles.dropdownText}>{selectedMonth}</Text>
       </Pressable>
-    
+
+      {/* Dropdown Pilih Tahun */}
+      <Pressable
+        style={styles.dropdown}
+        onPress={() => setYearModalVisible(true)}>
+        <Text style={styles.dropdownText}>{selectedYear}</Text>
+      </Pressable>
 
       {/* Dropdown Pilih Ruangan */}
       <Pressable
@@ -195,11 +209,20 @@ const PrintOutScreen = ({ route }) => {
         onPress={() => setRoomModalVisible(true)}>
         <Text style={styles.dropdownText}>{selectedRoom}</Text>
       </Pressable>
+
       {renderModal(
         monthModalVisible,
         months,
         setSelectedMonth,
         setMonthModalVisible,
+      )}
+
+      {/* Modal Pilih Tahun */}
+      {renderModal(
+        yearModalVisible,
+        years,
+        setSelectedYear,
+        setYearModalVisible,
       )}
 
       {/* Modal Pilih Ruangan */}
@@ -234,25 +257,25 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     justifyContent: 'center',
-    zIndex:10
+    zIndex: 10,
   },
   icon: {
     width: 45,
     height: 25,
   },
   textContainer: {
-    flex:1,
+    flex: 1,
     right: 'auto',
-    top: '25%',  
-    transform: [{ translateY: -12 }],  
+    top: '25%',
+    transform: [{translateY: -12}],
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center',
   },
   text: {
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     fontSize: 18,
-    textAlign:'center'
+    textAlign: 'center',
   },
   dropdown: {
     height: 50,
@@ -299,7 +322,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   barAtas: {
-    position: 'absolute', 
+    position: 'absolute',
     left: 0,
     right: 0,
     height: 60,
@@ -307,14 +330,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    backgroundColor: '#ffffff', 
+    backgroundColor: '#ffffff',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
     zIndex: 10,
-    
   },
 });
 

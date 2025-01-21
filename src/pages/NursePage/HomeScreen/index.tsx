@@ -18,8 +18,8 @@ import {
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {Color, FontFamily, Border} from '../../../../GlobalStyles';
-import PopupMenuNurse from '../../../../components/PopupMenu';
 import HistoryPage from '../../../../components/HistoryPage';
+import PopupMenu from '../../../../components/PopupMenu';
 
 // NEW CODE
 import 'react-native-gesture-handler';
@@ -103,34 +103,6 @@ const HomeScreenNurse = ({route}) => {
     }
   };
 
-  const menuOptions = [
-    {
-      title: 'About App',
-      action: () => {
-        setMenuVisible(false);
-        navigation.navigate('AboutApp', {user});
-      },
-    },
-    {
-      title: 'Change Password',
-      action: () => {
-        setMenuVisible(false);
-        navigation.navigate('ChangePassword', {user});
-      },
-    },
-    {
-      title: 'Logout',
-      action: () => {
-        setMenuVisible(false);
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
-        });
-        alert("You've been logged out");
-      },
-    },
-  ];
-
   return (
     <View style={{flex: 1}}>
       <ImageBackground
@@ -146,55 +118,14 @@ const HomeScreenNurse = ({route}) => {
           <Text style={styles.welcomeText}>Sensus Harian Pasien</Text>
           <Text style={styles.welcomeText}>Ruangan {ruangan}</Text>
         </View>
-
-        {/* <View style={styles.imageContainer}>
-          <Image
-            source={require('../../../../assets/fotoRuangan.png')}
-            style={styles.fotoRuangan}
-            resizeMode="cover"
-          />
-        </View> */}
-        <View style={styles.menuButtonContainer}>
-          <TouchableOpacity onPress={() => resizeBox(1)}>
-            <Image
-              source={require('../../../../assets/menu.png')}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
-        </View>
       </ImageBackground>
+
+      <View style={styles.menuButtonContainer}>
+        <PopupMenu navigation={navigation} user={user} />
+      </View>
 
       <View style={styles.cardContainer}>
         <ScrollView contentContainerStyle={{paddingBottom: 10}}>
-          <Modal transparent visible={menuVisible}>
-            <SafeAreaView style={{flex: 1}} pointerEvents="box-none">
-              <View
-                style={{flex: 1}}
-                onTouchStart={() => setMenuVisible(false)}
-              />
-              <Animated.View
-                style={[
-                  styles.popup,
-                  {
-                    opacity: scale.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0, 1],
-                    }),
-                    transform: [{scale}],
-                  },
-                ]}>
-                {menuOptions.map((op, i) => (
-                  <TouchableOpacity
-                    style={styles.option}
-                    key={i}
-                    onPress={op.action}>
-                    <Text style={styles.optionText}>{op.title}</Text>
-                  </TouchableOpacity>
-                ))}
-              </Animated.View>
-            </SafeAreaView>
-          </Modal>
-
           <View
             style={{
               flexDirection: 'row',
@@ -221,7 +152,7 @@ const HomeScreenNurse = ({route}) => {
                           fontFamily: FontFamily.poppinsRegular,
                           color: Color.notSoBlack,
                         }}>
-                        Jumlah Bed:{'\n\n'}
+                        Jumlah Bed :{'\n\n'}
                         <Text
                           style={{
                             fontSize: dynamicFontSize(30),

@@ -9,7 +9,7 @@ import {
   Image,
   Alert,
   BackHandler,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import {
   Padding,
@@ -21,9 +21,9 @@ import {
 import {Button} from 'react-native-elements';
 import {useRoute, useFocusEffect} from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('window');
-const dynamicFontSize = (size) => (width / 375) * size; // 375 adalah lebar referensi
-const dynamicPadding = (padding) => (height / 667) * padding; // 667 adalah tinggi referensi
+const {width, height} = Dimensions.get('window');
+const dynamicFontSize = size => (width / 375) * size; // 375 adalah lebar referensi
+const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi referensi
 
 const ChangePassword = ({navigation}) => {
   const route = useRoute();
@@ -90,7 +90,7 @@ const ChangePassword = ({navigation}) => {
 
       if (result.status === 'success') {
         Alert.alert('Sukses', 'Password berhasil diubah!', [
-          {text: 'OK', onPress: () => navigation.navigate('ProfilScreenNurse')},
+          {text: 'OK', onPress: () => navigation.navigate('HomeScreenNurse')},
         ]);
       } else {
         Alert.alert('Error', result.message || 'Gagal mengubah password.');
@@ -104,20 +104,17 @@ const ChangePassword = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.barAtas}>
-        <Pressable
-        style={styles.backButton}
-        onPress={handleBackPress}
-        >
-        <Image
-        style={styles.icon}
-        resizeMode="cover"
-        source={require('../../../../assets/-icon-arrow-back.png')}
-        />
+        <Pressable style={styles.backButton} onPress={handleBackPress}>
+          <Image
+            style={styles.icon}
+            resizeMode="cover"
+            source={require('../../../../assets/-icon-arrow-back.png')}
+          />
         </Pressable>
         <View style={styles.textContainer}>
-        <Text style={styles.text}>Edit Password</Text>
+          <Text style={styles.text}>Edit Password</Text>
+        </View>
       </View>
-    </View>
 
       <Text style={styles.description}>Masukkan password baru anda</Text>
 
@@ -130,7 +127,7 @@ const ChangePassword = ({navigation}) => {
           value={password}
           onChangeText={setPassword}
         />
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={togglePasswordVisibility}
           style={styles.iconContainer}>
           <Image
@@ -159,8 +156,8 @@ const ChangePassword = ({navigation}) => {
           <Image
             source={
               secureConfirmPassword
-              ? require('../../../../assets/icons8-invisible-48.png')
-              : require('../../../../assets/icons8-eye-48.png')
+                ? require('../../../../assets/icons8-invisible-48.png')
+                : require('../../../../assets/icons8-eye-48.png')
             }
             style={styles.icon2}
           />
@@ -186,14 +183,14 @@ const styles = StyleSheet.create({
     marginEnd: 'auto',
     left: -10,
   },
- 
+
   iconShowPassword: {
     height: '50%',
     width: '50%',
   },
-  icon2:{
-    width:25,
-    height:25
+  icon2: {
+    width: 25,
+    height: 25,
   },
   header: {
     flexDirection: 'row',
@@ -239,10 +236,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 15,
     marginTop: 20,
-
   },
   barAtas: {
-    position: 'absolute', 
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -253,7 +249,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#ffffff',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
@@ -269,21 +265,21 @@ const styles = StyleSheet.create({
     height: 45,
     justifyContent: 'center',
     zIndex: 20,
-},
-textContainer: {
-  flex:1,
-  right: 'auto',
-  top: '25%',  
-  transform: [{ translateY: -12 }],  
-  justifyContent: 'center',
-  alignItems:'center'
-},
-text: {
-  fontFamily: FontFamily.poppinsBold,
-  color: Color.notSoBlack,
-  fontSize: dynamicFontSize(16),
-  textAlign:'center'
-},
+  },
+  textContainer: {
+    flex: 1,
+    right: 'auto',
+    top: '25%',
+    transform: [{translateY: -12}],
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontFamily: FontFamily.poppinsBold,
+    color: Color.notSoBlack,
+    fontSize: dynamicFontSize(16),
+    textAlign: 'center',
+  },
 });
 
 export default ChangePassword;

@@ -224,6 +224,7 @@ const LoginScreen = ({route}) => {
               resizeMode="contain"
               onAnimationFinish={() => console.log('Animation Completed')}
             />
+            <Text style={styles.successText}>Logging in...</Text>
           </View>
         </View>
       </Modal>
