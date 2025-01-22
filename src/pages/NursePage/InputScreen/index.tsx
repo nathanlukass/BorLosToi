@@ -30,8 +30,10 @@ const dynamicFontSize = size => (width / 375) * size; // 375 adalah lebar refere
 const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi referensi
 
 const NurseInputPage = ({route}) => {
-  const {user} = route.params || {};
-  const {username, role, ruangan, id_user, nama} = user;
+  const {user} = route.params || {}; // Pastikan `route.params` selalu diakses dengan aman
+  const {username, role, ruangan, id_user, nama} = user || {}; // Access all relevant fields
+  console.log('Route params:', route.params);
+
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
   const [jumlahTempatTidur, setJumlahTempatTidur] = useState('');
@@ -380,6 +382,11 @@ const NurseInputPage = ({route}) => {
 
   const fetchJumlahBed = async () => {
     try {
+      // Validasi awal untuk variabel `ruangan`
+      if (!ruangan || typeof ruangan !== 'string') {
+        throw new Error('Ruangan tidak valid atau undefined');
+      }
+
       // Membersihkan ruangan tanpa mengubah case-sensitive
       const normalizedRuangan = ruangan
         .replace(/\u00A0/g, ' ') // Mengganti spasi non-breaking
@@ -388,13 +395,16 @@ const NurseInputPage = ({route}) => {
 
       console.log('Normalized Ruangan:', JSON.stringify(normalizedRuangan));
 
+      // Fetch data dari API
+      const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_bed_quantity',
         {
           method: 'POST',
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
           body: new URLSearchParams({
-            ruangan: normalizedRuangan, // Kirim ruangan sesuai format database
+            ruangan: normalizedRuangan,
+            date: today, // Kirim tanggal jika diperlukan
           }).toString(),
         },
       );
@@ -510,6 +520,12 @@ const NurseInputPage = ({route}) => {
     fetchJumlahBed();
     // Set default ke hari ini saat komponen dimuat
   }, [ruangan]);
+
+  useEffect(() => {
+    if (!user || !user.username) {
+      console.error('User data is missing!');
+    }
+  }, [user]);
 
   return (
     <View style={styles.container}>

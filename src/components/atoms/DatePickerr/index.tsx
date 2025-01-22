@@ -1,25 +1,31 @@
 import React from 'react';
-import { Platform, Text, StyleSheet, View, TouchableOpacity, Modal, Linking, Dimensions, Image} from 'react-native';
-import { Overlay } from 'react-native-elements';
+import {
+  Platform,
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Modal,
+  Linking,
+  Dimensions,
+  Image,
+} from 'react-native';
+import {Overlay} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import {
-  Color,
-  FontFamily,
-} from '../../../../GlobalStyles';
-import { NavigationProp, withNavigation } from '@react-navigation/native';
-const { width, height } = Dimensions.get('window');
-const dynamicFontSize = (size) => (width / 375) * size; 
-const dynamicPadding = (padding) => (height / 667) * padding; 
-const dynamicSize = (baseSize) => Math.round((baseSize * width) / 375);
+import {Color, FontFamily} from '../../../../GlobalStyles';
+import {NavigationProp, withNavigation} from '@react-navigation/native';
+const {width, height} = Dimensions.get('window');
+const dynamicFontSize = size => (width / 375) * size;
+const dynamicPadding = padding => (height / 667) * padding;
+const dynamicSize = baseSize => Math.round((baseSize * width) / 375);
 
 export interface IProps {
   date?: string;
   placeholder?: string;
   style?: React.CSSProperties;
-  onDateChange?: (date: Date) => void; 
-  checkDataExist?: (tanggal: string, ruangan: string) => Promise<boolean>; 
-  ruangan?: string; 
+  onDateChange?: (date: Date) => void;
+  checkDataExist?: (tanggal: string, ruangan: string) => Promise<boolean>;
   navigation?: NavigationProp<any>; // Tambahkan ini
 }
 
@@ -27,24 +33,39 @@ export interface IState {
   dateString: string;
   date: Date;
   show: boolean;
-  isModalVisible: boolean; 
-  formattedDate: string; 
+  isModalVisible: boolean;
+  formattedDate: string;
 }
 
 class DatePickerr extends React.Component<IProps, IState> {
-  state: IState = {
-    dateString: moment(new Date()).format('dddd, YYYY-MM-DD'),
-    date: this.props.date ? new Date(this.props.date) : new Date(),
-    show: false,
-    isModalVisible: false, 
-    formattedDate: '',
-  };
+  constructor(props: IProps) {
+    super(props);
+
+    // Pastikan `props.route` tersedia, jika tidak, beri nilai default {}
+    const {user} = props.route?.params || {}; // Akses data `user` dari route.params
+    const {username, role, ruangan, id_user, nama} = user || {};
+
+    // Atur state awal
+    this.state = {
+      dateString: moment(new Date()).format('dddd, YYYY-MM-DD'),
+      date: this.props.date ? new Date(this.props.date) : new Date(),
+      show: false,
+      isModalVisible: false,
+      formattedDate: '',
+      user: {
+        username: username || '', // Berikan nilai default jika `username` kosong
+        role: role || '',
+        ruangan: ruangan || '',
+        id_user: id_user || '',
+        nama: nama || '',
+      },
+    };
+  }
 
   onChange = async (event: any, selectedDate: any) => {
     if (selectedDate) {
       const formattedDate = moment(selectedDate).format('YYYY-MM-DD');
-     
-     
+
       if (formattedDate === 'Invalid date') {
         alert('Tanggal tidak valid, silakan pilih tanggal yang benar.');
         return;
@@ -63,45 +84,49 @@ class DatePickerr extends React.Component<IProps, IState> {
         .replace(/\u00A0/g, ' ')
         .trim()
         .toLowerCase();
-      const dataExists = await this.props.checkDataExist(formattedDate, normalizedRuangan);
-      console.log("Setting modal visibility to true");
+      const dataExists = await this.props.checkDataExist(
+        formattedDate,
+        normalizedRuangan,
+      );
+      console.log('Setting modal visibility to true');
       if (dataExists) {
-        this.setState({ isModalVisible: true }, () => {
+        this.setState({isModalVisible: true}, () => {
           console.log('Modal visibility set to:', this.state.isModalVisible);
         });
         return;
       }
     } else {
-      this.setState({ show: false });
+      this.setState({show: false});
     }
   };
 
   showOverlay = () => {
-    this.setState({ show: true });
+    this.setState({show: true});
   };
   hideOverlay = () => {
-    this.setState({ show: false });
+    this.setState({show: false});
   };
- hideModal = () => {
-    const { navigation, ruangan } = this.props;
+  hideModal = () => {
+    const {navigation, ruangan, username} = this.props; // Tambahkan username di destructuring props
 
-    this.setState({ isModalVisible: false }, () => {
-      if (navigation) {
-        navigation.navigate('HomeScreenNurse', { ruangan });
-      }
-    });
+    this.setState({isModalVisible: false}, () => {});
   };
+
   handleAdminContact = () => {
-    const phoneNumber = '+6285757161739'; 
+    const phoneNumber = '+6285757161739';
     const message = `Halo, saya ingin melaporkan kesalahan dalam penginputan data pada tanggal ${this.state.formattedDate}.`;
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    Linking.openURL(url).catch(err => console.error('Failed to open WhatsApp', err));
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message,
+    )}`;
+    Linking.openURL(url).catch(err =>
+      console.error('Failed to open WhatsApp', err),
+    );
   };
 
   render() {
     const currentDate = new Date();
     return (
-      <View style={{ flex: 1, borderRadius: 50, }}>
+      <View style={{flex: 1, borderRadius: 50}}>
         <TouchableOpacity
           onPress={this.showOverlay}
           style={[styles.inputContainerStyle, this.props.style]}>
@@ -112,10 +137,10 @@ class DatePickerr extends React.Component<IProps, IState> {
               {this.props.placeholder}
             </Text>
           )}
-        <Image 
-          source={require('../../../../assets/icon.png')} 
-          style={styles.iconStyle} 
-        />
+          <Image
+            source={require('../../../../assets/icon.png')}
+            style={styles.iconStyle}
+          />
         </TouchableOpacity>
 
         {Platform.OS === 'ios' ? (
@@ -125,10 +150,10 @@ class DatePickerr extends React.Component<IProps, IState> {
             overlayStyle={styles.overlayStyle}>
             <View style={styles.headerStyle}>
               <TouchableOpacity onPress={this.hideOverlay}>
-                <Text style={{ paddingHorizontal: 15 }}>Cancel</Text>
+                <Text style={{paddingHorizontal: 15}}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={this.hideOverlay}>
-                <Text style={{ paddingHorizontal: 15, color: 'green' }}>
+                <Text style={{paddingHorizontal: 15, color: 'green'}}>
                   Done
                 </Text>
               </TouchableOpacity>
@@ -139,8 +164,8 @@ class DatePickerr extends React.Component<IProps, IState> {
               is24Hour={true}
               display="default"
               onChange={this.onChange}
-              maximumDate={currentDate} 
-              style={{ backgroundColor: 'white' }}
+              maximumDate={currentDate}
+              style={{backgroundColor: 'white'}}
             />
           </Overlay>
         ) : (
@@ -151,8 +176,8 @@ class DatePickerr extends React.Component<IProps, IState> {
               is24Hour={true}
               display="default"
               onChange={this.onChange}
-              maximumDate={currentDate} 
-              style={{ backgroundColor: 'white' }}
+              maximumDate={currentDate}
+              style={{backgroundColor: 'white'}}
             />
           )
         )}
@@ -166,14 +191,18 @@ class DatePickerr extends React.Component<IProps, IState> {
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Data Sudah Tersimpan</Text>
               <Text style={styles.modalMessage}>
-                Anda sudah menginput data pada tanggal {this.state.formattedDate}
+                Anda sudah menginput data pada tanggal{' '}
+                {this.state.formattedDate}
               </Text>
               <Text style={styles.warningText}>
-                <Text style={{ fontSize: 14 }}>⚠️</Text>{' '} 
-                <Text style={{ fontStyle: 'italic' }}>
+                <Text style={{fontSize: 14}}>⚠️</Text>{' '}
+                <Text style={{fontStyle: 'italic'}}>
                   Silahkan{' '}
                   <TouchableOpacity onPress={this.handleAdminContact}>
-                    <Text style={[styles.contactAdminText, { fontStyle: 'italic'}]}>hubungi admin</Text>
+                    <Text
+                      style={[styles.contactAdminText, {fontStyle: 'italic'}]}>
+                      hubungi admin
+                    </Text>
                   </TouchableOpacity>{' '}
                   jika terjadi kesalahan dalam penginputan data.
                 </Text>
@@ -206,21 +235,21 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: FontFamily.poppinsMedium,
     fontSize: dynamicFontSize(14),
-    color: Color.notSoBlack, 
-    paddingVertical: 0, 
-    flexWrap: 'wrap', 
-    marginRight: dynamicSize(30), 
+    color: Color.notSoBlack,
+    paddingVertical: 0,
+    flexWrap: 'wrap',
+    marginRight: dynamicSize(30),
   },
   iconStyle: {
     width: dynamicSize(20),
     height: dynamicSize(20),
     resizeMode: 'contain',
     position: 'absolute',
-    right: dynamicPadding(8), 
-    top: '50%', 
-    transform: [{ translateY: -dynamicSize(10) }],
+    right: dynamicPadding(8),
+    top: '50%',
+    transform: [{translateY: -dynamicSize(10)}],
   },
-  
+
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
@@ -233,9 +262,9 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     width: '80%',
-    height:'40%',
+    height: '40%',
     alignItems: 'center',
-    justifyContent:'center'
+    justifyContent: 'center',
   },
   modalTitle: {
     fontSize: 18,
@@ -255,7 +284,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'justify',
     lineHeight: 20,
-    fontStyle:'italic'
+    fontStyle: 'italic',
   },
   contactAdminText: {
     fontSize: 14,
@@ -264,7 +293,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   modalButton: {
-    marginTop:16,
+    marginTop: 16,
     fontSize: 14,
     color: 'white',
     paddingVertical: 12,

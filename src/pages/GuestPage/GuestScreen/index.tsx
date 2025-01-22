@@ -37,7 +37,9 @@ const ScreenGuest = () => {
   const [bto, setNilaiBto] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('');
 
-  const [selectedMonth, setSelectedMonth] = useState('1'); // Default bulan adalah Januari
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState(null);
+
   const [isBottomSheetRuanganVisible, setIsBottomSheetRuanganVisible] =
     useState(false);
   const [isBottomSheetIndikatorVisible, setIsBottomSheetIndikatorVisible] =
@@ -160,9 +162,9 @@ const ScreenGuest = () => {
 
   const handleMonthChange = value => {
     if (value) {
-      const formattedMonth = value.toString().padStart(2, '0'); // Format jadi dua digit
-      setSelectedMonth(formattedMonth);
-
+      setSelectedMonth(value);
+      console.log('Bulan yang dipilih: ', value);
+      const formattedMonth = value.toString().padStart(2, '0');
       const monthNames = [
         'January',
         'February',
@@ -177,16 +179,28 @@ const ScreenGuest = () => {
         'November',
         'December',
       ];
-      const monthName = monthNames[parseInt(value, 10) - 1]; // Ambil nama bulan dari array
-
-      //console.log('Bulan yang dipilih:', formattedMonth);
+      const monthName = monthNames[parseInt(value, 10) - 1];
       setSelectedFilter('Filter Bulanan');
-      //setSelectedFilterDetail(`Bulan ${monthName}`);
-      fetchStatsDataByMonth(formattedMonth);
+      fetchStatsDataByMonthAndYear(formattedMonth);
     }
   };
 
-  const fetchStatsDataByMonth = async month => {
+  const handleYearChange = year => {
+    setSelectedYear(year);
+
+    if (!selectedMonth) {
+      Alert.alert('Pilih Bulan', 'Silakan pilih bulan terlebih dahulu.');
+      return;
+    }
+
+    // Fetch data hanya jika bulan dan tahun sudah dipilih
+    fetchStatsDataByMonthAndYear(selectedMonth, year);
+  };
+
+  const fetchStatsDataByMonthAndYear = async (month, year) => {
+    setLoading(true);
+    console.log('Mengirim request dengan bulan dan tahun:', {month, year});
+
     try {
       const response = await fetch(
         'https://samratindikator.online/borlostoi/public/insert/get_stats_data_rs_monthly',
@@ -195,14 +209,16 @@ const ScreenGuest = () => {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-          body: new URLSearchParams({month: month}).toString(),
+          body: new URLSearchParams({
+            month: month,
+            year: year,
+          }).toString(),
         },
       );
 
       const responseText = await response.text();
       console.log('Response dari server:', responseText);
 
-      // Jika respons adalah HTML, mungkin ada kesalahan pada server
       if (responseText.startsWith('<')) {
         console.error('Response mengandung HTML, ada masalah di server.');
         Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
@@ -214,9 +230,10 @@ const ScreenGuest = () => {
         result = JSON.parse(responseText);
         console.log('Parsed JSON:', result);
 
-        // Jika status sukses dan ada data, tampilkan data
         if (result.status === 'success' && result.data) {
-          const data = result.data; // Mengambil data pertama jika ada
+          const data = result.data;
+
+          // Update state dengan data yang diterima
           setNilaiBor(data.bor || '0');
           setNilaiAvlos(data.avlos || '0');
           setNilaiToi(data.toi || '0');
@@ -224,14 +241,15 @@ const ScreenGuest = () => {
           setNilaiBto(data.bto || '0');
           setNilaiNdr(data.ndr || '0');
         } else {
-          // Jika tidak ada data, set nilai default 0
+          console.warn('Tidak ada data untuk bulan dan tahun ini.');
+          Alert.alert('No Data', 'Tidak ada data untuk bulan dan tahun ini.');
+          // Jika tidak ada data, set semua nilai ke "0"
           setNilaiBor('0');
           setNilaiAvlos('0');
           setNilaiToi('0');
           setNilaiGdr('0');
           setNilaiBto('0');
           setNilaiNdr('0');
-          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
         }
       } catch (jsonError) {
         console.error('JSON Parse Error:', jsonError.message);
@@ -244,103 +262,8 @@ const ScreenGuest = () => {
         'Failed to fetch data. Please check your network connection.',
       );
     } finally {
-      setLoading(false); // Jangan lupa set loading false setelah request selesai
+      setLoading(false); // Set loading selesai
     }
-
-    const handleStartDateChange = date => {
-      const formattedDate = moment(date).format('YYYY-MM-DD');
-      setStartDate(formattedDate);
-      console.log('Start Date: ', formattedDate);
-      if (endDate) {
-        fetchStatsDataByRange(formattedDate, endDate); // Call API if both dates are selected
-      }
-    };
-
-    const handleEndDateChange = date => {
-      const formattedDate = moment(date).format('YYYY-MM-DD');
-      setEndDate(formattedDate);
-      console.log('End Date: ', formattedDate);
-      if (startDate) {
-        fetchStatsDataByRange(startDate, formattedDate); // Call API if both dates are selected
-      }
-    };
-
-    const fetchStatsDataByRange = async (startDate, endDate) => {
-      if (!startDate || !endDate) {
-        console.error('Tanggal awal dan akhir belum dipilih');
-        Alert.alert('Error', 'Tanggal awal dan akhir harus dipilih.');
-        return;
-      }
-
-      setLoading(true);
-      console.log('Mengirim request dengan data:', {
-        start_date: startDate,
-        end_date: endDate,
-      });
-
-      try {
-        const response = await fetch(
-          'https://samratindikator.online/borlostoi/public/insert/get_stats_rs_range',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-              start_date: startDate,
-              end_date: endDate,
-            }).toString(),
-          },
-        );
-
-        const responseText = await response.text();
-        console.log('Response dari server:', responseText);
-
-        // Jika respons adalah HTML, mungkin ada kesalahan pada server
-        if (responseText.startsWith('<')) {
-          console.error('Response mengandung HTML, ada masalah di server.');
-          Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
-          return;
-        }
-
-        let result;
-        try {
-          result = JSON.parse(responseText);
-          console.log('Parsed JSON:', result);
-
-          // Jika status sukses dan ada data, tampilkan data
-          if (result.status === 'success' && result.data) {
-            const data = result.data; // Data range
-            setNilaiBor(data.BOR || '0');
-            setNilaiAvlos(data.AVLOS || '0');
-            setNilaiToi(data.TOI || '0');
-            setNilaiGdr(data.GDR || '0');
-            setNilaiBto(data.BTO || '0');
-            setNilaiNdr(data.NDR || '0');
-          } else {
-            // Jika tidak ada data, set nilai default 0
-            setNilaiBor('0');
-            setNilaiAvlos('0');
-            setNilaiToi('0');
-            setNilaiGdr('0');
-            setNilaiBto('0');
-            setNilaiNdr('0');
-            Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
-          }
-        } catch (jsonError) {
-          console.error('JSON Parse Error:', jsonError.message);
-          Alert.alert('Error', 'Invalid response from server.');
-        }
-      } catch (error) {
-        console.error('Fetch Error:', error.message);
-        Alert.alert(
-          'Error',
-          'Failed to fetch data. Please check your network connection.',
-        );
-      } finally {
-        setLoading(false); // Jangan lupa set loading false setelah request selesai
-      }
-    };
   };
 
   const handleStartDateChange = date => {
@@ -627,21 +550,43 @@ const ScreenGuest = () => {
                   {label: 'November', value: '11'},
                   {label: 'December', value: '12'},
                 ]}
-                style={{
-                  inputAndroid: {
-                    alignItems: 'center',
-                    color: Color.notSoBlack,
-                  },
-                  inputIOS: {
-                    alignItems: 'center',
-                    color: 'white',
-                  },
-                }}
                 value={selectedMonth}
                 placeholder={{
-                  label: 'Select a month...',
+                  label: 'Pilih Bulan...',
                   value: null,
-                  color: Color.notSoBlack,
+                  color: '#9EA0A4',
+                }}
+                style={{
+                  inputAndroid: {color: 'black'},
+                  inputIOS: {color: 'black'},
+                }}
+              />
+
+              <RNPickerSelect
+                onValueChange={value => handleYearChange(value)}
+                items={[
+                  {
+                    label: `${new Date().getFullYear() - 1}`,
+                    value: new Date().getFullYear() - 1,
+                  },
+                  {
+                    label: `${new Date().getFullYear()}`,
+                    value: new Date().getFullYear(),
+                  },
+                  {
+                    label: `${new Date().getFullYear() + 1}`,
+                    value: new Date().getFullYear() + 1,
+                  },
+                ]}
+                value={selectedYear}
+                placeholder={{
+                  label: 'Pilih Tahun...',
+                  value: null,
+                  color: '#9EA0A4',
+                }}
+                style={{
+                  inputAndroid: {color: 'black'},
+                  inputIOS: {color: 'black'},
                 }}
               />
             </View>

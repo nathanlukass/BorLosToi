@@ -224,7 +224,7 @@ const LoginScreen = ({route}) => {
               resizeMode="contain"
               onAnimationFinish={() => console.log('Animation Completed')}
             />
-            <Text style={styles.successText}>Logging in...</Text>
+            <Text style={styles.successText}>Logging In...</Text>
           </View>
         </View>
       </Modal>
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'green',
+    color: 'grey',
   },
   icon2: {
     right: 8,
