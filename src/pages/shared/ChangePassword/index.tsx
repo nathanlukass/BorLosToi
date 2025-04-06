@@ -28,7 +28,8 @@ const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi
 const ChangePassword = ({navigation}) => {
   const route = useRoute();
   const {user} = route.params;
-  const {username, role, ruangan, id_user, nama} = user;
+  const {username, role, ruangan, user_id, nama} = user;
+
   console.log('Route Params:', route.params); // Debugging
   console.log('User:', user);
 
@@ -37,8 +38,7 @@ const ChangePassword = ({navigation}) => {
   const [securePassword, setSecurePassword] = useState(true);
   const [secureConfirmPassword, setSecureConfirmPassword] = useState(true);
 
-  const API_URL =
-    'https://samratindikator.online/borlostoi/public/insert/change_password';
+  const API_URL = 'https://moraya.online/moraya/public/user/change_password';
 
   const togglePasswordVisibility = () => setSecurePassword(!securePassword);
   const toggleConfirmPasswordVisibility = () =>
@@ -64,36 +64,62 @@ const ChangePassword = ({navigation}) => {
   );
 
   const handleChangePassword = async () => {
+    if (!password || !confirmPassword) {
+      Alert.alert('Error', 'Mohon isi semua kolom password.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Password dan konfirmasi tidak cocok.');
+      return;
+    }
+
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `username=${username}&role=${role}&ruangan=${ruangan}&new_password=${password}`,
+        body: `username=${username}&role=${role}&ruangan=${ruangan}&user_id=${user_id}&new_password=${password}`,
       });
 
       const rawResponse = await response.text();
       console.log('Raw Response from Server:', rawResponse);
 
-      // Ambil hanya JSON pertama yang valid dari respons
-      const firstJSON = rawResponse.split('}{').join('}||{').split('||')[0]; // Memisahkan dua JSON yang bertabrakan
-      let result;
-
-      try {
-        result = JSON.parse(firstJSON);
-      } catch (err) {
-        console.error('JSON Parse Error:', err.message);
+      // Cari JSON pertama yang valid dari raw response
+      const match = rawResponse.match(/{.*?}/); // Ambil objek JSON pertama
+      if (!match) {
         Alert.alert('Error', 'Respons server tidak valid.');
         return;
       }
 
+      const result = JSON.parse(match[0]);
       console.log('Server Response:', result);
 
       if (result.status === 'success') {
         Alert.alert('Sukses', 'Password berhasil diubah!', [
-          {text: 'OK', onPress: () => navigation.navigate('HomeScreenNurse')},
+          {
+            text: 'OK',
+            onPress: () => {
+              if (role === 'admin') {
+                navigation.navigate('HomeScreenAdmin', {user});
+              } else {
+                navigation.navigate('HomeScreenNurse', {user});
+              }
+            },
+          },
         ]);
       } else {
-        Alert.alert('Error', result.message || 'Gagal mengubah password.');
+        let message = 'Gagal mengubah password.';
+        if (
+          result.message ===
+          'The new password is the same as the current password. No changes made.'
+        ) {
+          message =
+            'Password baru sama dengan password lama. Tidak ada perubahan.';
+        } else if (result.message) {
+          message = result.message; // fallback jika ada pesan error lain
+        }
+
+        Alert.alert('Gagal', message);
       }
     } catch (error) {
       console.error('Error:', error.message);

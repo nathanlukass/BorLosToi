@@ -174,7 +174,7 @@ const HomeScreenAdmin = ({route}) => {
       <BottomSheetEditRuangan
         isVisible={isBottomSheetRuanganVisible}
         onClose={() => setIsBottomSheetRuanganVisible(false)}
-        user={currentUser}
+        user={user}
       />
     </View>
   );

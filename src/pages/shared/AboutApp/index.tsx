@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Pressable,
   BackHandler,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import {useRoute, useFocusEffect} from '@react-navigation/native';
 import {
@@ -17,9 +17,9 @@ import {
   FontSize,
 } from '../../../../GlobalStyles';
 
-const { width, height } = Dimensions.get('window');
-const dynamicFontSize = (size) => (width / 375) * size; // 375 adalah lebar referensi
-const dynamicPadding = (padding) => (height / 667) * padding; // 667 adalah tinggi referensi
+const {width, height} = Dimensions.get('window');
+const dynamicFontSize = size => (width / 375) * size; // 375 adalah lebar referensi
+const dynamicPadding = padding => (height / 667) * padding; // 667 adalah tinggi referensi
 
 const AboutApp = ({navigation}) => {
   const route = useRoute();
@@ -28,9 +28,9 @@ const AboutApp = ({navigation}) => {
 
   const handleBackPress = useCallback(() => {
     if (user?.role === 'nurse') {
-      navigation.navigate('HomeScreenNurse', { user }); // Kembali ke home nurse
+      navigation.navigate('HomeScreenNurse', {user}); // Kembali ke home nurse
     } else if (user?.role === 'admin') {
-      navigation.navigate('HomeScreenAdmin', { user }); // Kembali ke home admin
+      navigation.navigate('HomeScreenAdmin', {user}); // Kembali ke home admin
     } else {
       navigation.goBack(); // Fallback jika role tidak terdeteksi
     }
@@ -48,16 +48,14 @@ const AboutApp = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.barAtas}>
-        <Pressable
-          style={styles.backButton}
-          onPress={handleBackPress}>
+        <Pressable style={styles.backButton} onPress={handleBackPress}>
           <Image
-          style={styles.icon2}
-          resizeMode="cover"
-          source={require('../../../../assets/-icon-arrow-back.png')}
+            style={styles.icon2}
+            resizeMode="cover"
+            source={require('../../../../assets/-icon-arrow-back.png')}
           />
-          </Pressable>
-          <View style={styles.textContainer}>
+        </Pressable>
+        <View style={styles.textContainer}>
           <Text style={styles.text}>About app</Text>
         </View>
       </View>
@@ -67,9 +65,14 @@ const AboutApp = ({navigation}) => {
           style={styles.logo}
         />
         <Text style={styles.title}>
-          Samrat InapDikator: Data Akurat, Layanan Hebat
+          {'MORAYA\n(Monitor Rekapitulasi Indikator Terpercaya)'}
         </Text>
-        <Text style={styles.version}>Versi 1.0.0</Text>
+        <Text style={styles.title1}>
+          {
+            'Merupakan simbol komitmen terhadap pelayanan kesehatan yang berkualitas, berbasis data akurat, dan berakar pada nilai budaya Minahasa.'
+          }
+        </Text>
+        <Text style={styles.version}>{'\n\nVersi 1.0.0'}</Text>
       </View>
     </View>
   );
@@ -112,44 +115,52 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: dynamicFontSize(16),
+    fontSize: dynamicFontSize(15),
+    fontFamily: FontFamily.poppinsRegular,
+    color: 'black',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  title1: {
+    fontSize: dynamicFontSize(14),
     fontFamily: FontFamily.poppinsRegular,
     color: Color.notSoBlack,
     textAlign: 'center',
     marginBottom: 10,
+    fontStyle: 'italic',
   },
   version: {
-    fontSize: dynamicFontSize(16),
+    fontSize: dynamicFontSize(13),
     fontFamily: FontFamily.poppinsRegular,
     color: Color.notSoBlack,
   },
-   icon2: {
-      width: 50,
-      height: 25,
-    },
-    backButton: {
-      position: 'absolute',
-      width: 45,
-      height: 45,
-      justifyContent: 'center',
-      zIndex: 20,
+  icon2: {
+    width: 50,
+    height: 25,
+  },
+  backButton: {
+    position: 'absolute',
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    zIndex: 20,
   },
   textContainer: {
-    flex:1,
+    flex: 1,
     right: 'auto',
-    top: '25%',  
-    transform: [{ translateY: -12 }],  
+    top: '25%',
+    transform: [{translateY: -12}],
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems: 'center',
   },
   text: {
     fontFamily: FontFamily.poppinsBold,
     color: Color.notSoBlack,
     fontSize: dynamicFontSize(16),
-    textAlign:'center'
+    textAlign: 'center',
   },
   barAtas: {
-    position: 'absolute', 
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -160,13 +171,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#ffffff',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
     zIndex: 10,
   },
 });
-
 
 export default AboutApp;

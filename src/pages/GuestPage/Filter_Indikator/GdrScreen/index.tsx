@@ -57,7 +57,7 @@ const GDR = () => {
     }
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_by_indicator',
+        'https://moraya.online/moraya/public/guest/get_stats_by_indicator',
         {
           method: 'POST',
           headers: {
@@ -88,15 +88,15 @@ const GDR = () => {
         // Jika tidak ada data atau status bukan 'success', set semua nilai menjadi 0
         if (result.status === 'success' && result.data) {
           const data = result.data;
-          setNilaiMujairA(data.Stats_Mujair_A || '0');
-          setNilaiMujairB(data.Stats_Mujair_B || '0');
-          setNilaiMujairC(data.Stats_Mujair_C || '0');
-          setNilaiNike(data.Stats_Nike || '0');
-          setNilaiPayangka(data.Stats_Payangka || '0');
-          setNilaiNeonati(data.Stats_Neonati || '0');
-          setNilaiBomboya(data.Stats_Bomboya || '0');
-          setNilaiKarper(data.Stats_Karper || '0');
-          setNilaiIcu(data.Stats_Icu || '0');
+          setNilaiMujairA(data['Mujair A']?.toString() || '0');
+          setNilaiMujairB(data['Mujair B']?.toString() || '0');
+          setNilaiMujairC(data['Mujair C']?.toString() || '0');
+          setNilaiNike(data.Nike?.toString() || '0');
+          setNilaiPayangka(data.Payangka?.toString() || '0');
+          setNilaiNeonati(data.Neonati?.toString() || '0');
+          setNilaiBomboya(data.Bomboya?.toString() || '0');
+          setNilaiKarper(data.Karper?.toString() || '0');
+          setNilaiIcu(data.Icu?.toString() || '0');
         } else {
           // Jika tidak ada data, set nilai default 0
           setNilaiMujairA('0');
@@ -129,7 +129,12 @@ const GDR = () => {
     if (value) {
       setSelectedMonth(value);
       console.log('Bulan yang dipilih: ', value);
-      fetchStatsDataByMonthAndYear(value);
+
+      if (!selectedYear) {
+        Alert.alert('Pilih Tahun', 'Silakan pilih tahun.');
+        return;
+      }
+
       const formattedMonth = value.toString().padStart(2, '0');
       const monthNames = [
         'January',
@@ -146,9 +151,11 @@ const GDR = () => {
         'December',
       ];
       const monthName = monthNames[parseInt(value, 10) - 1];
+
       setSelectedFilter('Filter Bulanan');
-      //setSelectedFilterDetail(`Bulan ${monthName}`);
-      fetchStatsDataByMonthAndYear(formattedMonth);
+      // setSelectedFilterDetail(`Bulan ${monthName}`);
+
+      fetchStatsDataByMonthAndYear(formattedMonth, selectedYear);
     }
   };
 
@@ -172,7 +179,7 @@ const GDR = () => {
 
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_monthly_stats_by_indicator',
+        'https://moraya.online/moraya/public/guest/get_monthly_stats_by_indicator',
         {
           method: 'POST',
           headers: {
@@ -302,7 +309,7 @@ const GDR = () => {
       });
 
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_indicator_by_range',
+        'https://moraya.online/moraya/public/guest/get_stats_indicator_by_range',
         {
           method: 'POST',
           headers: {
@@ -326,18 +333,18 @@ const GDR = () => {
         console.log('Parsed JSON:', result);
 
         if (result.status === 'success') {
-          const data = result.indicator_stats || {};
+          const data = result.data || {};
 
           // Update state dengan data yang diterima
-          setNilaiMujairA(data.Input_Mujair_A || '0');
-          setNilaiMujairB(data.Input_Mujair_B || '0');
-          setNilaiMujairC(data.Input_Mujair_C || '0');
-          setNilaiNike(data.Input_Nike || '0');
-          setNilaiPayangka(data.Input_Payangka || '0');
-          setNilaiNeonati(data.Input_Neonati || '0');
-          setNilaiBomboya(data.Input_Bomboya || '0');
-          setNilaiKarper(data.Input_Karper || '0');
-          setNilaiIcu(data.Input_Icu || '0');
+          setNilaiMujairA(data['Mujair A']?.toString() || '0');
+          setNilaiMujairB(data['Mujair B']?.toString() || '0');
+          setNilaiMujairC(data['Mujair C']?.toString() || '0');
+          setNilaiNike(data.Nike?.toString() || '0');
+          setNilaiPayangka(data.Payangka?.toString() || '0');
+          setNilaiNeonati(data.Neonati?.toString() || '0');
+          setNilaiBomboya(data.Bomboya?.toString() || '0');
+          setNilaiKarper(data.Karper?.toString() || '0');
+          setNilaiIcu(data.Icu?.toString() || '0');
         } else {
           console.log('No data found for the selected range.');
           Alert.alert('No Data', 'Tidak ada data untuk rentang tanggal ini.');
@@ -358,38 +365,40 @@ const GDR = () => {
   };
   // Handler Perubahan Tanggal
   const handleStartDateChange = date => {
-    //console.log('Start Date:', date);
     setSelectedFilter('Filter Rentang Tanggal');
     if (!date) {
-      console.error('Tanggal tidak valid:', date);
+      console.error('Tanggal mulai tidak valid:', date);
       return;
     }
 
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setStartDate(formattedDate);
 
+    console.log('📅 Start Date Selected:', formattedDate);
+
     if (endDate) {
-      console.log('Memanggil fetchStatsDataByRange dengan:', {
-        startDate: formattedDate,
-        endDate,
-      });
+      console.log('🚀 Memanggil fetchStatsDataByRange dengan:');
+      console.log(`- Start Date: ${formattedDate}`);
+      console.log(`- End Date  : ${endDate}`);
+
       fetchStatsDataByRange(formattedDate, endDate);
     }
   };
 
   const handleEndDateChange = date => {
-    console.log('End Date:', date);
     setSelectedFilter('Filter Rentang Tanggal');
     if (!date) {
-      console.error('Tanggal tidak valid:', date);
+      console.error('❌ Tanggal akhir tidak valid:', date);
       return;
     }
 
     const formattedDate = moment(date).format('YYYY-MM-DD');
     setEndDate(formattedDate);
 
+    console.log('📅 End Date Selected:', formattedDate);
+
     if (startDate) {
-      console.log('Memanggil fetchStatsDataByRange dengan:', {
+      console.log('🚀 Memanggil fetchStatsDataByRange dengan:', {
         startDate,
         endDate: formattedDate,
       });

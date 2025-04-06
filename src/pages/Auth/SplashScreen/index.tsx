@@ -1,6 +1,13 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React, {useEffect} from 'react';
 import {Logo} from '../../../assets/images';
+import {
+  FontFamily,
+  Color,
+  Padding,
+  Border,
+  FontSize,
+} from '../../../../GlobalStyles';
 
 const SplashScreen = ({navigation}) => {
   useEffect(() => {
@@ -9,10 +16,9 @@ const SplashScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../../../assets/samrat1.png')}/>
+      <Image source={require('../../../../assets/samrat1.png')} />
       <View style={styles.textContainer}>
-        <Text style={styles.text}>Samrat</Text>
-        <Text style={styles.text1}>Indikator</Text>
+        <Text style={styles.text}>Moraya</Text>
       </View>
     </View>
   );
@@ -37,7 +43,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   text: {
-    color: '#ED1F33',
+    color: Color.notSoBlack,
     fontWeight: 'bold',
     fontSize: 25,
     marginRight: 5,

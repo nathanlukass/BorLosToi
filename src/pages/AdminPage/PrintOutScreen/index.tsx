@@ -66,8 +66,7 @@ const PrintOutScreen = ({route}) => {
   const years = [currentYear - 1, currentYear, currentYear + 1];
 
   const FILE_NAME = 'laporan.pdf'; // Nama file saat diunduh
-  const API_URL =
-    'https://samratindikator.online/borlostoi/public/insert/export_table';
+  const API_URL = 'https://moraya.online/moraya/public/admin/export_table';
 
   const renderItem = ({item, onSelect}) => (
     <TouchableOpacity onPress={() => onSelect(item)} style={styles.item}>

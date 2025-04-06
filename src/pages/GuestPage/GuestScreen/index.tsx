@@ -99,14 +99,14 @@ const ScreenGuest = () => {
 
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_rs',
+        'https://moraya.online/moraya/public/guest/get_stats_data_rs_daily',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
-            tanggal: date, // hanya mengirim tanggal
+            tanggal: date,
           }).toString(),
         },
       );
@@ -114,36 +114,51 @@ const ScreenGuest = () => {
       const responseText = await response.text();
       console.log('Response dari server:', responseText);
 
-      // Jika respons adalah HTML, mungkin ada kesalahan pada server
-      if (responseText.startsWith('<')) {
-        console.error('Response mengandung HTML, ada masalah di server.');
-        Alert.alert('Error', 'Server mengirimkan HTML, bukan JSON.');
-        return;
-      }
+      // Pisahkan JSON jika double
+      const jsonParts = responseText.split('}{').join('}||{').split('||');
+      const firstJSON = jsonParts[0];
 
       let result;
       try {
-        result = JSON.parse(responseText);
+        result = JSON.parse(firstJSON);
         console.log('Parsed JSON:', result);
 
-        // Jika status sukses dan ada data, tampilkan data
         if (result.status === 'success' && result.data) {
-          const data = result.data; // Mengambil data pertama jika ada
+          const data = result.data;
+
           setNilaiBor(data.BOR || '0');
           setNilaiAvlos(data.AVLOS || '0');
           setNilaiToi(data.TOI || '0');
           setNilaiGdr(data.GDR || '0');
           setNilaiBto(data.BTO || '0');
           setNilaiNdr(data.NDR || '0');
-        } else {
-          // Jika tidak ada data, set nilai default 0
+        } else if (result.status === 'error' && result.missing_rooms) {
+          const roomList = result.missing_rooms
+            .map(room => `• ${room}`)
+            .join('\n');
+
+          Alert.alert(
+            'Tidak Ada Data',
+            `Data tidak tersedia atau belum lengkap untuk ruangan berikut pada tanggal yang dipilih:\n\n${roomList}`,
+          );
+
           setNilaiBor('0');
           setNilaiAvlos('0');
           setNilaiToi('0');
           setNilaiGdr('0');
           setNilaiBto('0');
           setNilaiNdr('0');
-          Alert.alert('No Data', 'Tidak ada data untuk tanggal ini.');
+        } else {
+          setNilaiBor('0');
+          setNilaiAvlos('0');
+          setNilaiToi('0');
+          setNilaiGdr('0');
+          setNilaiBto('0');
+          setNilaiNdr('0');
+          Alert.alert(
+            'No Data',
+            result.message || 'Tidak ada data untuk tanggal ini.',
+          );
         }
       } catch (jsonError) {
         console.error('JSON Parse Error:', jsonError.message);
@@ -156,7 +171,7 @@ const ScreenGuest = () => {
         'Failed to fetch data. Please check your network connection.',
       );
     } finally {
-      setLoading(false); // Jangan lupa set loading false setelah request selesai
+      setLoading(false);
     }
   };
 
@@ -164,24 +179,16 @@ const ScreenGuest = () => {
     if (value) {
       setSelectedMonth(value);
       console.log('Bulan yang dipilih: ', value);
+
+      if (!selectedYear) {
+        Alert.alert('Pilih Tahun', 'Silakan pilih tahun terlebih dahulu.');
+        return;
+      }
+
       const formattedMonth = value.toString().padStart(2, '0');
-      const monthNames = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ];
-      const monthName = monthNames[parseInt(value, 10) - 1];
       setSelectedFilter('Filter Bulanan');
-      fetchStatsDataByMonthAndYear(formattedMonth);
+
+      fetchStatsDataByMonthAndYear(formattedMonth, selectedYear);
     }
   };
 
@@ -193,7 +200,6 @@ const ScreenGuest = () => {
       return;
     }
 
-    // Fetch data hanya jika bulan dan tahun sudah dipilih
     fetchStatsDataByMonthAndYear(selectedMonth, year);
   };
 
@@ -203,7 +209,7 @@ const ScreenGuest = () => {
 
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_data_rs_monthly',
+        'https://moraya.online/moraya/public/guest/get_stats_data_rs_monthly',
         {
           method: 'POST',
           headers: {
@@ -225,44 +231,57 @@ const ScreenGuest = () => {
         return;
       }
 
-      let result;
-      try {
-        result = JSON.parse(responseText);
-        console.log('Parsed JSON:', result);
-
-        if (result.status === 'success' && result.data) {
-          const data = result.data;
-
-          // Update state dengan data yang diterima
-          setNilaiBor(data.bor || '0');
-          setNilaiAvlos(data.avlos || '0');
-          setNilaiToi(data.toi || '0');
-          setNilaiGdr(data.gdr || '0');
-          setNilaiBto(data.bto || '0');
-          setNilaiNdr(data.ndr || '0');
-        } else {
-          console.warn('Tidak ada data untuk bulan dan tahun ini.');
-          Alert.alert('No Data', 'Tidak ada data untuk bulan dan tahun ini.');
-          // Jika tidak ada data, set semua nilai ke "0"
-          setNilaiBor('0');
-          setNilaiAvlos('0');
-          setNilaiToi('0');
-          setNilaiGdr('0');
-          setNilaiBto('0');
-          setNilaiNdr('0');
+      // Tangani jika responseText mengandung dua JSON
+      const splitJsons = responseText.split('}{').map((chunk, index, arr) => {
+        if (arr.length > 1) {
+          if (index === 0) {
+            return chunk + '}';
+          }
+          if (index === arr.length - 1) {
+            return '{' + chunk;
+          }
+          return '{' + chunk + '}';
         }
-      } catch (jsonError) {
-        console.error('JSON Parse Error:', jsonError.message);
-        Alert.alert('Error', 'Invalid response from server.');
+        return chunk;
+      });
+
+      let result = JSON.parse(splitJsons[0]); // Pakai JSON pertama
+      console.log('Parsed JSON:', result);
+
+      if (result.status === 'success' && result.data) {
+        const data = result.data;
+
+        setNilaiBor(data.bor || '0');
+        setNilaiAvlos(data.avlos || '0');
+        setNilaiToi(data.toi || '0');
+        setNilaiGdr(data.gdr || '0');
+        setNilaiBto(data.bto || '0');
+        setNilaiNdr(data.ndr || '0');
+      } else if (result.status === 'error' && result.missing_data) {
+        // Data missing per ruangan
+        const missingRooms = Object.keys(result.missing_data);
+        const roomList = missingRooms.map(room => `• ${room}`).join('\n');
+
+        Alert.alert(
+          'Tidak Ada Data',
+          `Data tidak tersedia atau belum lengkap untuk ruangan berikut pada bulan yang dipilih:\n\n${roomList}`,
+        );
+
+        setNilaiBor('0');
+        setNilaiAvlos('0');
+        setNilaiToi('0');
+        setNilaiGdr('0');
+        setNilaiBto('0');
+        setNilaiNdr('0');
       }
     } catch (error) {
       console.error('Fetch Error:', error.message);
       Alert.alert(
         'Error',
-        'Failed to fetch data. Please check your network connection.',
+        'Gagal mengambil data. Periksa koneksi internet Anda.',
       );
     } finally {
-      setLoading(false); // Set loading selesai
+      setLoading(false);
     }
   };
 
@@ -297,9 +316,10 @@ const ScreenGuest = () => {
     }
 
     setLoading(true);
+
     try {
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_stats_rs_range',
+        'https://moraya.online/moraya/public/guest/get_stats_data_rs_range',
         {
           method: 'POST',
           headers: {
@@ -315,58 +335,69 @@ const ScreenGuest = () => {
       const responseText = await response.text();
       console.log('Raw Response:', responseText);
 
-      const jsonParts = responseText
-        .split('}')
-        .filter(part => part.trim() !== '')
-        .map(part => `${part}}`);
-
-      let dataFound = false; // Menandai apakah ada data yang ditemukan
-
-      for (const jsonPart of jsonParts) {
-        try {
-          const result = JSON.parse(jsonPart.trim());
-          console.log('Parsed JSON:', result);
-
-          if (result.status === 'success') {
-            dataFound = true; // Tandai bahwa data ditemukan
-            setNilaiBor(result.BOR || '0');
-            setNilaiAvlos(result.AVLOS || '0');
-            setNilaiToi(result.TOI || '0');
-            setNilaiGdr(result.GDR || '0');
-            setNilaiBto(result.BTO || '0');
-            setNilaiNdr(result.NDR || '0');
-          } else if (!result.status && result.TotalPatientDays) {
-            dataFound = true; // Tandai bahwa data ditemukan
-            setStatsData(result); // Simpan statistik utama
-          }
-        } catch (error) {
-          console.error('JSON Parsing Error:', error.message);
-        }
+      // Cek apakah respons mengandung HTML (indikasi error dari server)
+      if (responseText.trim().startsWith('<')) {
+        console.error('Response mengandung HTML, ada masalah di server.');
+        Alert.alert('Error', 'Server mengembalikan HTML, bukan data.');
+        return;
       }
 
-      // Jika tidak ada data yang ditemukan, tampilkan pesan
-      if (!dataFound) {
-        Alert.alert(
-          'No Data',
-          'Tidak ada data pada rentang tanggal yang dipilih.',
-        );
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (jsonErr) {
+        console.error('JSON Parsing Error:', jsonErr.message);
+        Alert.alert('Error', 'Gagal membaca data dari server.');
+        return;
+      }
+
+      console.log('Parsed JSON:', result);
+
+      if (result.status === 'success' && result.BOR !== undefined) {
+        setNilaiBor(result.BOR.toString());
+        setNilaiAvlos(result.AVLOS.toString());
+        setNilaiToi(result.TOI.toString());
+        setNilaiGdr(result.GDR.toString());
+        setNilaiBto(result.BTO.toString());
+        setNilaiNdr(result.NDR.toString());
+      } else if (result.status === 'error' && result.message) {
+        console.warn('Pesan dari server:', result.message);
+
+        // Ambil nama ruangan dari missing_data jika tersedia
+        const missingRooms = result.missing_data
+          ? Object.keys(result.missing_data)
+          : [];
+
+        const roomList = missingRooms.map(room => `• ${room}`).join('\n');
+
+        const finalMessage =
+          missingRooms.length > 0
+            ? `Data tidak tersedia atau belum lengkap untuk ruangan berikut pada tanggal yang dipilih:\n\n${roomList}`
+            : 'Data tidak tersedia untuk tanggal yang dipilih.';
+
+        Alert.alert('Tidak Ada Data', finalMessage);
+
+        // Reset nilai indikator ke '0'
         setNilaiBor('0');
         setNilaiAvlos('0');
         setNilaiToi('0');
         setNilaiGdr('0');
         setNilaiBto('0');
         setNilaiNdr('0');
+      } else {
+        Alert.alert('Error', 'Format data dari server tidak sesuai.');
       }
     } catch (error) {
       console.error('Fetch Error:', error.message);
       Alert.alert(
         'Error',
-        'Failed to fetch data. Please check your network connection.',
+        'Gagal mengambil data. Periksa koneksi internet Anda.',
       );
     } finally {
       setLoading(false);
     }
   };
+
   //const [showDatePickers, setShowDatePickers] = useState(false);
 
   return (

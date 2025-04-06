@@ -18,7 +18,7 @@ import {
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation, ParamListBase} from '@react-navigation/native';
 import {Color, FontFamily, Border} from '../../../../GlobalStyles';
-import PopupMenuNurse from '../../../../components/PopupMenu';
+import PopupMenu from '../../../../components/PopupMenu';
 import HistoryPage from '../../../../components/HistoryPage';
 
 // NEW CODE
@@ -68,7 +68,7 @@ const HomeScreenNurse = ({route}) => {
       console.log('Normalized Ruangan:', JSON.stringify(normalizedRuangan));
 
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/insert/get_bed_quantity',
+        'https://moraya.online/moraya/public/nurse/get_bed_quantity',
         {
           method: 'POST',
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -103,33 +103,34 @@ const HomeScreenNurse = ({route}) => {
     }
   };
 
-  const menuOptions = [
-    {
-      title: 'About App',
-      action: () => {
-        setMenuVisible(false);
-        navigation.navigate('AboutApp', {user});
-      },
-    },
-    {
-      title: 'Change Password',
-      action: () => {
-        setMenuVisible(false);
-        navigation.navigate('ChangePassword', {user});
-      },
-    },
-    {
-      title: 'Logout',
-      action: () => {
-        setMenuVisible(false);
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
-        });
-        alert("You've been logged out");
-      },
-    },
-  ];
+  // const menuOptions = [
+  //   {
+  //     title: 'About App',
+  //     action: () => {
+  //       setMenuVisible(false);
+  //       navigation.navigate('AboutApp', {user});
+  //     },
+  //   },
+  //   {
+  //     title: 'Change Password',
+  //     action: () => {
+  //       setMenuVisible(false);
+  //       navigation.navigate('ChangePassword', {user});
+  //     },
+  //   },
+  //   {
+  //     title: 'Logout',
+  //     action: () => {
+  //       setMenuVisible(false);
+  //       navigation.reset({
+  //         index: 0,
+
+  //         routes: [{name: 'LoginScreen', params: {loggedOut: true}}],
+  //       });
+  //       alert("You've been logged out");
+  //     },
+  //   },
+  // ];
 
   return (
     <View style={{flex: 1}}>
@@ -144,7 +145,9 @@ const HomeScreenNurse = ({route}) => {
           ]}>
           <Text style={styles.greetingText}>Selamat Datang di</Text>
           <Text style={styles.welcomeText}>Sensus Harian Pasien</Text>
-          <Text style={styles.welcomeText}>Ruangan {ruangan}</Text>
+          <Text style={styles.welcomeText}>
+            Ruangan {ruangan || 'Tidak Diketahui'}
+          </Text>
         </View>
 
         {/* <View style={styles.imageContainer}>
@@ -154,13 +157,8 @@ const HomeScreenNurse = ({route}) => {
             resizeMode="cover"
           />
         </View> */}
-        <View style={styles.menuButtonContainer}>
-          <TouchableOpacity onPress={() => resizeBox(1)}>
-            <Image
-              source={require('../../../../assets/menu.png')}
-              resizeMode="cover"
-            />
-          </TouchableOpacity>
+        <View style={styles.menuButtonContainer2}>
+          <PopupMenu navigation={navigation} user={user} />
         </View>
       </ImageBackground>
 
@@ -172,26 +170,6 @@ const HomeScreenNurse = ({route}) => {
                 style={{flex: 1}}
                 onTouchStart={() => setMenuVisible(false)}
               />
-              <Animated.View
-                style={[
-                  styles.popup,
-                  {
-                    opacity: scale.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0, 1],
-                    }),
-                    transform: [{scale}],
-                  },
-                ]}>
-                {menuOptions.map((op, i) => (
-                  <TouchableOpacity
-                    style={styles.option}
-                    key={i}
-                    onPress={op.action}>
-                    <Text style={styles.optionText}>{op.title}</Text>
-                  </TouchableOpacity>
-                ))}
-              </Animated.View>
             </SafeAreaView>
           </Modal>
 
@@ -199,7 +177,7 @@ const HomeScreenNurse = ({route}) => {
             style={{
               flexDirection: 'row',
               justifyContent: 'flex-start',
-              marginHorizontal: dynamicPadding(-8),
+              marginHorizontal: dynamicPadding(-10),
             }}>
             <TouchableOpacity style={styles.menuItem} onPress={openLihatBORLOS}>
               <Modal
@@ -254,7 +232,6 @@ const HomeScreenNurse = ({route}) => {
               <Text style={styles.cardText}>Input Sensus</Text>
             </TouchableOpacity>
           </View>
-
           <HistoryPage ruangan={ruangan || null} />
         </ScrollView>
       </View>
@@ -365,6 +342,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 30,
     right: dynamicPadding(30),
+    zIndex: 3,
+  },
+  menuButtonContainer2: {
+    position: 'absolute',
+    top: 20,
+    right: 35,
     zIndex: 3,
   },
   fotoRuangan: {

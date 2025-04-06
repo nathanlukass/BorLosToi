@@ -107,11 +107,6 @@ const LoginScreen = ({route}) => {
     }
   };
 
-  const selectRole = (role: string) => {
-    setSelectedRole(role);
-    toggleDropdown(); // Menggunakan toggleDropdown untuk mengatur animasi penutupan
-  };
-
   const rotateIcon = rotateAnim.interpolate({
     inputRange: [0, 1],
     outputRange: ['0deg', '180deg'], // Rotasi dari 0 derajat ke 180 derajat
@@ -119,8 +114,16 @@ const LoginScreen = ({route}) => {
 
   const navigation = useNavigation<StackNavigationProp<ParamListBase>>();
 
+  const selectRole = (role: string) => {
+    setSelectedRole(role);
+    toggleDropdown(); // Menggunakan toggleDropdown untuk mengatur animasi penutupan
+  };
+
   const handleLogin = async () => {
+    console.log('Login attempt initiated');
+
     if (!username || !password) {
+      console.log('Missing username or password');
       return showMessage({
         message: 'Please enter both username and password!',
         type: 'danger',
@@ -128,13 +131,16 @@ const LoginScreen = ({route}) => {
     }
 
     if (!selectedRole) {
+      console.log('Role not selected');
       return showMessage({message: 'Select your role!', type: 'danger'});
     }
 
     try {
       const formBody = new URLSearchParams({username, password}).toString();
+      console.log('Form data prepared:', formBody);
+
       const response = await fetch(
-        'https://samratindikator.online/borlostoi/public/login/authenticate',
+        'https://moraya.online/moraya/public/user/authenticate',
         {
           method: 'POST',
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -142,15 +148,22 @@ const LoginScreen = ({route}) => {
         },
       );
 
+      console.log('Response received:', response);
+
       const jsonResponse = await response.json();
+      console.log('Response parsed as JSON:', jsonResponse);
+
       if (response.ok && jsonResponse.user) {
         const userRole = jsonResponse.user.role.toLowerCase();
+        console.log('User role from response:', userRole);
+
         if (userRole === selectedRole.toLowerCase()) {
-          //Alert.alert('Login Successful!');
+          console.log('Role matches selected role');
           openModal();
 
           setTimeout(() => {
             closeModal();
+            console.log('Navigating to screen');
             navigation.navigate(
               userRole === 'nurse' ? 'HomeScreenNurse' : 'HomeScreenAdmin',
               {
@@ -160,19 +173,21 @@ const LoginScreen = ({route}) => {
             );
           }, 3000);
         } else {
+          console.log('Role mismatch');
           showMessage({
             message: 'Role, Username, or Password mismatch!',
             type: 'danger',
           });
         }
       } else {
+        console.log('Login failed:', jsonResponse.message || 'Login failed!');
         showMessage({
           message: jsonResponse.message || 'Login failed!',
           type: 'danger',
         });
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error during login:', error);
       showMessage({
         message: 'Incorrect Username or Password',
         type: 'danger',
@@ -233,7 +248,7 @@ const LoginScreen = ({route}) => {
           <FlashMessage position="top" />
           {/* Bagian untuk Gambar dan Teks Welcome */}
           <View style={[styles.welcomeWrapper]}>
-            <Text style={[styles.title1]}>{'Welcome to\n(app name)'}</Text>
+            <Text style={[styles.title1]}>{'Welcome to\nMoraya'}</Text>
             <Image
               style={styles.samratIcon}
               resizeMode="cover"
